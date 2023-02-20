@@ -31,9 +31,8 @@ jobs:
         uses: actions/configure-pages@v3
       - name: Build with Jekyll
         uses: actions/jekyll-build-pages@v1
-        working-directory: ./docs
         with:
-          source: ./
+          source: ./docs/
           destination: ./_site
       - name: Upload artifact
         uses: actions/upload-pages-artifact@v1
