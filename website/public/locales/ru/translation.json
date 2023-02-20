@@ -1,0 +1,22 @@
+{
+    "document_translation": "Перевод документов",
+    "my_translations": "Мои переводы",
+    "new_translation": "Новый перевод",
+    "help": "Помощь",
+    "sign_out": "Выйти",
+    "original_document": "Оригинальный документ",
+    "original_document_error_no_doc": "Выберите оригинальный документ для перевода.",
+    "original_document_error_unsupported_type": "Загрузите поддерживаемый тип файла (docx, pptx, xlsx, txt, xml, html).",
+    "original_document_error_too_large": "Пожалуйста, загрузите файл меньшего размера.",
+    "original_language": "Исходный язык",
+    "original_language_help": "На каком языке написан исходный документ?",
+    "original_language_error_no_selection": "Выберите оригинальный язык для перевода.",
+    "target_languages": "Целевые языки",
+    "submit": "Отправить",
+    "submit_submitting_translation": "Отправка перевода.",
+    "submit_input_validated": "Ввод на английском языке подтвержден.",
+    "submit_document_uploaded": "Документ загружен.",
+    "submit_input_submitted": "Ввод отправлен.",
+    "submit_success": "Ваш перевод успешно отправлен.",
+    "links": "Ссылки"
+}

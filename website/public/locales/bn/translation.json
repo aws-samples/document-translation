@@ -1,0 +1,22 @@
+{
+    "document_translation": "ডকুমেন্ট অনুবাদ",
+    "my_translations": "আমার অনুবাদসমূহ",
+    "new_translation": "নতুন অনুবাদ",
+    "help": "হেল্প",
+    "sign_out": "সাইন আউট",
+    "original_document": "মূল নথি",
+    "original_document_error_no_doc": "অনুবাদ করার জন্য অনুগ্রহ করে একটি অরিজিনাল ডকুমেন্ট নির্বাচন করুন।",
+    "original_document_error_unsupported_type": "অনুগ্রহ করে একটি সমর্থিত ফাইল টাইপ আপলোড করুন (docx, pptx, xlsx, txt, xml, html)।",
+    "original_document_error_too_large": "অনুগ্রহ করে একটি ছোট ফাইলের আকার আপলোড করুন।",
+    "original_language": "মূল ভাষা",
+    "original_language_help": "মূল নথিতে ভাষাটি কি?",
+    "original_language_error_no_selection": "অনুবাদের জন্য অনুগ্রহ করে একটি অরিজিনাল ভাষা নির্বাচন করুন।",
+    "target_languages": "লক্ষ্যভেদ ভাষাসমূহ",
+    "submit": "জমা দিন",
+    "submit_submitting_translation": "অনুবাদ জমা দিচ্ছেন।",
+    "submit_input_validated": "ইংরেজি ইনপুট যাচাই করা হয়েছে।",
+    "submit_document_uploaded": "ডকুমেন্ট আপলোড করা হয়েছে।",
+    "submit_input_submitted": "ইনপুট জমা দিয়েছে।",
+    "submit_success": "আপনার অনুবাদ সফলভাবে জমা দেওয়া হয়েছে।",
+    "links": "লিংক"
+}

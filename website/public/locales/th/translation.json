@@ -1,0 +1,22 @@
+{
+    "document_translation": "การแปลเอกสาร",
+    "my_translations": "การแปลของฉัน",
+    "new_translation": "คำแปลใหม่",
+    "help": "ความช่วยเหลือ",
+    "sign_out": "ออกจากระบบ",
+    "original_document": "เอกสารต้นฉบับ",
+    "original_document_error_no_doc": "โปรดเลือกเอกสารต้นฉบับที่จะแปล",
+    "original_document_error_unsupported_type": "โปรดอัพโหลดประเภทแฟ้มที่รองรับ (docx, pptx, xlsx, txt, xml, html)",
+    "original_document_error_too_large": "โปรดอัพโหลดไฟล์ขนาดเล็กลง",
+    "original_language": "ภาษาต้นฉบับ",
+    "original_language_help": "ภาษาในเอกสารต้นฉบับคืออะไร",
+    "original_language_error_no_selection": "โปรดเลือกภาษาต้นฉบับที่จะแปล",
+    "target_languages": "ภาษาเป้าหมาย",
+    "submit": "ส่งข้อมูล",
+    "submit_submitting_translation": "ส่งคำแปล",
+    "submit_input_validated": "Englihsh อินพุตการตรวจสอบ",
+    "submit_document_uploaded": "อัพโหลดเอกสาร",
+    "submit_input_submitted": "การป้อนข้อมูลที่ส่ง",
+    "submit_success": "การแปลของคุณได้รับการส่งเรียบร้อยแล้ว",
+    "links": "ลิงก์"
+}

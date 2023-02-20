@@ -1,0 +1,22 @@
+{
+    "document_translation": "Traducció de documents",
+    "my_translations": "Les meves traduccions",
+    "new_translation": "Nova traducció",
+    "help": "Ajuda",
+    "sign_out": "Tancar la sessió",
+    "original_document": "Document original",
+    "original_document_error_no_doc": "Seleccioneu un document original per traduir.",
+    "original_document_error_unsupported_type": "Si us plau, carregueu un tipus de fitxer suportat (docx, pptx, xlsx, txt, xml, html).",
+    "original_document_error_too_large": "Si us plau carregueu una mida de fitxer més petita.",
+    "original_language": "Idioma original",
+    "original_language_help": "Quin és l&#39;idioma en el document original?",
+    "original_language_error_no_selection": "Seleccioneu un idioma original per traduir.",
+    "target_languages": "Llengües de destinació",
+    "submit": "Presentar",
+    "submit_submitting_translation": "Enviar traducció.",
+    "submit_input_validated": "Englihsh Entrada validada.",
+    "submit_document_uploaded": "Document penjat.",
+    "submit_input_submitted": "Entrada presentada.",
+    "submit_success": "La traducció s&#39;ha enviat correctament.",
+    "links": "Enllaços"
+}

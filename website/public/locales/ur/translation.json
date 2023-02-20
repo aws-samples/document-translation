@@ -1,0 +1,23 @@
+<html dir="rtl": "
+<body>
+    "document_translation": "دستاویز کا ترجمہ",
+    "my_translations": "میرے ترجمے",
+    "new_translation": "نیا ترجمہ",
+    "help": "مدد",
+    "sign_out": "سائن آؤٹ",
+    "original_document": "اصل دستاویز",
+    "original_document_error_no_doc": "براہ کرم ترجمہ کرنے کے لئے ایک اصل دستاویز منتخب کریں.",
+    "original_document_error_unsupported_type": "براہ کرم ایک معاون فائل کی قسم (ڈاککس، pptx، xlsx، txt، xml، HTML) اپ لوڈ کریں.",
+    "original_document_error_too_large": "براہ کرم ایک چھوٹا فائل سائز اپ لوڈ کریں.",
+    "original_language": "اصل زبان",
+    "original_language_help": "اصل دستاویز میں زبان کیا ہے؟",
+    "original_language_error_no_selection": "ترجمہ کرنے کے لیے براہ مہربانی ایک اصل زبان منتخب کریں۔",
+    "target_languages": "ہدف زبانیں",
+    "submit": "جمع کرائیں",
+    "submit_submitting_translation": "ترجمہ جمع کرانے.",
+    "submit_input_validated": "انگریزی ان پٹ کی توثیق.",
+    "submit_document_uploaded": "دستاویز اپ لوڈ.",
+    "submit_input_submitted": "جمع کردہ ان پٹ.",
+    "submit_success": "آپ کا ترجمہ کامیابی کے ساتھ جمع کرایا گیا ہے۔",
+    "links": "لنکس"
+}

@@ -1,0 +1,22 @@
+{
+    "document_translation": "Översättning av dokument",
+    "my_translations": "Mina översättningar",
+    "new_translation": "Ny översättning",
+    "help": "Hjälp",
+    "sign_out": "Logga ut",
+    "original_document": "Originaldokument",
+    "original_document_error_no_doc": "Välj ett originaldokument att översätta.",
+    "original_document_error_unsupported_type": "Ladda upp en filtyp som stöds (docx, pptx, xlsx, txt, xml, html).",
+    "original_document_error_too_large": "Ladda upp en mindre filstorlek.",
+    "original_language": "Original Språk",
+    "original_language_help": "Vad är språket i originaldokumentet?",
+    "original_language_error_no_selection": "Välj ett originalspråk att översätta.",
+    "target_languages": "Målspråk",
+    "submit": "Skicka",
+    "submit_submitting_translation": "Skicka in översättning.",
+    "submit_input_validated": "Englihsh-ingång validerad.",
+    "submit_document_uploaded": "Dokument uppladdat.",
+    "submit_input_submitted": "Ingång skickad.",
+    "submit_success": "Din översättning har skickats in.",
+    "links": "Länkar"
+}

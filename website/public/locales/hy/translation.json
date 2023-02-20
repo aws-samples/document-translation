@@ -1,0 +1,22 @@
+{
+    "document_translation": "Փաստաթղթի թարգմանություն",
+    "my_translations": "Իմ թարգմանությունները",
+    "new_translation": "Նոր թարգմանություն",
+    "help": "Օգնություն",
+    "sign_out": "Մուտք գործեք",
+    "original_document": "Բնօրինակ փաստաթուղթ",
+    "original_document_error_no_doc": "Թարգմանելու համար խնդրում ենք ընտրել բնօրինակ փաստաթուղթ:",
+    "original_document_error_unsupported_type": "Խնդրում ենք վերբեռնել աջակցվող ֆայլի տեսակը (docx, pptx, xlsx, txt, xml, html):",
+    "original_document_error_too_large": "Խնդրում ենք վերբեռնել ավելի փոքր ֆայլի չափ:",
+    "original_language": "Բնօրինակ լեզու",
+    "original_language_help": "Ո՞րն է լեզուն բնօրինակ փաստաթղթում:",
+    "original_language_error_no_selection": "Թարգմանելու համար խնդրում ենք ընտրել բնօրինակ լեզու:",
+    "target_languages": "Նպատակային լեզուներ",
+    "submit": "Ներկայացնել",
+    "submit_submitting_translation": "Թարգմանություն ներկայացնելը:",
+    "submit_input_validated": "Անգլերեն Մուտքային վավերացված.",
+    "submit_document_uploaded": "Վերբեռնված փաստաթուղթ:",
+    "submit_input_submitted": "Մուտքային ներկայացվել:",
+    "submit_success": "Ձեր թարգմանությունը հաջողությամբ ներկայացվել է:",
+    "links": "Հղումներ"
+}

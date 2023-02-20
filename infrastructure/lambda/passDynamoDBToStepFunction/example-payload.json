@@ -1,0 +1,77 @@
+{
+	"Records": [
+		{
+			"eventID": "3682bda876a1025dd664b22e62376fac",
+			"eventName": "INSERT",
+			"eventVersion": "1.1",
+			"eventSource": "aws:dynamodb",
+			"awsRegion": "eu-west-2",
+			"dynamodb": {
+				"ApproximateCreationDateTime": 1669734669,
+				"Keys": {
+					"id": {
+						"S": "53601a2b-c738-4f46-ac31-41293d850df0"
+					}
+				},
+				"NewImage": {
+					"jobName": {
+						"S": "Letter to Alexandra Benson.docx"
+					},
+					"translateStatus": {
+						"M": {
+							"langel": {
+								"S": "Submitted"
+							}
+						}
+					},
+					"createdAt": {
+						"N": "1669734669"
+					},
+					"languageSource": {
+						"S": "en"
+					},
+					"jobStatus": {
+						"S": "UPLOADED"
+					},
+					"translateCallback": {
+						"M": {
+							"langel": {
+								"S": ""
+							}
+						}
+					},
+					"translateKey": {
+						"M": {
+							"langel": {
+								"S": ""
+							}
+						}
+					},
+					"jobIdentity": {
+						"S": "eu-west-2:793fb4ff-a153-43cf-af81-9fde505016a8"
+					},
+					"jobOwner": {
+						"S": "d3d6c7c2-5df3-456a-baa6-68300834b619"
+					},
+					"id": {
+						"S": "53601a2b-c738-4f46-ac31-41293d850df0"
+					},
+					"languageTargets": {
+						"L": [
+							{
+								"S": "el"
+							}
+						]
+					},
+					"contentType": {
+						"S": "application/vnd.openxmlformats-officedocument.wordprocessingml.document"
+					}
+				},
+				"SequenceNumber": "32724300000000007285525816",
+				"SizeBytes": 449,
+				"StreamViewType": "NEW_AND_OLD_IMAGES"
+			},
+			"eventSourceARN": "arn:aws:dynamodb:eu-west-2:006919394233:table/doctran-dev-DocTranStack-basetranslatejobTable3C38C3F6-S8267WO5Q8GK/stream/2022-11-22T17:14:54.053"
+		}
+	]
+}

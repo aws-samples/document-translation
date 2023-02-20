@@ -1,0 +1,22 @@
+{
+    "document_translation": "Dịch tài liệu",
+    "my_translations": "Bản dịch của tôi",
+    "new_translation": "Bản dịch mới",
+    "help": "Trợ giúp",
+    "sign_out": "Đăng xuất",
+    "original_document": "Tài liệu gốc",
+    "original_document_error_no_doc": "Vui lòng chọn một tài liệu gốc để dịch.",
+    "original_document_error_unsupported_type": "Vui lòng tải lên một tập tin được hỗ trợ (docx, pptx, xlsx, txt, xml, html).",
+    "original_document_error_too_large": "Vui lòng tải lên một kích thước tập tin nhỏ hơn.",
+    "original_language": "Ngôn ngữ gốc",
+    "original_language_help": "Ngôn ngữ trong tài liệu gốc là gì?",
+    "original_language_error_no_selection": "Vui lòng chọn một ngôn ngữ gốc để dịch.",
+    "target_languages": "Ngôn ngữ mục tiêu",
+    "submit": "Gửi",
+    "submit_submitting_translation": "Đang gửi bản dịch.",
+    "submit_input_validated": "Englihsh Input xác nhận.",
+    "submit_document_uploaded": "Tài liệu đã tải lên.",
+    "submit_input_submitted": "Nhập liệu đã gửi.",
+    "submit_success": "Bản dịch của bạn đã được gửi thành công.",
+    "links": "Liên kết"
+}

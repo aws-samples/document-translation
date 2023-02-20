@@ -1,0 +1,22 @@
+{
+    "document_translation": "Dokumendi tõlkimine",
+    "my_translations": "Minu tõlked",
+    "new_translation": "Uus tõlge",
+    "help": "Abi",
+    "sign_out": "Logi välja",
+    "original_document": "Algne dokument",
+    "original_document_error_no_doc": "Palun valige originaaldokument, mida tõlkida.",
+    "original_document_error_unsupported_type": "Palun laadige üles toetatud failitüüp (docx, pptx, xlsx, txt, xml, html).",
+    "original_document_error_too_large": "Palun laadige üles väiksem failimaht.",
+    "original_language": "Algkeel",
+    "original_language_help": "Mis on originaaldokumendi keel?",
+    "original_language_error_no_selection": "Palun valige tõlkimiseks originaalkeel.",
+    "target_languages": "Sihtkeeled",
+    "submit": "Esita",
+    "submit_submitting_translation": "Tõlke esitamine.",
+    "submit_input_validated": "Englihsh sisend valideeritud.",
+    "submit_document_uploaded": "Dokument on üles laaditud.",
+    "submit_input_submitted": "Sisend esitatud.",
+    "submit_success": "Teie tõlge on edukalt esitatud.",
+    "links": "Lingid"
+}

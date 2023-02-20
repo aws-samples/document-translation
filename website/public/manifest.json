@@ -1,0 +1,16 @@
+{
+  "short_name": "DocumentTranslation",
+  "name": "Translate documents into other languages",
+  "icons": [
+    {
+      "src": "/FcDocument.svg",
+      "type": "image/svg+xml",
+      "sizes": "any",
+      "purpose": "any"
+    }
+  ],
+  "start_url": ".",
+  "display": "standalone",
+  "theme_color": "#000000",
+  "background_color": "#ffffff"
+}

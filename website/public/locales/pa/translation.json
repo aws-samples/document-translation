@@ -1,0 +1,22 @@
+{
+    "document_translation": "ਦਸਤਾਵੇਜ਼ ਅਨੁਵਾਦ",
+    "my_translations": "ਮੇਰੇ ਅਨੁਵਾਦ",
+    "new_translation": "ਨਵਾਂ ਅਨੁਵਾਦ",
+    "help": "ਮਦਦ ਕਰੋ",
+    "sign_out": "ਸਾਇਨ ਆਉਟ",
+    "original_document": "ਅਸਲ ਦਸਤਾਵੇਜ਼",
+    "original_document_error_no_doc": "ਕਿਰਪਾ ਕਰਕੇ ਅਨੁਵਾਦ ਕਰਨ ਲਈ ਇੱਕ ਅਸਲ ਦਸਤਾਵੇਜ਼ ਦੀ ਚੋਣ ਕਰੋ.",
+    "original_document_error_unsupported_type": "ਕਿਰਪਾ ਕਰਕੇ ਇੱਕ ਸਹਿਯੋਗੀ ਫਾਈਲ ਟਾਈਪ ਅਪਲੋਡ ਕਰੋ (docx, pptx, xlsx, txt, xml, html).",
+    "original_document_error_too_large": "ਕਿਰਪਾ ਕਰਕੇ ਇੱਕ ਛੋਟਾ ਫਾਈਲ ਅਕਾਰ ਅਪਲੋਡ ਕਰੋ.",
+    "original_language": "ਅਸਲੀ ਭਾਸ਼ਾ",
+    "original_language_help": "ਅਸਲ ਦਸਤਾਵੇਜ਼ ਵਿਚ ਭਾਸ਼ਾ ਕੀ ਹੈ?",
+    "original_language_error_no_selection": "ਕਿਰਪਾ ਕਰਕੇ ਅਨੁਵਾਦ ਕਰਨ ਲਈ ਇੱਕ ਅਸਲ ਭਾਸ਼ਾ ਦੀ ਚੋਣ ਕਰੋ.",
+    "target_languages": "ਟੀਚੇ ਦੀਆਂ ਭਾਸ਼ਾਵਾਂ",
+    "submit": "ਸਬਮਿਟ",
+    "submit_submitting_translation": "ਅਨੁਵਾਦ ਜਮ੍ਹਾਂ ਕਰ ਰਿਹਾ ਹੈ.",
+    "submit_input_validated": "ਇੰਗਲਿਹਸ਼ ਇਨਪੁਟ ਪ੍ਰਮਾਣਿਤ.",
+    "submit_document_uploaded": "ਦਸਤਾਵੇਜ਼ ਅਪਲੋਡ ਕੀਤਾ ਗਿਆ.",
+    "submit_input_submitted": "ਇਨਪੁਟ ਜਮ੍ਹਾ ਕੀਤਾ ਗਿਆ.",
+    "submit_success": "ਤੁਹਾਡਾ ਅਨੁਵਾਦ ਸਫਲਤਾਪੂਰਵਕ ਪੇਸ਼ ਕੀਤਾ ਗਿਆ ਹੈ.",
+    "links": "ਲਿੰਕ"
+}

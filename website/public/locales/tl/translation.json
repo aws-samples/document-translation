@@ -1,0 +1,22 @@
+{
+    "document_translation": "Pagsasalin ng Dokumento",
+    "my_translations": "Ang Aking Mga Pagsasalin",
+    "new_translation": "Bagong Pagsasalin",
+    "help": "Tulong",
+    "sign_out": "Mag-sign Out",
+    "original_document": "Orihinal na Dokumento",
+    "original_document_error_no_doc": "Mangyaring pumili ng Orihinal na Dokumento upang isalin.",
+    "original_document_error_unsupported_type": "Mangyaring mag-upload ng suportadong filetype (docx, pptx, xlsx, txt, xml, html).",
+    "original_document_error_too_large": "Mangyaring mag-upload ng mas maliit na laki ng file.",
+    "original_language": "Orihinal na Wika",
+    "original_language_help": "Ano ang wika sa orihinal na dokumento?",
+    "original_language_error_no_selection": "Mangyaring pumili ng Orihinal na Wika upang isalin.",
+    "target_languages": "Target na Wika",
+    "submit": "Isumite",
+    "submit_submitting_translation": "Pagsusumite ng Pagsasalin.",
+    "submit_input_validated": "Napatunayan ang Englihsh Input.",
+    "submit_document_uploaded": "Na-upload ang dokumento.",
+    "submit_input_submitted": "Input na isinumite.",
+    "submit_success": "Matagumpay na naisumite ang iyong pagsasalin.",
+    "links": "Mga Link"
+}

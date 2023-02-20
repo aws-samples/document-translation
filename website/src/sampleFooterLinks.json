@@ -1,0 +1,31 @@
+[
+	{
+		"prefix": "Framework:",
+		"url": "https://reactjs.org/",
+		"text": "React"
+	},
+	{
+		"prefix": "Icons:",
+		"url": "https://github.com/icons8/flat-color-icons",
+		"text": "Flat Color Icons"
+	},
+	{
+		"prefix": "UI:",
+		"url": "https://ui.docs.amplify.aws/s",
+		"text": "Amplify"
+	},
+	{
+		"prefix": "Translation:",
+		"url": "https://aws.amazon.com/",
+		"text": "Amazon Translate"
+	},
+	{
+		"prefix": "Prefix",
+		"url": "/",
+		"text": "link-text",
+		"suffix": "suffix"
+	},
+	{
+		"url": "/url-with-no-text"
+	}
+]

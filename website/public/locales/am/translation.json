@@ -1,0 +1,22 @@
+{
+    "document_translation": "የሰነድ ትርጉም",
+    "my_translations": "የእኔ ትርጉሞች",
+    "new_translation": "አዲስ ትርጉም",
+    "help": "እገዛ",
+    "sign_out": "ዘግተው ይውጡ",
+    "original_document": "የመጀመሪያው ሰነድ",
+    "original_document_error_no_doc": "ለመተርጎም እባክዎ ኦሪጅናል ሰነድ ይምረጡ።",
+    "original_document_error_unsupported_type": "እባክዎ የሚደገፍ የፋይል አይነት (docx, pptx, xlsx, txt, xml, html) ይስቀሉ።",
+    "original_document_error_too_large": "አነስ ያለ የፋይል መጠን ይስቀሉ።",
+    "original_language": "የመጀመሪያ ቋንቋ",
+    "original_language_help": "በመጀመሪያው ሰነድ ውስጥ ያለው ቋንቋ ምንድን ነው?",
+    "original_language_error_no_selection": "ለመተርጎም እባክዎ ኦሪጅናል ቋንቋ ይምረጡ።",
+    "target_languages": "የዒላማ ቋንቋዎች",
+    "submit": "አስገባ",
+    "submit_submitting_translation": "ትርጉም በማስገባት ላይ።",
+    "submit_input_validated": "የእንግሊዝኛ ግቤት ተረጋግጧል።",
+    "submit_document_uploaded": "ሰነድ የተሰቀለ።",
+    "submit_input_submitted": "ግብዓት ገብቷል።",
+    "submit_success": "የእርስዎ ትርጉም በተሳካ ሁኔታ ገብቷል።",
+    "links": "አገናኞች"
+}

@@ -1,0 +1,8 @@
+# NODE
+node_modules/
+
+# CDK
+cdk.out/
+.cdk.staging
+*.js
+*.d.ts

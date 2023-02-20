@@ -1,0 +1,22 @@
+{
+    "document_translation": "Fassarar Takaddun",
+    "my_translations": "Fassarorina",
+    "new_translation": "Sabuwar Fassarar",
+    "help": "Taimako",
+    "sign_out": "Shiga",
+    "original_document": "Takardun asali",
+    "original_document_error_no_doc": "Da fatan za a zaɓi Takardun asali don fassara.",
+    "original_document_error_unsupported_type": "Da fatan za a shigar da fayilolin da aka tallafa (docx, pptx, xlsx, txt, xml, html).",
+    "original_document_error_too_large": "Da fatan za a shigar da karamin girman fayil.",
+    "original_language": "Harshen asali",
+    "original_language_help": "Mene ne harshen a cikin takardun asali?",
+    "original_language_error_no_selection": "Da fatan za a zaɓi wani Harshe na asali don fassara.",
+    "target_languages": "Harsunan Target",
+    "submit": "Sallama",
+    "submit_submitting_translation": "Mika Fassara.",
+    "submit_input_validated": "Hausa Input validated.",
+    "submit_document_uploaded": "Takardun da aka ɗora.",
+    "submit_input_submitted": "Shigowa sukayi sallama.",
+    "submit_success": "An mika fassararku cikin nasara.",
+    "links": "Hanyoyin haɗi"
+}
