@@ -9,8 +9,6 @@ Copyright Amazon.com, Inc. or its affiliates. All Rights Reserved.
 SPDX-License-Identifier: MIT-0
 -->
 
-# Architecture
-
 ## Services Used
 
 - [Amazon CloudWatch](https://aws.amazon.com/cloudwatch/)
