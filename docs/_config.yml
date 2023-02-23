@@ -2,8 +2,8 @@
 title: Document Translation
 # email: your-email@example.com
 description: A web user interface and workflow for document translations using the Amazon Translate service
-# baseurl: "" # the subpath of your site, e.g. /blog
-# url: "" # the base hostname & protocol for your site, e.g. http://example.com
+baseurl: "/document-translation"
+url: "https://aws-samples.github.io"
 
 # Build settings
 markdown: kramdown
