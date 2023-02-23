@@ -5,7 +5,7 @@ nav_order: 1
 permalink: /
 ---
 
-# Improving inclusion through automated Document Transation
+# Improving inclusion through automated Document Translation
 {: .fs-9 }
 
 A web user interface and workflow for document translations using the Amazon Translate service
