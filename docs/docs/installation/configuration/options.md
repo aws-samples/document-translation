@@ -21,7 +21,7 @@ SPDX-License-Identifier: MIT-0
 >
 > It is important that the below options are defined in the same shell session as the deploy step. 
 
-This solution is configurable to meet your specific needs. In this step you will specify which features you want enabled or disabled. To configure an option use the terminal (E.g. [CloudShell](/docs/installation/prerequisite/cloudshell.md)) to perform the relevant commands.
+This solution is configurable to meet your specific needs. In this step you will specify which features you want enabled or disabled. To configure an option use the terminal (E.g. [CloudShell]({{ site.baseurl }}/docs/installation/prerequisite/cloudshell.md)) to perform the relevant commands.
 
 <details open markdown="block">
   <summary>

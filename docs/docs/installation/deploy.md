@@ -21,7 +21,7 @@ SPDX-License-Identifier: MIT-0
 >
 > It is important that the below command are run in the same shell session as the configuration options step. 
 
-Using the terminal (E.g. [CloudShell](/docs/installation/prerequisite/cloudshell.md)) perform the following commands. 
+Using the terminal (E.g. [CloudShell]({{ site.baseurl }}/docs/installation/prerequisite/cloudshell.md)) perform the following commands. 
 
 ## Bootstrap the account
 

@@ -18,7 +18,7 @@ SPDX-License-Identifier: MIT-0
 
 [AWS CodeCommit](https://aws.amazon.com/codecommit/) is a secure, highly scalable, fully managed source control service that hosts private Git repositories.
 
-Using the terminal (E.g. [CloudShell](/docs/installation/prerequisite/cloudshell.md)) perform the following commands. The specific repository name of "document-translation" is not a requirement. You can substitute this name with another name. The name must be unique and is referenced in later steps. 
+Using the terminal (E.g. [CloudShell]({{ site.baseurl }}/docs/installation/prerequisite/cloudshell.md)) perform the following commands. The specific repository name of "document-translation" is not a requirement. You can substitute this name with another name. The name must be unique and is referenced in later steps. 
 
 ```sh
 # Defile a repository name

@@ -19,7 +19,7 @@ SPDX-License-Identifier: MIT-0
 {: .note-title }
 > Note
 >
-> If you are not familiar with GitHub and do not use it for other projects consider using the [AWS CodeCommit method](/docs/installation/source-service/codecommit.md) instead. The AWS CodeCommit method has no requirements for GitHub accounts and repositories. You are expected to understand how to convert the use of CodeCommit to GitHub in other sections of the installation guide. 
+> If you are not familiar with GitHub and do not use it for other projects consider using the [AWS CodeCommit method]({{ site.baseurl }}/docs/installation/source-service/codecommit.md) instead. The AWS CodeCommit method has no requirements for GitHub accounts and repositories. You are expected to understand how to convert the use of CodeCommit to GitHub in other sections of the installation guide. 
 
 ## Prerequisites
 
