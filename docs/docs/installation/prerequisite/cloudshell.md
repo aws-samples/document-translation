@@ -23,8 +23,8 @@ CloudShell is the recommended installation method. The installation is tested wi
 1. Navigate to the [AWS Console](https://console.aws.amazon.com/console/home) of the solution AWS Account
 2. Select the CloudShell icon from the top bar
 
-![CloudShell Icon](/assets/img/cloud_shell_icon.png)
+![CloudShell Icon]({{ site.baseurl }}/assets/img/cloud_shell_icon.png)
 
 If this is your first time using the CloudShell it will take a minute to initiate. It is safe to continue through this installation guide whilst it initiates.
 
-![CloudShell in the AWS Console](/assets/img/console_cloudshell.png)
+![CloudShell in the AWS Console]({{ site.baseurl }}/assets/img/console_cloudshell.png)

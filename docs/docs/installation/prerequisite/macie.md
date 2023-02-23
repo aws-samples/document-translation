@@ -48,4 +48,4 @@ If you see the following error that is expected when the Log Group already exist
 
 > An error occurred (ResourceAlreadyExistsException) when calling the CreateLogGroup operation: The specified log group already exists
 
-![Macie Commands](/assets/img/console_cloudshell_macie.png)
+![Macie Commands]({{ site.baseurl }}/assets/img/console_cloudshell_macie.png)

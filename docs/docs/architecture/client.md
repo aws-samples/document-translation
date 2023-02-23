@@ -20,7 +20,7 @@ The client is created with [React JS](https://reactjs.org/), utilising [Amplify]
 - Read their past jobs
 - Download their translated content
 
-![Client interaction](/assets/graphs/client_interaction.png)
+![Client interaction]({{ site.baseurl }}/assets/graphs/client_interaction.png)
 
 ## Process Steps
 
@@ -36,7 +36,7 @@ Authentication is provided by [Cognito](https://aws.amazon.com/cognito/) and is 
 2. Cognito Local Users
 3. Both 
 
-![Client login](/assets/img/client_login_both.png)
+![Client login]({{ site.baseurl }}/assets/img/client_login_both.png)
 
 ## Content Upload/Download
 

@@ -27,11 +27,11 @@ User authentication is required and handled by [AWS Cognito](https://aws.amazon.
 
 **Past Translations Table**
 
-![Web UI - My Translations Table](/assets/img/client_history.png)
+![Web UI - My Translations Table]({{ site.baseurl }}/assets/img/client_history.png)
 
 **New Translations Form**
 
-![Web UI - New Translation Form](/assets/img/client_create.png)
+![Web UI - New Translation Form]({{ site.baseurl }}/assets/img/client_create.png)
 
 ## Security
 
