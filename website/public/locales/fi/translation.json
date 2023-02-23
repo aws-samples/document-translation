@@ -1,0 +1,22 @@
+{
+    "document_translation": "Asiakirjan käännös",
+    "my_translations": "Omat käännökset",
+    "new_translation": "Uusi käännös",
+    "help": "Apua",
+    "sign_out": "Kirjaudu ulos",
+    "original_document": "Alkuperäinen asiakirja",
+    "original_document_error_no_doc": "Valitse käännettävä alkuperäinen asiakirja.",
+    "original_document_error_unsupported_type": "Lataa tuettu tiedostotyyppi (docx, pptx, xlsx, txt, xml, html).",
+    "original_document_error_too_large": "Lataa pienempi tiedostokoko.",
+    "original_language": "Alkuperäinen kieli",
+    "original_language_help": "Mikä on alkuperäisen asiakirjan kieli?",
+    "original_language_error_no_selection": "Valitse käännettävä alkuperäinen kieli.",
+    "target_languages": "Kohdekielet",
+    "submit": "Lähetä",
+    "submit_submitting_translation": "Käännöksen lähettäminen.",
+    "submit_input_validated": "Englihsh Input validoitu.",
+    "submit_document_uploaded": "Asiakirja ladattu.",
+    "submit_input_submitted": "Syöttö lähetetty.",
+    "submit_success": "Käännöksesi on lähetetty onnistuneesti.",
+    "links": "Linkit"
+}

@@ -1,0 +1,23 @@
+<html dir="rtl": "
+<body>
+    "document_translation": "ترجمة المستندات",
+    "my_translations": "ترجماتي",
+    "new_translation": "ترجمة جديدة",
+    "help": "مساعدة",
+    "sign_out": "تسجيل الخروج",
+    "original_document": "المستند الأصلي",
+    "original_document_error_no_doc": "يرجى تحديد مستند أصلي للترجمة.",
+    "original_document_error_unsupported_type": "يرجى تحميل نوع الملف المدعوم (docx، pptx، xlsx، txt، xml، html).",
+    "original_document_error_too_large": "يرجى تحميل ملف بحجم أصغر.",
+    "original_language": "اللغة الأصلية",
+    "original_language_help": "ما هي اللغة في المستند الأصلي؟",
+    "original_language_error_no_selection": "يرجى تحديد اللغة الأصلية للترجمة.",
+    "target_languages": "اللغات المستهدفة",
+    "submit": "أرسل",
+    "submit_submitting_translation": "تقديم الترجمة.",
+    "submit_input_validated": "تم التحقق من صحة الإدخال باللغة الإنجليزية.",
+    "submit_document_uploaded": "تم تحميل المستند.",
+    "submit_input_submitted": "تم إرسال الإدخال.",
+    "submit_success": "تم إرسال ترجمتك بنجاح.",
+    "links": "روابط"
+}

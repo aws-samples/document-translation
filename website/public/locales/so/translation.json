@@ -1,0 +1,22 @@
+{
+    "document_translation": "Turjumaad dukumeenti",
+    "my_translations": "Turjumaadahayga",
+    "new_translation": "Turjumaad Cusub",
+    "help": "Caawin",
+    "sign_out": "Saxiix Out",
+    "original_document": "Dukumeentiga asalka ah",
+    "original_document_error_no_doc": "Fadlan dooro Dukumiintiga Asalka ah si aad u turjumto.",
+    "original_document_error_unsupported_type": "Fadlan geli filetype taageeray (docx, pptx, xlsx, txt, xml, html).",
+    "original_document_error_too_large": "Fadlan geliyaan size a file yar.",
+    "original_language": "Luqadda asalka ah",
+    "original_language_help": "Waa maxay luqadda dukumiintiga asalka ah?",
+    "original_language_error_no_selection": "Fadlan dooro Luqad Asal ah si aad u turjumto.",
+    "target_languages": "Luqadaha Bartilmaameedka",
+    "submit": "Gudbi",
+    "submit_submitting_translation": "Gudbinta Tarjumaad.",
+    "submit_input_validated": "Input Ingiriisi la ansixiyey.",
+    "submit_document_uploaded": "Dukumeenti la soo geliyay.",
+    "submit_input_submitted": "Input gudbiyey.",
+    "submit_success": "Your turjumaad ayaa si guul leh loo soo gudbiyey.",
+    "links": "Xiriiro"
+}

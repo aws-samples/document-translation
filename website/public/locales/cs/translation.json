@@ -1,0 +1,22 @@
+{
+    "document_translation": "Překlad dokumentů",
+    "my_translations": "Moje překlady",
+    "new_translation": "Nový překlad",
+    "help": "Pomoc",
+    "sign_out": "Odhlásit se",
+    "original_document": "Originální dokument",
+    "original_document_error_no_doc": "Vyberte prosím originální dokument k překladu.",
+    "original_document_error_unsupported_type": "Nahrajte prosím podporovaný typ souboru (docx, pptx, xlsx, txt, xml, html).",
+    "original_document_error_too_large": "Nahrajte prosím menší velikost souboru.",
+    "original_language": "Původní jazyk",
+    "original_language_help": "Jaký je jazyk v původním dokumentu?",
+    "original_language_error_no_selection": "Vyberte prosím původní jazyk, který chcete přeložit.",
+    "target_languages": "Cílové jazyky",
+    "submit": "Předložit",
+    "submit_submitting_translation": "Odeslání překladu.",
+    "submit_input_validated": "Anglický vstup ověřen.",
+    "submit_document_uploaded": "Dokument nahrán.",
+    "submit_input_submitted": "Vstup odeslán.",
+    "submit_success": "Váš překlad byl úspěšně odeslán.",
+    "links": "Odkazy"
+}

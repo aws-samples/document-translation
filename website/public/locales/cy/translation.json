@@ -1,0 +1,22 @@
+{
+    "document_translation": "Cyfieithu Dogfennau",
+    "my_translations": "Fy Nghyfieithiadau",
+    "new_translation": "Cyfieithiad Newydd",
+    "help": "Help",
+    "sign_out": "Llofnodi Allan",
+    "original_document": "Dogfen Wreiddiol",
+    "original_document_error_no_doc": "Dewiswch Ddogfen Wreiddiol i&#39;w chyfieithu.",
+    "original_document_error_unsupported_type": "Llwythwch ffeil a gefnogir (docx, pptx, xlsx, txt, xml, html).",
+    "original_document_error_too_large": "Llwythwch i fyny maint ffeil llai.",
+    "original_language": "Iaith Wreiddiol",
+    "original_language_help": "Beth yw&#39;r iaith yn y ddogfen wreiddiol?",
+    "original_language_error_no_selection": "Dewiswch Iaith Wreiddiol i gyfieithu.",
+    "target_languages": "Ieithoedd Targed",
+    "submit": "Cyflwyno",
+    "submit_submitting_translation": "Cyflwyno Cyfieithu.",
+    "submit_input_validated": "Mewnbwn Saesneg wedi&#39;i ddilysu.",
+    "submit_document_uploaded": "Dogfen wedi&#39;i llwytho i fyny.",
+    "submit_input_submitted": "Mewnbwn wedi&#39;i gyflwyno.",
+    "submit_success": "Mae eich cyfieithiad wedi cael ei gyflwyno&#39;n llwyddiannus.",
+    "links": "Dolenni"
+}

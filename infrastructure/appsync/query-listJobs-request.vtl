@@ -1,0 +1,17 @@
+## Copyright Amazon.com, Inc. or its affiliates. All Rights Reserved.
+## SPDX-License-Identifier: MIT-0
+
+{
+    "version" : "2017-02-28",
+    "operation" : "Scan",
+    ## FORCE JOBOWNER TO COGNITO SUB | DO NOT ACCEPT ANY USER INPUT | START
+    "filter": {
+        "expression": "contains(jobOwner, :value)",
+        "expressionValues" : {
+            ":value": {
+                "S": "$ctx.identity.sub"
+            }
+        }
+    }
+    ## FORCE JOBOWNER TO COGNITO SUB | DO NOT ACCEPT ANY USER INPUT | END
+}

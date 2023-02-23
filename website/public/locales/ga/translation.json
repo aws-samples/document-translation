@@ -1,0 +1,22 @@
+{
+    "document_translation": "Aistriúchán Doiciméad",
+    "my_translations": "Mo Aistriúcháin",
+    "new_translation": "Aistriúchán Nua",
+    "help": "Cabhair",
+    "sign_out": "Sínigh Amach",
+    "original_document": "Doiciméad Bunaidh",
+    "original_document_error_no_doc": "Roghnaigh Doiciméad Bunaidh le haistriú.",
+    "original_document_error_unsupported_type": "Uaslódáil cineál comhaid tacaithe le do thoil (docx, pptx, xlsx, txt, xml, html).",
+    "original_document_error_too_large": "Uaslódáil méid comhaid níos lú le do thoil.",
+    "original_language": "Teanga Bhunaidh",
+    "original_language_help": "Cad é an teanga sa doiciméad bunaidh?",
+    "original_language_error_no_selection": "Roghnaigh Teanga Bhunaidh le haistriú.",
+    "target_languages": "Sprioctheangacha",
+    "submit": "Cuir isteach",
+    "submit_submitting_translation": "Aistriúchán a chur isteach.",
+    "submit_input_validated": "Englihsh Ionchur bailíochtaithe.",
+    "submit_document_uploaded": "Doiciméad uaslódáilte.",
+    "submit_input_submitted": "Ionchur curtha isteach.",
+    "submit_success": "Tá do aistriúchán curtha isteach go rathúil.",
+    "links": "Naisc"
+}

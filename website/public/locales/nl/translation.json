@@ -1,0 +1,22 @@
+{
+    "document_translation": "Vertaling van documenten",
+    "my_translations": "Mijn vertalingen",
+    "new_translation": "Nieuwe vertaling",
+    "help": "Hulp",
+    "sign_out": "Uitloggen",
+    "original_document": "Origineel document",
+    "original_document_error_no_doc": "Selecteer een origineel document om te vertalen.",
+    "original_document_error_unsupported_type": "Upload een ondersteund bestandstype (docx, pptx, xlsx, txt, xml, html).",
+    "original_document_error_too_large": "Upload een kleiner bestand.",
+    "original_language": "Oorspronkelijke taal",
+    "original_language_help": "Wat is de taal in het originele document?",
+    "original_language_error_no_selection": "Selecteer een originele taal om te vertalen.",
+    "target_languages": "Doeltalen",
+    "submit": "Verzenden",
+    "submit_submitting_translation": "Vertaling indienen.",
+    "submit_input_validated": "Engelse invoer gevalideerd.",
+    "submit_document_uploaded": "Document geüpload.",
+    "submit_input_submitted": "Invoer ingediend.",
+    "submit_success": "Je vertaling is succesvol ingediend.",
+    "links": "Links"
+}

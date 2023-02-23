@@ -1,0 +1,25 @@
+# Site settings
+title: Document Translation
+# email: your-email@example.com
+description: A web user interface and workflow for document translations using the Amazon Translate service
+# baseurl: "" # the subpath of your site, e.g. /blog
+# url: "" # the base hostname & protocol for your site, e.g. http://example.com
+
+# Build settings
+markdown: kramdown
+remote_theme: just-the-docs/just-the-docs
+# theme: just-the-docs
+
+# Theme settings # just-the-docs
+## Links
+aux_links:
+  "GitHub":
+    - "//github.com/aws-samples/document-translation"
+aux_links_new_tab: false
+heading_anchors: true
+nav_external_links:
+  - title: Document Translation on GitHub
+    url: https://github.com/aws-samples/document-translation
+callouts:
+  note:
+    color: blue

@@ -1,0 +1,22 @@
+{
+    "document_translation": "Баримт бичгийн орчуулга",
+    "my_translations": "Миний орчуулгууд",
+    "new_translation": "Шинэ орчуулга",
+    "help": "Туслах",
+    "sign_out": "Нэвтрэх",
+    "original_document": "Жинхэнэ баримт бичиг",
+    "original_document_error_no_doc": "Орчуулах анхны баримт бичгийг сонгоно уу.",
+    "original_document_error_unsupported_type": "Дэмжигдсэн файлын төрлийг (docx, pptx, xlsx, TXT, XML, HTML) байршуулна уу.",
+    "original_document_error_too_large": "Жижиг файлын хэмжээг байршуулна уу.",
+    "original_language": "Эх хэл",
+    "original_language_help": "Анхны баримт бичигт хэл гэж юу вэ?",
+    "original_language_error_no_selection": "Орчуулах эх хэлээ сонгоно уу.",
+    "target_languages": "Зорилтот хэл",
+    "submit": "Оруулах",
+    "submit_submitting_translation": "Орчуулга оруулах.",
+    "submit_input_validated": "Englihsh Оролт баталгаажсан.",
+    "submit_document_uploaded": "Бичиг баримт Хуулагдсан.",
+    "submit_input_submitted": "Оролт ирүүлсэн.",
+    "submit_success": "Таны орчуулгыг амжилттай ирүүлсэн байна.",
+    "links": "холбоосууд"
+}

@@ -1,0 +1,22 @@
+{
+    "document_translation": "Превод на документи",
+    "my_translations": "Моите преводи",
+    "new_translation": "Нов превод",
+    "help": "Помощ",
+    "sign_out": "Излезте",
+    "original_document": "Оригинален документ",
+    "original_document_error_no_doc": "Моля, изберете оригинален документ, който да превеждате.",
+    "original_document_error_unsupported_type": "Моля, качете поддържан файлов тип (docx, pptx, xlsx, txt, xml, html).",
+    "original_document_error_too_large": "Моля, качете по-малък размер на файла.",
+    "original_language": "Оригинален език",
+    "original_language_help": "Какъв е езикът в оригиналния документ?",
+    "original_language_error_no_selection": "Моля, изберете оригинален език, който да превеждате.",
+    "target_languages": "Целеви езици",
+    "submit": "Изпращане",
+    "submit_submitting_translation": "Изпращане на превод.",
+    "submit_input_validated": "Английският вход е валидиран.",
+    "submit_document_uploaded": "Документът е качен.",
+    "submit_input_submitted": "Входът е подаден.",
+    "submit_success": "Преводът ви е изпратен успешно.",
+    "links": "Връзки"
+}

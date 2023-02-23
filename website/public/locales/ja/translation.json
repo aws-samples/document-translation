@@ -1,0 +1,22 @@
+{
+    "document_translation": "ドキュメント翻訳",
+    "my_translations": "マイ翻訳",
+    "new_translation": "新しい翻訳",
+    "help": "ヘルプ",
+    "sign_out": "サインアウト",
+    "original_document": "オリジナル文書",
+    "original_document_error_no_doc": "翻訳するオリジナルドキュメントを選択してください。",
+    "original_document_error_unsupported_type": "サポートされているファイルタイプ (docx、pptx、xlsx、txt、xml、html) をアップロードしてください。",
+    "original_document_error_too_large": "小さいファイルサイズをアップロードしてください。",
+    "original_language": "オリジナル言語",
+    "original_language_help": "元の文書にはどのような言語が使用されていますか?",
+    "original_language_error_no_selection": "翻訳する元の言語を選択してください。",
+    "target_languages": "ターゲット言語",
+    "submit": "送信",
+    "submit_submitting_translation": "翻訳の提出。",
+    "submit_input_validated": "英語入力が検証されました。",
+    "submit_document_uploaded": "ドキュメントがアップロードされました。",
+    "submit_input_submitted": "入力が送信されました。",
+    "submit_success": "翻訳は正常に送信されました。",
+    "links": "リンク"
+}

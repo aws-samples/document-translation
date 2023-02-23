@@ -1,0 +1,22 @@
+{
+    "document_translation": "Terjemahan Dokumen",
+    "my_translations": "Terjemahan Saya",
+    "new_translation": "Terjemahan Baru",
+    "help": "Bantuan",
+    "sign_out": "Daftar Keluar",
+    "original_document": "Dokumen Asal",
+    "original_document_error_no_doc": "Sila pilih Dokumen Asal untuk diterjemahkan.",
+    "original_document_error_unsupported_type": "Sila muat naik jenis fail yang disokong (docx, pptx, xlsx, txt, xml, html).",
+    "original_document_error_too_large": "Sila muat naik saiz fail yang lebih kecil.",
+    "original_language": "Bahasa Asal",
+    "original_language_help": "Apakah bahasa dalam dokumen asal?",
+    "original_language_error_no_selection": "Sila pilih Bahasa Asal untuk diterjemahkan.",
+    "target_languages": "Bahasa Sasaran",
+    "submit": "Hantar",
+    "submit_submitting_translation": "Menghantar Terjemahan.",
+    "submit_input_validated": "Englihsh Input disahkan.",
+    "submit_document_uploaded": "Dokumen dimuat naik.",
+    "submit_input_submitted": "Input dihantar.",
+    "submit_success": "Terjemahan anda telah dihantar dengan jayanya.",
+    "links": "Pautan"
+}

@@ -1,0 +1,22 @@
+{
+    "document_translation": "Document Translation",
+    "my_translations": "My Translations",
+    "new_translation": "New Translation",
+    "help": "Help",
+    "sign_out": "Sign Out",
+    "original_document": "Original Document",
+    "original_document_error_no_doc": "Please select an Original Document to translate.",
+    "original_document_error_unsupported_type": "Please upload a supported filetype (docx, pptx, xlsx, txt, xml, html).",
+    "original_document_error_too_large": "Please upload a smaller file size.",
+    "original_language": "Original Language",
+    "original_language_help": "What's is the language in the original document?",
+    "original_language_error_no_selection": "Please select an Original Language to translate.",
+    "target_languages": "Target Languages",
+    "submit": "Submit",
+    "submit_submitting_translation": "Submitting Translation",
+    "submit_input_validated": "Input validated.",
+    "submit_document_uploaded": "Document uploaded.",
+    "submit_input_submitted": "Input submitted.",
+    "submit_success": "Your translation has been submitted successfully.",
+    "links": "Links"
+}

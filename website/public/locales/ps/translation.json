@@ -1,0 +1,23 @@
+<html dir="rtl": "
+<body>
+    "document_translation": "د لاسوند ژباړه",
+    "my_translations": "زما ژباړې",
+    "new_translation": "نوی ژباړه",
+    "help": "مرسته",
+    "sign_out": "لاسلیکول",
+    "original_document": "اصلي لاسوند",
+    "original_document_error_no_doc": "مهرباني وکړئ د ژباړلو لپاره اصلي لاسوند وټاکئ.",
+    "original_document_error_unsupported_type": "مهرباني وکړئ یو ملاتړ شوی فایل ډول پورته کړئ (docx، pptx، xlsx، txt، xml، html).",
+    "original_document_error_too_large": "مهرباني وکړئ د کوچنۍ دوتنې کچ پورته کړئ.",
+    "original_language": "اصلي ژبه",
+    "original_language_help": "اصلي سند کې ژبه څه ده؟",
+    "original_language_error_no_selection": "مهرباني وکړئ د ژباړلو لپاره اصلي ژبه وټاکئ.",
+    "target_languages": "موخې ژبې",
+    "submit": "وسپاري",
+    "submit_submitting_translation": "د ژباړې سپارل.",
+    "submit_input_validated": "د Englihsh انډول تصدیق شوی.",
+    "submit_document_uploaded": ".لاسوند پورته شو",
+    "submit_input_submitted": "انډول سپارل شوی.",
+    "submit_success": "ستاسې ژباړه په برياليتوب سره سپارل شوې ده.",
+    "links": "لینکونه"
+}

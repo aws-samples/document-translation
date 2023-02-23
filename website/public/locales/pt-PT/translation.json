@@ -1,0 +1,22 @@
+{
+    "document_translation": "Tradução de documentos",
+    "my_translations": "As minhas traduções",
+    "new_translation": "Nova Tradução",
+    "help": "Ajuda",
+    "sign_out": "Encerrar sessão",
+    "original_document": "Documento Original",
+    "original_document_error_no_doc": "Selecione um Documento Original para traduzir.",
+    "original_document_error_unsupported_type": "Por favor, carregue um tipo de ficheiro suportado (docx, pptx, xlsx, txt, xml, html).",
+    "original_document_error_too_large": "Favor carregar um arquivo de tamanho menor.",
+    "original_language": "Idioma original",
+    "original_language_help": "Qual é a linguagem no documento original?",
+    "original_language_error_no_selection": "Selecione um Idioma original para traduzir.",
+    "target_languages": "Idiomas alvo",
+    "submit": "Submeter",
+    "submit_submitting_translation": "Submeter Tradução.",
+    "submit_input_validated": "Englihsh Input validada.",
+    "submit_document_uploaded": "Documento carregado.",
+    "submit_input_submitted": "Entrada submetida.",
+    "submit_success": "A sua tradução foi submetida com sucesso.",
+    "links": "Links"
+}

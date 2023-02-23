@@ -1,0 +1,22 @@
+{
+    "document_translation": "दस्तावेज़ का अनुवाद",
+    "my_translations": "मेरे अनुवाद",
+    "new_translation": "नया अनुवाद",
+    "help": "मदद",
+    "sign_out": "साइन आउट",
+    "original_document": "ओरिजिनल डॉक्यूमेंट",
+    "original_document_error_no_doc": "अनुवाद करने के लिए कृपया एक मूल दस्तावेज़ चुनें।",
+    "original_document_error_unsupported_type": "कृपया एक समर्थित फ़ाइल प्रकार (docx, pptx, xlsx, txt, xml, html) अपलोड करें।",
+    "original_document_error_too_large": "कृपया एक छोटा फ़ाइल आकार अपलोड करें।",
+    "original_language": "मूल भाषा",
+    "original_language_help": "मूल दस्तावेज़ में भाषा क्या है?",
+    "original_language_error_no_selection": "अनुवाद करने के लिए कृपया एक मूल भाषा चुनें।",
+    "target_languages": "लक्षित भाषाएँ",
+    "submit": "सबमिट करें",
+    "submit_submitting_translation": "अनुवाद सबमिट किया जा रहा है।",
+    "submit_input_validated": "अंग्रेज़ी इनपुट मान्य किया गया।",
+    "submit_document_uploaded": "दस्तावेज़ अपलोड किया गया।",
+    "submit_input_submitted": "इनपुट सबमिट किया गया।",
+    "submit_success": "आपका अनुवाद सफलतापूर्वक सबमिट कर दिया गया है।",
+    "links": "लिंक्स"
+}

@@ -1,0 +1,22 @@
+{
+    "document_translation": "Hati Tafsiri",
+    "my_translations": "Tafsiri yangu",
+    "new_translation": "Tafsiri mpya",
+    "help": "Msaada",
+    "sign_out": "Ingia",
+    "original_document": "Hati ya awali",
+    "original_document_error_no_doc": "Tafadhali chagua Hati ya awali ili kutafsiri.",
+    "original_document_error_unsupported_type": "Tafadhali upload filetype mkono (docx, pptx, xlsx, txt, xml, html).",
+    "original_document_error_too_large": "Tafadhali pakia ukubwa wa faili ndogo.",
+    "original_language": "Lugha ya asili",
+    "original_language_help": "Lugha ni nini katika hati ya awali?",
+    "original_language_error_no_selection": "Tafadhali chagua Lugha ya asili ya kutafsiri.",
+    "target_languages": "Lugha za Target",
+    "submit": "Wasilisha",
+    "submit_submitting_translation": "Kuwasilisha Tafsiri.",
+    "submit_input_validated": "Ingiza ya Kiingereza imethibitishwa.",
+    "submit_document_uploaded": "Hati iliyopakiwa.",
+    "submit_input_submitted": "Ingiza kuwasilishwa.",
+    "submit_success": "Tafsiri yako imewasilishwa kwa mafanikio.",
+    "links": "Links"
+}

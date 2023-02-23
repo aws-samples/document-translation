@@ -1,0 +1,22 @@
+{
+    "document_translation": "Hujjat tarjimasi",
+    "my_translations": "Mening tarjimalarim",
+    "new_translation": "Yangi tarjima",
+    "help": "Yordam",
+    "sign_out": "Kirish",
+    "original_document": "Asl hujjat",
+    "original_document_error_no_doc": "Iltimos, tarjima qilish uchun asl hujjatni tanlang.",
+    "original_document_error_unsupported_type": "Iltimos, qo&#39;llab-quvvatlanadigan fayl turini (docx, pptx, xlsx, txt, xml, html) yuklang.",
+    "original_document_error_too_large": "Iltimos, kichikroq fayl hajmini yuklang.",
+    "original_language": "Asl til",
+    "original_language_help": "Asl hujjatdagi til nima?",
+    "original_language_error_no_selection": "Iltimos, tarjima qilish uchun asl tilni tanlang.",
+    "target_languages": "Maqsadli tillar",
+    "submit": "Yuborish",
+    "submit_submitting_translation": "Tarjima yuborish.",
+    "submit_input_validated": "Englihsh Kirish tasdiqlangan.",
+    "submit_document_uploaded": "Hujjat yuklandi.",
+    "submit_input_submitted": "Kirish taqdim etildi.",
+    "submit_success": "Tarjimangiz muvaffaqiyatli topshirildi.",
+    "links": "Linklar"
+}

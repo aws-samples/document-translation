@@ -1,0 +1,22 @@
+{
+    "document_translation": "Dokument Vertaling",
+    "my_translations": "My Vertalings",
+    "new_translation": "Nuwe Vertaling",
+    "help": "Hulp",
+    "sign_out": "Teken Uit",
+    "original_document": "Oorspronklike Dokument",
+    "original_document_error_no_doc": "Kies asseblief &#39;n oorspronklike dokument om te vertaal",
+    "original_document_error_unsupported_type": "Laai asseblief &#39;n ondersteunde lêertipe op (docx, pptx, xlsx, txt, xml, html).",
+    "original_document_error_too_large": "Laai asseblief &#39;n kleiner lêer grootte op.",
+    "original_language": "Oorspronklike Taal",
+    "original_language_help": "Wat is die taal in die oorspronklike dokument?",
+    "original_language_error_no_selection": "Kies asseblief &#39;n oorspronklike taal om te vertaal.",
+    "target_languages": "Teiken Tale",
+    "submit": "Indien",
+    "submit_submitting_translation": "Indiening van Vertaling.",
+    "submit_input_validated": "Engels Input bekragtig.",
+    "submit_document_uploaded": "Dokument opgelaai.",
+    "submit_input_submitted": "Insette voorgelê.",
+    "submit_success": "Jou vertaling is suksesvol ingedien.",
+    "links": "Skakels"
+}

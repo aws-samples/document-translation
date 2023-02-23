@@ -1,0 +1,22 @@
+{
+    "document_translation": "文件翻譯",
+    "my_translations": "我的翻譯",
+    "new_translation": "新翻譯",
+    "help": "幫助",
+    "sign_out": "登出",
+    "original_document": "原始文件",
+    "original_document_error_no_doc": "請選擇要翻譯的原始文件。",
+    "original_document_error_unsupported_type": "請上傳一個支持的文件類型（文檔，PPTX，xlsx，文本，XML，HTML）。",
+    "original_document_error_too_large": "請上傳較小的檔案大小。",
+    "original_language": "原始語言",
+    "original_language_help": "原始文件中的語言是什麼？",
+    "original_language_error_no_selection": "請選擇要翻譯的原始語言。",
+    "target_languages": "目標語言",
+    "submit": "提交",
+    "submit_submitting_translation": "提交翻譯。",
+    "submit_input_validated": "英語輸入驗證.",
+    "submit_document_uploaded": "文件已上載。",
+    "submit_input_submitted": "輸入已提交。",
+    "submit_success": "您的翻譯已成功提交。",
+    "links": "友情链接"
+}

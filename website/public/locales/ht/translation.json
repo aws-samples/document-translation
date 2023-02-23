@@ -1,0 +1,22 @@
+{
+    "document_translation": "Tradiksyon Dokiman",
+    "my_translations": "Tradiksyon mwen",
+    "new_translation": "Nouvo Tradiksyon",
+    "help": "Ede",
+    "sign_out": "Siyen",
+    "original_document": "Dokiman orijinal la",
+    "original_document_error_no_doc": "Tanpri chwazi yon Dokiman orijinal pou tradwi.",
+    "original_document_error_unsupported_type": "Tanpri Upload yon filetype sipòte (docx, pptx, xlsx, txt, xml, html).",
+    "original_document_error_too_large": "Tanpri telechaje yon gwosè dosye ki pi piti.",
+    "original_language": "Lang orijinal",
+    "original_language_help": "Ki sa ki nan se lang lan nan dokiman orijinal la?",
+    "original_language_error_no_selection": "Tanpri chwazi yon lang orijinal pou tradwi.",
+    "target_languages": "Sib Lang",
+    "submit": "Soumèt",
+    "submit_submitting_translation": "Soumèt Tradiksyon.",
+    "submit_input_validated": "Englihsh Antre valide.",
+    "submit_document_uploaded": "Dokiman Uploaded.",
+    "submit_input_submitted": "Antre soumèt.",
+    "submit_success": "Tradiksyon ou te soumèt avèk siksè.",
+    "links": "Lyen"
+}

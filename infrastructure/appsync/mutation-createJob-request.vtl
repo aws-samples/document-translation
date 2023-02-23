@@ -1,0 +1,20 @@
+## Copyright Amazon.com, Inc. or its affiliates. All Rights Reserved.
+## SPDX-License-Identifier: MIT-0
+
+## FORCE JOBOWNER TO COGNITO SUB | DO NOT ACCEPT ANY USER INPUT | START
+#set($input = $ctx.args.input)
+#set($input.jobOwner = $ctx.identity.sub)
+## FORCE JOBOWNER TO COGNITO SUB | DO NOT ACCEPT ANY USER INPUT | END
+
+## SET CREATED TIMESTAMP | START
+#set($input.createdAt = $util.time.nowEpochSeconds())
+## SET CREATED TIMESTAMP | END
+
+{
+    "version": "2017-02-28",
+    "operation": "PutItem",
+    "key" : {
+        "id" : $util.dynamodb.toDynamoDBJson($ctx.args.input.id)
+    },
+    "attributeValues": $util.dynamodb.toMapValuesJson($input)
+}

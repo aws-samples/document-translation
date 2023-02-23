@@ -1,0 +1,22 @@
+{
+    "document_translation": "Sənəd tərcüməsi",
+    "my_translations": "Mənim tərcümələr",
+    "new_translation": "Yeni Tərcümə",
+    "help": "Kömək",
+    "sign_out": "Çıxış",
+    "original_document": "Orijinal sənəd",
+    "original_document_error_no_doc": "Tərcümə etmək üçün Orijinal Sənəd seçin.",
+    "original_document_error_unsupported_type": "Xahiş edirik dəstəklənən fayl tipini (docx, pptx, xlsx, txt, xml, html) yükləyə bilərsiniz.",
+    "original_document_error_too_large": "Xahiş edirik daha kiçik bir fayl ölçüsü yükləyə bilərsiniz.",
+    "original_language": "Original Language",
+    "original_language_help": "Orijinal sənəddə dil nədir?",
+    "original_language_error_no_selection": "Tərcümə etmək üçün Orijinal Dil seçin.",
+    "target_languages": "Hədəf dilləri",
+    "submit": "Təqdim",
+    "submit_submitting_translation": "Tərcümə təqdim.",
+    "submit_input_validated": "Englihsh Input təsdiq.",
+    "submit_document_uploaded": "Sənəd yükləndi.",
+    "submit_input_submitted": "Input təqdim.",
+    "submit_success": "Sizin tərcüməiniz uğurla təqdim olundu.",
+    "links": "Linklər"
+}

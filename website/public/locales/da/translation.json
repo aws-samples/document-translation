@@ -1,0 +1,22 @@
+{
+    "document_translation": "Oversættelse af dokumenter",
+    "my_translations": "Mine oversættelser",
+    "new_translation": "Ny oversættelse",
+    "help": "Hjælp",
+    "sign_out": "Log ud",
+    "original_document": "Originalt dokument",
+    "original_document_error_no_doc": "Vælg et originaldokument, der skal oversættes.",
+    "original_document_error_unsupported_type": "Upload en understøttet filtype (docx, pptx, xlsx, txt, xml, html).",
+    "original_document_error_too_large": "Upload en mindre filstørrelse.",
+    "original_language": "Originalsprog",
+    "original_language_help": "Hvad er sproget i originaldokumentet?",
+    "original_language_error_no_selection": "Vælg et originalsprog, der skal oversættes.",
+    "target_languages": "Målsprog",
+    "submit": "Indsend",
+    "submit_submitting_translation": "Indsendelse af oversættelse.",
+    "submit_input_validated": "Englihsh Input valideret.",
+    "submit_document_uploaded": "Dokument uploadet.",
+    "submit_input_submitted": "Input indsendt.",
+    "submit_success": "Din oversættelse er blevet sendt med succes.",
+    "links": "Links"
+}

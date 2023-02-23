@@ -1,0 +1,22 @@
+{
+    "document_translation": "დოკუმენტის თარგმანი",
+    "my_translations": "ჩემი თარგმანები",
+    "new_translation": "ახალი თარგმანი",
+    "help": "დახმარება",
+    "sign_out": "გამოდით",
+    "original_document": "ორიგინალი დოკუმენტი",
+    "original_document_error_no_doc": "გთხოვთ, აირჩიოთ ორიგინალი დოკუმენტი.",
+    "original_document_error_unsupported_type": "გთხოვთ ატვირთოთ მხარდაჭერილი ფაილის ტიპი (docx, pptx, xlsx, txt, xml, html).",
+    "original_document_error_too_large": "გთხოვთ ატვირთოთ პატარა ფაილის ზომა.",
+    "original_language": "ორიგინალური ენა",
+    "original_language_help": "რა არის ენა ორიგინალ დოკუმენტში?",
+    "original_language_error_no_selection": "გთხოვთ, აირჩიოთ ორიგინალი ენა თარგმნისთვის.",
+    "target_languages": "მიზნობრივი ენები",
+    "submit": "წარდგენა",
+    "submit_submitting_translation": "თარგმანის წარდგენა.",
+    "submit_input_validated": "Englihsh შეყვანის დამტკიცდა.",
+    "submit_document_uploaded": "დოკუმენტი აიტვირთა.",
+    "submit_input_submitted": "შეყვანის წარმოდგენილი.",
+    "submit_success": "თქვენი თარგმანი წარმატებით იქნა წარმოდგენილი.",
+    "links": "ბმულები"
+}

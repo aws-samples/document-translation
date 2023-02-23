@@ -1,0 +1,22 @@
+{
+    "document_translation": "Prevajanje dokumentov",
+    "my_translations": "Moji prevodi",
+    "new_translation": "Nov prevod",
+    "help": "Pomoč",
+    "sign_out": "Odjava",
+    "original_document": "Izvirni dokument",
+    "original_document_error_no_doc": "Izberite izvirni dokument, ki ga želite prevesti.",
+    "original_document_error_unsupported_type": "Prosimo, naložite podprti tip datoteke (docx, pptx, xlsx, txt, xml, html).",
+    "original_document_error_too_large": "Naložite manjšo velikost datoteke.",
+    "original_language": "Izvirni jezik",
+    "original_language_help": "Kakšen je jezik v izvirnem dokumentu?",
+    "original_language_error_no_selection": "Izberite izvirni jezik, ki ga želite prevesti.",
+    "target_languages": "Ciljni jeziki",
+    "submit": "Pošlji",
+    "submit_submitting_translation": "Predložitev prevoda.",
+    "submit_input_validated": "Englihsh Vhod potrjena.",
+    "submit_document_uploaded": "Dokument naložen.",
+    "submit_input_submitted": "Predložen vhod.",
+    "submit_success": "Vaš prevod je bil uspešno oddan.",
+    "links": "Povezave"
+}
