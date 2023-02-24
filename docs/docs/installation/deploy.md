@@ -38,6 +38,14 @@ git clone https://github.com/aws-samples/document-translation.git
 #
 # Change directory into the pulled project directory
 cd document-translation
+# 
+# If desired checkout a particular version, see https://semver.org/
+# Fetch available tags
+git fetch --all --tags
+# View tags
+git tags
+# Checkout tag
+git checkout tags/v1.0.1
 ```
 
 ## Push source code to your CodeCommit
