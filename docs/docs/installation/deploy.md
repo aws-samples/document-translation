@@ -3,7 +3,6 @@ layout: default
 title: Deploy
 nav_order: 4
 parent: Installation
-has_children: true
 ---
 
 <!--
