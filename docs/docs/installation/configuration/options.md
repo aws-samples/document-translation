@@ -57,8 +57,6 @@ This solution supports two sources of user authentication. These can be enabled 
 
 ### Enable Cognito Local Users
 
-> Note: Once MFA is enabled it cannot be disabled. MFA can be `required`, `optional`, or `off`
-
 ```sh
 export cognitoLocalUsers="true"
 export cognitoLocalUsersMfa="required"
