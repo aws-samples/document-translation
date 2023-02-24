@@ -13,4 +13,4 @@ SPDX-License-Identifier: MIT-0
 
 The Translate StepFuction is triggered by the Main StepFunction. This StepFunction performs translations on uploaded documents.
 
-![Translate StepFunction Overview](graphs/stepfunction_translate_overview.png)
+![Translate StepFunction Overview]({{ site.baseurl }}/assets/graphs/stepfunction_translate_overview.png)
