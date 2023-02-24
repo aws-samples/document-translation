@@ -10,7 +10,11 @@ Copyright Amazon.com, Inc. or its affiliates. All Rights Reserved.
 SPDX-License-Identifier: MIT-0
 -->
 
-The solution is built with modular features in mind allowing you to enable or disable particular features that you need. The below shows the features available. 
+The solution is built with modular features in mind allowing you to enable or disable particular features that you need. The below shows the feature dependencies.
+
+![Features dependency]({{ site.baseurl }}/assets/graphs/features.svg)
+
+The below shows the optional features available.
 
 | Feature             | Depends On  | Required  | Description                                                                 |
 | ------------------- | ----------- | --------- | --------------------------------------------------------------------------- |
