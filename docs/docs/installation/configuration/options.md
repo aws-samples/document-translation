@@ -74,7 +74,7 @@ This installation guide assumes that the user directory used for the SAML provid
 
 ```sh
 export cognitoSamlUsers="true"
-export cognitoSamlMetadataUrl="https://domain.tld/path/to/metadata.json"
+export cognitoSamlMetadataUrl="https://domain.tld/path/to/metadata.xml"
 ```
 
 ## Enable Web UI
