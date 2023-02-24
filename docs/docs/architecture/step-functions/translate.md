@@ -1,7 +1,7 @@
 ---
 layout: default
 title: Translate
-nav_order: 1
+nav_order: 2
 parent: Step Functions
 grand_parent: Architecture
 ---
