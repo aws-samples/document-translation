@@ -105,9 +105,17 @@ export class dt_web extends Construct {
 		// WEBSITE | API CALLBACK
 		const cfnUserPoolClient = props.userPoolClient.node
 			.defaultChild as cognito.CfnUserPoolClient;
-		cfnUserPoolClient.callbackUrLs = [
-			`https://${this.websiteDistribution.domainName}/`,
-		];
+		if (props.webUiCustomDomainFlag) {
+			cfnUserPoolClient.callbackUrLs = [
+				`https://${this.websiteDistribution.domainName}/`,
+				`https://${props.webUiCustomDomain}/`
+			];
+			
+		} else {
+			cfnUserPoolClient.callbackUrLs = [
+				`https://${this.websiteDistribution.domainName}/`,
+			];
+		}
 		// END
 	}
 }

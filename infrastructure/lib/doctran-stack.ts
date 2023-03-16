@@ -252,9 +252,15 @@ export class DocTranStack extends cdk.Stack {
 				"appWebsiteDistribution",
 				{ value: base_web.websiteDistribution.distributionId }
 			);
-			this.appHostedUrl = new cdk.CfnOutput(this, "appHostedUrl", {
-				value: `https://${base_web.websiteDistribution.domainName}/`,
-			});
+			if (webUiCustomDomainFlag) {
+				this.appHostedUrl = new cdk.CfnOutput(this, "appHostedUrl", {
+					value: `https://${webUiCustomDomain}/`,
+				});
+			} else {
+				this.appHostedUrl = new cdk.CfnOutput(this, "appHostedUrl", {
+					value: `https://${base_web.websiteDistribution.domainName}/`,
+				});
+			}
 		}
 
 		// OUTPUTS
