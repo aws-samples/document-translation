@@ -158,7 +158,6 @@ export class pipelineStack extends cdk.Stack {
 				);
 				break;
 			default:
-				// const codeCommitRepo: codecommit.IRepository = codecommit.Repository.fromRepositoryArn(this, 'codeCommitRepo', sourceGitRepo);
 				const codeCommitRepo = codecommit.Repository.fromRepositoryName(
 					this,
 					"codeCommitRepo",
