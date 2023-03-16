@@ -40,23 +40,44 @@ export class dt_web extends Construct {
 		});
 
 		// WEBSITE | CLOUDFRONT
-		this.websiteDistribution = new cloudfront.Distribution(
-			this,
-			"websiteDistribution",
-			{
-				defaultBehavior: { 
-					origin: new origins.S3Origin(this.websiteBucket), // ASM-S5 // ASM-CRF6
-					allowedMethods: cloudfront.AllowedMethods.ALLOW_GET_HEAD,
-					viewerProtocolPolicy: cloudfront.ViewerProtocolPolicy.REDIRECT_TO_HTTPS,
-				},
-				defaultRootObject: "index.html",
-				enableLogging: true, // ASM-CFR3
-				logBucket: props.serverAccessLoggingBucket, // ASM-S1
-				logFilePrefix: "logs/websiteDistribution/", // ASM-S1
-				logIncludesCookies: true,
-				minimumProtocolVersion: cloudfront.SecurityPolicyProtocol.TLS_V1_2_2021, // ASM-CRF5
-			}
-		);
+		if (props.webUiCustomDomainFlag) {
+			this.websiteDistribution = new cloudfront.Distribution(
+				this,
+				"websiteDistribution",
+				{
+					domainNames: [props.webUiCustomDomain],
+					defaultBehavior: { 
+						origin: new origins.S3Origin(this.websiteBucket), // ASM-S5 // ASM-CRF6
+						allowedMethods: cloudfront.AllowedMethods.ALLOW_GET_HEAD,
+						viewerProtocolPolicy: cloudfront.ViewerProtocolPolicy.REDIRECT_TO_HTTPS,
+					},
+					defaultRootObject: "index.html",
+					enableLogging: true, // ASM-CFR3
+					logBucket: props.serverAccessLoggingBucket, // ASM-S1
+					logFilePrefix: "logs/websiteDistribution/", // ASM-S1
+					logIncludesCookies: true,
+					minimumProtocolVersion: cloudfront.SecurityPolicyProtocol.TLS_V1_2_2021, // ASM-CRF5
+				}
+			);
+		} else {
+			this.websiteDistribution = new cloudfront.Distribution(
+				this,
+				"websiteDistribution",
+				{
+					defaultBehavior: { 
+						origin: new origins.S3Origin(this.websiteBucket), // ASM-S5 // ASM-CRF6
+						allowedMethods: cloudfront.AllowedMethods.ALLOW_GET_HEAD,
+						viewerProtocolPolicy: cloudfront.ViewerProtocolPolicy.REDIRECT_TO_HTTPS,
+					},
+					defaultRootObject: "index.html",
+					enableLogging: true, // ASM-CFR3
+					logBucket: props.serverAccessLoggingBucket, // ASM-S1
+					logFilePrefix: "logs/websiteDistribution/", // ASM-S1
+					logIncludesCookies: true,
+					minimumProtocolVersion: cloudfront.SecurityPolicyProtocol.TLS_V1_2_2021, // ASM-CRF5
+				}
+			);
+		};
 		NagSuppressions.addResourceSuppressions(
 			this.websiteDistribution,
 			[
