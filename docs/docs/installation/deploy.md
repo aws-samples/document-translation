@@ -27,7 +27,7 @@ Using the terminal (E.g. [CloudShell]({{ site.baseurl }}/docs/installation/prere
 ```sh
 # Bootstrap the account for use with the AWS CDK
 # Update the <ACCOUNT-ID> with your account ID (shown top right of the AWS Console)
-cdk bootstrap aws://<ACCONT-ID>/${AWS_REGION}
+cdk bootstrap aws://<ACCOUNT-ID>/${AWS_REGION}
 ```
 
 ## Clone source code
@@ -43,7 +43,7 @@ cd document-translation
 # Fetch available tags
 git fetch --all --tags
 # View tags
-git tags
+git tag
 # Checkout tag
 git checkout tags/v1.0.1
 ```
