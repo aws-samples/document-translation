@@ -42,7 +42,10 @@ export class dt_web extends Construct {
 			this,
 			"websiteDistribution",
 			{
-				defaultBehavior: { origin: new origins.S3Origin(this.websiteBucket) }, // ASM-S5 // ASM-CRF6
+				defaultBehavior: { 
+					origin: new origins.S3Origin(this.websiteBucket), // ASM-S5 // ASM-CRF6
+					allowedMethods: cloudfront.AllowedMethods.ALLOW_GET_HEAD,
+				},
 				defaultRootObject: "index.html",
 				enableLogging: true, // ASM-CFR3
 				logBucket: props.serverAccessLoggingBucket, // ASM-S1
