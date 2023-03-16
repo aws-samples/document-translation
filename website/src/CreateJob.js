@@ -343,6 +343,7 @@ export default function CreateJob({
 						</Heading>
 						<input 
 							type="file"
+							accept="text/plain,text/html,application/x-xliff+xml,application/vnd.openxmlformats-officedocument.wordprocessingml.document,application/vnd.openxmlformats-officedocument.presentationml.presentation,application/vnd.openxmlformats-officedocument.spreadsheetml.sheet"
 							onChange={onChangeFile}
 						/>
 					{ formState.formErrors_noOriginalDoc && <Text lineHeight="2em" variation="error"><Badge variation="error">Error</Badge>&nbsp;{ t('original_document_error_no_doc') }</Text>}
