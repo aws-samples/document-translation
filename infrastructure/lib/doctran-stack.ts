@@ -99,6 +99,10 @@ export class DocTranStack extends cdk.Stack {
 			process.env.webUiCustomDomain !== undefined && process.env.webUiCustomDomain !== "" 
 				? process.env.webUiCustomDomain.toLowerCase()
 				: "";
+		const webUiCustomDomainCertificate: string =
+			process.env.webUiCustomDomainCertificate !== undefined && process.env.webUiCustomDomainCertificate !== "" 
+				? process.env.webUiCustomDomainCertificate
+				: "";
 		// ENVIRONMENT VARIABLES | REMOVAL POLICY
 		const appRemovalPolicy: string =
 			process.env.appRemovalPolicy !== undefined
@@ -232,6 +236,7 @@ export class DocTranStack extends cdk.Stack {
 				removalPolicy: removalPolicy, // ASM-CFN1
 				webUiCustomDomainFlag: webUiCustomDomainFlag,
 				webUiCustomDomain: webUiCustomDomain,
+				webUiCustomDomainCertificate: webUiCustomDomainCertificate,
 			});
 			// OUTPUTS
 			this.awsCognitoOauthRedirect = new cdk.CfnOutput(

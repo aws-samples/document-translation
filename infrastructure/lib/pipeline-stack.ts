@@ -83,6 +83,10 @@ export class pipelineStack extends cdk.Stack {
 			process.env.webUiCustomDomain !== undefined && process.env.webUiCustomDomain !== "" 
 				? process.env.webUiCustomDomain.toLowerCase()
 				: "";
+		const webUiCustomDomainCertificate: string =
+			process.env.webUiCustomDomainCertificate !== undefined && process.env.webUiCustomDomainCertificate !== "" 
+				? process.env.webUiCustomDomainCertificate
+				: "";
 		// ENVIRONMENT VARIABLES | GIT
 		// ENVIRONMENT VARIABLES | GIT | SERVICE
 		const sourceGitService: string =
@@ -210,6 +214,7 @@ export class pipelineStack extends cdk.Stack {
 						appRemovalPolicy: { value: appRemovalPolicy },
 						webUi: { value: webUi },
 						webUiCustomDomain: { value: webUiCustomDomain },
+						webUiCustomDomainCertificate: { value: webUiCustomDomainCertificate },
 						cognitoLocalUsers: { value: cognitoLocalUsers },
 						cognitoLocalUsersMfa: { value: cognitoLocalUsersMfa },
 						cognitoLocalUsersMfaOtp: { value: cognitoLocalUsersMfaOtp },

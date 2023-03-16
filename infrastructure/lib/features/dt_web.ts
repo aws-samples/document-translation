@@ -10,6 +10,7 @@ import {
 	aws_cloudfront as cloudfront,
 	aws_cloudfront_origins as origins,
 	aws_cognito as cognito,
+	aws_certificatemanager as acm,
 } from "aws-cdk-lib";
 
 export interface props {
@@ -18,6 +19,7 @@ export interface props {
 	removalPolicy: cdk.RemovalPolicy;
 	webUiCustomDomainFlag: boolean,
 	webUiCustomDomain: string,
+	webUiCustomDomainCertificate: string,
 }
 
 export class dt_web extends Construct {
@@ -41,11 +43,13 @@ export class dt_web extends Construct {
 
 		// WEBSITE | CLOUDFRONT
 		if (props.webUiCustomDomainFlag) {
+			const certificate = acm.Certificate.fromCertificateArn(this, 'Certificate', props.webUiCustomDomainCertificate);
 			this.websiteDistribution = new cloudfront.Distribution(
 				this,
 				"websiteDistribution",
 				{
 					domainNames: [props.webUiCustomDomain],
+					certificate: certificate,
 					defaultBehavior: { 
 						origin: new origins.S3Origin(this.websiteBucket), // ASM-S5 // ASM-CRF6
 						allowedMethods: cloudfront.AllowedMethods.ALLOW_GET_HEAD,
