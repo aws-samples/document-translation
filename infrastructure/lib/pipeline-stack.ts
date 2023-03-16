@@ -75,6 +75,14 @@ export class pipelineStack extends cdk.Stack {
 			process.env.webUi && process.env.webUi.toLowerCase() === "true"
 				? true
 				: false;
+		const webUiCustomDomainFlag: boolean =
+			process.env.webUiCustomDomain !== undefined && process.env.webUiCustomDomain !== "" 
+				? true
+				: false;
+		const webUiCustomDomain: string =
+			process.env.webUiCustomDomain !== undefined && process.env.webUiCustomDomain !== "" 
+				? process.env.webUiCustomDomain.toLowerCase()
+				: "";
 		// ENVIRONMENT VARIABLES | GIT
 		// ENVIRONMENT VARIABLES | GIT | SERVICE
 		const sourceGitService: string =
