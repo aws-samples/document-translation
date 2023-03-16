@@ -91,6 +91,18 @@ export class DocTranStack extends cdk.Stack {
 			process.env.webUi && process.env.webUi.toLowerCase() === "true"
 				? true
 				: false;
+		const webUiCustomDomainFlag: boolean =
+			process.env.webUiCustomDomain !== undefined && process.env.webUiCustomDomain !== "" 
+				? true
+				: false;
+		const webUiCustomDomain: string =
+			process.env.webUiCustomDomain !== undefined && process.env.webUiCustomDomain !== "" 
+				? process.env.webUiCustomDomain.toLowerCase()
+				: "";
+		const webUiCustomDomainCertificate: string =
+			process.env.webUiCustomDomainCertificate !== undefined && process.env.webUiCustomDomainCertificate !== "" 
+				? process.env.webUiCustomDomainCertificate
+				: "";
 		// ENVIRONMENT VARIABLES | REMOVAL POLICY
 		const appRemovalPolicy: string =
 			process.env.appRemovalPolicy !== undefined
@@ -222,13 +234,11 @@ export class DocTranStack extends cdk.Stack {
 				serverAccessLoggingBucket,
 				userPoolClient: base_api.userPoolClient,
 				removalPolicy: removalPolicy, // ASM-CFN1
+				webUiCustomDomainFlag: webUiCustomDomainFlag,
+				webUiCustomDomain: webUiCustomDomain,
+				webUiCustomDomainCertificate: webUiCustomDomainCertificate,
 			});
 			// OUTPUTS
-			this.awsCognitoOauthRedirect = new cdk.CfnOutput(
-				this,
-				"awsCognitoOauthRedirect",
-				{ value: `https://${base_web.websiteDistribution.domainName}/` }
-			);
 			this.appWebsiteS3Bucket = new cdk.CfnOutput(this, "appWebsiteS3Bucket", {
 				value: base_web.websiteBucket.bucketName,
 			});
@@ -237,9 +247,25 @@ export class DocTranStack extends cdk.Stack {
 				"appWebsiteDistribution",
 				{ value: base_web.websiteDistribution.distributionId }
 			);
-			this.appHostedUrl = new cdk.CfnOutput(this, "appHostedUrl", {
-				value: `https://${base_web.websiteDistribution.domainName}/`,
-			});
+			if (webUiCustomDomainFlag) {
+				this.awsCognitoOauthRedirect = new cdk.CfnOutput(
+					this,
+					"awsCognitoOauthRedirect",
+					{ value: `https://${webUiCustomDomain}/` }
+				);
+				this.appHostedUrl = new cdk.CfnOutput(this, "appHostedUrl", {
+					value: `https://${webUiCustomDomain}/`,
+				});
+			} else {
+				this.awsCognitoOauthRedirect = new cdk.CfnOutput(
+					this,
+					"awsCognitoOauthRedirect",
+					{ value: `https://${base_web.websiteDistribution.domainName}/` }
+				);
+				this.appHostedUrl = new cdk.CfnOutput(this, "appHostedUrl", {
+					value: `https://${base_web.websiteDistribution.domainName}/`,
+				});
+			}
 		}
 
 		// OUTPUTS

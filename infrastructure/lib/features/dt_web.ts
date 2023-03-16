@@ -10,12 +10,16 @@ import {
 	aws_cloudfront as cloudfront,
 	aws_cloudfront_origins as origins,
 	aws_cognito as cognito,
+	aws_certificatemanager as acm,
 } from "aws-cdk-lib";
 
 export interface props {
 	serverAccessLoggingBucket: s3.Bucket;
 	userPoolClient: cognito.UserPoolClient;
 	removalPolicy: cdk.RemovalPolicy;
+	webUiCustomDomainFlag: boolean,
+	webUiCustomDomain: string,
+	webUiCustomDomainCertificate: string,
 }
 
 export class dt_web extends Construct {
@@ -38,23 +42,46 @@ export class dt_web extends Construct {
 		});
 
 		// WEBSITE | CLOUDFRONT
-		this.websiteDistribution = new cloudfront.Distribution(
-			this,
-			"websiteDistribution",
-			{
-				defaultBehavior: { 
-					origin: new origins.S3Origin(this.websiteBucket), // ASM-S5 // ASM-CRF6
-					allowedMethods: cloudfront.AllowedMethods.ALLOW_GET_HEAD,
-					viewerProtocolPolicy: cloudfront.ViewerProtocolPolicy.REDIRECT_TO_HTTPS,
-				},
-				defaultRootObject: "index.html",
-				enableLogging: true, // ASM-CFR3
-				logBucket: props.serverAccessLoggingBucket, // ASM-S1
-				logFilePrefix: "logs/websiteDistribution/", // ASM-S1
-				logIncludesCookies: true,
-				minimumProtocolVersion: cloudfront.SecurityPolicyProtocol.TLS_V1_2_2021, // ASM-CRF5
-			}
-		);
+		if (props.webUiCustomDomainFlag) {
+			const certificate = acm.Certificate.fromCertificateArn(this, 'Certificate', props.webUiCustomDomainCertificate);
+			this.websiteDistribution = new cloudfront.Distribution(
+				this,
+				"websiteDistribution",
+				{
+					domainNames: [props.webUiCustomDomain],
+					certificate: certificate,
+					defaultBehavior: { 
+						origin: new origins.S3Origin(this.websiteBucket), // ASM-S5 // ASM-CRF6
+						allowedMethods: cloudfront.AllowedMethods.ALLOW_GET_HEAD,
+						viewerProtocolPolicy: cloudfront.ViewerProtocolPolicy.REDIRECT_TO_HTTPS,
+					},
+					defaultRootObject: "index.html",
+					enableLogging: true, // ASM-CFR3
+					logBucket: props.serverAccessLoggingBucket, // ASM-S1
+					logFilePrefix: "logs/websiteDistribution/", // ASM-S1
+					logIncludesCookies: true,
+					minimumProtocolVersion: cloudfront.SecurityPolicyProtocol.TLS_V1_2_2021, // ASM-CRF5
+				}
+			);
+		} else {
+			this.websiteDistribution = new cloudfront.Distribution(
+				this,
+				"websiteDistribution",
+				{
+					defaultBehavior: { 
+						origin: new origins.S3Origin(this.websiteBucket), // ASM-S5 // ASM-CRF6
+						allowedMethods: cloudfront.AllowedMethods.ALLOW_GET_HEAD,
+						viewerProtocolPolicy: cloudfront.ViewerProtocolPolicy.REDIRECT_TO_HTTPS,
+					},
+					defaultRootObject: "index.html",
+					enableLogging: true, // ASM-CFR3
+					logBucket: props.serverAccessLoggingBucket, // ASM-S1
+					logFilePrefix: "logs/websiteDistribution/", // ASM-S1
+					logIncludesCookies: true,
+					minimumProtocolVersion: cloudfront.SecurityPolicyProtocol.TLS_V1_2_2021, // ASM-CRF5
+				}
+			);
+		};
 		NagSuppressions.addResourceSuppressions(
 			this.websiteDistribution,
 			[
@@ -78,9 +105,17 @@ export class dt_web extends Construct {
 		// WEBSITE | API CALLBACK
 		const cfnUserPoolClient = props.userPoolClient.node
 			.defaultChild as cognito.CfnUserPoolClient;
-		cfnUserPoolClient.callbackUrLs = [
-			`https://${this.websiteDistribution.domainName}/`,
-		];
+		if (props.webUiCustomDomainFlag) {
+			cfnUserPoolClient.callbackUrLs = [
+				`https://${this.websiteDistribution.domainName}/`,
+				`https://${props.webUiCustomDomain}/`
+			];
+			
+		} else {
+			cfnUserPoolClient.callbackUrLs = [
+				`https://${this.websiteDistribution.domainName}/`,
+			];
+		}
 		// END
 	}
 }

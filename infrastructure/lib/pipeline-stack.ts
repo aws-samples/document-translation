@@ -75,6 +75,18 @@ export class pipelineStack extends cdk.Stack {
 			process.env.webUi && process.env.webUi.toLowerCase() === "true"
 				? true
 				: false;
+		const webUiCustomDomainFlag: boolean =
+			process.env.webUiCustomDomain !== undefined && process.env.webUiCustomDomain !== "" 
+				? true
+				: false;
+		const webUiCustomDomain: string =
+			process.env.webUiCustomDomain !== undefined && process.env.webUiCustomDomain !== "" 
+				? process.env.webUiCustomDomain.toLowerCase()
+				: "";
+		const webUiCustomDomainCertificate: string =
+			process.env.webUiCustomDomainCertificate !== undefined && process.env.webUiCustomDomainCertificate !== "" 
+				? process.env.webUiCustomDomainCertificate
+				: "";
 		// ENVIRONMENT VARIABLES | GIT
 		// ENVIRONMENT VARIABLES | GIT | SERVICE
 		const sourceGitService: string =
@@ -201,6 +213,8 @@ export class pipelineStack extends cdk.Stack {
 						pipelineRemovalPolicy: { value: pipelineRemovalPolicy },
 						appRemovalPolicy: { value: appRemovalPolicy },
 						webUi: { value: webUi },
+						webUiCustomDomain: { value: webUiCustomDomain },
+						webUiCustomDomainCertificate: { value: webUiCustomDomainCertificate },
 						cognitoLocalUsers: { value: cognitoLocalUsers },
 						cognitoLocalUsersMfa: { value: cognitoLocalUsersMfa },
 						cognitoLocalUsersMfaOtp: { value: cognitoLocalUsersMfaOtp },
