@@ -45,6 +45,7 @@ export class dt_web extends Construct {
 				defaultBehavior: { 
 					origin: new origins.S3Origin(this.websiteBucket), // ASM-S5 // ASM-CRF6
 					allowedMethods: cloudfront.AllowedMethods.ALLOW_GET_HEAD,
+					viewerProtocolPolicy: cloudfront.ViewerProtocolPolicy.REDIRECT_TO_HTTPS,
 				},
 				defaultRootObject: "index.html",
 				enableLogging: true, // ASM-CFR3
