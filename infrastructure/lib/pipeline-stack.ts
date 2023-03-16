@@ -209,6 +209,7 @@ export class pipelineStack extends cdk.Stack {
 						pipelineRemovalPolicy: { value: pipelineRemovalPolicy },
 						appRemovalPolicy: { value: appRemovalPolicy },
 						webUi: { value: webUi },
+						webUiCustomDomain: { value: webUiCustomDomain },
 						cognitoLocalUsers: { value: cognitoLocalUsers },
 						cognitoLocalUsersMfa: { value: cognitoLocalUsersMfa },
 						cognitoLocalUsersMfaOtp: { value: cognitoLocalUsersMfaOtp },

@@ -16,6 +16,8 @@ export interface props {
 	serverAccessLoggingBucket: s3.Bucket;
 	userPoolClient: cognito.UserPoolClient;
 	removalPolicy: cdk.RemovalPolicy;
+	webUiCustomDomainFlag: boolean,
+	webUiCustomDomain: string,
 }
 
 export class dt_web extends Construct {

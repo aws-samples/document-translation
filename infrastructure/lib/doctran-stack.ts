@@ -230,6 +230,8 @@ export class DocTranStack extends cdk.Stack {
 				serverAccessLoggingBucket,
 				userPoolClient: base_api.userPoolClient,
 				removalPolicy: removalPolicy, // ASM-CFN1
+				webUiCustomDomainFlag: webUiCustomDomainFlag,
+				webUiCustomDomain: webUiCustomDomain,
 			});
 			// OUTPUTS
 			this.awsCognitoOauthRedirect = new cdk.CfnOutput(
