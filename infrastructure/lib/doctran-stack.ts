@@ -239,11 +239,6 @@ export class DocTranStack extends cdk.Stack {
 				webUiCustomDomainCertificate: webUiCustomDomainCertificate,
 			});
 			// OUTPUTS
-			this.awsCognitoOauthRedirect = new cdk.CfnOutput(
-				this,
-				"awsCognitoOauthRedirect",
-				{ value: `https://${base_web.websiteDistribution.domainName}/` }
-			);
 			this.appWebsiteS3Bucket = new cdk.CfnOutput(this, "appWebsiteS3Bucket", {
 				value: base_web.websiteBucket.bucketName,
 			});
@@ -253,10 +248,20 @@ export class DocTranStack extends cdk.Stack {
 				{ value: base_web.websiteDistribution.distributionId }
 			);
 			if (webUiCustomDomainFlag) {
+				this.awsCognitoOauthRedirect = new cdk.CfnOutput(
+					this,
+					"awsCognitoOauthRedirect",
+					{ value: `https://${webUiCustomDomain}/` }
+				);
 				this.appHostedUrl = new cdk.CfnOutput(this, "appHostedUrl", {
 					value: `https://${webUiCustomDomain}/`,
 				});
 			} else {
+				this.awsCognitoOauthRedirect = new cdk.CfnOutput(
+					this,
+					"awsCognitoOauthRedirect",
+					{ value: `https://${base_web.websiteDistribution.domainName}/` }
+				);
 				this.appHostedUrl = new cdk.CfnOutput(this, "appHostedUrl", {
 					value: `https://${base_web.websiteDistribution.domainName}/`,
 				});
