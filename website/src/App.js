@@ -54,7 +54,8 @@ export default function App(props) {
 		let data;
 		async function fetchJobs() {
 			console.log("Loading job data");
-			await API.graphql({ query: listJobs, authMode: 'AMAZON_COGNITO_USER_POOLS' }).then(response => {
+			try {
+				const response = await API.graphql({ query: listJobs, authMode: 'AMAZON_COGNITO_USER_POOLS' });
 				console.log("Loading job data: Checking for Cloud jobs");
 				console.log(response);
 				data = response.data.listJobs.items;
@@ -74,28 +75,33 @@ export default function App(props) {
 				console.log("Loading job data: Using jobs");
 				console.log(data);
 				updateJobs(data);
-			}).catch(e => {
-				console.log(e);
-				console.log("ERROR: " + e.errors[0].message);
-			});
+			} catch (error) {
+				console.error(error);
+				console.error("ERROR: " + error.errors[0].message);
+			}
 		}
 
 		/* Check user is logged in, redirect if not */
-		let updateUser = async authState => {
+		async function updateUser() {
 			console.log("Auth State: Check auth state");
-			let user = await Auth.currentAuthenticatedUser().then(user => {
+			try {
+				const user = await Auth.currentAuthenticatedUser();
 				console.log(user);
 				console.log("Auth State: Set user");
 				setUser(user);
 				console.log("Auth State: Fetch user jobs");
 				fetchJobs();
-			}).catch(e => {
-				console.log("Auth State: " + e);
-				console.log("Auth State: Set user to null");
-				setUser(null);
-				console.log("Auth State: Redirect to login");
-				Auth.federatedSignIn();
-			});
+			} catch (error) {
+				if (error == 'The user is not authenticated'){
+					console.log("Auth State: " + error);
+					console.log("Auth State: Set user to null");
+					setUser(null);
+					console.log("Auth State: Redirect to login");
+					await Auth.federatedSignIn();
+				} else {
+					console.error("ERROR:", error);
+				}
+			}
 		}
 		Hub.listen('auth', updateUser)
 		updateUser()
