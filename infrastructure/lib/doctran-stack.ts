@@ -33,10 +33,12 @@ export class DocTranStack extends cdk.Stack {
 	public readonly awsUserPoolsWebClientId: cdk.CfnOutput;
 	public readonly awsCognitoOauthDomain: cdk.CfnOutput;
 	public readonly awsUserFilesS3Bucket: cdk.CfnOutput;
-	public readonly awsCognitoOauthRedirect: cdk.CfnOutput;
+	public readonly awsCognitoOauthRedirectSignIn: cdk.CfnOutput;
+	public readonly awsCognitoOauthRedirectSignOut: cdk.CfnOutput;
 	// OUTPUTS | WEBSITE FRONT-END | User
 	public readonly appWebsiteS3Bucket: cdk.CfnOutput;
 	public readonly appHostedUrl: cdk.CfnOutput;
+	public readonly appHostedUrlCloudFront: cdk.CfnOutput;
 	// OUTPUTS | SAML PROVIDER
 	public readonly samlIdentifier: cdk.CfnOutput;
 	public readonly samlReplyUrl: cdk.CfnOutput;
@@ -230,6 +232,7 @@ export class DocTranStack extends cdk.Stack {
 		// WEBSITE (Optional feature)
 		//
 		if (webUi) {
+			const signOutSuffix: string = "signedout";
 			const base_web = new dt_web(this, "base_web", {
 				serverAccessLoggingBucket,
 				userPoolClient: base_api.userPoolClient,
@@ -237,6 +240,7 @@ export class DocTranStack extends cdk.Stack {
 				webUiCustomDomainFlag: webUiCustomDomainFlag,
 				webUiCustomDomain: webUiCustomDomain,
 				webUiCustomDomainCertificate: webUiCustomDomainCertificate,
+				signOutSuffix: signOutSuffix,
 			});
 			// OUTPUTS
 			this.appWebsiteS3Bucket = new cdk.CfnOutput(this, "appWebsiteS3Bucket", {
@@ -248,10 +252,15 @@ export class DocTranStack extends cdk.Stack {
 				{ value: base_web.websiteDistribution.distributionId }
 			);
 			if (webUiCustomDomainFlag) {
-				this.awsCognitoOauthRedirect = new cdk.CfnOutput(
+				this.awsCognitoOauthRedirectSignIn = new cdk.CfnOutput(
 					this,
-					"awsCognitoOauthRedirect",
+					"awsCognitoOauthRedirectSignIn",
 					{ value: `https://${webUiCustomDomain}/` }
+				);
+				this.awsCognitoOauthRedirectSignOut = new cdk.CfnOutput(
+					this,
+					"awsCognitoOauthRedirectSignOut",
+					{ value: `https://${webUiCustomDomain}/${signOutSuffix}` }
 				);
 				this.appHostedUrl = new cdk.CfnOutput(this, "appHostedUrl", {
 					value: `https://${webUiCustomDomain}/`,
@@ -260,10 +269,15 @@ export class DocTranStack extends cdk.Stack {
 					value: `https://${base_web.websiteDistribution.domainName}/`,
 				});
 			} else {
-				this.awsCognitoOauthRedirect = new cdk.CfnOutput(
+				this.awsCognitoOauthRedirectSignIn = new cdk.CfnOutput(
 					this,
-					"awsCognitoOauthRedirect",
+					"awsCognitoOauthRedirectSignIn",
 					{ value: `https://${base_web.websiteDistribution.domainName}/` }
+				);
+				this.awsCognitoOauthRedirectSignOut = new cdk.CfnOutput(
+					this,
+					"awsCognitoOauthRedirectSignOut",
+					{ value: `https://${base_web.websiteDistribution.domainName}/${signOutSuffix}` }
 				);
 				this.appHostedUrl = new cdk.CfnOutput(this, "appHostedUrl", {
 					value: `https://${base_web.websiteDistribution.domainName}/`,

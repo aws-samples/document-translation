@@ -11,8 +11,8 @@ const awsmobile = {
     aws_cognito_identity_pool_id: cfnOutputs.awsCognitoIdentityPoolId,
     oauth: {
         domain: cfnOutputs.awsCognitoOauthDomain + '.auth.' + cfnOutputs.awsRegion + '.amazoncognito.com',
-        redirectSignIn: cfnOutputs.awsCognitoOauthRedirect,
-        redirectSignOut: cfnOutputs.awsCognitoOauthRedirect,
+        redirectSignIn: cfnOutputs.awsCognitoOauthRedirectSignIn,
+        redirectSignOut: cfnOutputs.awsCognitoOauthRedirectSignOut,
         scope: ['openid'],
         responseType: 'code'
     },
