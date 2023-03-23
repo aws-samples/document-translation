@@ -46,7 +46,7 @@ export class dt_web extends Construct {
 		// Redirect non index pages back to React to handle
 		const returnUnknownPagesToIndex: cloudfront.ErrorResponse = {
 			httpStatus: 404,
-			responseHttpStatus: 202,
+			responseHttpStatus: 200,
 			responsePagePath: '/',
 		};
 		if (props.webUiCustomDomainFlag) {
