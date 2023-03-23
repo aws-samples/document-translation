@@ -92,10 +92,9 @@ export default function App(props) {
 				// Fetch jobs
 				const response = await API.graphql({ query: listJobs, authMode: 'AMAZON_COGNITO_USER_POOLS' });
 				data = response.data.listJobs.items;
-				
 				// If no data is returned, load sample data instead
 				if (data === undefined || data.length === 0) {
-					data = loadSampleData()
+					data = await loadSampleData()
 				}
 				
 				// Sort the job data by creation date
