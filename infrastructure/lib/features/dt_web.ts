@@ -103,6 +103,7 @@ export class dt_web extends Construct {
 		);
 
 		// WEBSITE | API CALLBACK
+		const signOutSuffix = 'signedout';
 		const cfnUserPoolClient = props.userPoolClient.node
 			.defaultChild as cognito.CfnUserPoolClient;
 		if (props.webUiCustomDomainFlag) {
@@ -111,9 +112,17 @@ export class dt_web extends Construct {
 				`https://${props.webUiCustomDomain}/`
 			];
 			
+			cfnUserPoolClient.logoutUrLs = [
+				`https://${this.websiteDistribution.domainName}/${signOutSuffix}`,
+				`https://${props.webUiCustomDomain}/${signOutSuffix}`
+			];
+			
 		} else {
 			cfnUserPoolClient.callbackUrLs = [
 				`https://${this.websiteDistribution.domainName}/`,
+			];
+			cfnUserPoolClient.logoutUrLs = [
+				`https://${this.websiteDistribution.domainName}/${signOutSuffix}`,
 			];
 		}
 		// END
