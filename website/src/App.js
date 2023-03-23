@@ -146,7 +146,7 @@ export default function App(props) {
 					case '/signout':
 						updateSigningOut(true)
 						console.log('Signing out the user...');
-						await Auth.signOut({ global: true });
+						await Auth.signOut();
 						break;
 
 					// If the pathname is '/signedout/' or '/signedout', wait, then redirect to the homepage
