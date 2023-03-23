@@ -256,6 +256,9 @@ export class DocTranStack extends cdk.Stack {
 				this.appHostedUrl = new cdk.CfnOutput(this, "appHostedUrl", {
 					value: `https://${webUiCustomDomain}/`,
 				});
+				this.appHostedUrlCloudFront = new cdk.CfnOutput(this, "appHostedUrlCloudFront", {
+					value: `https://${base_web.websiteDistribution.domainName}/`,
+				});
 			} else {
 				this.awsCognitoOauthRedirect = new cdk.CfnOutput(
 					this,
