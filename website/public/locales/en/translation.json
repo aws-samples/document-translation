@@ -4,6 +4,7 @@
     "new_translation": "New Translation",
     "help": "Help",
     "sign_out": "Sign Out",
+    "signing_out": "Signing out",
     "original_document": "Original Document",
     "original_document_error_no_doc": "Please select an Original Document to translate.",
     "original_document_error_unsupported_type": "Please upload a supported filetype (docx, pptx, xlsx, txt, xml, html).",
