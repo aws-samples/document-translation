@@ -217,6 +217,7 @@ export default function App(props) {
 						</Tabs>
 					}
 					{signingOut && <p>{t('signing_out')}...&#128075;</p>}
+					{signedOut && <p>{t('signed_out')}...&#128075;</p>}
 					<Footer />
 				</View>
 			</View>
