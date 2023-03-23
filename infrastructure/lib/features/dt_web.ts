@@ -43,6 +43,12 @@ export class dt_web extends Construct {
 		});
 
 		// WEBSITE | CLOUDFRONT
+		// Redirect non index pages back to React to handle
+		const returnUnknownPagesToIndex: cloudfront.ErrorResponse = {
+			httpStatus: 404,
+			responseHttpStatus: 202,
+			responsePagePath: '/',
+		};
 		if (props.webUiCustomDomainFlag) {
 			const certificate = acm.Certificate.fromCertificateArn(this, 'Certificate', props.webUiCustomDomainCertificate);
 			this.websiteDistribution = new cloudfront.Distribution(
@@ -62,6 +68,9 @@ export class dt_web extends Construct {
 					logFilePrefix: "logs/websiteDistribution/", // ASM-S1
 					logIncludesCookies: true,
 					minimumProtocolVersion: cloudfront.SecurityPolicyProtocol.TLS_V1_2_2021, // ASM-CRF5
+					errorResponses: [
+						returnUnknownPagesToIndex,
+					],
 				}
 			);
 		} else {
@@ -80,6 +89,9 @@ export class dt_web extends Construct {
 					logFilePrefix: "logs/websiteDistribution/", // ASM-S1
 					logIncludesCookies: true,
 					minimumProtocolVersion: cloudfront.SecurityPolicyProtocol.TLS_V1_2_2021, // ASM-CRF5
+					errorResponses: [
+						returnUnknownPagesToIndex,
+					],
 				}
 			);
 		};
