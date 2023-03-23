@@ -152,6 +152,7 @@ export default function App(props) {
 					// If the pathname is '/signedout/' or '/signedout', wait, then redirect to the homepage
 					case '/signedout/':
 					case '/signedout':
+						updateSigningOut(true)
 						console.log('Redirecting the user...');
 						setTimeout(() => {
 							window.location.assign('/');
