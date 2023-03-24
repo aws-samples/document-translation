@@ -65,6 +65,7 @@ export default function App(props) {
 	const [jobs, updateJobs]             = useState([]);
 	const [user, setUser]                = useState(null)
 	const [signingOut, updateSigningOut] = useState(false);
+	const [signedOut, updateSignedOut]   = useState(false);
 
 	useEffect(() => {
 		// Loads sample job history data from user or project
@@ -151,7 +152,7 @@ export default function App(props) {
 					// If the pathname is '/signedout/' or '/signedout', wait, then redirect to the homepage
 					case '/signedout/':
 					case '/signedout':
-						updateSigningOut(true)
+						updateSignedOut(true)
 						console.log('Redirecting the user...');
 						setTimeout(() => {
 							window.location.assign('/');
