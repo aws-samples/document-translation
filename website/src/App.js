@@ -19,6 +19,10 @@ import Footer    from './Footer';
 import Help      from './Help';
 import MyJobs    from './MyJobs';
 import CreateJob from './CreateJob';
+// IMPORTS | FUNCTIONS
+import sortDataByCreatedAt from './sortDataByCreatedAt';
+import loadSampleData      from './loadSampleData';
+import forceSampleValues   from './forceSampleValues';
 
 // CONFIGURE
 // CONFIGURE | AMPLIFY
@@ -26,30 +30,6 @@ Amplify.configure(config)
 Storage.configure({ level: 'private' });
 
 // FUNCTIONS
-// Replaces the id, jobOwner, and translateKey properties of each object in the data array with sample values
-function forceSampleValues(data) {
-	return data.map((job) => {
-		return {
-			...job,
-			id: "sample",
-			jobOwner: "sample",
-			translateKey: "{\"sample\":\"sample\"}"
-		};
-	});
-}
-
-// Sorts an array of data objects in descending order by the "createdAt" property
-function sortDataByCreatedAt(data) {
-	data.sort((a, b) => {
-		if (a.createdAt < b.createdAt) return 1;  // sort second object first
-		if (b.createdAt < a.createdAt) return -1; // sort first object first
-		if (a.id < b.id) return -1; // sort first object first
-		if (b.id < a.id) return 1;  // sort second object first
-		return 0; // equal objects
-	});
-	return data;
-}
-
 // Initiates federated sign-in process
 async function signIn() {
 	console.log("Starting federated sign-in...");
@@ -65,26 +45,9 @@ export default function App(props) {
 	const [jobs, updateJobs]             = useState([]);
 	const [user, setUser]                = useState(null)
 	const [signingOut, updateSigningOut] = useState(false);
+	const [signedOut, updateSignedOut]   = useState(false);
 
-	useEffect(() => {
-		// Loads sample job history data from user or project
-		async function loadSampleData() {
-			let data;
-			try {
-				// If user sample data is not available, load project sample data
-				console.log("Loading user sample jobs");
-				data = require("./jobData.json");
-			} catch {
-				// If user sample data is not available, load project sample data
-				console.log("Loading project sample jobs");
-				data = require("./sampleJobData.json");
-			}
-			// Add sample values to the job data
-			data = forceSampleValues(data);
-			
-			return data
-		}
-		
+	useEffect(() => {		
 		// Fetches users job history
 		async function fetchJobs() {
 			let data;
@@ -151,7 +114,7 @@ export default function App(props) {
 					// If the pathname is '/signedout/' or '/signedout', wait, then redirect to the homepage
 					case '/signedout/':
 					case '/signedout':
-						updateSigningOut(true)
+						updateSignedOut(true)
 						console.log('Redirecting the user...');
 						setTimeout(() => {
 							window.location.assign('/');
