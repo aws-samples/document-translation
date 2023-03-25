@@ -20,7 +20,7 @@ import Help      from './Help';
 import MyJobs    from './MyJobs';
 import CreateJob from './CreateJob';
 // IMPORTS | FUNCTIONS
-import sortDataByCreatedAt from './sortDataByCreatedAt';
+import sortDataByKey from './sortDataByKey';
 import loadSampleData      from './loadSampleData';
 import forceSampleValues   from './forceSampleValues';
 
@@ -61,7 +61,7 @@ export default function App(props) {
 				}
 				
 				// Sort the job data by creation date
-				data = sortDataByCreatedAt(data);
+				data = sortDataByKey("createdAt", "id", data);
 				
 				// Update the job data state with the fetched data
 				updateJobs(data);
