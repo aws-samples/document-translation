@@ -18,8 +18,5 @@ export default async function loadSampleData() {
 	
 	// Add sample values to the job data
 	data = await forceSampleValues(data);
-	console.log("AAA")
-	console.log(data)
-	console.log(JSON.stringify(data))
 	return data
 }
