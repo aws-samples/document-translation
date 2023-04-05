@@ -1,5 +1,6 @@
 // Copyright Amazon.com, Inc. or its affiliates. All Rights Reserved.
 // SPDX-License-Identifier: MIT-0
+import { useTranslation } from 'react-i18next';
 
 // AMPLIFY
 import { Auth, Storage } from 'aws-amplify';
@@ -21,6 +22,7 @@ export default function Jobs({
 	jobs = []
 }) {
 	const { tokens } = useTheme();
+	const { t } = useTranslation();
 
 	/* download hanlder	*/
 	async function download(e) {
@@ -63,7 +65,7 @@ export default function Jobs({
 
 		return (
 			<>
-			{showSummary && <span>{targets.length} Languages</span>}
+			{showSummary && <span>{targets.length} { t('jobs_table_status_languages') }</span>}
 			{!showSummary && JSON.stringify(targets)
 					.replaceAll(',', ', ')
 					.replaceAll('[','')
@@ -98,7 +100,7 @@ export default function Jobs({
 			<View
 				padding="1rem 0"
 			>
-				<Text variation="info"><Badge variation="info">Note</Badge>&nbsp;These are sample translations as you have no past translations to show. Please create your own translation using the tab above.</Text>
+				<Text variation="info"><Badge variation="info">{ t('notice_tag_note') }</Badge>&nbsp;{ t('notice_sample') }</Text>
 			</View>
 			</>
 		}
@@ -110,11 +112,11 @@ export default function Jobs({
 			>
 				<TableHead>
 					<TableRow>
-						<TableCell as="th">Name</TableCell>
-						<TableCell as="th">Created</TableCell>
-						<TableCell as="th" className="can-collapse">Source</TableCell>
-						<TableCell as="th">Targets</TableCell>
-						<TableCell as="th">Status</TableCell>
+						<TableCell as="th">{ t('jobs_table_header_name') }</TableCell>
+						<TableCell as="th">{ t('jobs_table_header_created') }</TableCell>
+						<TableCell as="th" className="can-collapse">{ t('jobs_table_header_source') }</TableCell>
+						<TableCell as="th">{ t('jobs_table_header_targets') }</TableCell>
+						<TableCell as="th">{ t('jobs_table_header_status') }</TableCell>
 					</TableRow>
 				</TableHead>
 				<TableBody>
@@ -136,15 +138,15 @@ export default function Jobs({
 								{formatTargets(item.languageTargets)}
 							</TableCell>
 							<TableCell>
-								{item.jobStatus.toUpperCase() === "UPLOADED"   && <Text variation="info">Uploaded</Text>}
-								{item.jobStatus.toUpperCase() === "PROCESSING" && <Text variation="info">Processing</Text>}
-								{item.jobStatus.toUpperCase() === "EXPIRED"    && <Text variation="warning">Expired</Text>}
-								{item.jobStatus.toUpperCase() === "ABORTED"    && <Text variation="Tertiary">Aborted</Text>}
-								{item.jobStatus.toUpperCase() === "FAILED"     && <Text variation="error">Failed</Text>}
-								{item.jobStatus.toUpperCase() === "TIMED_OUT"  && <Text variation="error">Timed Out</Text>}
+								{item.jobStatus.toUpperCase() === "UPLOADED"   && <Text variation="info">{ t('jobs_table_status_uploaded') }</Text>}
+								{item.jobStatus.toUpperCase() === "PROCESSING" && <Text variation="info">{ t('jobs_table_status_processing') }</Text>}
+								{item.jobStatus.toUpperCase() === "EXPIRED"    && <Text variation="warning">{ t('jobs_table_status_expired') }</Text>}
+								{item.jobStatus.toUpperCase() === "ABORTED"    && <Text variation="Tertiary">{ t('jobs_table_status_aborted') }</Text>}
+								{item.jobStatus.toUpperCase() === "FAILED"     && <Text variation="error">{ t('jobs_table_status_failed') }</Text>}
+								{item.jobStatus.toUpperCase() === "TIMED_OUT"  && <Text variation="error">{ t('jobs_table_status_timed_out') }</Text>}
 								{item.jobStatus.toUpperCase() === "COMPLETED"  &&
 									<>
-									<Button variation="primary" className="can-collapse" onClick={download} value={item.translateKey} download>Download</Button>
+									<Button variation="primary" className="can-collapse" onClick={download} value={item.translateKey} download>{ t('jobs_table_status_download') }</Button>
 									<Button variation="primary" className="is-collapsed" onClick={download} value={item.translateKey} download>&darr;</Button>
 									</>
 								}
