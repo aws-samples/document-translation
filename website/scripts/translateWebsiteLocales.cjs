@@ -5,7 +5,7 @@ const fs = require('fs');
 const { TranslateClient, TranslateTextCommand } = require("@aws-sdk/client-translate");
 
 const client = new TranslateClient({
-    maxAttempts: 3,
+    maxAttempts: 100,
 });
 
 const sourceLanguageCode = "en";
