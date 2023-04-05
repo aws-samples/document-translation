@@ -14,7 +14,9 @@ const allLanguages = [
 ]
 
 function createFilePath(languageCode) {
-    return "../public/locales/" + languageCode + "/translation.json"
+    const filePath = "../public/locales/" + languageCode + "/translation.json";
+    console.log(filePath);
+    return filePath;
 }
 
 async function translateString(sourceLanguageCode, targetLanguageCode, text) {
@@ -29,7 +31,9 @@ async function translateString(sourceLanguageCode, targetLanguageCode, text) {
     };
     const command = new TranslateTextCommand(input);
     const response = await client.send(command);
-
+    // if (targetLanguageCode == "fr") {
+    //     console.log(response.TranslatedText);
+    // }
     return response.TranslatedText;
 }
 
@@ -58,5 +62,5 @@ async function loopAllTargets(sourceLanguageCode, sourceStrings, targetLanguages
 }
 
 const sourceStrings = require(createFilePath(sourceLanguageCode));
-const targetLanguages = allLanguages.splice(allLanguages.indexOf(sourceLanguageCode));
+const targetLanguages = allLanguages.filter(item => item !== sourceLanguageCode);
 loopAllTargets(sourceLanguageCode, sourceStrings, targetLanguages);
