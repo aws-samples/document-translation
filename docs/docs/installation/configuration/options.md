@@ -119,6 +119,7 @@ export translationLifecyclePii="3"
 | `cognitoSamlUsers`            | `true`, `false`                   | `false`  | Yes, **if not** using local users | Enable SAML managed users                       |
 | `cognitoSamlMetadataUrl`      | "https://domain.tld/metadata.xml" | None     | Yes, **if** using SAML users      | Metadata XML from the SAML provider             |
 | **Git Source**                |                                   |          |                                   |                                                 |
+| `sourceGitService`               | "github"                  | "codecommit"     | Not required          | Your repository for source code                 |
 | `sourceGitRepo`               | "\<owner>/\<repo>"                  | None     | Yes, **always** required          | Your repository for source code                 |
 | `sourceGitBranch`             | "main", "test", "app"             | `main`   | Not required                      | Your repository branch for source code          |
 | **Feature - Translation**     |                                   |          |                                   |                                                 |
