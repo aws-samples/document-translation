@@ -208,6 +208,7 @@ export class pipelineStack extends cdk.Stack {
 			codeBuildDefaults: {
 				buildEnvironment: {
 					environmentVariables: {
+						sourceGitService: { value: sourceGitService },
 						sourceGitRepo: { value: sourceGitRepo },
 						sourceGitBranch: { value: sourceGitBranch },
 						pipelineRemovalPolicy: { value: pipelineRemovalPolicy },
