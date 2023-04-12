@@ -545,8 +545,8 @@ export default function CreateJob({
 							<li><label className="languageTargetsLabel"><input type="checkbox" onChange={onChangeLanguageTarget} className="languageTargetsCheckbox" value="cy"/>Welsh (cy)</label></li>
 						</ul>
 						<div class="controls">
-							<Button variation="link" size="small" onClick={languageTargetsAll} value={true} title="Select All">Select All</Button>
-							<Button variation="link" size="small" onClick={languageTargetsAll} value={false} title="Select None">Select None</Button>
+							<Button variation="link" size="small" onClick={languageTargetsAll} value={true} title="{ t('job_create_button_select_all') }">{ t('job_create_button_select_all') }</Button>
+							<Button variation="link" size="small" onClick={languageTargetsAll} value={false} title="{ t('job_create_button_select_none') }">{ t('job_create_button_select_none') }</Button>
 						</div>
 					{ formState.formErrors_noLanguageTarget && <Text lineHeight="2em" variation="error"><Badge variation="error">Error</Badge>&nbsp;Please select at least one Target Tanguage to translate to.</Text>}
 					</Card>
@@ -557,11 +557,11 @@ export default function CreateJob({
 					>
 						<Button variation="primary" onClick={save} title="Submit">{ t('submit') }</Button>
 					</Flex>
-					{ formState.formErrors_noOriginalDoc && <Text lineHeight="2em" variation="error"><Badge variation="error">Error</Badge>&nbsp;Please select an Original Document to translate.</Text>}
-					{ formState.formErrors_unsupportedFileType && <Text lineHeight="2em" variation="error"><Badge variation="error">Error</Badge>&nbsp;Please upload a supported filetype (docx, pptx, xlsx, txt, xlf, html).</Text>}
-					{ formState.formErrors_unsupportedFileSize && <Text lineHeight="2em" variation="error"><Badge variation="error">Error</Badge>&nbsp;Please upload a smaller file size ({supportedFileSizeMegaBytes} MB/{supportedFileSizeKiloBytes} KB maximum).</Text>}
-					{ formState.formErrors_noLanguageSource && <Text lineHeight="2em" variation="error"><Badge variation="error">Error</Badge>&nbsp;Please select an Original Language to translate.</Text>}
-					{ formState.formErrors_noLanguageTarget && <Text lineHeight="2em" variation="error"><Badge variation="error">Error</Badge>&nbsp;Please select at least one Target Tanguage to translate to.</Text>}
+					{ formState.formErrors_noOriginalDoc && <Text lineHeight="2em" variation="error"><Badge variation="error">{ t('notice_tag_error') }</Badge>&nbsp;{ t('notice_error_no_original_doc') }</Text>}
+					{ formState.formErrors_unsupportedFileType && <Text lineHeight="2em" variation="error"><Badge variation="error">{ t('notice_tag_error') }</Badge>&nbsp;{ t('notice_error_unsupported_file_type') }</Text>}
+					{ formState.formErrors_unsupportedFileSize && <Text lineHeight="2em" variation="error"><Badge variation="error">{ t('notice_tag_error') }</Badge>&nbsp;{ t('notice_error_unsupported_file_size') }&nbsp;({supportedFileSizeMegaBytes} MB/{supportedFileSizeKiloBytes} KB).</Text>}
+					{ formState.formErrors_noLanguageSource && <Text lineHeight="2em" variation="error"><Badge variation="error">{ t('notice_tag_error') }</Badge>&nbsp;{ t('notice_error_no_language_source') }</Text>}
+					{ formState.formErrors_noLanguageTarget && <Text lineHeight="2em" variation="error"><Badge variation="error">{ t('notice_tag_error') }</Badge>&nbsp;{ t('notice_error_no_language_target') }</Text>}
 				</div>
 			}
 			{ formState.saving &&

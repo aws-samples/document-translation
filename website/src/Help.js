@@ -19,6 +19,8 @@ import {
 } from '@aws-amplify/ui-react';
 import '@aws-amplify/ui-react/styles.css';
 
+import sortDataByKey from './sortDataByKey';
+
 export default function Help() {
 	/* Initial state */
 	const [help, updateHelps] = React.useState([]);
@@ -29,7 +31,7 @@ export default function Help() {
 		try {
 			data = require("./helpData.json");
 			// Sort array by order
-			data.sort((a,b) => (a.order > b.order) ? 1 : ((b.order > a.order) ? -1 : 0))
+			data = sortDataByKey("order", "title", data);
 			updateHelps(data);
 		} catch {
 			async function fetchHelps() {
@@ -39,7 +41,7 @@ export default function Help() {
 					// If no data, use sampleData
 					data = ( data === undefined || data.length === 0 ) ? require("./sampleHelpData.json") : data;
 					// Sort array by order
-					data.sort((a,b) => (a.order > b.order) ? 1 : ((b.order > a.order) ? -1 : 0))
+					data = sortDataByKey("order", "title", data);
 					updateHelps(data);
 				}).catch(e => {
 					console.log(e);
