@@ -37,7 +37,7 @@ This solution is configurable to meet your specific needs. In this step you will
 The git source type information is only required if using GitHub to host your code. The recommended option is to use CodeCommit, which is the default, where this section can be skipped. 
 
 ```sh
-export sourceGitBranch="github"
+export sourceGitService="github"
 export sourceGitRepo="<your-github-username>/<your-repo-name>"
 ```
 
