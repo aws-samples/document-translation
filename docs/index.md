@@ -11,7 +11,7 @@ permalink: /
 A web user interface and workflow for document translations using the Amazon Translate service
 {: .fs-6 .fw-300 }
 
-[Get started now]({{ site.baseurl }}/docs/installation){: .btn .btn-primary .fs-5 .mb-4 .mb-md-0 .mr-2 }
+[Get started now]({{ site.baseurl }}/docs/quick-start){: .btn .btn-primary .fs-5 .mb-4 .mb-md-0 .mr-2 }
 [View it on GitHub](https://github.com/aws-samples/document-translation){: .btn .fs-5 .mb-4 .mb-md-0 }
 
 ---
