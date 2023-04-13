@@ -23,6 +23,10 @@ User authentication is required and handled by [AWS Cognito](https://aws.amazon.
 
 ![Web UI - My Translations Table](docs/assets/img/client_history.png)
 
+**Multiple Language UI**
+
+![Web UI - Multiple Languages](docs//assets/img/client_multi_lang.png)
+
 **New Translations Form**
 
 ![Web UI - New Translation Form](docs/assets/img/client_create.png)
