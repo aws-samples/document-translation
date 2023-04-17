@@ -91,6 +91,7 @@ export default function CreateJob({
 				...currentState,
 				formErrors_unsupportedFileSize: true
 			}));
+			e.target.value = null;
 			return;
 		} else {
 			updateFormState(currentState => ({
