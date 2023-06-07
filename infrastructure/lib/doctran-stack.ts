@@ -127,6 +127,7 @@ export class DocTranStack extends cdk.Stack {
 			this,
 			"serverAccessLoggingBucket",
 			{
+				objectOwnership: s3.ObjectOwnership.OBJECT_WRITER,
 				blockPublicAccess: s3.BlockPublicAccess.BLOCK_ALL, // ASM-S2
 				encryption: s3.BucketEncryption.S3_MANAGED, // ASM-S3
 				enforceSSL: true, // ASM-S10
