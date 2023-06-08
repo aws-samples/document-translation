@@ -60,6 +60,7 @@ export class dt_translate extends Construct {
 		//
 		// INFRA | S3 | CONTENT
 		this.contentBucket = new s3.Bucket(this, "contentBucket", {
+			objectOwnership: s3.ObjectOwnership.BUCKET_OWNER_ENFORCED,
 			blockPublicAccess: s3.BlockPublicAccess.BLOCK_ALL, // ASM-S2
 			encryption: s3.BucketEncryption.S3_MANAGED, // ASM-S3
 			enforceSSL: true, // ASM-S10

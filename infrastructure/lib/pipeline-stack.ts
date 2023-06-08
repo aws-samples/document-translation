@@ -130,6 +130,7 @@ export class pipelineStack extends cdk.Stack {
 			this,
 			"serverAccessLogsBucket",
 			{
+				objectOwnership: s3.ObjectOwnership.OBJECT_WRITER,
 				blockPublicAccess: s3.BlockPublicAccess.BLOCK_ALL, // ASM-S2
 				encryption: s3.BucketEncryption.S3_MANAGED, // ASM-S3
 				enforceSSL: true, // ASM-S10
@@ -151,6 +152,7 @@ export class pipelineStack extends cdk.Stack {
 
 		// S3 | ARTIFACT BUCKET
 		const artifactBucket = new s3.Bucket(this, "artifactBucket", {
+			objectOwnership: s3.ObjectOwnership.BUCKET_OWNER_ENFORCED,
 			blockPublicAccess: s3.BlockPublicAccess.BLOCK_ALL, // ASM-S2
 			encryption: s3.BucketEncryption.S3_MANAGED, // ASM-S3
 			enforceSSL: true, // ASM-S10
