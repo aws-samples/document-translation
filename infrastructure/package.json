@@ -31,7 +31,7 @@
 	"dependencies": {
 		"@aws-cdk/aws-appsync-alpha": "^2.51.1-alpha.0",
 		"@aws-cdk/aws-cognito-identitypool-alpha": "^2.51.1-alpha.0",
-		"aws-cdk-lib": "2.51.1",
+		"aws-cdk-lib": "2.80.0",
 		"cdk-nag": "2.21.12",
 		"constructs": "^10.1.170",
 		"lambda-tester": "^4.0.1",
