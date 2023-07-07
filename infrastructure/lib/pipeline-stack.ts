@@ -268,7 +268,7 @@ export class pipelineStack extends cdk.Stack {
 						appWebsiteS3Bucket: deployStage.appWebsiteS3Bucket,
 						appWebsiteDistribution: deployStage.appWebsiteDistribution,
 					},
-					installCommands: ["npm install -u @aws-amplify/cli"],
+					installCommands: ["npm install -u @aws-amplify/cli@12.0.3"],
 					commands: [
 						'echo "appStackId: ${appStackId}"',
 						'echo "appStackName: ${appStackName}"',
