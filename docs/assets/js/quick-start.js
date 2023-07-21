@@ -79,19 +79,21 @@ function handleForm(event) {
 	event.preventDefault();
 	const data = Object.fromEntries(new FormData(event.target).entries())
 
+	console.log(data);
+
 	appendSection('----------')
 	appendSection('Configuration')
-	if (data.piiDetectionEnable.checked) {
+	if (data.piiDetectionEnable === "on") {
 		appendSection('PII Detection')
 		appendStep('Enable Macie', 'aws macie2 enable-macie')
 		appendStep('Create Macie log group', 'aws logs create-log-group --log-group-name /aws/macie/classificationjobs')
-		appendStep('Enable PII detection', `export translationPii="${data.piiDetectionEnable.checked}"`)
+		appendStep('Enable PII detection', `export translationPii="true"`)
 		appendStep('Set PII lifecycle', `export translationLifecyclePii="${data.piiDetectionLifecycle}"`)
 	};
 
-	if (data.customDomainEnable.checked) {
+	if (data.customDomainEnable === "on") {
 		appendSection('Custom Domain')
-		appendStep('Set custom domain name', `export webUiCustomDomain="${data.customDomainName.checked}"`)
+		appendStep('Set custom domain name', `export webUiCustomDomain="true"`)
 		appendStep('Set custom domain certificate', `export webUiCustomDomain="${data.customDomainCert}"`)
 	};
 	if (data.sourceGitService){
@@ -109,26 +111,26 @@ function handleForm(event) {
 		}
 		appendStep('Set branch name', `export sourceGitBranch="${data.sourceGitBranch}"`)
 	}
-	if (data.cognitoLocalUsers.checked) {
+	if (data.cognitoLocalUsers === "on") {
 		appendSection('Cognito Local Users')
-		appendStep('Enable Cognito local users', `export cognitoLocalUsers="${data.cognitoLocalUsers.checked}"`)
+		appendStep('Enable Cognito local users', `export cognitoLocalUsers="true"`)
 		appendStep('Set MFA enforcement', `export cognitoLocalUsersMfa="${data.cognitoLocalUsersMfa}"`)
 		appendStep('Enable MFA type OTP', `export cognitoLocalUsersMfaOtp="${data.cognitoLocalUsersMfaOtp}"`)
 		appendStep('Enable MFA type SMS', `export cognitoLocalUsersMfaSms="${data.cognitoLocalUsersMfaSms}"`)
 	};
 
-	if (data.cognitoSamlUsers.checked) {
+	if (data.cognitoSamlUsers === "on") {
 		appendSection('Cognito SAML Users')
-		appendStep('Enable Cognito SAML users', `export cognitoSamlUsers="${data.cognitoSamlUsers.checked}"`)
+		appendStep('Enable Cognito SAML users', `export cognitoSamlUsers="true"`)
 		appendStep('Set SAML metadata URL', `export cognitoSamlMetadataUrl="${data.cognitoSamlMetadataUrl}"`)
 	};
-	if (data.webUi.checked) {
+	if (data.webUi === "on") {
 		appendSection('Web UI')
-		appendStep('Enable Web UI', `export webUi="${data.webUi.checked}"`)
+		appendStep('Enable Web UI', `export webUi="true"`)
 	};
-	if (data.translation.checked) {
+	if (data.translation === "on") {
 		appendSection('Translation')
-		appendStep('Enable Translation', `export translation="${data.translation.checked}"`)
+		appendStep('Enable Translation', `export translation="true"`)
 		appendStep('Set default lifecycle', `export translationLifecycleDefault="${data.translationLifecycleDefault}"`)
 	};
 
