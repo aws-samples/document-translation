@@ -124,6 +124,9 @@ function handleForm(event) {
 		appendStep('Enable Cognito SAML users', `export cognitoSamlUsers="true"`)
 		appendStep('Set SAML metadata URL', `export cognitoSamlMetadataUrl="${data.cognitoSamlMetadataUrl}"`)
 	};
+
+    console.log(data.webUi);
+
 	if (data.webUi === "on") {
 		appendSection('Web UI')
 		appendStep('Enable Web UI', `export webUi="true"`)
