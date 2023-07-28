@@ -27,6 +27,7 @@ export class DocTranAppStage extends cdk.Stage {
 		const stackName = `DocTran-${sourceGitBranch}-app`;
 		const docTranStackInstance = new DocTranStack(this, `${stackName}`, {
 			stackName: `${stackName}`,
+			description: `INDSOL-0e1ec93-App`,
 		});
 
 		cdk.Aspects.of(docTranStackInstance).add(
