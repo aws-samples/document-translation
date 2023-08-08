@@ -201,10 +201,11 @@ export class pipelineStack extends cdk.Stack {
 				input: pipelineSource,
 				primaryOutputDirectory: `${dirPipeline}/cdk.out`,
 				commands: [
+					"npm install -g aws-cdk@^2.89.0",
 					`cd ${dirPipeline}`,
 					"npm ci",
 					"npm run build",
-					"npx cdk synth",
+					"cdk synth",
 				],
 			}),
 			codeBuildDefaults: {
