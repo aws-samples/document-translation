@@ -72,7 +72,7 @@ function appendSection(description){
 	output += "\n# " + description + "\n"
 }
 function appendStep(description, command){
-	output += command +  " # " + description + "\n"
+	output += command.trim() +  " # " + description + "\n"
 }
 
 function handleForm(event) {
