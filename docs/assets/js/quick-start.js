@@ -160,13 +160,21 @@ function handleForm(event) {
 	appendStep('Deploy', `cdk deploy`)
 
 	const result = document.getElementById('result');
+	const buttonCopy = document.getElementById('buttonCopy');
 
 	result.innerText = output;
 	form.style.display = "none";
 	result.style.display = "block";
+	buttonCopy.style.display = "block";
 	console.log(output);
 }
 form.addEventListener('submit', handleForm);
+
+function copyToClipboard() {
+	const result = document.getElementById('result');
+	navigator.clipboard.writeText(result.innerText);
+	console.log("Results copied to clipboard");
+}
 
 // FORM STYLE
 const styles = `

@@ -15,6 +15,7 @@ This project is [configurable]({{ site.baseurl }}/docs/architecture/features) to
 This form will collate your inputs and return the appropriate commands to enter for deployment. The output can be used with the [CloudShell]({{ site.baseurl }}/docs/installation/prerequisite/cloudshell) to quickly perform the installation. Please review the output to ensure you are happy with the values.
 
 <code id="result" style="display: none;"></code>
+<button id="buttonCopy" style="display: none;"  onclick="copyToClipboard()" class="btn btn-green">Copy</button>
 <form id="form">
 	<fieldset>
 		<legend>General Information</legend>
@@ -131,5 +132,4 @@ This form will collate your inputs and return the appropriate commands to enter 
 	</fieldset>
     <button type="submit" class="btn btn-blue">Generate</button>
 </form>
-
 <script src="{{ site.baseurl }}/assets/js/quick-start.js"></script>
