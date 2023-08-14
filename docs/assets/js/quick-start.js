@@ -115,8 +115,12 @@ function handleForm(event) {
 		appendSection('Cognito Local Users')
 		appendStep('Enable Cognito local users', `export cognitoLocalUsers="true"`)
 		appendStep('Set MFA enforcement', `export cognitoLocalUsersMfa="${data.cognitoLocalUsersMfa}"`)
-		appendStep('Enable MFA type OTP', `export cognitoLocalUsersMfaOtp="${data.cognitoLocalUsersMfaOtp}"`)
-		appendStep('Enable MFA type SMS', `export cognitoLocalUsersMfaSms="${data.cognitoLocalUsersMfaSms}"`)
+		if (data.cognitoLocalUsersMfaOtp === "on") {
+			appendStep('Enable MFA type OTP', `export cognitoLocalUsersMfaOtp="true"`)
+		}
+		if (data.cognitoLocalUsersMfaSms === "on") {
+			appendStep('Enable MFA type SMS', `export cognitoLocalUsersMfaSms="true"`)
+		}
 	};
 
 	if (data.cognitoSamlUsers === "on") {
