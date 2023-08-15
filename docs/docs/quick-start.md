@@ -132,11 +132,11 @@ This form will collate your inputs and return the appropriate commands to enter 
 			</select>
 		</div>
 		<div class="formOptionGroup isForCognitoLocalUsersMfa" style="display: none;">
-			<label class="formOptionLabel" for="cognitoLocalUsersMfaOtp">MFA OTP?</label>
+			<label class="formOptionLabel" for="cognitoLocalUsersMfaOtp">MFA OTP</label>
 			<input class="formOptionInput" type="checkbox" name="cognitoLocalUsersMfaOtp"/>
 		</div>
 		<div class="formOptionGroup isForCognitoLocalUsersMfa" style="display: none;">
-			<label class="formOptionLabel" for="cognitoLocalUsersMfaSms">MFA SMS?</label>
+			<label class="formOptionLabel" for="cognitoLocalUsersMfaSms">MFA SMS</label>
 			<input class="formOptionInput" type="checkbox" name="cognitoLocalUsersMfaSms"/>
 		</div>
 		<blockquote class="note-title isForCognitoLocalUsers">
