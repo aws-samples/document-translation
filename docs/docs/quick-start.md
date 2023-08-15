@@ -106,6 +106,11 @@ This form will collate your inputs and return the appropriate commands to enter 
 			<label class="formOptionLabel" for="cognitoSamlMetadataUrl">Metadata URL</label>
 			<input class="formOptionInput requiredForCognitoSamlUsers" type="text" name="cognitoSamlMetadataUrl" placeholder="https://domain.tld/path/to/metadata.xml?appid=xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx" required/>
 		</div>
+		<blockquote class="note-title isForCognitoSamlUsers">
+			<p>Note</p>
+			<p>Post install steps are required to complete integration with the SAML provider.</p>
+			<p><a href="{{ site.baseurl }}/docs/installation/post-install/saml-provider-update.html">SAML Provider Update</a></p>
+		</blockquote>
 	</fieldset>
 	<fieldset>
 		<legend>Cognito Local Users <a class="info" target="_blank" href="{{ site.baseurl }}/docs/installation/configuration/options.html#enable-cognito-local-users">(info)</a></legend>
@@ -129,6 +134,11 @@ This form will collate your inputs and return the appropriate commands to enter 
 			<label class="formOptionLabel" for="cognitoLocalUsersMfaSms">MFA SMS?</label>
 			<input class="formOptionInput" type="checkbox" name="cognitoLocalUsersMfaSms"/>
 		</div>
+		<blockquote class="note-title isForCognitoLocalUsers">
+			<p>Note</p>
+			<p>Post install steps are required to create Local Cognito Users.</p>
+			<p><a href="{{ site.baseurl }}/docs/installation/post-install/cognito-first-user.html">Cognito First User</a></p>
+		</blockquote>
 	</fieldset>
     <button type="submit" class="btn btn-blue">Generate</button>
 </form>
