@@ -58,6 +58,11 @@ This form will collate your inputs and return the appropriate commands to enter 
 			<label class="formOptionLabel" for="webUi">Enable</label>
 			<input class="formOptionInput" type="checkbox" name="webUi" checked/>
 		</div>
+		<blockquote class="note-title isForCognitoLocalUsers">
+			<p>Note</p>
+			<p>Post install steps are required to access the web user interface.</p>
+			<p><a href="{{ site.baseurl }}/docs/installation/post-install/web-ui.html">Access Web UI</a></p>
+		</blockquote>
 	</fieldset>
 	<fieldset>
 		<legend>Translation <a class="info" target="_blank" href="{{ site.baseurl }}/docs/installation/configuration/options.html#translation--translation-pii">(info)</a></legend>
