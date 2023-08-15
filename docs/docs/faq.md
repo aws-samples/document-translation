@@ -75,8 +75,8 @@ Document filenames are preserved as part of the job history for a user. There is
 
 You may opt out of having your content used to improve and develop the quality of Amazon Translate and other Amazon machine-learning/artificial-intelligence technologies by using an AWS Organizations opt-out policy. For information about how to opt out, see below.
 
-- Managing AI services opt-out policy: https://docs.aws.amazon.com/organizations/latest/userguide/orgs_manage_policies_ai-opt-out.html
-- Amazon Translate FAQ: https://aws.amazon.com/translate/faqs/ 
+- [Managing AI services opt-out policy](https://docs.aws.amazon.com/organizations/latest/userguide/orgs_manage_policies_ai-opt-out.html)
+- [Amazon Translate FAQ](https://aws.amazon.com/translate/faqs/)
 
 ### What services interact with uploaded data?
 
@@ -86,9 +86,9 @@ To provide a clear user experience, the filename of the documents is preserved t
 
 Further details about how each individual service handles data can be found in their respective documentation. 
 
-- Amazon Translate: https://aws.amazon.com/translate/
-- Amazon Macie: https://aws.amazon.com/macie/
-- Amazon S3: https://aws.amazon.com/s3/
+- [Amazon Translate](https://aws.amazon.com/translate/)
+- [Amazon Macie](https://aws.amazon.com/macie/)
+- [Amazon S3](https://aws.amazon.com/s3/) 
 
 ### Where is data stored?
 
