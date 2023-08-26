@@ -96,6 +96,9 @@ export class pipelineStack extends cdk.Stack {
 		// ENVIRONMENT VARIABLES | GIT | REPO
 		const sourceGitRepo: string =
 			process.env.sourceGitRepo !== undefined ? process.env.sourceGitRepo : "";
+		if (sourceGitRepo === "") {
+			throw new Error("sourceGitRepo is required");
+		};
 		// ENVIRONMENT VARIABLES | GIT | BRANCH
 		const sourceGitBranch: string =
 			process.env.sourceGitBranch !== undefined
