@@ -10,8 +10,8 @@ import {
 	aws_s3 as s3,
 	aws_iam as iam,
 	aws_stepfunctions as sfn,
+	aws_appsync as appsync,
 } from "aws-cdk-lib";
-import * as appsync from "@aws-cdk/aws-appsync-alpha";
 import * as identitypool from "@aws-cdk/aws-cognito-identitypool-alpha";
 import { dt_translationPii } from "../features/dt_translationPii";
 import { dt_translationTag } from "../features/dt_translationTag";
@@ -19,6 +19,7 @@ import { dt_translationTranslate } from "../features/dt_translationTranslate";
 import { dt_translationErrors } from "../features/dt_translationErrors";
 import { dt_translationLifecycle } from "../features/dt_translationLifecycle";
 import { dt_translationMain } from "../features/dt_translationMain";
+import { CodeFirstSchema, GraphqlType, ObjectType, InputType, ResolvableField } from 'awscdk-appsync-utils';
 
 const namedStrings: { [key: string]: string } = {
 	attributeForJobStatus: "jobStatus",
@@ -44,6 +45,7 @@ export interface props {
 	s3PrefixPrivate: string;
 	identityPool: identitypool.IdentityPool;
 	api: appsync.GraphqlApi;
+	apiSchema: CodeFirstSchema;
 	translationPii: boolean;
 	removalPolicy: cdk.RemovalPolicy;
 }
@@ -152,38 +154,38 @@ export class dt_translate extends Construct {
 
 		// INFRA | DYNAMODB | JOBS | API | QUERY
 		const jobNodeDefinition = {
-			contentType: appsync.GraphqlType.string({ isRequired: true }),
-			createdAt: appsync.GraphqlType.awsTimestamp(),
-			id: appsync.GraphqlType.id({ isRequired: true }),
-			jobIdentity: appsync.GraphqlType.string({ isRequired: true }),
-			jobName: appsync.GraphqlType.string({ isRequired: true }),
-			jobOwner: appsync.GraphqlType.string(),
-			jobStatus: appsync.GraphqlType.string(),
-			languageSource: appsync.GraphqlType.string({ isRequired: true }),
-			languageTargets: appsync.GraphqlType.awsJson(),
-			sourceKey: appsync.GraphqlType.string(),
-			sourceStatus: appsync.GraphqlType.string(),
-			translateCallback: appsync.GraphqlType.awsJson(),
-			translateKey: appsync.GraphqlType.awsJson(),
-			translateStatus: appsync.GraphqlType.awsJson(),
+			contentType: GraphqlType.string({ isRequired: true }),
+			createdAt: GraphqlType.awsTimestamp(),
+			id: GraphqlType.id({ isRequired: true }),
+			jobIdentity: GraphqlType.string({ isRequired: true }),
+			jobName: GraphqlType.string({ isRequired: true }),
+			jobOwner: GraphqlType.string(),
+			jobStatus: GraphqlType.string(),
+			languageSource: GraphqlType.string({ isRequired: true }),
+			languageTargets: GraphqlType.awsJson(),
+			sourceKey: GraphqlType.string(),
+			sourceStatus: GraphqlType.string(),
+			translateCallback: GraphqlType.awsJson(),
+			translateKey: GraphqlType.awsJson(),
+			translateStatus: GraphqlType.awsJson(),
 		};
 
-		const jobNode = new appsync.ObjectType("jobNode", {
+		const jobNode = new ObjectType("jobNode", {
 			definition: jobNodeDefinition,
 		});
 
-		const jobNodeConnection = new appsync.ObjectType(`jobNodeConnection`, {
+		const jobNodeConnection = new ObjectType(`jobNodeConnection`, {
 			definition: {
 				items: jobNode.attribute({ isList: true, isRequired: true }),
-				nextToken: appsync.GraphqlType.string(),
+				nextToken: GraphqlType.string(),
 			},
 		});
 
-		const listJobsQuery = new appsync.ResolvableField({
+		const listJobsQuery = new ResolvableField({
 			returnType: jobNodeConnection.attribute(),
 			args: {
-				limit: appsync.GraphqlType.int(),
-				nextToken: appsync.GraphqlType.string(),
+				limit: GraphqlType.int(),
+				nextToken: GraphqlType.string(),
 			},
 			dataSource: apiDsJobTable,
 			requestMappingTemplate: appsync.MappingTemplate.fromFile(
@@ -192,20 +194,20 @@ export class dt_translate extends Construct {
 			responseMappingTemplate: appsync.MappingTemplate.dynamoDbResultItem(),
 		});
 
-		props.api.addType(jobNode);
-		props.api.addType(jobNodeConnection);
-		props.api.addQuery("listJobs", listJobsQuery);
+		props.apiSchema.addType(jobNode);
+		props.apiSchema.addType(jobNodeConnection);
+		props.apiSchema.addQuery("listJobs", listJobsQuery);
 
 		// INFRA | DYNAMODB | JOBS | API | MUTATION
-		const jobNodeInput = new appsync.InputType("jobNodeInput", {
+		const jobNodeInput = new InputType("jobNodeInput", {
 			definition: jobNodeDefinition,
 		});
 
-		const createJobMutation = new appsync.ResolvableField({
+		const createJobMutation = new ResolvableField({
 			returnType: jobNodeConnection.attribute(),
 			args: {
-				limit: appsync.GraphqlType.int(),
-				nextToken: appsync.GraphqlType.string(),
+				limit: GraphqlType.int(),
+				nextToken: GraphqlType.string(),
 				input: jobNodeInput.attribute(),
 			},
 			dataSource: apiDsJobTable,
@@ -215,8 +217,8 @@ export class dt_translate extends Construct {
 			responseMappingTemplate: appsync.MappingTemplate.dynamoDbResultItem(),
 		});
 
-		props.api.addType(jobNodeInput);
-		props.api.addMutation("createJob", createJobMutation);
+		props.apiSchema.addType(jobNodeInput);
+		props.apiSchema.addMutation("createJob", createJobMutation);
 
 		// INFRA | DYNAMODB | HELP
 		const helpTable = new dynamodb.Table(this, "helpTable", {
@@ -237,37 +239,37 @@ export class dt_translate extends Construct {
 		);
 
 		// INFRA | DYNAMODB | JOBS | API | QUERY
-		const helpNode = new appsync.ObjectType("helpNode", {
+		const helpNode = new ObjectType("helpNode", {
 			definition: {
-				description: appsync.GraphqlType.string(),
-				id: appsync.GraphqlType.id({ isRequired: true }),
-				link: appsync.GraphqlType.string(),
-				order: appsync.GraphqlType.int(),
-				title: appsync.GraphqlType.string(),
+				description: GraphqlType.string(),
+				id: GraphqlType.id({ isRequired: true }),
+				link: GraphqlType.string(),
+				order: GraphqlType.int(),
+				title: GraphqlType.string(),
 			},
 		});
 
-		const helpNodeConnection = new appsync.ObjectType(`helpNodeConnection`, {
+		const helpNodeConnection = new ObjectType(`helpNodeConnection`, {
 			definition: {
 				items: helpNode.attribute({ isList: true, isRequired: true }),
-				nextToken: appsync.GraphqlType.string(),
+				nextToken: GraphqlType.string(),
 			},
 		});
 
-		const listHelpsQuery = new appsync.ResolvableField({
+		const listHelpsQuery = new ResolvableField({
 			returnType: helpNodeConnection.attribute(),
 			args: {
-				limit: appsync.GraphqlType.int(),
-				nextToken: appsync.GraphqlType.string(),
+				limit: GraphqlType.int(),
+				nextToken: GraphqlType.string(),
 			},
 			dataSource: apiDsHelpTable,
 			requestMappingTemplate: appsync.MappingTemplate.dynamoDbScanTable(),
 			responseMappingTemplate: appsync.MappingTemplate.dynamoDbResultItem(),
 		});
 
-		props.api.addType(helpNode);
-		props.api.addType(helpNodeConnection);
-		props.api.addQuery("listHelps", listHelpsQuery);
+		props.apiSchema.addType(helpNode);
+		props.apiSchema.addType(helpNodeConnection);
+		props.apiSchema.addQuery("listHelps", listHelpsQuery);
 
 		//
 		// STATE MACHINE

@@ -9,9 +9,10 @@ import {
 	aws_iam as iam,
 	aws_cognito as cognito,
 	aws_wafv2 as waf,
+	aws_appsync as appsync,
 } from "aws-cdk-lib";
-import * as appsync from "@aws-cdk/aws-appsync-alpha";
 import * as identitypool from "@aws-cdk/aws-cognito-identitypool-alpha";
+import { CodeFirstSchema } from 'awscdk-appsync-utils';
 
 export interface props {
 	cognitoLocalUsers?: boolean;
@@ -25,6 +26,7 @@ export interface props {
 
 export class dt_api extends Construct {
 	public readonly api: appsync.GraphqlApi;
+	public readonly apiSchema: CodeFirstSchema;
 	public readonly identityPool: identitypool.IdentityPool;
 	public readonly userPool: cognito.UserPool;
 	public readonly userPoolClient: cognito.UserPoolClient;
@@ -245,8 +247,10 @@ export class dt_api extends Construct {
 		});
 
 		// GRAPHQL | API
+		this.apiSchema = new CodeFirstSchema();
 		this.api = new appsync.GraphqlApi(this, "Api", {
 			name: "api",
+			schema: this.apiSchema,
 			authorizationConfig: {
 				defaultAuthorization: {
 					authorizationType: appsync.AuthorizationType.USER_POOL, // ASM-ASC2

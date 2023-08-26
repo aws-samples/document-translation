@@ -5,12 +5,15 @@ import * as cdk from "aws-cdk-lib";
 import { Construct } from "constructs";
 import { NagSuppressions } from "cdk-nag";
 
-import { aws_s3 as s3 } from "aws-cdk-lib";
-import * as appsync from "@aws-cdk/aws-appsync-alpha";
+import {
+	aws_s3 as s3,
+	aws_appsync as appsync,
+} from "aws-cdk-lib";
 
 import { dt_api } from "./features/dt_api";
 import { dt_web } from "./features/dt_web";
 import { dt_translate } from "./features/dt_translation";
+import { CodeFirstSchema } from 'awscdk-appsync-utils';
 
 // STATIC VARS
 const s3PrefixPrivate = "private";
@@ -218,6 +221,7 @@ export class DocTranStack extends cdk.Stack {
 				s3PrefixPrivate,
 				identityPool: base_api.identityPool,
 				api: base_api.api,
+				apiSchema: base_api.apiSchema,
 				removalPolicy: removalPolicy, // ASM-CFN1
 				translationPii,
 			});
@@ -297,12 +301,15 @@ export class DocTranStack extends cdk.Stack {
 			value: this.stackId,
 		});
 		// Must come after all components due to resolve
+		// this.awsAppsyncSchema = new cdk.CfnOutput(this, "awsAppsyncSchema", {
+		// 	// eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
+		// 	value: this.resolve(
+		// 		// (base_api.apiSchema as unknown as { schema: CodeFirstSchema }).schema.definition
+		// 		(base_api.apiSchema)
+		// 	),
+		// });
 		this.awsAppsyncSchema = new cdk.CfnOutput(this, "awsAppsyncSchema", {
-			// eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
-			value: this.resolve(
-				(base_api.api.schema as unknown as { schema: appsync.Schema }).schema
-					.definition
-			),
+			value: base_api.apiSchema.definition,
 		});
 		// END
 	}
