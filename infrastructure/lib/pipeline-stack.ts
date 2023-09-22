@@ -378,6 +378,11 @@ export class pipelineStack extends cdk.Stack {
 					appliesTo: ["Resource::arn:*:iam::<AWS::AccountId>:role/*"],
 				},
 				{
+					id: "AwsSolutions-IAM5",
+					reason: "Schema ID unknown at deploy/pipeline time",
+					appliesTo: ["Resource::arn:aws:appsync:<AWS::Region>:<AWS::AccountId>:/v1/apis/*/schema"],
+				},
+				{
 					id: "AwsSolutions-CB4",
 					reason:
 						"Encryption is enabled by default by CodePipline https://docs.aws.amazon.com/cdk/api/v2/docs/aws-cdk-lib.aws_codepipeline-readme.html",
