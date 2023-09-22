@@ -282,8 +282,8 @@ export class pipelineStack extends cdk.Stack {
 						"aws cloudformation describe-stacks --stack-name ${appStackName} --query 'Stacks[0].Outputs' | jq .[] | jq -n 'reduce inputs as $i (null; . + ($i|{ (.OutputKey) : (.OutputValue) }))' > ./src/cfnOutputs.json",
 						// Get AppSync Schema
 						"mkdir -p ./src/graphql/",
-						"cat ./src/cfnOutputs.json | jq .awsAppsyncSchema | tr -d '\"' > awsAppsyncSchema.temp ",
-						'printf "$(cat awsAppsyncSchema.temp)" > ./src/graphql/schema.graphql',
+						"export awsAppsyncId=$(jq -r .awsAppsyncId ./src/cfnOutputs.json)",
+						"aws appsync get-introspection-schema --api-id=${awsAppsyncId} --format SDL ./src/graphql/schema.graphql",
 						"cd ./src/graphql",
 						"~/.amplify/bin/amplify codegen",
 						"cd ../..",
