@@ -11,8 +11,8 @@ export class DocTranAppStage extends cdk.Stage {
 	public readonly appStackId: cdk.CfnOutput;
 	public readonly appStackName: cdk.CfnOutput;
 	public readonly appWebsiteS3Bucket: cdk.CfnOutput;
-	public readonly awsAppsyncSchema: cdk.CfnOutput;
 	public readonly appWebsiteDistribution: cdk.CfnOutput;
+	public readonly awsAppsyncId: cdk.CfnOutput;
 
 	constructor(scope: Construct, id: string, props?: cdk.StageProps) {
 		super(scope, id, props);
@@ -39,6 +39,6 @@ export class DocTranAppStage extends cdk.Stage {
 		this.appStackName = docTranStackInstance.appStackId;
 		this.appWebsiteS3Bucket = docTranStackInstance.appWebsiteS3Bucket;
 		this.appWebsiteDistribution = docTranStackInstance.appWebsiteDistribution;
-		this.awsAppsyncSchema = docTranStackInstance.awsAppsyncSchema;
+		this.awsAppsyncId = docTranStackInstance.awsAppsyncId;
 	}
 }
