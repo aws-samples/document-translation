@@ -250,6 +250,11 @@ export class pipelineStack extends cdk.Stack {
 						actions: ["s3:PutObject", "s3:ListBucket", "s3:DeleteObject"],
 						resources: ["*"],
 					}),
+					new iam.PolicyStatement({
+						effect: iam.Effect.ALLOW,
+						actions: ["appsync:GetIntrospectionSchema"],
+						resources: [`arn:aws:appsync:${this.region}:${this.account}:/v1/apis/*/schema`],
+					}),
 				],
 			},
 		});
