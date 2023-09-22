@@ -13,7 +13,6 @@ import {
 import { dt_api } from "./features/dt_api";
 import { dt_web } from "./features/dt_web";
 import { dt_translate } from "./features/dt_translation";
-import { CodeFirstSchema } from 'awscdk-appsync-utils';
 
 // STATIC VARS
 const s3PrefixPrivate = "private";
@@ -299,17 +298,6 @@ export class DocTranStack extends cdk.Stack {
 		});
 		this.appStackId = new cdk.CfnOutput(this, "appStackId", {
 			value: this.stackId,
-		});
-		// Must come after all components due to resolve
-		// this.awsAppsyncSchema = new cdk.CfnOutput(this, "awsAppsyncSchema", {
-		// 	// eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
-		// 	value: this.resolve(
-		// 		// (base_api.apiSchema as unknown as { schema: CodeFirstSchema }).schema.definition
-		// 		(base_api.apiSchema)
-		// 	),
-		// });
-		this.awsAppsyncSchema = new cdk.CfnOutput(this, "awsAppsyncSchema", {
-			value: base_api.apiSchema.definition,
 		});
 		// END
 	}
