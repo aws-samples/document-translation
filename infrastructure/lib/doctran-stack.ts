@@ -26,7 +26,6 @@ export class DocTranStack extends cdk.Stack {
 
 	// OUTPUTS | WEBSITE FRONT-END
 	// OUTPUTS | WEBSITE FRONT-END | React
-	// public readonly awsAppsyncSchema: cdk.CfnOutput;
 	public readonly awsRegion: cdk.CfnOutput;
 	public readonly awsAppsyncId: cdk.CfnOutput;
 	public readonly awsAppsyncGraphqlEndpoint: cdk.CfnOutput;
