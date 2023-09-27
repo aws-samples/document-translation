@@ -35,6 +35,7 @@ export class dt_stepfunction extends Construct {
 							cdk.Stack.of(this).stackName
 						}/${props.nameSuffix}`,
 						removalPolicy: props.removalPolicy, // ASM-CFN1
+						retention: logs.RetentionDays.INFINITE,
 					}),
 					level: sfn.LogLevel.ALL,
 				},
