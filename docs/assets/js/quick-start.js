@@ -93,8 +93,8 @@ function handleForm(event) {
 
 	if (data.customDomainEnable === "on") {
 		appendSection('Custom Domain')
-		appendStep('Set custom domain name', `export webUiCustomDomain="true"`)
-		appendStep('Set custom domain certificate', `export webUiCustomDomain="${data.customDomainCert}"`)
+		appendStep('Set custom domain name', `export webUiCustomDomain="${data.customDomainName}"`)
+		appendStep('Set custom domain certificate', `export webUiCustomDomainCertificate="${data.customDomainCert}"`)
 	};
 	if (data.sourceGitService){
 		switch (data.sourceGitService) {
