@@ -160,7 +160,14 @@ export class dt_translationMain extends Construct {
 					nameSuffix: "TranslationMain",
 					removalPolicy: props.removalPolicy,
 					definition: mapJobDetails
-						.next(startSfnTranslate)
+						.next(
+							// PARRLLEL CONDITIONAL
+							new sfn.Parallel(this, "mainParallel", {
+								resultPath: "$.mainParallel",
+							})
+								// P1 SfnTranslate
+								.branch(startSfnTranslate)
+						)
 						.next(updateDbJobStatus),
 				}
 			).StateMachine;
