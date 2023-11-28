@@ -34,7 +34,15 @@ This solution is configurable to meet your specific needs. In this step you will
 
 ## Source Code Service
 
-The git source type information is only required if using GitHub to host your code. The recommended option is to use CodeCommit, which is the default, where this section can be skipped. 
+The git source type information is a **required** configuration. There are 2 values to set in this section and they differ based on whether you're using CodeCommit or GitHub to host your code. The recommended option is to use CodeCommit, which is the default. 
+
+**If using CodeCommit**
+
+```sh
+export sourceGitRepo="document-translation"
+```
+
+**If using GitHub**
 
 ```sh
 export sourceGitService="github"
