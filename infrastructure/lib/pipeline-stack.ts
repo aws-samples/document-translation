@@ -56,8 +56,8 @@ export class pipelineStack extends cdk.Stack {
 				? true
 				: false;
 		const translationPii: boolean =
-			process.env.translation &&
-			process.env.translation.toLowerCase() === "true"
+			process.env.translationPii &&
+			process.env.translationPii.toLowerCase() === "true"
 				? true
 				: false;
 		const translationLifecycleDefault: number =
