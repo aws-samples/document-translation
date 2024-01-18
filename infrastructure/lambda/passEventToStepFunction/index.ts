@@ -6,7 +6,7 @@
 const aws = require("aws-sdk");
 const stepfunctions = new aws.StepFunctions({ apiVersion: "2016-11-23" });
 
-exports.handler = (event) => {
+export const handler = async (event) => {
 	const params: {
 		stateMachineArn: string | undefined;
 		input: unknown;
@@ -20,4 +20,3 @@ exports.handler = (event) => {
 		else console.log(data);
 	});
 };
-export {};

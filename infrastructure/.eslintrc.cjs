@@ -1,3 +1,6 @@
+// Copyright Amazon.com, Inc. or its affiliates. All Rights Reserved.
+// SPDX-License-Identifier: MIT-0
+
 module.exports = {
 	extends: [
 		"eslint:recommended",
@@ -12,4 +15,5 @@ module.exports = {
 	},
 	plugins: ["@typescript-eslint"],
 	root: true,
+	ignorePatterns: ["**/*.d.ts", "**/*.js"],
 };

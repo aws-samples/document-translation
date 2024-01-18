@@ -3,7 +3,7 @@
 
 const aws = require("aws-sdk");
 
-exports.handler = (event, context, callback) => {
+export const handler = async (event, context, callback) => {
 	const key: string = event.s3.object.key;
 	const k: string[] = key.split("/");
 

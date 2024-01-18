@@ -55,10 +55,15 @@ async function loopAllStrings(sourceLanguageCode, targetLanguageCode, sourceStri
     });
 }
 
+function sleep(ms) {
+    return new Promise(resolve => setTimeout(resolve, ms));
+}
+
 async function loopAllTargets(sourceLanguageCode, sourceStrings, targetLanguages) {
-    targetLanguages.forEach(target => {
+    for (let target of targetLanguages) {
         loopAllStrings(sourceLanguageCode, target, sourceStrings);
-    });
+        await sleep(1000);
+    }
 }
 
 const sourceStrings = require(createFilePath(sourceLanguageCode));

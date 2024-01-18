@@ -1,0 +1,6 @@
+{
+	"type": "module",
+	"dependencies": {
+		"@aws-sdk/client-sfn": "^3.425.0"
+	}
+}

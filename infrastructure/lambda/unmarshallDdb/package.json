@@ -1,0 +1,6 @@
+{
+	"type": "module",
+	"dependencies": {
+		"@aws-sdk/util-dynamodb": "^3.437.0"
+	}
+}

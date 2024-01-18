@@ -31,7 +31,7 @@ export class DocTranAppStage extends cdk.Stage {
 		});
 
 		cdk.Aspects.of(docTranStackInstance).add(
-			new AwsSolutionsChecks({ verbose: true })
+			new AwsSolutionsChecks({ verbose: true }),
 		);
 
 		// OUTPUTS

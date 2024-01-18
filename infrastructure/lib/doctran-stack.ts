@@ -5,14 +5,12 @@ import * as cdk from "aws-cdk-lib";
 import { Construct } from "constructs";
 import { NagSuppressions } from "cdk-nag";
 
-import {
-	aws_s3 as s3,
-	aws_appsync as appsync,
-} from "aws-cdk-lib";
+import { aws_s3 as s3 } from "aws-cdk-lib";
 
-import { dt_api } from "./features/dt_api";
-import { dt_web } from "./features/dt_web";
-import { dt_translate } from "./features/dt_translation";
+import { dt_api } from "./features/api";
+import { dt_web } from "./features/web";
+import { dt_translate } from "./features/translation/translation";
+import { dt_readable } from "./features/readable/readable";
 
 // STATIC VARS
 const s3PrefixPrivate = "private";
@@ -21,7 +19,6 @@ export class DocTranStack extends cdk.Stack {
 	// OUTPUTS
 	public readonly appStackId: cdk.CfnOutput;
 	public readonly appStackName: cdk.CfnOutput;
-	public readonly awsAppsyncSchema: cdk.CfnOutput;
 	public readonly appWebsiteDistribution: cdk.CfnOutput;
 
 	// OUTPUTS | WEBSITE FRONT-END
@@ -34,6 +31,7 @@ export class DocTranStack extends cdk.Stack {
 	public readonly awsUserPoolsWebClientId: cdk.CfnOutput;
 	public readonly awsCognitoOauthDomain: cdk.CfnOutput;
 	public readonly awsUserFilesS3Bucket: cdk.CfnOutput;
+	public readonly awsReadableS3Bucket: cdk.CfnOutput;
 	public readonly awsCognitoOauthRedirectSignIn: cdk.CfnOutput;
 	public readonly awsCognitoOauthRedirectSignOut: cdk.CfnOutput;
 	// OUTPUTS | WEBSITE FRONT-END | User
@@ -47,6 +45,12 @@ export class DocTranStack extends cdk.Stack {
 	constructor(scope: Construct, id: string, props?: cdk.StackProps) {
 		super(scope, id, props);
 		// ENVIRONMENT VARIABLES
+		// ENVIRONMENT VARIABLES | DEVELOPMENT
+		const development: boolean =
+			process.env.development &&
+			process.env.development.toLowerCase() === "true"
+				? true
+				: false;
 		// ENVIRONMENT VARIABLES | FEATURES (Default: false)
 		// Cognito local users
 		const cognitoLocalUsers: boolean =
@@ -89,21 +93,24 @@ export class DocTranStack extends cdk.Stack {
 			process.env.translationPii.toLowerCase() === "true"
 				? true
 				: false;
+		// Readable
+		const readable: boolean =
+			process.env.readable && process.env.readable.toLowerCase() === "true"
+				? true
+				: false;
 		// Web UI
 		const webUi: boolean =
 			process.env.webUi && process.env.webUi.toLowerCase() === "true"
 				? true
 				: false;
-		const webUiCustomDomainFlag: boolean =
-			process.env.webUiCustomDomain !== undefined && process.env.webUiCustomDomain !== "" 
-				? true
-				: false;
 		const webUiCustomDomain: string =
-			process.env.webUiCustomDomain !== undefined && process.env.webUiCustomDomain !== "" 
+			process.env.webUiCustomDomain !== undefined &&
+			process.env.webUiCustomDomain !== ""
 				? process.env.webUiCustomDomain.toLowerCase()
 				: "";
 		const webUiCustomDomainCertificate: string =
-			process.env.webUiCustomDomainCertificate !== undefined && process.env.webUiCustomDomainCertificate !== "" 
+			process.env.webUiCustomDomainCertificate !== undefined &&
+			process.env.webUiCustomDomainCertificate !== ""
 				? process.env.webUiCustomDomainCertificate
 				: "";
 		// ENVIRONMENT VARIABLES | REMOVAL POLICY
@@ -134,7 +141,7 @@ export class DocTranStack extends cdk.Stack {
 				enforceSSL: true, // ASM-S10
 				versioned: true,
 				removalPolicy: removalPolicy, // ASM-CFN1
-			}
+			},
 		);
 		NagSuppressions.addResourceSuppressions(
 			serverAccessLoggingBucket,
@@ -145,7 +152,7 @@ export class DocTranStack extends cdk.Stack {
 						"This bucket is the AccessLogs destination bucket for other buckets.",
 				},
 			],
-			true
+			true,
 		);
 
 		//
@@ -171,7 +178,7 @@ export class DocTranStack extends cdk.Stack {
 		this.awsUserPoolsWebClientId = new cdk.CfnOutput(
 			this,
 			"awsUserPoolsWebClientId",
-			{ value: base_api.userPoolClient.userPoolClientId }
+			{ value: base_api.userPoolClient.userPoolClientId },
 		);
 		this.awsUserPoolsId = new cdk.CfnOutput(this, "awsUserPoolsId", {
 			value: base_api.userPool.userPoolId,
@@ -179,12 +186,12 @@ export class DocTranStack extends cdk.Stack {
 		this.awsCognitoOauthDomain = new cdk.CfnOutput(
 			this,
 			"awsCognitoOauthDomain",
-			{ value: base_api.userPoolDomain.domainName }
+			{ value: base_api.userPoolDomain.domainName },
 		);
 		this.awsCognitoIdentityPoolId = new cdk.CfnOutput(
 			this,
 			"awsCognitoIdentityPoolId",
-			{ value: base_api.identityPool.identityPoolId }
+			{ value: base_api.identityPool.identityPoolId },
 		);
 		this.awsAppsyncId = new cdk.CfnOutput(this, "awsAppsyncId", {
 			value: base_api.api.apiId,
@@ -192,7 +199,7 @@ export class DocTranStack extends cdk.Stack {
 		this.awsAppsyncGraphqlEndpoint = new cdk.CfnOutput(
 			this,
 			"awsAppsyncGraphqlEndpoint",
-			{ value: base_api.api.graphqlUrl }
+			{ value: base_api.api.graphqlUrl },
 		);
 
 		//
@@ -227,7 +234,26 @@ export class DocTranStack extends cdk.Stack {
 			this.awsUserFilesS3Bucket = new cdk.CfnOutput(
 				this,
 				"awsUserFilesS3Bucket",
-				{ value: base_translate.contentBucket.bucketName }
+				{ value: base_translate.contentBucket.bucketName },
+			);
+		}
+
+		//
+		// READABLE (Optional feature)
+		//
+		if (readable) {
+			const base_readable = new dt_readable(this, "base_readable", {
+				api: base_api.api,
+				apiSchema: base_api.apiSchema,
+				identityPool: base_api.identityPool,
+				removalPolicy: removalPolicy, // ASM-CFN1
+				serverAccessLoggingBucket,
+			});
+			// OUTPUTS
+			this.awsReadableS3Bucket = new cdk.CfnOutput(
+				this,
+				"awsReadableS3Bucket",
+				{ value: base_readable.contentBucket.bucketName },
 			);
 		}
 
@@ -235,15 +261,15 @@ export class DocTranStack extends cdk.Stack {
 		// WEBSITE (Optional feature)
 		//
 		if (webUi) {
-			const signOutSuffix: string = "signedout";
+			const signOutSuffix: string = "signout";
 			const base_web = new dt_web(this, "base_web", {
 				serverAccessLoggingBucket,
 				userPoolClient: base_api.userPoolClient,
 				removalPolicy: removalPolicy, // ASM-CFN1
-				webUiCustomDomainFlag: webUiCustomDomainFlag,
 				webUiCustomDomain: webUiCustomDomain,
 				webUiCustomDomainCertificate: webUiCustomDomainCertificate,
 				signOutSuffix: signOutSuffix,
+				development: development,
 			});
 			// OUTPUTS
 			this.appWebsiteS3Bucket = new cdk.CfnOutput(this, "appWebsiteS3Bucket", {
@@ -252,35 +278,41 @@ export class DocTranStack extends cdk.Stack {
 			this.appWebsiteDistribution = new cdk.CfnOutput(
 				this,
 				"appWebsiteDistribution",
-				{ value: base_web.websiteDistribution.distributionId }
+				{ value: base_web.websiteDistribution.distributionId },
 			);
-			if (webUiCustomDomainFlag) {
+			if (webUiCustomDomain && webUiCustomDomainCertificate) {
 				this.awsCognitoOauthRedirectSignIn = new cdk.CfnOutput(
 					this,
 					"awsCognitoOauthRedirectSignIn",
-					{ value: `https://${webUiCustomDomain}/` }
+					{ value: `https://${webUiCustomDomain}/` },
 				);
 				this.awsCognitoOauthRedirectSignOut = new cdk.CfnOutput(
 					this,
 					"awsCognitoOauthRedirectSignOut",
-					{ value: `https://${webUiCustomDomain}/${signOutSuffix}` }
+					{ value: `https://${webUiCustomDomain}/${signOutSuffix}` },
 				);
 				this.appHostedUrl = new cdk.CfnOutput(this, "appHostedUrl", {
 					value: `https://${webUiCustomDomain}/`,
 				});
-				this.appHostedUrlCloudFront = new cdk.CfnOutput(this, "appHostedUrlCloudFront", {
-					value: `https://${base_web.websiteDistribution.domainName}/`,
-				});
+				this.appHostedUrlCloudFront = new cdk.CfnOutput(
+					this,
+					"appHostedUrlCloudFront",
+					{
+						value: `https://${base_web.websiteDistribution.domainName}/`,
+					},
+				);
 			} else {
 				this.awsCognitoOauthRedirectSignIn = new cdk.CfnOutput(
 					this,
 					"awsCognitoOauthRedirectSignIn",
-					{ value: `https://${base_web.websiteDistribution.domainName}/` }
+					{ value: `https://${base_web.websiteDistribution.domainName}/` },
 				);
 				this.awsCognitoOauthRedirectSignOut = new cdk.CfnOutput(
 					this,
 					"awsCognitoOauthRedirectSignOut",
-					{ value: `https://${base_web.websiteDistribution.domainName}/${signOutSuffix}` }
+					{
+						value: `https://${base_web.websiteDistribution.domainName}/${signOutSuffix}`,
+					},
 				);
 				this.appHostedUrl = new cdk.CfnOutput(this, "appHostedUrl", {
 					value: `https://${base_web.websiteDistribution.domainName}/`,

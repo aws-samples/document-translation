@@ -1,7 +1,6 @@
 // Copyright Amazon.com, Inc. or its affiliates. All Rights Reserved.
 // SPDX-License-Identifier: MIT-0
 
-import * as path from "path";
 import * as cdk from "aws-cdk-lib";
 import { Construct } from "constructs";
 import { NagSuppressions } from "cdk-nag";
@@ -18,6 +17,12 @@ export class pipelineStack extends cdk.Stack {
 	constructor(scope: Construct, id: string, props?: cdk.StackProps) {
 		super(scope, id, props);
 		// ENVIRONMENT VARIABLES
+		// ENVIRONMENT VARIABLES | DEVELOPMENT
+		const development: boolean =
+			process.env.development &&
+			process.env.development.toLowerCase() === "true"
+				? true
+				: false;
 		// ENVIRONMENT VARIABLES | FEATURES (Default: false)
 		// Cognito local users
 		const cognitoLocalUsers: boolean =
@@ -70,21 +75,24 @@ export class pipelineStack extends cdk.Stack {
 			parseInt(process.env.translationLifecyclePii) > 0
 				? parseInt(process.env.translationLifecyclePii)
 				: 3;
+		// Readable
+		const readable: boolean =
+			process.env.readable && process.env.readable.toLowerCase() === "true"
+				? true
+				: false;
 		// Web UI
 		const webUi: boolean =
 			process.env.webUi && process.env.webUi.toLowerCase() === "true"
 				? true
 				: false;
-		const webUiCustomDomainFlag: boolean =
-			process.env.webUiCustomDomain !== undefined && process.env.webUiCustomDomain !== "" 
-				? true
-				: false;
 		const webUiCustomDomain: string =
-			process.env.webUiCustomDomain !== undefined && process.env.webUiCustomDomain !== "" 
+			process.env.webUiCustomDomain !== undefined &&
+			process.env.webUiCustomDomain !== ""
 				? process.env.webUiCustomDomain.toLowerCase()
 				: "";
 		const webUiCustomDomainCertificate: string =
-			process.env.webUiCustomDomainCertificate !== undefined && process.env.webUiCustomDomainCertificate !== "" 
+			process.env.webUiCustomDomainCertificate !== undefined &&
+			process.env.webUiCustomDomainCertificate !== ""
 				? process.env.webUiCustomDomainCertificate
 				: "";
 		// ENVIRONMENT VARIABLES | GIT
@@ -98,7 +106,7 @@ export class pipelineStack extends cdk.Stack {
 			process.env.sourceGitRepo !== undefined ? process.env.sourceGitRepo : "";
 		if (sourceGitRepo === "") {
 			throw new Error("sourceGitRepo is required");
-		};
+		}
 		// ENVIRONMENT VARIABLES | GIT | BRANCH
 		const sourceGitBranch: string =
 			process.env.sourceGitBranch !== undefined
@@ -139,7 +147,7 @@ export class pipelineStack extends cdk.Stack {
 				enforceSSL: true, // ASM-S10
 				versioned: true,
 				removalPolicy: removalPolicy, // ASM-CFN1
-			}
+			},
 		);
 		NagSuppressions.addResourceSuppressions(
 			serverAccessLogsBucket,
@@ -150,7 +158,7 @@ export class pipelineStack extends cdk.Stack {
 						"Bucket is the AccessLogs destination bucket for other buckets.",
 				},
 			],
-			true
+			true,
 		);
 
 		// S3 | ARTIFACT BUCKET
@@ -167,24 +175,21 @@ export class pipelineStack extends cdk.Stack {
 
 		// SOURCE
 		let pipelineSource: pipelines.CodePipelineSource;
-		switch (sourceGitService) {
-			case "github":
-				pipelineSource = pipelines.CodePipelineSource.gitHub(
-					sourceGitRepo,
-					sourceGitBranch
-				);
-				break;
-			default:
-				const codeCommitRepo = codecommit.Repository.fromRepositoryName(
-					this,
-					"codeCommitRepo",
-					sourceGitRepo
-				);
-				pipelineSource = pipelines.CodePipelineSource.codeCommit(
-					codeCommitRepo,
-					sourceGitBranch
-				);
-				break;
+		if (sourceGitService == "github") {
+			pipelineSource = pipelines.CodePipelineSource.gitHub(
+				sourceGitRepo,
+				sourceGitBranch,
+			);
+		} else {
+			const codeCommitRepo = codecommit.Repository.fromRepositoryName(
+				this,
+				"codeCommitRepo",
+				sourceGitRepo,
+			);
+			pipelineSource = pipelines.CodePipelineSource.codeCommit(
+				codeCommitRepo,
+				sourceGitBranch,
+			);
 		}
 
 		// PIPELINE
@@ -207,13 +212,14 @@ export class pipelineStack extends cdk.Stack {
 					"npm install -g aws-cdk@^2.89.0",
 					`cd ${dirPipeline}`,
 					"npm ci",
-					"npm run build",
+					"npm run build lib/**.ts",
 					"cdk synth",
 				],
 			}),
 			codeBuildDefaults: {
 				buildEnvironment: {
 					environmentVariables: {
+						development: { value: development },
 						sourceGitService: { value: sourceGitService },
 						sourceGitRepo: { value: sourceGitRepo },
 						sourceGitBranch: { value: sourceGitBranch },
@@ -221,13 +227,16 @@ export class pipelineStack extends cdk.Stack {
 						appRemovalPolicy: { value: appRemovalPolicy },
 						webUi: { value: webUi },
 						webUiCustomDomain: { value: webUiCustomDomain },
-						webUiCustomDomainCertificate: { value: webUiCustomDomainCertificate },
+						webUiCustomDomainCertificate: {
+							value: webUiCustomDomainCertificate,
+						},
 						cognitoLocalUsers: { value: cognitoLocalUsers },
 						cognitoLocalUsersMfa: { value: cognitoLocalUsersMfa },
 						cognitoLocalUsersMfaOtp: { value: cognitoLocalUsersMfaOtp },
 						cognitoLocalUsersMfaSms: { value: cognitoLocalUsersMfaSms },
 						cognitoSamlUsers: { value: cognitoSamlUsers },
 						cognitoSamlMetadataUrl: { value: cognitoSamlMetadataUrl },
+						readable: { value: readable },
 						translation: { value: translation },
 						translationPii: { value: translationPii },
 						translationLifecycleDefault: { value: translationLifecycleDefault },
@@ -253,7 +262,9 @@ export class pipelineStack extends cdk.Stack {
 					new iam.PolicyStatement({
 						effect: iam.Effect.ALLOW,
 						actions: ["appsync:GetIntrospectionSchema"],
-						resources: [`arn:aws:appsync:${this.region}:${this.account}:/v1/apis/*/schema`],
+						resources: [
+							`arn:aws:appsync:${this.region}:${this.account}:/v1/apis/*/schema`,
+						],
 					}),
 				],
 			},
@@ -279,29 +290,51 @@ export class pipelineStack extends cdk.Stack {
 					},
 					installCommands: ["npm install -u @aws-amplify/cli@~12.0"],
 					commands: [
+						// ENVs
 						'echo "appStackId: ${appStackId}"',
 						'echo "appStackName: ${appStackName}"',
 						'echo "appWebsiteS3Bucket: ${appWebsiteS3Bucket}"',
-						"cd website/",
+						'export WEBDIR=${CODEBUILD_SRC_DIR}/website',
+						'export WEBDIR_SRC=${WEBDIR}/src',
+						'export WEBDIR_BUILD=${WEBDIR}/build',
+						'export WEBDIR_GRAPHQL=${WEBDIR_SRC}/graphql',
+						'echo "WEBDIR: ${WEBDIR}"',
+						'echo "WEBDIR_SRC: ${WEBDIR_SRC}"',
+						'echo "WEBDIR_BUILD: ${WEBDIR_BUILD}"',
+						'echo "WEBDIR_GRAPHQL: ${WEBDIR_GRAPHQL}"',
+						'export CFNOUTPUTSFILE=${WEBDIR_SRC}/cfnOutputs.json',
+						'export GRAPHQLSCHEMAFILE=${WEBDIR_GRAPHQL}/schema.graphql',
+						'export FEATURESFILE=${WEBDIR_SRC}/features.json',
+						'echo "CFNOUTPUTSFILE: ${CFNOUTPUTSFILE}"',
+						'echo "GRAPHQLSCHEMAFILE: ${GRAPHQLSCHEMAFILE}"',
+						'echo "FEATURESFILE: ${FEATURESFILE}"',
 						// Get Cloudformation Outputs
-						"aws cloudformation describe-stacks --stack-name ${appStackName} --query 'Stacks[0].Outputs' | jq .[] | jq -n 'reduce inputs as $i (null; . + ($i|{ (.OutputKey) : (.OutputValue) }))' > ./src/cfnOutputs.json",
+						"aws cloudformation describe-stacks --stack-name ${appStackName} --query 'Stacks[0].Outputs' | jq .[] | jq -n 'reduce inputs as $i (null; . + ($i|{ (.OutputKey) : (.OutputValue) }))' > ${CFNOUTPUTSFILE}",
 						// Get AppSync Schema
-						"mkdir -p ./src/graphql/",
-						"export awsAppsyncId=$(jq -r .awsAppsyncId ./src/cfnOutputs.json)",
-						"aws appsync get-introspection-schema --api-id=${awsAppsyncId} --format SDL ./src/graphql/schema.graphql",
-						"cd ./src/graphql",
-						"~/.amplify/bin/amplify codegen",
-						"cd ../..",
+						'export awsAppsyncId=$(jq -r .awsAppsyncId ${CFNOUTPUTSFILE})',
+						'echo "awsAppsyncId: ${awsAppsyncId}"',
+						'mkdir -p ${WEBDIR_GRAPHQL}',
+						'aws appsync get-introspection-schema --api-id=${awsAppsyncId} --format SDL ${GRAPHQLSCHEMAFILE}',
+						'cd ${WEBDIR_GRAPHQL}',
+						'~/.amplify/bin/amplify codegen',
 						// BUILD REACT
-						"npm ci",
-						"npm run build",
+						// BUILD REACT | FEATURES
+						'cd ${WEBDIR_SRC}',
+						'touch ${FEATURESFILE}',
+						'echo "{}" > ${FEATURESFILE}',
+						'jq -r ".translation = \"${translation}\"" ${FEATURESFILE} > ${FEATURESFILE}.tmp && mv ${FEATURESFILE}.tmp ${FEATURESFILE}',
+						'jq -r ".readable    = \"${readable}\""    ${FEATURESFILE} > ${FEATURESFILE}.tmp && mv ${FEATURESFILE}.tmp ${FEATURESFILE}',
+						// BUILD REACT | BUILD
+						'cd ${WEBDIR}',
+						'npm ci',
+						'npm run build',
 						// PUSH TO S3
-						"cd build",
-						"aws s3 rm s3://${appWebsiteS3Bucket} --recursive",
-						"aws s3 sync . s3://${appWebsiteS3Bucket}",
-						"aws cloudfront create-invalidation --distribution-id ${appWebsiteDistribution} --paths '/*'",
+						'cd ${WEBDIR_BUILD}',
+						'aws s3 rm s3://${appWebsiteS3Bucket} --recursive',
+						'aws s3 sync . s3://${appWebsiteS3Bucket}',
+						'aws cloudfront create-invalidation --distribution-id ${appWebsiteDistribution} --paths "/*"',
 					],
-				}
+				},
 			);
 			post.push(shellStep_deployWebsiteToS3);
 		}
@@ -326,7 +359,9 @@ export class pipelineStack extends cdk.Stack {
 						"Action::s3:List*",
 						"Action::s3:DeleteObject*",
 						"Action::s3:Abort*",
-						"Resource::<artifactBucket27548F83.Arn>/*",
+						`Resource::<${cdk.Stack.of(this).getLogicalId(
+							artifactBucket.node.defaultChild as cdk.CfnElement,
+						)}.Arn>/*`,
 					],
 				},
 				{
@@ -348,7 +383,7 @@ export class pipelineStack extends cdk.Stack {
 					reason: "Resource ARN is unknown before deployment. Permit wildcard.",
 				},
 			],
-			true
+			true,
 		);
 
 		// CDK NAGS | CDK PIPELINE
@@ -361,7 +396,9 @@ export class pipelineStack extends cdk.Stack {
 					appliesTo: [
 						"Resource::arn:<AWS::Partition>:logs:<AWS::Region>:<AWS::AccountId>:log-group:/aws/codebuild/<cdkPipelineUpdatePipelineSelfMutation8E64EDB9>:*",
 						"Resource::arn:<AWS::Partition>:codebuild:<AWS::Region>:<AWS::AccountId>:report-group/<cdkPipelineUpdatePipelineSelfMutation8E64EDB9>-*",
-						"Resource::<artifactBucket27548F83.Arn>/*",
+						`Resource::<${cdk.Stack.of(this).getLogicalId(
+							artifactBucket.node.defaultChild as cdk.CfnElement,
+						)}.Arn>/*`,
 						"Action::s3:GetBucket*",
 						"Action::s3:GetObject*",
 						"Action::s3:List*",
@@ -380,7 +417,9 @@ export class pipelineStack extends cdk.Stack {
 				{
 					id: "AwsSolutions-IAM5",
 					reason: "Schema ID unknown at deploy/pipeline time",
-					appliesTo: ["Resource::arn:aws:appsync:<AWS::Region>:<AWS::AccountId>:/v1/apis/*/schema"],
+					appliesTo: [
+						"Resource::arn:aws:appsync:<AWS::Region>:<AWS::AccountId>:/v1/apis/*/schema",
+					],
 				},
 				{
 					id: "AwsSolutions-CB4",
@@ -388,7 +427,7 @@ export class pipelineStack extends cdk.Stack {
 						"Encryption is enabled by default by CodePipline https://docs.aws.amazon.com/cdk/api/v2/docs/aws-cdk-lib.aws_codepipeline-readme.html",
 				},
 			],
-			true
+			true,
 		);
 
 		// CDK NAGS | PIPELINE | STAGE
@@ -400,7 +439,7 @@ export class pipelineStack extends cdk.Stack {
 					reason: "Permissions scoped to dedicated resources",
 				},
 			],
-			true
+			true,
 		);
 
 		// CDK NAGS | CDK PIPELINE | STAGE
@@ -417,7 +456,7 @@ export class pipelineStack extends cdk.Stack {
 					],
 				},
 			],
-			true
+			true,
 		);
 
 		// END

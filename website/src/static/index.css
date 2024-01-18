@@ -1,0 +1,169 @@
+/*
+Copyright Amazon.com, Inc. or its affiliates. All Rights Reserved.
+SPDX-License-Identifier: MIT-0
+*/
+
+/* COMMON */
+html {
+	background-color: #fafafa;
+}
+
+body {
+	margin: 0;
+	font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen',
+		'Ubuntu', 'Cantarell', 'Fira Sans', 'Droid Sans', 'Helvetica Neue',
+		sans-serif;
+	-webkit-font-smoothing: antialiased;
+	-moz-osx-font-smoothing: grayscale;
+}
+
+.is-collapsed {
+	display: none;
+}
+
+.amplify-heading > span.align-with-text ,
+.amplify-heading > svg.align-with-text {
+	vertical-align: middle;
+	display: inline-block;
+}
+
+a[href^="http://"]::after,
+a[href^="https://"]::after { /* Non local URL links */
+	content: " \2197";
+	font-style: italic;
+	font-size: 0.7rem;
+	position: relative;
+	top: -0.25rem;
+}
+
+.pushRight { /* Align tabs after "pushRight" right */
+	margin-left: auto;
+}
+
+/* COMMON | LISTS */
+ul.list-no-bullet {
+	list-style-type: none;
+	padding-left: 0;
+}
+
+ul.list-can-collapse {
+	columns: 3;
+}
+
+/* CREATEJOBS */
+div#createJobForm div.amplify-card {
+	margin-bottom: 1.5rem;
+}
+
+input[type="file"] {
+	border: solid 1px #ccc;
+	width: 100%;
+	min-width: 100%;
+	max-width: 100%;
+	padding: 1rem;
+	margin-top: 1rem;
+	box-sizing:border-box;
+}
+
+input[type="file"]::file-selector-button {
+	padding: 0.5rem 2rem;
+}
+
+input[type="checkbox"].languageTargetsCheckbox {
+    width:1rem;
+    height:1rem;
+    margin-right: 1rem;
+    vertical-align: middle;
+}
+
+li.languageTargetsSeparator {
+	font-weight: lighter;
+	border-style: dotted;
+	border-width: 0 0 1px 0;
+	margin: 2rem 0 0 0;
+	padding-left: 0.5rem;
+}
+li.languageTargetsSeparator:first-of-type {
+	margin-top: 0;
+}
+
+.controls {
+	margin-top: 1rem;
+}
+
+.controls button {
+	margin-right: 1rem;
+}
+
+.controls button:last-of-type {
+	margin-right: 0;
+}
+
+/* MYJOBS */
+.jobId {
+	display: block;
+	font-size: 0.5rem;
+    opacity: 0.5;
+}
+.jobId:hover {
+	opacity: 1;
+}
+.jobId::before {
+	content: "ID: "
+}
+
+table.nested-table td.amplify-table__td {
+	border: none;
+}
+
+/* READABLE | VIEW */
+.borderRadius {
+	border-radius: 0.5rem;
+}
+.generatedImage {
+	max-width: 256px;
+	max-height: 256px;
+	width: 256px;
+	height: 256px;
+}
+
+hr {
+	hr {
+		background-color: #f2f3f3;
+		height: 20px;
+	}
+
+	height: 2px;
+	border-width: 0;
+}
+/* SMALL SCREENS | LISTS */
+@media screen and (max-width: 1080px) {
+	ul.list-can-collapse {
+		columns: 2;
+	}
+}
+
+@media screen and (max-width: 720px) {
+	.is-collapsed {
+		display: initial;
+	}
+	.can-collapse {
+		display: none;
+	}
+	ul.list-can-collapse {
+		columns: 1;
+	}
+
+	.amplify-heading--1 { /* Heading */
+		font-size: 2rem;
+	}
+	.amplify-tabs-item { /* Tabs */
+		font-size: 0.8rem;
+	}
+}
+
+@media screen and (max-width: 480px) {
+	.amplify-heading--1 { /* Heading */
+		font-size: 1.75rem;
+	}
+}

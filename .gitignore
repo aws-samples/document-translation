@@ -16,10 +16,15 @@ infrastructure/**/*.d.ts
 # CFN
 cfnOutputs.json
 
+# FEATURES
+features.json
+features.json.tmp
+
 # APPSYNC
 schema.graphql
 mutations.js
 queries.js
+subscriptions.js
 
 # REACT
 build/

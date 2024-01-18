@@ -1,3 +1,6 @@
+// Copyright Amazon.com, Inc. or its affiliates. All Rights Reserved.
+// SPDX-License-Identifier: MIT-0
+
 const LambdaTester = require("lambda-tester");
 
 const myHandler = require("../lambda/parseS3Key/index").handler;
@@ -144,7 +147,7 @@ describe("handler", function () {
 				expect(result.stage).toEqual("output");
 				expect(result.type).toEqual("details");
 				expect(result.filenameFull).toEqual(
-					"xx.auxiliary-translation-details.json"
+					"xx.auxiliary-translation-details.json",
 				);
 				expect(result.language).toEqual("xx");
 			});

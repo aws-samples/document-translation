@@ -4,7 +4,8 @@
 const aws = require("aws-sdk");
 const stepfunctions = new aws.StepFunctions({ apiVersion: "2016-11-23" });
 
-exports.handler = (event) => {
+export const handler = async (event) => {
+	console.log("Event:", JSON.stringify(event, null, 4));
 	const key: string = event.Records[0].s3.object.key;
 	const decodedKey: string = key.replace("%3A", ":");
 	const keySplit: string[] = decodedKey.split("/");
@@ -42,6 +43,7 @@ exports.handler = (event) => {
 		callbackAttribute: language,
 		payload: decodedKey,
 	};
+	console.log("Input:", JSON.stringify(input, null, 4));
 
 	const params: {
 		stateMachineArn: string | undefined;
@@ -52,11 +54,10 @@ exports.handler = (event) => {
 		input: JSON.stringify(input),
 		name: jobId + "_" + language,
 	};
+	console.log("Params:", JSON.stringify(params, null, 4));
 
-	console.log("Params:", JSON.stringify(params, null, 2));
-	stepfunctions.startExecution(params, function (err, data) {
-		if (err) console.log(err, err.stack);
-		else console.log(data);
-	});
+	const data = await stepfunctions.startExecution(params).promise();
+	console.log("data:", JSON.stringify(data, null, 4));
+
+	return data;
 };
-export {};
