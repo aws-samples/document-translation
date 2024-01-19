@@ -55,6 +55,8 @@ The branch `dev` is used for upstream development ahead of `main`. It **will** h
 
 The dev branch currently has the initial code for "Simply Readable" which is a Generative AI feature for text simplification and image generation to represent the text. 
 
+Note: Simply Readable uses Amazon Bedrock for Generative AI. Amazon bedrock is [supported in these regions](https://docs.aws.amazon.com/bedrock/latest/userguide/what-is-bedrock.html#bedrock-regions). This project is currently using the region `BEDROCK_REGION: "us-west-2"` for the Lambdas that interact with Bedrock. 
+
 - The Document Translation feature must be enabled until the help component is split out from it.
 - The Document Translation PII feature is optional as the help component is not bundled with it.
 - The Simply Readable feature must be explicitly enabled.
