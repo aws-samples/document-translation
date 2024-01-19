@@ -49,4 +49,27 @@ Tags and Releases are used to mark commits considered as verions with the format
 
 The branch `main` is used for upstream development for this project. It **may** at times be non functional and require knowledge of the project to install, update, or fix. It is not intended for general use. 
 
-The branch `dev` is used for upstream development ahead of `main`. It **will** have components/functions/features that are non functional. It is not intended for general use. 
+The branch `dev` is used for upstream development ahead of `main`. It **will** have components/functions/features that are non functional. It is not intended for general use. Features in this `dev` branch may not be documented until they are merged into the `main` branch. 
+
+### Dev Branch
+
+The dev branch currently has the initial code for "Simply Readable" which is a Generative AI feature for text simplification and image generation to represent the text. 
+
+- The Document Translation feature must be enabled until the help component is split out from it.
+- The Document Translation PII feature is optional as the help component is not bundled with it.
+- The Simply Readable feature must be explicitly enabled.
+- When using the quick-start manually update to include the below.
+
+```sh
+export translation="true" # Needed for "help" until separated out
+export translationPii="false"
+export readable="true"
+```
+
+Recommended for any development installations.
+
+```sh
+export development="true" # Enables development features such as use of localhost:3000 with Cognito authentication
+export appRemovalPolicy="destroy" # Enables deletion of app resources that hold state upon stack deletion
+export pipelineRemovalPolicy="destroy" # Enables deletion of pipeline resources that hold state upon stack deletion
+```
