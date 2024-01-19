@@ -69,7 +69,7 @@ Note: Simply Readable uses Amazon Bedrock for Generative AI. Amazon bedrock is [
 export translation="true" # Needed for "help" until separated out
 export translationPii="false"
 export readable="true"
-export readableBedrockRegion="eu-west-1" # Specify region to use Bedrock in
+export readableBedrockRegion="us-west-1" # Specify region to use Bedrock in
 ```
 
 ```sh
@@ -109,7 +109,7 @@ export translationLifecycleDefault="7" # Set default lifecycle
 
 # Simply Readable
 export readable="true"
-export readableBedrockRegion="eu-west-1" # Specify region to use Bedrock in
+export readableBedrockRegion="us-west-1" # Specify region to use Bedrock in
 
 # ----------
 
