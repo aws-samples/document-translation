@@ -18,6 +18,7 @@ import { dt_lambda } from "../../../components/lambda";
 import { dt_stepfunction } from "../../../components/stepfunction";
 
 export interface props {
+	bedrockRegion: string;
 	contentBucket: s3.Bucket;
 	removalPolicy: cdk.RemovalPolicy;
 }
@@ -112,7 +113,7 @@ export class dt_readableWorkflow extends Construct {
 			path: "lambda/invokeBedrockSaveToS3",
 			description: "Invoke Bedrock API & save file to S3",
 			environment: {
-				BEDROCK_REGION: "us-west-2",
+				BEDROCK_REGION: props.bedrockRegion,
 			},
 			bundlingNodeModules: [
 				"@aws-sdk/client-bedrock-runtime",

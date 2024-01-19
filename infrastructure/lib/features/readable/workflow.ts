@@ -57,6 +57,7 @@ const appsyncQuery_updateItem = `mutation ReadableUpdateItem(
 
 export interface props {
 	api: appsync.GraphqlApi;
+	bedrockRegion: string;
 	contentBucket: s3.Bucket;
 	jobTable: dynamodb.Table;
 	modelTable: dynamodb.Table;
@@ -72,6 +73,7 @@ export class dt_readableWorkflow extends Construct {
 			this,
 			"workflowGenerate",
 			{
+				bedrockRegion: props.bedrockRegion,
 				contentBucket: props.contentBucket,
 				removalPolicy: props.removalPolicy,
 			},

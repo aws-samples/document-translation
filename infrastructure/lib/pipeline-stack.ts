@@ -80,6 +80,13 @@ export class pipelineStack extends cdk.Stack {
 			process.env.readable && process.env.readable.toLowerCase() === "true"
 				? true
 				: false;
+		const readableBedrockRegion: string =
+			process.env.readableBedrockRegion !== undefined
+				? process.env.readableBedrockRegion.toLowerCase()
+				: "";
+		if (readable && readableBedrockRegion === "") {
+			throw new Error("readableBedrockRegion is required when readable is true");
+		}
 		// Web UI
 		const webUi: boolean =
 			process.env.webUi && process.env.webUi.toLowerCase() === "true"
@@ -237,6 +244,7 @@ export class pipelineStack extends cdk.Stack {
 						cognitoSamlUsers: { value: cognitoSamlUsers },
 						cognitoSamlMetadataUrl: { value: cognitoSamlMetadataUrl },
 						readable: { value: readable },
+						readableBedrockRegion: { value: readableBedrockRegion },
 						translation: { value: translation },
 						translationPii: { value: translationPii },
 						translationLifecycleDefault: { value: translationLifecycleDefault },

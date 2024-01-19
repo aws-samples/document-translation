@@ -25,6 +25,7 @@ import { dt_readableWorkflow as dt_readableWorkflow_anthropic_claudeText } from 
 import { dt_readableWorkflow as dt_readableWorkflow_stabilityai_stableDiffusion } from "./vendor/stabilityai_stableDiffusion";
 
 export interface props {
+	bedrockRegion: string;
 	contentBucket: s3.Bucket;
 	removalPolicy: cdk.RemovalPolicy;
 }
@@ -92,7 +93,7 @@ export class dt_readableWorkflowGenerate extends Construct {
 			path: "lambda/invokeBedrock",
 			description: "Invoke Bedrock API",
 			environment: {
-				BEDROCK_REGION: "us-west-2",
+				BEDROCK_REGION: props.bedrockRegion,
 			},
 			bundlingNodeModules: ["@aws-sdk/client-bedrock-runtime"],
 			timeout: cdk.Duration.seconds(60),
@@ -151,7 +152,7 @@ export class dt_readableWorkflowGenerate extends Construct {
 				this,
 				"workflow_stabilityai",
 				{
-					// invokeBedrockLambda: invokeBedrockLambda.lambdaFunction,
+					bedrockRegion: props.bedrockRegion,
 					contentBucket: props.contentBucket,
 					removalPolicy: props.removalPolicy,
 				},

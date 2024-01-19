@@ -17,6 +17,7 @@ import { dt_readableWorkflow } from "./workflow";
 export interface props {
 	api: appsync.GraphqlApi;
 	apiSchema: CodeFirstSchema;
+	bedrockRegion: string;
 	identityPool: identitypool.IdentityPool;
 	removalPolicy: cdk.RemovalPolicy;
 	serverAccessLoggingBucket: s3.Bucket;
@@ -63,6 +64,7 @@ export class dt_readable extends Construct {
 		// WORKFLOW
 		const readableWorkflow = new dt_readableWorkflow(this, "readableWorkflow", {
 			api: props.api,
+			bedrockRegion: props.bedrockRegion,
 			jobTable: readableJob.jobTable,
 			modelTable: readableModel.modelTable,
 			removalPolicy: props.removalPolicy,

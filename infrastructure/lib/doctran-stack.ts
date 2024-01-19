@@ -98,6 +98,13 @@ export class DocTranStack extends cdk.Stack {
 			process.env.readable && process.env.readable.toLowerCase() === "true"
 				? true
 				: false;
+		const readableBedrockRegion: string =
+			process.env.readableBedrockRegion !== undefined
+				? process.env.readableBedrockRegion.toLowerCase()
+				: "";
+		if (readable && readableBedrockRegion === "") {
+			throw new Error("readableBedrockRegion is required when readable is true");
+		}
 		// Web UI
 		const webUi: boolean =
 			process.env.webUi && process.env.webUi.toLowerCase() === "true"
@@ -245,6 +252,7 @@ export class DocTranStack extends cdk.Stack {
 			const base_readable = new dt_readable(this, "base_readable", {
 				api: base_api.api,
 				apiSchema: base_api.apiSchema,
+				bedrockRegion: readableBedrockRegion,
 				identityPool: base_api.identityPool,
 				removalPolicy: removalPolicy, // ASM-CFN1
 				serverAccessLoggingBucket,
