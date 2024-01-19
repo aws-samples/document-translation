@@ -60,10 +60,16 @@ The dev branch currently has the initial code for "Simply Readable" which is a G
 - The Simply Readable feature must be explicitly enabled.
 - When using the quick-start manually update to include the below.
 
+(A full example is shown later)
+
 ```sh
 export translation="true" # Needed for "help" until separated out
 export translationPii="false"
 export readable="true"
+```
+
+```sh
+git checkout dev # Checkout the dev branch rather than a tag from main
 ```
 
 Recommended for any development installations.
@@ -72,4 +78,55 @@ Recommended for any development installations.
 export development="true" # Enables development features such as use of localhost:3000 with Cognito authentication
 export appRemovalPolicy="destroy" # Enables deletion of app resources that hold state upon stack deletion
 export pipelineRemovalPolicy="destroy" # Enables deletion of pipeline resources that hold state upon stack deletion
+```
+
+**Full example**
+
+```sh
+# ----------
+
+# Configuration
+
+# Source Service CodeCommit
+export sourceGitRepo="document-translation" # Set repo name
+aws codecommit create-repository --repository-name document-translation # Create CodeCommit repo
+export sourceGitBranch="dev" # Set branch name
+
+# Cognito Local Users
+export cognitoLocalUsers="true" # Enable Cognito local users
+export cognitoLocalUsersMfa="off" # Set MFA enforcement
+
+# Web UI
+export webUi="true" # Enable Web UI
+
+# Translation
+export translation="true" # Enable Translation
+export translationLifecycleDefault="7" # Set default lifecycle
+
+# Simply Readable
+export readable="true"
+
+# ----------
+
+# Deployment
+
+# CDK Bootstrap
+cdk bootstrap aws://123456789012/${AWS_REGION} # Bootstrap the account
+
+# Clone source code
+git clone https://github.com/aws-samples/document-translation.git # Clone the upstream project git repository
+cd document-translation # Change directory into the pulled project directory
+git fetch --all # Fetch
+git checkout dev # Checkout the dev branch rather than a tag from main
+
+# Push source code to your CodeCommit
+git config --global credential.helper '!aws codecommit credential-helper $@' # Enable the AWS CLI git credentials helper
+git config --global credential.UseHttpPath true # Enable the AWS CLI git credentials helper
+git remote add codecommit https://git-codecommit.${AWS_REGION}.amazonaws.com/v1/repos/document-translation # Add CodeCommit as a remote
+git push codecommit dev # Push files
+
+# Deploy the pipeline
+cd infrastructure # Change directory into the infrastructure directory
+npm install # Install node dependencies
+cdk deploy # Deploy
 ```
