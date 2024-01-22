@@ -32,56 +32,62 @@ export default function HistoryTable() {
 	// RUN ONCE
 	// RUN ONCE | FETCH JOBS
 	useEffect(() => {
-		async function fetchData(filename, query, sortA, sortB, updateFunction) {
+		async function fetchData(query, sortA, sortB, updateFunction) {
 			let data;
+
 			try {
 				// Attempt to load user provided local data
-				try {
-					data = require(`./${filename}`);
-					console.log("Loaded local data");
-					return data;
-				} catch (error) {
-					console.log("No local data found.");
-				}
-
-				if (!data) {
-					// Attempt to load user provided cloud data
-					try {
-						const response = await API.graphql({
-							query: query,
-							authMode: "AMAZON_COGNITO_USER_POOLS",
-						});
-
-						data = response.data[query]?.items || null;
-						console.log("Loaded cloud data");
-					} catch (error) {
-						console.log("No cloud data found.");
-					}
-				}
+				data = require("../../sampleData/helpData.json");
+				console.log("Loaded local data:", data);
 			} catch (error) {
-				console.error("Error:", error);
-				return null;
+				console.log("No local data found.");
 			}
-			
+
+			if (!data) {
+				// Attempt to load user provided cloud data
+				try {
+					const response = await API.graphql({
+						query: query,
+						authMode: "AMAZON_COGNITO_USER_POOLS",
+					});
+
+					data = response.data[query]?.items || null;
+					console.log("Loaded cloud data:", data);
+				} catch (error) {
+					console.log("No cloud data found.");
+				}
+			}
+
+			if (!data) {
+				// Attempt to load project sample data
+				try {
+					data = require("../../helpData.json");
+					console.log("Loaded project sample data:", data);
+				} catch (error) {
+					console.log("No project sample data found.");
+				}
+			}
+
 			if (data) {
 				// Local or cloud data found
+				updateFunction(data);
 				const dataSorted = sortDataByKey(sortA, sortB, data);
 				updateFunction(dataSorted);
+			} else {
+				console.log("Unable to load any help data");
 			}
 		}
 		fetchData(
-			"../../sampleHelpData.json",
 			listHelps,
 			"order",
 			"title",
 			updateHelps
 		);
-		console.log(help);
 	}, []);
 
 	// WATCH
 	useEffect(() => {
-		console.log(help);
+		console.log("Watch:", help);
 	}, [help]);
 
 	return (
