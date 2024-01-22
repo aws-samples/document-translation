@@ -70,7 +70,6 @@ export default function HistoryTable() {
 
 			if (data) {
 				// Local or cloud data found
-				updateFunction(data);
 				const dataSorted = sortDataByKey(sortA, sortB, data);
 				updateFunction(dataSorted);
 			} else {
