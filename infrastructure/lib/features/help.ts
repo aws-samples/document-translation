@@ -78,7 +78,7 @@ export class dt_help extends Construct {
 
 		props.apiSchema.addType(helpNode);
 		props.apiSchema.addType(helpNodeConnection);
-		props.apiSchema.addQuery("listHelps", listHelpsQuery);
+		props.apiSchema.addQuery("helpListHelps", listHelpsQuery);
 
 		// END
 	}
