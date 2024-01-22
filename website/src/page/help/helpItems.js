@@ -114,7 +114,7 @@ export default function HistoryTable() {
 			}
 			header={
 				<Header
-				// counter={"(" + item.length + ")"}
+					counter={"(" + help.length + ")"}
 				>
 					{t("generic_filter_title")}
 				</Header>
