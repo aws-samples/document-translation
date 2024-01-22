@@ -113,16 +113,16 @@ export default function HistoryTable() {
 					</SpaceBetween>
 				</Box>
 			}
-			filter={
-				<TextFilter filteringPlaceholder={t("generic_filter_placeholder")} />
-			}
-			header={
-				<Header
-					counter={"(" + help.length + ")"}
-				>
-					{t("generic_filter_title")}
-				</Header>
-			}
+			// filter={
+			// 	<TextFilter filteringPlaceholder={t("generic_filter_placeholder")} />
+			// }
+			// header={
+			// 	<Header
+			// 		counter={"(" + help.length + ")"}
+			// 	>
+			// 		{t("generic_filter_title")}
+			// 	</Header>
+			// }
 			// pagination={<Pagination currentPageIndex={1} pagesCount={2} />}
 		/>
 	);
