@@ -29,6 +29,7 @@
 	"generic_add_new_image": "Add Image",
 	"generic_add_new_row": "Add Row",
 	"help_title": "Help",
+	"help_description": "Helpful information for using this app",
 	"readable_description": "Convert complex text to more simply readable text",
 	"readable_title": "Simply Readable",
 	"readable_view_input_text_placeholder": "Input your text here...",
