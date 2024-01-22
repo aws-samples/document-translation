@@ -51,7 +51,7 @@ export default function HistoryTable() {
 						authMode: "AMAZON_COGNITO_USER_POOLS",
 					});
 
-					data = response.data[query] || null;
+					data = response.data[query]?.items || null;
 					console.log("Loaded cloud data:", data);
 				} catch (error) {
 					console.log("No cloud data found.");

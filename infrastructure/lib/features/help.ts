@@ -12,9 +12,8 @@ import {
 import {
 	CodeFirstSchema,
 	GraphqlType,
-	ObjectType as OutputType,
+	ObjectType,
 	ResolvableField,
-	Directive,
 } from "awscdk-appsync-utils";
 
 export interface props {
@@ -44,17 +43,12 @@ export class dt_help extends Construct {
 		});
 
 		// API
-		// API | DATA SOURCE
 		const apiDsHelpTable = props.api.addDynamoDbDataSource(
 			"apiDsHelpTable",
 			helpTable,
 			);
 			
-		// API | DATA SOURCE
-		// API | INPUT
-		// NA
-		// API | OUTPUT
-		const listHelps_output = new OutputType("help_listHelps_output", {
+		const helpNode = new ObjectType("helpNode", {
 			definition: {
 				description: GraphqlType.string(),
 				id: GraphqlType.id({ isRequired: true }),
@@ -62,20 +56,28 @@ export class dt_help extends Construct {
 				order: GraphqlType.int(),
 				title: GraphqlType.string(),
 			},
-			directives: [Directive.custom("@aws_cognito_user_pools")],
 		});
-		props.apiSchema.addType(listHelps_output);
+
+		const helpNodeConnection = new ObjectType(`helpNodeConnection`, {
+			definition: {
+				items: helpNode.attribute({ isList: true, isRequired: true }),
+				nextToken: GraphqlType.string(),
+			},
+		});
 
 		const listHelpsQuery = new ResolvableField({
-			returnType: listHelps_output.attribute({ isList: true, isRequired: true }),
+			returnType: helpNodeConnection.attribute(),
 			args: {
 				limit: GraphqlType.int(),
 				nextToken: GraphqlType.string(),
 			},
 			dataSource: apiDsHelpTable,
 			requestMappingTemplate: appsync.MappingTemplate.dynamoDbScanTable(),
-			responseMappingTemplate: appsync.MappingTemplate.dynamoDbResultList(),
+			responseMappingTemplate: appsync.MappingTemplate.dynamoDbResultItem(),
 		});
+
+		props.apiSchema.addType(helpNode);
+		props.apiSchema.addType(helpNodeConnection);
 		props.apiSchema.addQuery("helpListHelps", listHelpsQuery);
 
 		// END
