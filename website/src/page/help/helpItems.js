@@ -62,8 +62,12 @@ export default function HistoryTable() {
 				console.error("Error:", error);
 				return null;
 			}
-			const dataSorted = sortDataByKey(sortA, sortB, data);
-			updateFunction(dataSorted);
+			
+			if (data) {
+				// Local or cloud data found
+				const dataSorted = sortDataByKey(sortA, sortB, data);
+				updateFunction(dataSorted);
+			}
 		}
 		fetchData(
 			"../../sampleHelpData.json",
