@@ -237,57 +237,6 @@ export class dt_translate extends Construct {
 		props.apiSchema.addType(jobNodeInput);
 		props.apiSchema.addMutation("createJob", createJobMutation);
 
-		// INFRA | DYNAMODB | HELP
-		const helpTable = new dynamodb.Table(this, "helpTable", {
-			partitionKey: {
-				name: "id",
-				type: dynamodb.AttributeType.STRING,
-			},
-			billingMode: dynamodb.BillingMode.PAY_PER_REQUEST,
-			tableClass: dynamodb.TableClass.STANDARD_INFREQUENT_ACCESS,
-			pointInTimeRecovery: true, // ASM-DDB3
-			removalPolicy: props.removalPolicy, // ASM-CFN1
-		});
-
-		// INFRA | DYNAMODB | HELP | API | DATA SOURCE
-		const apiDsHelpTable = props.api.addDynamoDbDataSource(
-			"apiDsHelpTable",
-			helpTable,
-		);
-
-		// INFRA | DYNAMODB | JOBS | API | QUERY
-		const helpNode = new ObjectType("helpNode", {
-			definition: {
-				description: GraphqlType.string(),
-				id: GraphqlType.id({ isRequired: true }),
-				link: GraphqlType.string(),
-				order: GraphqlType.int(),
-				title: GraphqlType.string(),
-			},
-		});
-
-		const helpNodeConnection = new ObjectType(`helpNodeConnection`, {
-			definition: {
-				items: helpNode.attribute({ isList: true, isRequired: true }),
-				nextToken: GraphqlType.string(),
-			},
-		});
-
-		const listHelpsQuery = new ResolvableField({
-			returnType: helpNodeConnection.attribute(),
-			args: {
-				limit: GraphqlType.int(),
-				nextToken: GraphqlType.string(),
-			},
-			dataSource: apiDsHelpTable,
-			requestMappingTemplate: appsync.MappingTemplate.dynamoDbScanTable(),
-			responseMappingTemplate: appsync.MappingTemplate.dynamoDbResultItem(),
-		});
-
-		props.apiSchema.addType(helpNode);
-		props.apiSchema.addType(helpNodeConnection);
-		props.apiSchema.addQuery("listHelps", listHelpsQuery);
-
 		//
 		// STATE MACHINE
 		//

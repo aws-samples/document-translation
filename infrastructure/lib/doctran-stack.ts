@@ -8,6 +8,7 @@ import { NagSuppressions } from "cdk-nag";
 import { aws_s3 as s3 } from "aws-cdk-lib";
 
 import { dt_api } from "./features/api";
+import { dt_help } from "./features/help";
 import { dt_web } from "./features/web";
 import { dt_translate } from "./features/translation/translation";
 import { dt_readable } from "./features/readable/readable";
@@ -208,6 +209,14 @@ export class DocTranStack extends cdk.Stack {
 			"awsAppsyncGraphqlEndpoint",
 			{ value: base_api.api.graphqlUrl },
 		);
+
+		//
+		// HELP (Required feature)
+		new dt_help(this, "base_help", {
+			api: base_api.api,
+			apiSchema: base_api.apiSchema,
+			removalPolicy: removalPolicy, // ASM-CFN1
+		});
 
 		//
 		// TRANSLATE (Optional feature)
