@@ -21,7 +21,7 @@ import {
 } from "@cloudscape-design/components";
 
 // IMPORTS | GRAPHQL
-import { listHelps } from "../../graphql/queries";
+import { helpListHelps as listHelps } from "../../graphql/queries";
 // IMPORTS | FUNCTIONS
 import sortDataByKey from "../../util/sortDataByKey";
 
