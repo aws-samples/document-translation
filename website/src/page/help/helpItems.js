@@ -94,14 +94,13 @@ export default function HistoryTable() {
 			cardDefinition={{
 				header: (item) => (
 					<Link href="#" fontSize="heading-m">
-						{" "}
-						{item.name}{" "}
+						{item.title}
 					</Link>
 				),
 				sections: [
 					{
 						id: "description",
-						description: (item) => item.description,
+						content: (item) => item.description,
 					},
 				],
 			}}
