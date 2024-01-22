@@ -76,12 +76,7 @@ export default function HistoryTable() {
 				console.log("Unable to load any help data");
 			}
 		}
-		fetchData(
-			listHelps,
-			"order",
-			"title",
-			updateHelps
-		);
+		fetchData(listHelps, "order", "title", updateHelps);
 	}, []);
 
 	// WATCH
