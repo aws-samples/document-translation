@@ -61,7 +61,7 @@ export default function HistoryTable() {
 			if (!data) {
 				// Attempt to load project sample data
 				try {
-					data = require("../../helpData.json");
+					data = require("../../sampleData/sampleHelpData.json");
 					console.log("Loaded project sample data:", data);
 				} catch (error) {
 					console.log("No project sample data found.");
