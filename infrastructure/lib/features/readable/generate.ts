@@ -192,9 +192,18 @@ export class dt_readableWorkflowGenerate extends Construct {
 					reason:
 						"Permission scoped to project specific resources. Execution ID unknown at deploy time.",
 					appliesTo: [
-						'Resource::arn:<AWS::Partition>:states:<AWS::Region>:<AWS::AccountId>:execution:{"Fn::Select":[6,{"Fn::Split":[":",{"Ref":"basereadablereadableWorkflowworkflowGenerateworkflowamazonDocTrandevappReadableamazon54A47EFF"}]}]}*',
-						'Resource::arn:<AWS::Partition>:states:<AWS::Region>:<AWS::AccountId>:execution:{"Fn::Select":[6,{"Fn::Split":[":",{"Ref":"basereadablereadableWorkflowworkflowGenerateworkflowanthropicDocTrandevappReadableanthropic2938CF7A"}]}]}*',
-						'Resource::arn:<AWS::Partition>:states:<AWS::Region>:<AWS::AccountId>:execution:{"Fn::Select":[6,{"Fn::Split":[":",{"Ref":"basereadablereadableWorkflowworkflowGenerateworkflowstabilityaiDocTrandevappReadablestability2E369112"}]}]}*',
+						`Resource::arn:<AWS::Partition>:states:<AWS::Region>:<AWS::AccountId>:execution:{"Fn::Select":[6,{"Fn::Split":[":",{"Ref":"${cdk.Stack.of(this).getLogicalId(
+							workflow_amazon.sfnMain.node
+								.defaultChild as cdk.CfnElement,
+						)}"}]}]}*`,
+						`Resource::arn:<AWS::Partition>:states:<AWS::Region>:<AWS::AccountId>:execution:{"Fn::Select":[6,{"Fn::Split":[":",{"Ref":"${cdk.Stack.of(this).getLogicalId(
+							workflow_anthropic.sfnMain.node
+								.defaultChild as cdk.CfnElement,
+						)}"}]}]}*`,
+						`Resource::arn:<AWS::Partition>:states:<AWS::Region>:<AWS::AccountId>:execution:{"Fn::Select":[6,{"Fn::Split":[":",{"Ref":"${cdk.Stack.of(this).getLogicalId(
+							workflow_stabilityai.sfnMain.node
+								.defaultChild as cdk.CfnElement,
+						)}"}]}]}*`,
 					],
 				},
 			],

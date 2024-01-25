@@ -31,6 +31,7 @@ enum Strings {
 export class dt_readableWorkflow extends Construct {
 	public readonly invokeModel: tasks.StepFunctionsStartExecution;
 	public readonly modelChoiceCondition: sfn.Condition;
+	public readonly sfnMain: sfn.StateMachine;
 
 	constructor(scope: Construct, id: string, props: props) {
 		super(scope, id);
@@ -182,7 +183,7 @@ export class dt_readableWorkflow extends Construct {
 		});
 
 		// STATE MACHINE | DEF
-		const sfnMain = new dt_stepfunction(
+		this.sfnMain = new dt_stepfunction(
 			this,
 			`${cdk.Stack.of(this).stackName}_Readable_${Strings.modelVendor}`,
 			{
@@ -195,7 +196,7 @@ export class dt_readableWorkflow extends Construct {
 			},
 		).StateMachine;
 		NagSuppressions.addResourceSuppressions(
-			sfnMain,
+			this.sfnMain,
 			[
 				{
 					id: "AwsSolutions-IAM5",
@@ -222,7 +223,7 @@ export class dt_readableWorkflow extends Construct {
 			this,
 			`invokeModel_${Strings.modelVendor}`,
 			{
-				stateMachine: sfnMain,
+				stateMachine: this.sfnMain,
 				resultSelector: {
 					"Payload.$": "$.Output.payload",
 				},

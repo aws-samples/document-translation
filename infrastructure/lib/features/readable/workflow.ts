@@ -436,7 +436,10 @@ export class dt_readableWorkflow extends Construct {
 					reason:
 						"Permission scoped to project specific resources. Execution ID unknown at deploy time.",
 					appliesTo: [
-						'Resource::arn:<AWS::Partition>:states:<AWS::Region>:<AWS::AccountId>:execution:{"Fn::Select":[6,{"Fn::Split":[":",{"Ref":"basereadablereadableWorkflowworkflowGenerateDocTrandevappReadableGenerate684E88C0"}]}]}*',
+						`Resource::arn:<AWS::Partition>:states:<AWS::Region>:<AWS::AccountId>:execution:{"Fn::Select":[6,{"Fn::Split":[":",{"Ref":"${cdk.Stack.of(this).getLogicalId(
+							workflowGenerate.sfnMain.node
+								.defaultChild as cdk.CfnElement,
+						)}"}]}]}*`,
 					],
 				},
 			],
