@@ -57,8 +57,6 @@ The dev branch currently has the initial code for "Simply Readable" which is a G
 
 Note: Simply Readable uses Amazon Bedrock for Generative AI. Amazon bedrock is [supported in these regions](https://docs.aws.amazon.com/bedrock/latest/userguide/what-is-bedrock.html#bedrock-regions). This project is currently using the region `BEDROCK_REGION: "us-west-2"` for the Lambdas that interact with Bedrock. 
 
-- The Document Translation feature must be enabled until the help component is split out from it.
-- The Document Translation PII feature is optional as the help component is not bundled with it.
 - The Simply Readable feature must be explicitly enabled.
 - The region to use Bedrock in must be specified. ([Supported regions](https://docs.aws.amazon.com/bedrock/latest/userguide/what-is-bedrock.html#bedrock-regions))
 - When using the quick-start manually update to include the below.
@@ -66,14 +64,12 @@ Note: Simply Readable uses Amazon Bedrock for Generative AI. Amazon bedrock is [
 (A full example is shown later)
 
 ```sh
-export translation="true" # Needed for "help" until separated out
-export translationPii="false"
 export readable="true"
 export readableBedrockRegion="us-west-1" # Specify region to use Bedrock in
 ```
 
 ```sh
-git checkout dev # Checkout the dev branch rather than a tag from main
+git switch -c dev origin/dev # Checkout the dev branch rather than a tag from main
 ```
 
 Recommended for any development installations.
@@ -103,10 +99,6 @@ export cognitoLocalUsersMfa="off" # Set MFA enforcement
 # Web UI
 export webUi="true" # Enable Web UI
 
-# Translation
-export translation="true" # Enable Translation
-export translationLifecycleDefault="7" # Set default lifecycle
-
 # Simply Readable
 export readable="true"
 export readableBedrockRegion="us-west-1" # Specify region to use Bedrock in
@@ -122,7 +114,7 @@ cdk bootstrap aws://123456789012/${AWS_REGION} # Bootstrap the account
 git clone https://github.com/aws-samples/document-translation.git # Clone the upstream project git repository
 cd document-translation # Change directory into the pulled project directory
 git fetch --all # Fetch
-git checkout dev # Checkout the dev branch rather than a tag from main
+git switch -c dev origin/dev # Checkout the dev branch rather than a tag from main
 
 # Push source code to your CodeCommit
 git config --global credential.helper '!aws codecommit credential-helper $@' # Enable the AWS CLI git credentials helper
