@@ -125,5 +125,5 @@ git push codecommit dev # Push files
 # Deploy the pipeline
 cd infrastructure # Change directory into the infrastructure directory
 npm install # Install node dependencies
-cdk deploy # Deploy
+npx --yes cdk@2.123.0 deploy
 ```
