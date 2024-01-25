@@ -338,6 +338,39 @@ export class dt_translate extends Construct {
 			jobTable: this.jobTable,
 		});
 
+		NagSuppressions.addResourceSuppressionsByPath(
+			cdk.Stack.of(this),
+			`/${
+				cdk.Stack.of(this).node.findChild(
+					"LogRetentionaae0aa3c5b4d4f87b02d85b201efdd8a",
+				).node.path
+			}/ServiceRole/Resource`,
+			[
+				{
+					id: "AwsSolutions-IAM4",
+					reason:
+						"CDK generates role with default policy. Default policy uses wildcard.",
+				},
+			],
+			true,
+		);
+		NagSuppressions.addResourceSuppressionsByPath(
+			cdk.Stack.of(this),
+			`/${
+				cdk.Stack.of(this).node.findChild(
+					"LogRetentionaae0aa3c5b4d4f87b02d85b201efdd8a",
+				).node.path
+			}/ServiceRole/DefaultPolicy/Resource`,
+			[
+				{
+					id: "AwsSolutions-IAM5",
+					reason:
+						"CDK generates role with default policy. Default policy uses wildcard.",
+				},
+			],
+			true,
+		);
+
 		// END
 	}
 }
