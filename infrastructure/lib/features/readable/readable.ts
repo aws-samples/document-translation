@@ -3,6 +3,7 @@
 
 import { Construct } from "constructs";
 import * as cdk from "aws-cdk-lib";
+import { NagSuppressions } from "cdk-nag";
 
 import { aws_appsync as appsync, aws_s3 as s3 } from "aws-cdk-lib";
 import * as identitypool from "@aws-cdk/aws-cognito-identitypool-alpha";
@@ -71,6 +72,39 @@ export class dt_readable extends Construct {
 			updateItemMutation_name: readableItem.updateItemMutation_name,
 			contentBucket: this.contentBucket,
 		});
+
+		NagSuppressions.addResourceSuppressionsByPath(
+			cdk.Stack.of(this),
+			`/${
+				cdk.Stack.of(this).node.findChild(
+					"LogRetentionaae0aa3c5b4d4f87b02d85b201efdd8a",
+				).node.path
+			}/ServiceRole/Resource`,
+			[
+				{
+					id: "AwsSolutions-IAM4",
+					reason:
+						"CDK generates role with default policy. Default policy uses wildcard.",
+				},
+			],
+			true,
+		);
+		NagSuppressions.addResourceSuppressionsByPath(
+			cdk.Stack.of(this),
+			`/${
+				cdk.Stack.of(this).node.findChild(
+					"LogRetentionaae0aa3c5b4d4f87b02d85b201efdd8a",
+				).node.path
+			}/ServiceRole/DefaultPolicy/Resource`,
+			[
+				{
+					id: "AwsSolutions-IAM5",
+					reason:
+						"CDK generates role with default policy. Default policy uses wildcard.",
+				},
+			],
+			true,
+		);
 
 		// END
 	}
