@@ -48,8 +48,8 @@ export class dt_readableModel extends Construct {
 
 		// API | QUERY listModel
 		// OUTPUT
-		const getModel_output = new OutputType(
-			`${dt_enums.Feature.PREFIX}_getModel_output`,
+		const getModel_output_item = new OutputType(
+			`${dt_enums.Feature.PREFIX}_getModel_output_item`,
 			{
 				definition: {
 					id: GraphqlType.string({ isRequired: true }),
@@ -60,6 +60,17 @@ export class dt_readableModel extends Construct {
 				directives: [Directive.custom("@aws_cognito_user_pools")],
 			},
 		);
+		const getModel_output = new OutputType(
+			`${dt_enums.Feature.PREFIX}_getModel_output`,
+			{
+				definition: {
+					items: getModel_output_item.attribute({ isList: true }),
+					nextToken: GraphqlType.string(),
+				},
+				directives: [Directive.custom("@aws_cognito_user_pools")],
+			},
+		);
+		props.apiSchema.addType(getModel_output_item);
 		props.apiSchema.addType(getModel_output);
 
 		// QUERY

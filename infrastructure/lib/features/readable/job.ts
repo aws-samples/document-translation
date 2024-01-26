@@ -94,8 +94,8 @@ export class dt_readableJob extends Construct {
 		// INPUT
 		// NA
 		// OUTPUT
-		const listJobs_output = new OutputType(
-			`${dt_enums.Feature.PREFIX}_listJobs_output`,
+		const listJobs_output_item = new OutputType(
+			`${dt_enums.Feature.PREFIX}_listJobs_output_item`,
 			{
 				definition: {
 					id: GraphqlType.string({ isRequired: true }),
@@ -107,11 +107,22 @@ export class dt_readableJob extends Construct {
 				directives: [Directive.custom("@aws_cognito_user_pools")],
 			},
 		);
+		const listJobs_output = new OutputType(
+			`${dt_enums.Feature.PREFIX}_listJobs_output`,
+			{
+				definition: {
+					items: listJobs_output_item.attribute({ isList: true }),
+					nextToken: GraphqlType.string(),
+				},
+				directives: [Directive.custom("@aws_cognito_user_pools")],
+			},
+		);
+		props.apiSchema.addType(listJobs_output_item);
 		props.apiSchema.addType(listJobs_output);
 
 		// QUERY
 		const listJobsQuery = new ResolvableField({
-			returnType: listJobs_output.attribute({ isList: true }),
+			returnType: listJobs_output.attribute(),
 			dataSource: this.apiDsJobTable,
 			requestMappingTemplate: appsync.MappingTemplate.fromString(`
 			{
@@ -149,8 +160,8 @@ export class dt_readableJob extends Construct {
 		);
 		props.apiSchema.addType(getJob_input);
 		// OUTPUT
-		const getJob_output = new OutputType(
-			`${dt_enums.Feature.PREFIX}_getJob_output`,
+		const getJob_output_item = new OutputType(
+			`${dt_enums.Feature.PREFIX}_getJob_output_item`,
 			{
 				definition: {
 					id: GraphqlType.string({ isRequired: true }),
@@ -172,11 +183,21 @@ export class dt_readableJob extends Construct {
 				directives: [Directive.custom("@aws_cognito_user_pools")],
 			},
 		);
+		const getJob_output = new OutputType(
+			`${dt_enums.Feature.PREFIX}_getJob_output`,
+			{
+				definition: {
+					items: getJob_output_item.attribute({ isList: true }),
+				},
+				directives: [Directive.custom("@aws_cognito_user_pools")],
+			},
+		);
+		props.apiSchema.addType(getJob_output_item);
 		props.apiSchema.addType(getJob_output);
 
 		// QUERY
 		const getJobQuery = new ResolvableField({
-			returnType: getJob_output.attribute({ isList: true }),
+			returnType: getJob_output.attribute(),
 			dataSource: this.apiDsJobTable,
 			args: getJob_input.definition,
 			requestMappingTemplate: appsync.MappingTemplate.fromString(`

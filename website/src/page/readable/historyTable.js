@@ -43,7 +43,7 @@ export default function HistoryTable() {
 					query: listJobs,
 					authMode: "AMAZON_COGNITO_USER_POOLS",
 				});
-				data = response.data.readableListJobs;
+				data = response.data.readableListJobs.items;
 				console.log(data);
 				updateJobs(sortDataByKey("updatedAt", "id", data));
 			} catch (error) {

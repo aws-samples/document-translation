@@ -174,7 +174,7 @@ export default function ReadableNew() {
 
 	async function setModelData() {
 		const result = await listModels();
-		const allModels = result.data.readableListModels;
+		const allModels = result.data.readableListModels.items;
 
 		const textModels = returnArrayOfType(allModels, ItemValues.TEXT);
 		setModelDataOfType(textModels, ItemValues.TEXT);
@@ -230,7 +230,7 @@ export default function ReadableNew() {
 
 	async function fetchInitialStates() {
 		const result = await fetchAllJobItems();
-		const allItems = result.data.readableGetJob;
+		const allItems = result.data.readableGetJob.items;
 		// METADATA
 		const metatdataItem = returnObjectWithItemId(allItems, ItemValues.METADATA);
 		setMetadataState(metatdataItem);
