@@ -25,6 +25,8 @@ import {
 	ObjectType,
 	InputType,
 	ResolvableField,
+	Field,
+	Directive,
 } from "awscdk-appsync-utils";
 
 const namedStrings: { [key: string]: string } = {
@@ -236,6 +238,21 @@ export class dt_translate extends Construct {
 
 		props.apiSchema.addType(jobNodeInput);
 		props.apiSchema.addMutation("translationCreateJob", createJobMutation);
+
+		// SUBSCRIPTION
+		// SUBSCRIPTION | updateJob
+		const subscribeUpdateJobSubscription = new Field({
+			returnType: jobNodeConnection.attribute(),
+			args: {
+				id: GraphqlType.id({ isRequired: true }),
+			},
+			directives: [
+			],
+		});
+		props.apiSchema.addSubscription(
+			'translationUpdateJob',
+			subscribeUpdateJobSubscription,
+		);
 
 		//
 		// STATE MACHINE
