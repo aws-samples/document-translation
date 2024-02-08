@@ -3,7 +3,7 @@
 
 // REACT
 import React, { useEffect, useState } from 'react';
-import { createJob } from '../../graphql/mutations';
+import { translationCreateJob as createJob } from '../../graphql/mutations';
 import { useTranslation } from 'react-i18next';
 import i18n from 'i18next';
 import { useNavigate } from 'react-router-dom';

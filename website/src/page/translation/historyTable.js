@@ -19,7 +19,7 @@ import {
 } from "@cloudscape-design/components";
 
 // IMPORTS | GRAPHQL
-import { listJobs } from '../../graphql/queries';
+import { translationListJobs as listJobs } from '../../graphql/queries';
 // IMPORTS | FUNCTIONS
 import sortDataByKey from '../../util/sortDataByKey';
 import { formatJobNameId } from '../../util/formatJobNameId';
@@ -44,7 +44,7 @@ export default function HistoryTable() {
 					query: listJobs,
 					authMode: "AMAZON_COGNITO_USER_POOLS",
 				});
-				data = response.data.listJobs.items;
+				data = response.data.translationListJobs.items;
 				data = sortDataByKey("createdAt", "id", data);
 				updateJobs(data);
 			} catch (error) {}
