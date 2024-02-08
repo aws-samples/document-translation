@@ -18,7 +18,7 @@ import {
 	Select,
 } from "@cloudscape-design/components";
 
-import { readableUpdateItem } from "../../graphql/mutations";
+import { readableUpdateJobItem } from "../../graphql/mutations";
 
 const initialFormState = [];
 
@@ -108,7 +108,7 @@ export default function ReadableViewEditText(props) {
 		// TODO Move to util
 		try {
 			await API.graphql({
-				query: readableUpdateItem,
+				query: readableUpdateJobItem,
 				authMode: "AMAZON_COGNITO_USER_POOLS",
 				variables: payload,
 			});

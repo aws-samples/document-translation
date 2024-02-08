@@ -28,16 +28,16 @@ export interface props {
 }
 
 export class dt_readableItem extends Construct {
-	public readonly updateItemMutation_name: string;
+	public readonly updateJobItemMutation_name: string;
 
 	constructor(scope: Construct, id: string, props: props) {
 		super(scope, id);
 
 		// API
-		// API | MUTATION createItem
+		// API | MUTATION createJobItem
 		// INPUT
-		const createItem_input = new InputType(
-			`${dt_enums.Feature.PREFIX}_createItem_input`,
+		const createJobItem_input = new InputType(
+			`${dt_enums.Feature.PREFIX}_createJobItem_input`,
 			{
 				definition: {
 					id: GraphqlType.id({ isRequired: true }),
@@ -48,10 +48,10 @@ export class dt_readableItem extends Construct {
 				},
 			},
 		);
-		props.apiSchema.addType(createItem_input);
+		props.apiSchema.addType(createJobItem_input);
 		// OUTPUT
-		const createItem_output = new OutputType(
-			`${dt_enums.Feature.PREFIX}_createItem_output`,
+		const createJobItem_output = new OutputType(
+			`${dt_enums.Feature.PREFIX}_createJobItem_output`,
 			{
 				definition: {
 					id: GraphqlType.id({ isRequired: true }),
@@ -64,13 +64,13 @@ export class dt_readableItem extends Construct {
 				directives: [Directive.custom("@aws_cognito_user_pools")],
 			},
 		);
-		props.apiSchema.addType(createItem_output);
+		props.apiSchema.addType(createJobItem_output);
 
 		// MUTATION
-		const createItemMutation = new ResolvableField({
-			returnType: createItem_output.attribute(),
+		const createJobItemMutation = new ResolvableField({
+			returnType: createJobItem_output.attribute(),
 			dataSource: props.apiDsJobTable,
-			args: createItem_input.definition,
+			args: createJobItem_input.definition,
 			requestMappingTemplate: appsync.MappingTemplate.fromString(`
 				#set( $timestamp = $util.time.nowEpochSeconds() )
 				{
@@ -97,14 +97,14 @@ export class dt_readableItem extends Construct {
 		});
 
 		props.apiSchema.addMutation(
-			`${dt_enums.Feature.PREFIX}CreateItem`,
-			createItemMutation,
+			`${dt_enums.Feature.PREFIX}CreateJobItem`,
+			createJobItemMutation,
 		);
 
-		// API | MUTATION updateItem
+		// API | MUTATION updateJobItem
 		// INPUT
-		const updateItem_input = new InputType(
-			`${dt_enums.Feature.PREFIX}_updateItem_input`,
+		const updateJobItem_input = new InputType(
+			`${dt_enums.Feature.PREFIX}_updateJobItem_input`,
 			{
 				definition: {
 					id: GraphqlType.string({ isRequired: true }),
@@ -124,11 +124,11 @@ export class dt_readableItem extends Construct {
 				],
 			},
 		);
-		props.apiSchema.addType(updateItem_input);
+		props.apiSchema.addType(updateJobItem_input);
 
 		// OUTPUT
-		const updateItem_output = new OutputType(
-			`${dt_enums.Feature.PREFIX}_updateItem_output`,
+		const updateJobItem_output = new OutputType(
+			`${dt_enums.Feature.PREFIX}_updateJobItem_output`,
 			{
 				definition: {
 					id: GraphqlType.string({ isRequired: true }),
@@ -149,12 +149,12 @@ export class dt_readableItem extends Construct {
 				],
 			},
 		);
-		props.apiSchema.addType(updateItem_output);
+		props.apiSchema.addType(updateJobItem_output);
 
 		// MUTATION
-		const updateItemMutation = new ResolvableField({
-			returnType: updateItem_output.attribute(),
-			args: updateItem_input.definition,
+		const updateJobItemMutation = new ResolvableField({
+			returnType: updateJobItem_output.attribute(),
+			args: updateJobItem_input.definition,
 			dataSource: props.apiDsJobTable,
 			requestMappingTemplate: appsync.MappingTemplate.fromString(`
 				#set( $timestamp = $util.time.nowEpochSeconds() )
@@ -230,28 +230,28 @@ export class dt_readableItem extends Construct {
 				Directive.iam(),
 			],
 		});
-		this.updateItemMutation_name = `${dt_enums.Feature.PREFIX}UpdateItem`;
+		this.updateJobItemMutation_name = `${dt_enums.Feature.PREFIX}UpdateJobItem`;
 		props.apiSchema.addMutation(
-			this.updateItemMutation_name,
-			updateItemMutation,
+			this.updateJobItemMutation_name,
+			updateJobItemMutation,
 		);
 
 		// SUBSCRIPTION
-		// SUBSCRIPTION | updateItem
-		const subscribeUpdateItemSubscription = new Field({
-			returnType: updateItem_output.attribute(),
+		// SUBSCRIPTION | updateJobItem
+		const subscribeUpdateJobItemSubscription = new Field({
+			returnType: updateJobItem_output.attribute(),
 			args: {
 				id: GraphqlType.id({ isRequired: true }),
 				itemId: GraphqlType.id(),
 			},
 			directives: [
 				Directive.custom("@aws_cognito_user_pools"),
-				Directive.subscribe(this.updateItemMutation_name),
+				Directive.subscribe(this.updateJobItemMutation_name),
 			],
 		});
 		props.apiSchema.addSubscription(
-			this.updateItemMutation_name,
-			subscribeUpdateItemSubscription,
+			this.updateJobItemMutation_name,
+			subscribeUpdateJobItemSubscription,
 		);
 
 		// END

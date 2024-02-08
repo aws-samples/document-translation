@@ -298,10 +298,10 @@ export class dt_readableJob extends Construct {
 			createJobMutation,
 		);
 
-		// API | MUTATION updateJob
+		// API | MUTATION updateJobMetadata
 		// INPUT
-		const updateJob_input = new InputType(
-			`${dt_enums.Feature.PREFIX}_updateJob_input`,
+		const updateJobMetadata_input = new InputType(
+			`${dt_enums.Feature.PREFIX}_updateJobMetadata_input`,
 			{
 				definition: {
 					id: GraphqlType.string({ isRequired: true }),
@@ -310,11 +310,11 @@ export class dt_readableJob extends Construct {
 				directives: [Directive.custom("@aws_cognito_user_pools")],
 			},
 		);
-		props.apiSchema.addType(updateJob_input);
+		props.apiSchema.addType(updateJobMetadata_input);
 
 		// OUTPUT
-		const updateJob_output = new OutputType(
-			`${dt_enums.Feature.PREFIX}_updateJob_output`,
+		const updateJobMetadata_output = new OutputType(
+			`${dt_enums.Feature.PREFIX}_updateJobMetadata_output`,
 			{
 				definition: {
 					id: GraphqlType.string({ isRequired: true }),
@@ -326,12 +326,12 @@ export class dt_readableJob extends Construct {
 				directives: [Directive.custom("@aws_cognito_user_pools")],
 			},
 		);
-		props.apiSchema.addType(updateJob_output);
+		props.apiSchema.addType(updateJobMetadata_output);
 
 		// MUTATION
-		const updateJobMutation = new ResolvableField({
-			returnType: updateJob_output.attribute(),
-			args: updateJob_input.definition,
+		const updateJobMetadataMutation = new ResolvableField({
+			returnType: updateJobMetadata_output.attribute(),
+			args: updateJobMetadata_input.definition,
 			dataSource: this.apiDsJobTable,
 			requestMappingTemplate: appsync.MappingTemplate.fromString(`
 				#set( $timestamp = $util.time.nowEpochSeconds() )
@@ -373,23 +373,23 @@ export class dt_readableJob extends Construct {
 			`),
 			directives: [Directive.custom("@aws_cognito_user_pools")],
 		});
-		const updateJobMutation_name = `${dt_enums.Feature.PREFIX}UpdateJob`;
-		props.apiSchema.addMutation(updateJobMutation_name, updateJobMutation);
+		const updateJobMetadataMutation_name = `${dt_enums.Feature.PREFIX}UpdateJobMetadata`;
+		props.apiSchema.addMutation(updateJobMetadataMutation_name, updateJobMetadataMutation);
 
-		// SUBSCRIPTION | updateJob
-		const subscribeUpdateJobSubscription = new Field({
-			returnType: updateJob_output.attribute(),
+		// SUBSCRIPTION | updateJobMetadata
+		const subscribeUpdateJobMetadataSubscription = new Field({
+			returnType: updateJobMetadata_output.attribute(),
 			args: {
 				id: GraphqlType.id({ isRequired: true }),
 			},
 			directives: [
 				Directive.custom("@aws_cognito_user_pools"),
-				Directive.subscribe(updateJobMutation_name),
+				Directive.subscribe(updateJobMetadataMutation_name),
 			],
 		});
 		props.apiSchema.addSubscription(
-			updateJobMutation_name,
-			subscribeUpdateJobSubscription,
+			updateJobMetadataMutation_name,
+			subscribeUpdateJobMetadataSubscription,
 		);
 
 		// END

@@ -10,8 +10,8 @@ import debug from "debug";
 
 import * as subscriptions from "../../graphql/subscriptions";
 import {
-	readableCreateItem,
-	readableUpdateItem,
+	readableCreateJobItem,
+	readableUpdateJobItem,
 } from "../../graphql/mutations";
 import { readableGetJob, readableListModels } from "../../graphql/queries";
 
@@ -274,7 +274,7 @@ export default function ReadableNew() {
 		log("subscriptionRequest metadataState", metadataState);
 		try {
 			return API.graphql({
-				query: subscriptions.readableUpdateItem,
+				query: subscriptions.readableUpdateJobItem,
 				authMode: "AMAZON_COGNITO_USER_POOLS",
 				// variables: { id: metadataState.id },
 				variables: { id: getPageJobId() },
@@ -403,7 +403,7 @@ export default function ReadableNew() {
 		debugger;
 		return subscriptionRequest().subscribe({
 			next: ({ value }) => {
-				const newData = value.data.readableUpdateItem;
+				const newData = value.data.readableUpdateJobItem;
 				handleNewDataFromSubscription(newData);
 			},
 			error: (error) => {
@@ -433,7 +433,7 @@ export default function ReadableNew() {
 		const identity = credentials.identityId;
 		try {
 			const result = await API.graphql({
-				query: readableCreateItem,
+				query: readableCreateJobItem,
 				authMode: "AMAZON_COGNITO_USER_POOLS",
 				variables: {
 					id: metadataState.id,
@@ -442,7 +442,7 @@ export default function ReadableNew() {
 					type: ItemValues.TEXT,
 				},
 			});
-			return await result.data.readableCreateItem;
+			return await result.data.readableCreateJobItem;
 		} catch (error) {
 			console.log("Error creating text item:", error);
 		}
@@ -453,7 +453,7 @@ export default function ReadableNew() {
 		const identity = credentials.identityId;
 		try {
 			const result = await API.graphql({
-				query: readableCreateItem,
+				query: readableCreateJobItem,
 				authMode: "AMAZON_COGNITO_USER_POOLS",
 				variables: {
 					id: metadataState.id,
@@ -463,7 +463,7 @@ export default function ReadableNew() {
 					parent: parentId,
 				},
 			});
-			return await result.data.readableCreateItem;
+			return await result.data.readableCreateJobItem;
 		} catch (error) {
 			console.log("Error creating text item:", error);
 		}
@@ -473,7 +473,7 @@ export default function ReadableNew() {
 		// TODO Move to util
 		try {
 			API.graphql({
-				query: readableUpdateItem,
+				query: readableUpdateJobItem,
 				authMode: "AMAZON_COGNITO_USER_POOLS",
 				variables: payload,
 			});

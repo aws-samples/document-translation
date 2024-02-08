@@ -5,7 +5,7 @@
 import React from "react";
 import { useTranslation } from "react-i18next";
 import { API } from "aws-amplify";
-import { readableUpdateJob } from "../../graphql/mutations";
+import { readableUpdateJobMetadata } from "../../graphql/mutations";
 // CLOUDSCAPE DESIGN
 import "@cloudscape-design/global-styles/index.css";
 import { Header, Table, Input } from "@cloudscape-design/components";
@@ -19,7 +19,7 @@ export default function ReadableViewDetails(props) {
 	async function saveJobNameToDb() {
 		try {
 			await API.graphql({
-				query: readableUpdateJob,
+				query: readableUpdateJobMetadata,
 				authMode: "AMAZON_COGNITO_USER_POOLS",
 				variables: {
 					id: props.metadataState.id,

@@ -21,7 +21,7 @@ import { dt_stepfunction } from "../../components/stepfunction";
 import { dt_lambda } from "../../components/lambda";
 import { dt_readableWorkflowGenerate as dt_readableWorkflowGenerate } from "./generate";
 
-const appsyncQuery_updateItem = `mutation ReadableUpdateItem(
+const appsyncQuery_updateJobItem = `mutation ReadableUpdateJobItem(
 		$id: String!
 		$itemId: String!
 		$order: Int
@@ -32,7 +32,7 @@ const appsyncQuery_updateItem = `mutation ReadableUpdateItem(
 		$type: String
 		$parent: String
 	) {
-	readableUpdateItem(
+	readableUpdateJobItem(
 		id: $id
 		itemId: $itemId
 		order: $order
@@ -62,7 +62,7 @@ export interface props {
 	jobTable: dynamodb.Table;
 	modelTable: dynamodb.Table;
 	removalPolicy: cdk.RemovalPolicy;
-	updateItemMutation_name: string;
+	updateJobItemMutation_name: string;
 }
 
 export class dt_readableWorkflow extends Construct {
@@ -131,7 +131,7 @@ export class dt_readableWorkflow extends Construct {
 							`arn:aws:appsync:${cdk.Stack.of(this).region}:${
 								cdk.Stack.of(this).account
 							}:apis/${props.api.apiId}/types/Mutation/fields/${
-								props.updateItemMutation_name
+								props.updateJobItemMutation_name
 							}`,
 						],
 					}),
@@ -146,7 +146,7 @@ export class dt_readableWorkflow extends Construct {
 			runtime: lambda.Runtime.NODEJS_18_X,
 			environment: {
 				API_ENDPOINT: props.api.graphqlUrl,
-				API_QUERY: appsyncQuery_updateItem,
+				API_QUERY: appsyncQuery_updateJobItem,
 				API_REGION: cdk.Stack.of(this).region,
 			},
 			bundlingNodeModules: ["@aws-crypto/sha256-js"],

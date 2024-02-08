@@ -15,7 +15,7 @@ import {
 	Select,
 } from "@cloudscape-design/components";
 
-import { readableUpdateItem } from "../../graphql/mutations";
+import { readableUpdateJobItem } from "../../graphql/mutations";
 
 // CONFIGURE
 // CONFIGURE | AMPLIFY
@@ -42,7 +42,7 @@ export default function ReadableViewEditImage(props) {
 	async function pushItemUpdateWithNewData(payload) {
 		try {
 			API.graphql({
-				query: readableUpdateItem,
+				query: readableUpdateJobItem,
 				authMode: "AMAZON_COGNITO_USER_POOLS",
 				variables: payload,
 			});

@@ -10,9 +10,9 @@ import * as identitypool from "@aws-cdk/aws-cognito-identitypool-alpha";
 import { CodeFirstSchema } from "awscdk-appsync-utils";
 
 import { dt_readableBucket } from "./bucket";
-import { dt_readableJob } from "./job";
+import { dt_readableJob } from "./jobMetadata";
 import { dt_readableModel } from "./model";
-import { dt_readableItem } from "./item";
+import { dt_readableItem } from "./jobItem";
 import { dt_readableWorkflow } from "./workflow";
 
 export interface props {
@@ -69,7 +69,7 @@ export class dt_readable extends Construct {
 			jobTable: readableJob.jobTable,
 			modelTable: readableModel.modelTable,
 			removalPolicy: props.removalPolicy,
-			updateItemMutation_name: readableItem.updateItemMutation_name,
+			updateJobItemMutation_name: readableItem.updateJobItemMutation_name,
 			contentBucket: this.contentBucket,
 		});
 
