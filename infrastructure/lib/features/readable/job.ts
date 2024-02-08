@@ -222,7 +222,11 @@ export class dt_readableJob extends Construct {
 					#set($added = $filteredResults.add($item))
 				#end
 			#end
-			$utils.toJson($filteredResults)
+			
+			{
+				"items": $util.toJson($filteredResults),
+				"nextToken": $util.toJson($util.defaultIfNullOrBlank($context.result.nextToken, null))
+			}
 		`),
 			directives: [Directive.custom("@aws_cognito_user_pools")],
 		});
