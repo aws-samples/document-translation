@@ -213,7 +213,7 @@ export class dt_translate extends Construct {
 
 		props.apiSchema.addType(jobNode);
 		props.apiSchema.addType(jobNodeConnection);
-		props.apiSchema.addQuery("listJobs", listJobsQuery);
+		props.apiSchema.addQuery("translationListJobs", listJobsQuery);
 
 		// INFRA | DYNAMODB | JOBS | API | MUTATION
 		const jobNodeInput = new InputType("jobNodeInput", {
@@ -235,7 +235,7 @@ export class dt_translate extends Construct {
 		});
 
 		props.apiSchema.addType(jobNodeInput);
-		props.apiSchema.addMutation("createJob", createJobMutation);
+		props.apiSchema.addMutation("translationCreateJob", createJobMutation);
 
 		//
 		// STATE MACHINE
