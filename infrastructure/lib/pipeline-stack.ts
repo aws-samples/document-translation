@@ -219,7 +219,6 @@ export class pipelineStack extends cdk.Stack {
 					"npm install -g aws-cdk@^2.89.0",
 					`cd ${dirPipeline}`,
 					"npm ci",
-					"npm run build lib/**.ts",
 					"cdk synth",
 				],
 			}),
