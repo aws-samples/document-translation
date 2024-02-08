@@ -140,7 +140,12 @@ export class dt_readableJob extends Construct {
 				}
 			}
 		`),
-			responseMappingTemplate: appsync.MappingTemplate.dynamoDbResultList(),
+			responseMappingTemplate: appsync.MappingTemplate.fromString(`
+				{
+					"items": $util.toJson($ctx.result.items),
+					"nextToken": $util.toJson($util.defaultIfNullOrBlank($context.result.nextToken, null))
+				}
+			`),
 			directives: [Directive.custom("@aws_cognito_user_pools")],
 		});
 		props.apiSchema.addQuery(
