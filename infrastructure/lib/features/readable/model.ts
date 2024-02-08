@@ -75,7 +75,7 @@ export class dt_readableModel extends Construct {
 
 		// QUERY
 		const listModelsQuery = new ResolvableField({
-			returnType: getModel_output.attribute({ isList: true }),
+			returnType: getModel_output.attribute(),
 			args: {
 				limit: GraphqlType.int(),
 				nextToken: GraphqlType.string(),
