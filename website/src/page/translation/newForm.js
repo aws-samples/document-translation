@@ -3,7 +3,6 @@
 
 // REACT
 import React, { useEffect, useState } from 'react';
-import { translationCreateJob as createJob } from '../../graphql/mutations';
 import { useTranslation } from 'react-i18next';
 import i18n from 'i18next';
 import { useNavigate } from 'react-router-dom';
@@ -32,6 +31,12 @@ import {
 
 // APP
 import { v4 as uuid } from 'uuid'; 
+
+const features = require("../../features.json");
+let createJob = null;
+if (features.translation) {
+	createJob = require('../../graphql/mutations').translationCreateJob
+} 
 
 // CONFIGURE
 // CONFIGURE | AMPLIFY

@@ -18,12 +18,16 @@ import {
 	TextContent,
 } from "@cloudscape-design/components";
 
-// IMPORTS | GRAPHQL
-import { translationListJobs as listJobs } from '../../graphql/queries';
 // IMPORTS | FUNCTIONS
 import sortDataByKey from '../../util/sortDataByKey';
 import { formatJobNameId } from '../../util/formatJobNameId';
 import { formatTimestamp } from '../../util/formatTimestamp';
+// IMPORTS | GRAPHQL
+const features = require("../../features.json");
+let listJobs = null;
+if (features.translation) {
+	listJobs = require('../../graphql/queries').translationListJobs
+} 
 
 // CONFIGURE
 // CONFIGURE | AMPLIFY
