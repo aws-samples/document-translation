@@ -46,6 +46,7 @@ function updateFormFields() {
 	filterFormFields("CognitoLocalUsers", form.cognitoLocalUsers.checked);
 	filterFormFields("CognitoSamlUsers", form.cognitoSamlUsers.checked);
 	filterFormFields("Translation", form.translation.checked);
+	filterFormFields("Readable", form.readable.checked);
 
 	if (form.sourceGitService.value == "codecommit"){
 		filterFormFields("CodeCommit", true);
@@ -137,6 +138,11 @@ function handleForm(event) {
 		appendSection('Translation')
 		appendStep('Enable Translation', `export translation="true"`)
 		appendStep('Set default lifecycle', `export translationLifecycleDefault="${data.translationLifecycleDefault}"`)
+	};
+	if (data.readable === "on") {
+		appendSection('Readable')
+		appendStep('Enable Readable', `export readable="true"`)
+		appendStep('Set Readable Bedrock region', `export readableBedrockRegion="${data.readableBedrockRegion}"`)
 	};
 
 	appendSection('----------')

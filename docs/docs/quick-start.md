@@ -87,6 +87,23 @@ This form will collate your inputs and return the appropriate commands to enter 
 		</div>
 	</fieldset>
 	<fieldset>
+		<legend>Readable <a class="info" target="_blank" href="{{ site.baseurl }}/docs/installation/configuration/options.html#readable">(info)</a></legend>
+		<div class="formOptionGroup">
+			<label class="formOptionLabel" for="readable">Enable</label>
+			<input class="formOptionInput" type="checkbox" name="readable" checked/>
+		</div>
+		<div class="formOptionGroup isForReadable">
+			<label class="formOptionLabel" for="readableBedrockRegion">Readable Bedrock Region</label>
+			<select id="readableBedrockRegion" class="formOptionInput" name="readableBedrockRegion">
+                <option value="us-east-1">us-east-1 | US East (N. Virginia)</option>
+                <option value="us-west-2">us-west-2 | US West (Oregon)</option>
+                <option value="ap-southwest-1">ap-southwest-1 | Asia Pacific (Singapore)</option>
+                <option value="ap-northeast-1">ap-northeast-1 | Asia Pacific (Tokyo)</option>
+                <option value="eu-central-1">eu-central-1 | Europe (Frankfurt)</option>
+			</select>
+		</div>
+	</fieldset>
+	<fieldset>
 		<legend>Custom Domain <a class="info" target="_blank" href="{{ site.baseurl }}/docs/installation/prerequisite/domain.html">(info)</a></legend>
 		<div class="formOptionGroup">
 			<label class="formOptionLabel" for="customDomainEnable">Enable</label>
