@@ -161,6 +161,11 @@ This form will collate your inputs and return the appropriate commands to enter 
 			<input class="formOptionInput" type="checkbox" name="readable" checked/>
 		</div>
 		<div class="formOptionGroup isForReadable">
+			<blockquote class="note-title isForCognitoLocalUsers">
+				<p>Note</p>
+				<p>Amazon Bedrock is available in select regions. Simply Readable will send the input text to the selected region for processing with the Bedrock service.</p>
+				<p><a href="{{ site.baseurl }}/docs/installation/post-install/web-ui.html">Access Web UI</a></p>
+			</blockquote>
 			<label class="formOptionLabel" for="readableBedrockRegion">Readable Bedrock Region</label>
 			<select id="readableBedrockRegion" class="formOptionInput" name="readableBedrockRegion">
                 <option value="us-east-1">us-east-1 | US East (N. Virginia)</option>
