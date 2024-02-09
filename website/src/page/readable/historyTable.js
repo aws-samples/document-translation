@@ -21,11 +21,16 @@ import {
 import {
 	CreateJob,
 } from '../../util/readableCreateJob';
-import { readableListJobs as listJobs } from '../../graphql/queries';
 // IMPORTS | FUNCTIONS
 import sortDataByKey from '../../util/sortDataByKey';
 import { formatJobNameId } from '../../util/formatJobNameId';
 import { formatTimestamp } from '../../util/formatTimestamp';
+
+const features = require("../../features.json");
+let listJobs = null;
+if (features.readable) {
+	listJobs = require('../../graphql/queries').readableListJobs;
+} 
 
 export default function HistoryTable() {
 	const [jobs, updateJobs] = useState([]);

@@ -8,13 +8,6 @@ import { API, Hub, Auth } from "aws-amplify";
 import { CONNECTION_STATE_CHANGE, ConnectionState } from "@aws-amplify/pubsub";
 import debug from "debug";
 
-import * as subscriptions from "../../graphql/subscriptions";
-import {
-	readableCreateJobItem,
-	readableUpdateJobItem,
-} from "../../graphql/mutations";
-import { readableGetJob, readableListModels } from "../../graphql/queries";
-
 // CLOUDSCAPE DESIGN
 import "@cloudscape-design/global-styles/index.css";
 import {
@@ -31,6 +24,20 @@ import ReadableViewDetails from "./viewDetails";
 import ReadableViewEditText from "./viewEditText";
 import ReadableViewEditImage from "./viewEditImage";
 import { getPageJobId } from "../../util/getPageJobId";
+
+const features = require("../../features.json");
+let readableCreateJobItem = null;
+let readableUpdateJobItem = null;
+let readableGetJob = null;
+let readableListModels = null;
+let subscription_readableUpdateJobItem = null;
+if (features.readable) {
+	readableCreateJobItem = require('../../graphql/mutations').readableCreateJobItem
+	readableUpdateJobItem = require('../../graphql/mutations').readableUpdateJobItem
+	readableGetJob = require('../../graphql/queries').readableGetJob
+	readableListModels = require('../../graphql/queries').readableListModels
+	subscription_readableUpdateJobItem = require('../../graphql/subscriptions').readableUpdateJobItem
+} 
 
 const initialModelState = {
 	text: [],
@@ -274,7 +281,7 @@ export default function ReadableNew() {
 		log("subscriptionRequest metadataState", metadataState);
 		try {
 			return API.graphql({
-				query: subscriptions.readableUpdateJobItem,
+				query: subscription_readableUpdateJobItem,
 				authMode: "AMAZON_COGNITO_USER_POOLS",
 				// variables: { id: metadataState.id },
 				variables: { id: getPageJobId() },

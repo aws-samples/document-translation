@@ -2,7 +2,12 @@
 // SPDX-License-Identifier: MIT-0
 
 import { API, Auth } from "aws-amplify";
-import { readableCreateJob } from "../graphql/mutations";
+
+const features = require("../features.json");
+let readableCreateJob = null;
+if (features.readable) {
+	readableCreateJob = require('../graphql/mutations').readableCreateJob;
+} 
 
 export async function CreateJob() {
 	try {

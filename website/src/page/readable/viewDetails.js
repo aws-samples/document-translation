@@ -5,13 +5,18 @@
 import React from "react";
 import { useTranslation } from "react-i18next";
 import { API } from "aws-amplify";
-import { readableUpdateJobMetadata } from "../../graphql/mutations";
 // CLOUDSCAPE DESIGN
 import "@cloudscape-design/global-styles/index.css";
 import { Header, Table, Input } from "@cloudscape-design/components";
 
 import { formatJobNameId } from "../../util/formatJobNameId";
 import { formatTimestamp } from "../../util/formatTimestamp";
+
+const features = require("../../features.json");
+let readableUpdateJobMetadata = null;
+if (features.readable) {
+	readableUpdateJobMetadata = require('../../graphql/mutations').readableUpdateJobMetadata;
+} 
 
 export default function ReadableViewDetails(props) {
 	const { t } = useTranslation();
