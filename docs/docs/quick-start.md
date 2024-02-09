@@ -17,8 +17,10 @@ This form will collate your inputs and return the appropriate commands to enter 
 <code id="result" style="display: none;"></code>
 <button id="buttonCopy" style="display: none;"  onclick="copyToClipboard()" class="btn btn-green">Copy</button>
 <form id="form">
+	<h2>Requires All</h2>
+	<p>All fields in this section are required for all features you decide to enable.</p>
 	<fieldset>
-		<legend>General Information</legend>
+		<h4>General Information</h4>
 		<div class="formOptionGroup">
 			<label class="formOptionLabel" for="accountId">AWS Account ID</label>
 			<input class="formOptionInput requiredForGitHub" type="text" name="accountId" placeholder="123456789012" maxlength="12" minlength="12" pattern="\d+" required/>
@@ -31,7 +33,7 @@ This form will collate your inputs and return the appropriate commands to enter 
 		</div>
 	</fieldset>
 	<fieldset>
-		<legend>Source Service <a class="info" target="_blank" href="{{ site.baseurl }}/docs/installation/source-service/">(info)</a></legend>
+		<h4>Source Service <a class="info" target="_blank" href="{{ site.baseurl }}/docs/installation/source-service/">(info)</a></h4>
 		<div class="formOptionGroup">
 			<label class="formOptionLabel" for="sourceGitService">Service</label>
 			<select class="formOptionInput" name="sourceGitService">
@@ -52,74 +54,10 @@ This form will collate your inputs and return the appropriate commands to enter 
 			<input class="formOptionInput" type="text" name="sourceGitBranch" placeholder="main" required/>
 		</div>
 	</fieldset>
+	<h2>Requires At Least One</h2>
+	<p>At least one selection for user store is required. Select Cognito SAML, or Cognito Local, or both.</p>
 	<fieldset>
-		<legend>Web UI <a class="info" target="_blank" href="{{ site.baseurl }}/docs/installation/configuration/options.html#enable-web-ui">(info)</a></legend>
-		<div class="formOptionGroup">
-			<label class="formOptionLabel" for="webUi">Enable</label>
-			<input class="formOptionInput" type="checkbox" name="webUi" checked/>
-		</div>
-		<blockquote class="note-title isForCognitoLocalUsers">
-			<p>Note</p>
-			<p>Post install steps are required to access the web user interface.</p>
-			<p><a href="{{ site.baseurl }}/docs/installation/post-install/web-ui.html">Access Web UI</a></p>
-		</blockquote>
-	</fieldset>
-	<fieldset>
-		<legend>Translation <a class="info" target="_blank" href="{{ site.baseurl }}/docs/installation/configuration/options.html#translation--translation-pii">(info)</a></legend>
-		<div class="formOptionGroup">
-			<label class="formOptionLabel" for="translation">Enable</label>
-			<input class="formOptionInput" type="checkbox" name="translation" checked/>
-		</div>
-		<div class="formOptionGroup isForTranslation">
-			<label class="formOptionLabel" for="translationLifecycleDefault">Expire files in days</label>
-			<input class="formOptionInput requiredForTranslation" type="number" name="translationLifecycleDefault" min="1" placeholder="7" required/>
-		</div>
-	</fieldset>
-	<fieldset>
-		<legend>PII Detection <a class="info" target="_blank" href="{{ site.baseurl }}/docs/installation/configuration/options.html#translation--translation-pii">(info)</a></legend>
-		<div class="formOptionGroup">
-			<label class="formOptionLabel" for="piiDetectionEnable">Enable</label>
-			<input class="formOptionInput" type="checkbox" name="piiDetectionEnable" checked/>
-		</div>
-		<div class="formOptionGroup isForPiiDetection">
-			<label class="formOptionLabel" for="piiDetectionLifecycle">Expire PII files in days</label>
-			<input class="formOptionInput requiredForPiiDetection" type="number" name="piiDetectionLifecycle" min="1" placeholder="3" required/>
-		</div>
-	</fieldset>
-	<fieldset>
-		<legend>Readable <a class="info" target="_blank" href="{{ site.baseurl }}/docs/installation/configuration/options.html#readable">(info)</a></legend>
-		<div class="formOptionGroup">
-			<label class="formOptionLabel" for="readable">Enable</label>
-			<input class="formOptionInput" type="checkbox" name="readable" checked/>
-		</div>
-		<div class="formOptionGroup isForReadable">
-			<label class="formOptionLabel" for="readableBedrockRegion">Readable Bedrock Region</label>
-			<select id="readableBedrockRegion" class="formOptionInput" name="readableBedrockRegion">
-                <option value="us-east-1">us-east-1 | US East (N. Virginia)</option>
-                <option value="us-west-2">us-west-2 | US West (Oregon)</option>
-                <option value="ap-southwest-1">ap-southwest-1 | Asia Pacific (Singapore)</option>
-                <option value="ap-northeast-1">ap-northeast-1 | Asia Pacific (Tokyo)</option>
-                <option value="eu-central-1">eu-central-1 | Europe (Frankfurt)</option>
-			</select>
-		</div>
-	</fieldset>
-	<fieldset>
-		<legend>Custom Domain <a class="info" target="_blank" href="{{ site.baseurl }}/docs/installation/prerequisite/domain.html">(info)</a></legend>
-		<div class="formOptionGroup">
-			<label class="formOptionLabel" for="customDomainEnable">Enable</label>
-			<input class="formOptionInput" type="checkbox" name="customDomainEnable"  checked/>
-		</div>
-		<div class="formOptionGroup isForCustomDomain">
-			<label class="formOptionLabel" for="customDomainName">Domain Name</label>
-			<input class="formOptionInput requiredForCustomDomain" type="text" name="customDomainName" placeholder="document-translation.business.com" required/>
-		</div>
-		<div class="formOptionGroup isForCustomDomain">
-			<label class="formOptionLabel" for="customDomainCert">Certificate ARN</label>
-			<input class="formOptionInput requiredForCustomDomain" type="text" name="customDomainCert" placeholder="arn:aws:acm:us-east-1:123456789012:certificate/abcdefgh-1234-5678-9012-ijklmnopqrst" required/>
-		</div>
-	</fieldset>
-	<fieldset>
-		<legend>Cognito SAML Users <a class="info" target="_blank" href="{{ site.baseurl }}/docs/installation/configuration/options.html#enable-cognito-saml-provider-users">(info)</a></legend>
+		<h4>Cognito SAML Users <a class="info" target="_blank" href="{{ site.baseurl }}/docs/installation/configuration/options.html#enable-cognito-saml-provider-users">(info)</a></h4>
 		<div class="formOptionGroup">
 			<label class="formOptionLabel" for="cognitoSamlUsers">Enable</label>
 			<input class="formOptionInput" type="checkbox" name="cognitoSamlUsers" checked/>
@@ -135,7 +73,7 @@ This form will collate your inputs and return the appropriate commands to enter 
 		</blockquote>
 	</fieldset>
 	<fieldset>
-		<legend>Cognito Local Users <a class="info" target="_blank" href="{{ site.baseurl }}/docs/installation/configuration/options.html#enable-cognito-local-users">(info)</a></legend>
+		<h4>Cognito Local Users <a class="info" target="_blank" href="{{ site.baseurl }}/docs/installation/configuration/options.html#enable-cognito-local-users">(info)</a></h4>
 		<div class="formOptionGroup">
 			<label class="formOptionLabel" for="cognitoLocalUsers">Enable</label>
 			<input class="formOptionInput" type="checkbox" name="cognitoLocalUsers"/>
@@ -162,6 +100,78 @@ This form will collate your inputs and return the appropriate commands to enter 
 			<p><a href="{{ site.baseurl }}/docs/installation/post-install/cognito-first-user.html">Cognito First User</a></p>
 		</blockquote>
 	</fieldset>
+	<h2>Features</h2>
+	<p>Enable and configure the features you wish to deploy.</p>
+	<h3>Web UI</h3>
+	<fieldset>
+		<h4>Web UI <a class="info" target="_blank" href="{{ site.baseurl }}/docs/installation/configuration/options.html#enable-web-ui">(info)</a></h4>
+		<div class="formOptionGroup">
+			<label class="formOptionLabel" for="webUi">Enable</label>
+			<input class="formOptionInput" type="checkbox" name="webUi" checked/>
+		</div>
+		<blockquote class="note-title isForCognitoLocalUsers">
+			<p>Note</p>
+			<p>Post install steps are required to access the web user interface.</p>
+			<p><a href="{{ site.baseurl }}/docs/installation/post-install/web-ui.html">Access Web UI</a></p>
+		</blockquote>
+	</fieldset>
+	<fieldset>
+		<h4>Custom Domain <a class="info" target="_blank" href="{{ site.baseurl }}/docs/installation/prerequisite/domain.html">(info)</a></h4>
+		<div class="formOptionGroup">
+			<label class="formOptionLabel" for="customDomainEnable">Enable</label>
+			<input class="formOptionInput" type="checkbox" name="customDomainEnable"  checked/>
+		</div>
+		<div class="formOptionGroup isForCustomDomain">
+			<label class="formOptionLabel" for="customDomainName">Domain Name</label>
+			<input class="formOptionInput requiredForCustomDomain" type="text" name="customDomainName" placeholder="document-translation.business.com" required/>
+		</div>
+		<div class="formOptionGroup isForCustomDomain">
+			<label class="formOptionLabel" for="customDomainCert">Certificate ARN</label>
+			<input class="formOptionInput requiredForCustomDomain" type="text" name="customDomainCert" placeholder="arn:aws:acm:us-east-1:123456789012:certificate/abcdefgh-1234-5678-9012-ijklmnopqrst" required/>
+		</div>
+	</fieldset>
+	<h3>Document Translation</h3>
+	<fieldset>
+		<h4>Document Translation <a class="info" target="_blank" href="{{ site.baseurl }}/docs/installation/configuration/options.html#translation--translation-pii">(info)</a></h4>
+		<div class="formOptionGroup">
+			<label class="formOptionLabel" for="translation">Enable</label>
+			<input class="formOptionInput" type="checkbox" name="translation" checked/>
+		</div>
+		<div class="formOptionGroup isForTranslation">
+			<label class="formOptionLabel" for="translationLifecycleDefault">Expire files in days</label>
+			<input class="formOptionInput requiredForTranslation" type="number" name="translationLifecycleDefault" min="1" placeholder="7" required/>
+		</div>
+	</fieldset>
+	<fieldset>
+		<h4>Document Translation PII Detection <a class="info" target="_blank" href="{{ site.baseurl }}/docs/installation/configuration/options.html#translation--translation-pii">(info)</a></h4>
+		<div class="formOptionGroup">
+			<label class="formOptionLabel" for="piiDetectionEnable">Enable</label>
+			<input class="formOptionInput" type="checkbox" name="piiDetectionEnable" checked/>
+		</div>
+		<div class="formOptionGroup isForPiiDetection">
+			<label class="formOptionLabel" for="piiDetectionLifecycle">Expire PII files in days</label>
+			<input class="formOptionInput requiredForPiiDetection" type="number" name="piiDetectionLifecycle" min="1" placeholder="3" required/>
+		</div>
+	</fieldset>
+	<h3>Simply Readable</h3>
+	<fieldset>
+		<h4>Readable <a class="info" target="_blank" href="{{ site.baseurl }}/docs/installation/configuration/options.html#readable">(info)</a></h4>
+		<div class="formOptionGroup">
+			<label class="formOptionLabel" for="readable">Enable</label>
+			<input class="formOptionInput" type="checkbox" name="readable" checked/>
+		</div>
+		<div class="formOptionGroup isForReadable">
+			<label class="formOptionLabel" for="readableBedrockRegion">Readable Bedrock Region</label>
+			<select id="readableBedrockRegion" class="formOptionInput" name="readableBedrockRegion">
+                <option value="us-east-1">us-east-1 | US East (N. Virginia)</option>
+                <option value="us-west-2">us-west-2 | US West (Oregon)</option>
+                <option value="ap-southwest-1">ap-southwest-1 | Asia Pacific (Singapore)</option>
+                <option value="ap-northeast-1">ap-northeast-1 | Asia Pacific (Tokyo)</option>
+                <option value="eu-central-1">eu-central-1 | Europe (Frankfurt)</option>
+			</select>
+		</div>
+	</fieldset>
+	
     <button type="submit" class="btn btn-blue">Generate</button>
 </form>
 <script src="{{ site.baseurl }}/assets/js/quick-start.js"></script>
