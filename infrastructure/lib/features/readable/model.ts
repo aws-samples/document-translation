@@ -82,7 +82,7 @@ export class dt_readableModel extends Construct {
 			},
 			dataSource: apiDsModelTable,
 			requestMappingTemplate: appsync.MappingTemplate.dynamoDbScanTable(),
-			responseMappingTemplate: appsync.MappingTemplate.dynamoDbResultList(),
+			responseMappingTemplate: appsync.MappingTemplate.dynamoDbResultItem(),
 			directives: [Directive.custom("@aws_cognito_user_pools")],
 		});
 		props.apiSchema.addQuery(
