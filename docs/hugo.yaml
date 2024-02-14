@@ -13,6 +13,8 @@ params:
   editURL:
     enable: true
     base: "https://github.com/aws-samples/document-translation/tree/main/docs"
+  page:
+    width: wide
 
 menu:
   main:
