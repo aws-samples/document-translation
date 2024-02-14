@@ -1,5 +1,4 @@
 ---
-layout: default
 title: Deploy
 weight: 4
 parent: Installation

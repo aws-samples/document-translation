@@ -1,8 +1,6 @@
 ---
-layout: default
 title: Source Service
 weight: 2
-has_children: true
 ---
 
 <!--

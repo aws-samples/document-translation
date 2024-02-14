@@ -1,7 +1,6 @@
 ---
 title: Architecture
 weight: 3
-has_children: true
 ---
 
 <!--

@@ -1,7 +1,6 @@
 ---
 title: FAQ
 weight: 9
-has_children: false
 ---
 
 <!--

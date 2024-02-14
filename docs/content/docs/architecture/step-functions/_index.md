@@ -1,7 +1,6 @@
 ---
 title: Step Functions
 weight: 4
-has_children: true
 ---
 
 <!--

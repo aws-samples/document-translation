@@ -1,5 +1,4 @@
 ---
-layout: default
 title: PII
 weight: 3
 grand_parent: Architecture

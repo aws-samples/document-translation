@@ -1,5 +1,4 @@
 ---
-layout: default
 title: Main
 weight: 1
 grand_parent: Architecture

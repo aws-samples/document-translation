@@ -1,5 +1,4 @@
 ---
-layout: default
 title: PII Detection
 weight: 4
 ---

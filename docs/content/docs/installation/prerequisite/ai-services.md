@@ -1,5 +1,4 @@
 ---
-layout: default
 title: AI Services
 weight: 1
 ---

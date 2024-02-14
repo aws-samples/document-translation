@@ -1,5 +1,4 @@
 ---
-layout: default
 title: Options
 weight: 1
 ---

@@ -1,7 +1,6 @@
 ---
 title: Quick Start
 weight: 1
-has_children: false
 ---
 
 <!--

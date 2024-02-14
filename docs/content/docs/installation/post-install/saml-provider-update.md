@@ -1,5 +1,4 @@
 ---
-layout: default
 title: SAML Provider Update
 weight: 2
 ---

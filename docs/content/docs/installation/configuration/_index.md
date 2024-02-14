@@ -1,8 +1,6 @@
 ---
-layout: default
 title: Configuration
 weight: 3
-has_children: true
 ---
 
 <!--

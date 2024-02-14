@@ -1,8 +1,6 @@
 ---
-layout: default
 title: Prerequisite
 weight: 1
-has_children: true
 ---
 
 <!--

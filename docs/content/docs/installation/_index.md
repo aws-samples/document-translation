@@ -1,8 +1,6 @@
 ---
-layout: default
 title: Installation
 weight: 4
-has_children: true
 ---
 
 <!--
