@@ -1,0 +1,37 @@
+baseURL: https://aws-samples.github.io/document-translation/
+languageCode: en-gb
+title: Document Transformation
+
+module:
+  imports:
+    - path: github.com/imfing/hextra
+
+params:
+  navbar:
+    displayTitle: true
+    displayLogo: false
+  editURL:
+    enable: true
+    base: "https://github.com/aws-samples/document-translation/tree/main/docs"
+
+menu:
+  main:
+    - name: Quick Start
+      pageRef: /docs/quick-start/
+      weight: 1
+    - name: FAQ
+      pageRef: /faq/
+      weight: 2
+    - name: Documentation
+      pageRef: /docs/
+      weight: 3
+    # Push to end
+    - name: Search
+      weight: 98
+      params:
+        type: search
+    - name: GitHub
+      weight: 99
+      url: "https://github.com/aws-samples/document-translation"
+      params:
+        icon: github

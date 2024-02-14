@@ -43,3 +43,7 @@ yarn-error.log*
 
 # JEST 
 coverage/
+
+# DOCS
+# DOCS | HUGO
+.hugo_build.lock
