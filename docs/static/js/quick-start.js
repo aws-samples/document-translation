@@ -189,29 +189,50 @@ function copyToClipboard() {
 // FORM STYLE
 const styles = `
 	/* LAYOUT */
-	form .formOptionGroup .formOptionLabel {
-		text-align: right;
+	form label {
+		font-weight: bold;
 	}
-	form .formOptionGroup .formOptionLabel,
-	form .formOptionGroup .formOptionInput {
-		display: inline-block;
+	form .sublabel {
+		opacity: 0.5;
 		margin: 0;
+	}
+	form label,
+	form input,
+	form select {
+		display: block;
 		box-sizing: border-box;
 	}
-	form .formOptionGroup .formOptionLabel{
-		padding: 0 1rem;
-		margin: 0 1rem 0 0;
-		width: 33%;
-		min-width: 33%;
-		border-right: solid 1px black;
-		margin-bottom: 0.5rem;
+	form input,
+	form select {
+		padding: 0.5rem;
+		margin: 0.5rem 0;
+		width: 100%;
+		min-width: 100%;
 	}
-	form .formOptionGroup .formOptionInput {
-		width: calc(66% - 1rem);
-		min-width: calc(66% - 1rem);
+	form input[type=checkbox],
+	form label.checkbox {
+		display: inline-block;
+	}
+
+	form h4 input[type=checkbox]{
+		margin: 1rem;
 	}
 
 	/* STYLE */
+	.info {
+		text-decoration: none;
+	}
+	button {
+		background-color: #006be6;
+		color: white;
+		padding: 1rem;
+		text-align: center;
+		cursor: pointer;
+		border-radius: 2rem;
+	}
+	button#buttonCopy {
+		background-color: #00C87F;
+	}
 	form input {
 		border: 1px solid;
 		border-radius: 0.25rem;

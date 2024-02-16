@@ -16,6 +16,11 @@ params:
   page:
     width: wide
 
+markup:
+  goldmark:
+    renderer:
+      unsafe: true
+
 menu:
   main:
     - name: Quick Start
