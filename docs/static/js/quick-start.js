@@ -171,11 +171,13 @@ function handleForm(event) {
 
 	const result = document.getElementById('result');
 	const buttonCopy = document.getElementById('buttonCopy');
+	const buttonCopy2 = document.getElementById('buttonCopy2');
 
 	result.innerText = output;
 	form.style.display = "none";
 	result.style.display = "block";
 	buttonCopy.style.display = "block";
+	buttonCopy2.style.display = "block";
 	console.log(output);
 }
 form.addEventListener('submit', handleForm);
@@ -223,7 +225,8 @@ const styles = `
 		text-decoration: none;
 	}
 	form button,
-	button#buttonCopy  {
+	button#buttonCopy,
+	button#buttonCopy2  {
 		background-color: #006be6;
 		color: white;
 		padding: 1rem;
@@ -231,7 +234,8 @@ const styles = `
 		cursor: pointer;
 		border-radius: 2rem;
 	}
-	button#buttonCopy {
+	button#buttonCopy,
+	button#buttonCopy2 {
 		background-color: #00C87F;
 	}
 	form input {

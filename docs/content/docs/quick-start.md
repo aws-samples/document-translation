@@ -14,7 +14,7 @@ This form will collate your inputs and return the appropriate commands to enter 
 
 <button id="buttonCopy" style="display: none;"  onclick="copyToClipboard()">Copy</button>
 <code id="result" style="display: none;"></code>
-<button id="buttonCopy" style="display: none;"  onclick="copyToClipboard()">Copy</button>
+<button id="buttonCopy2" style="display: none;"  onclick="copyToClipboard()">Copy</button>
 <form id="form">
 
 {{% steps %}}
