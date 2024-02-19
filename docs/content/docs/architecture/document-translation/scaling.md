@@ -1,7 +1,6 @@
 ---
 title: Scaling
 weight: 5
-parent: Architecture
 ---
 
 <!--

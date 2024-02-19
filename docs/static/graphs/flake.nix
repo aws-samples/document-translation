@@ -1,5 +1,5 @@
 {
-	description = "Docs Development";
+	description = "Diagrams Development";
 	
 	inputs.nixpkgs.url = "github:NixOS/nixpkgs/nixos-23.11-small";
 
@@ -11,12 +11,9 @@
 	in {
 		devShells.x86_64-linux.default = pkgs.mkShell {
 			packages = with pkgs; [
-				hugo
-				go
-				# Optional
-				bat
+				python3
+				python311Packages.diagrams
 			];
-			shellHook = ''bat ./README.md''; 
 		};
 	};
 }

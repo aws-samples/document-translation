@@ -1,7 +1,6 @@
 ---
 title: Features
-weight: 2
-parent: Architecture
+weight: 1
 ---
 
 <!--

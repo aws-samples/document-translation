@@ -1,7 +1,6 @@
 ---
 title: Translate
 weight: 2
-grand_parent: Architecture
 ---
 
 <!--

@@ -1,7 +1,6 @@
 ---
-title: Client
+title: Web Client
 weight: 3
-parent: Architecture
 ---
 
 <!--
@@ -11,21 +10,17 @@ SPDX-License-Identifier: MIT-0
 
 ## Overview
 
-The client is created with [React JS](https://reactjs.org/), utilising [Amplify](https://aws.amazon.com/amplify/) libraries for interaction with AWS services. Clients can perform the following:
+The client is created with [React JS](https://reactjs.org/), utilising [AWS Amplify](https://aws.amazon.com/amplify/) libraries for interaction with AWS services, and [AWS Cloudscape Design](https://cloudscape.design/) UI components. 
 
-- Authenticate
-- Upload new content
-- Submit a new job
-- Read their past jobs
-- Download their translated content
 
-![Client interaction](/graphs/client_interaction.png)
+{{% details title="Diagram" %}}
+{{< figure src="/document-translation/graphs/web_client.png" title="Web Client" >}}
+{{% /details %}}
 
-## Process Steps
 
-1. Client authentication
-2. Original content upload 
-3. Job info submission (DynamoDB Stream triggers workflow)
+## Hosting
+
+The site is hosted in an Amazon Simple Storage Service bucket and served from an Amazon CloudFront distribution. The bucket does not allow public access and is only accessible via the CloudFront distribution. The bucket only contains non-sensitive web client files.
 
 ## Authentication
 

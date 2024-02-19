@@ -1,7 +1,6 @@
 ---
 title: Web Application Firewall
 weight: 6
-parent: Architecture
 ---
 
 <!--

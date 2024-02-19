@@ -1,7 +1,6 @@
 ---
 title: Errors
 weight: 5
-grand_parent: Architecture
 ---
 
 <!--

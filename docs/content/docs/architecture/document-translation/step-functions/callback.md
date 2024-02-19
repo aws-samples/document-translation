@@ -1,7 +1,6 @@
 ---
 title: Callback
 weight: 4
-grand_parent: Architecture
 ---
 
 <!--

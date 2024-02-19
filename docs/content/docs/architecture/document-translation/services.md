@@ -1,7 +1,6 @@
 ---
 title: Services
 weight: 1
-parent: Architecture
 ---
 
 <!--

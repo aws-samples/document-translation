@@ -161,6 +161,9 @@ Enable and configure the features you wish to deploy.
 	<option value="ap-northeast-1">ap-northeast-1 | Asia Pacific (Tokyo)</option>
 	<option value="eu-central-1">eu-central-1 | Europe (Frankfurt)</option>
 </select>
+<div class="isForCognitoSamlUsers">
+	{{< callout type="info" >}}Post install steps are required to define your Generative AI models for text simplification and image generation. <a href='{{< ref "simply-readable-models" >}}'>SAML Provider Update</a>{{< /callout >}}
+</div>
 </div>
 </fieldset>
 
