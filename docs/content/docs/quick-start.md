@@ -162,7 +162,7 @@ Enable and configure the features you wish to deploy.
 	<option value="eu-central-1">eu-central-1 | Europe (Frankfurt)</option>
 </select>
 <div class="isForCognitoSamlUsers">
-	{{< callout type="info" >}}Post install steps are required to define your Generative AI models for text simplification and image generation. <a href='{{< ref "simply-readable-models" >}}'>SAML Provider Update</a>{{< /callout >}}
+	{{< callout type="info" >}}Post install steps are required to define your Generative AI models for text simplification and image generation. <a href='{{< ref "simply-readable-models" >}}'>Simply Readable Models</a>{{< /callout >}}
 </div>
 </div>
 </fieldset>
