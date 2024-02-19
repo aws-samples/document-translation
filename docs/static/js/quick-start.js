@@ -222,7 +222,8 @@ const styles = `
 	.info {
 		text-decoration: none;
 	}
-	button {
+	form button,
+	button#buttonCopy  {
 		background-color: #006be6;
 		color: white;
 		padding: 1rem;
