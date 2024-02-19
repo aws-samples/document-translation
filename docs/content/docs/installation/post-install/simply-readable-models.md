@@ -11,6 +11,10 @@ SPDX-License-Identifier: MIT-0
 Premade example model definitions for text simplificaiton and image generation are provided at the bottom of this page.
 {{< /callout >}}
 
+{{< callout type="warning" >}}
+The model you select must be pre-enabled within your AWS Bedrock Console via the "Model access" settings.
+{{< /callout >}}
+
 Simply Readable allows you to configure as many types of models you need for both text and images. Their configuration can be expanded and edited freely without redeployment of this app. The model details are stored within a DynamoDB database. As this is data rather than configuration it is not provided at the deployment time. Below are some sample model definitions to get you started and adapt as you see fit.
 
 You can have as many model definitions are you need. The user is presented a drop down selector with a filter search to find what they need. If only a single mode definition exists the user is not presented with a drop down selector with only one entry.
