@@ -10,7 +10,33 @@ SPDX-License-Identifier: MIT-0
 
 The solution is built with modular features in mind allowing you to enable or disable particular features that you need. The below shows the feature dependencies.
 
-![Features dependency](/diagrams/features.svg)
+```mermaid
+flowchart TD
+    %% NODES
+    cognitoLocal["Cognito Local Users"]
+    cognitoSaml["Cognito SAML Users"]
+    api["API*"]
+    help["Help Info"]
+    web["Web UI"]
+    dt["Document Translation"]
+    dtPii["PII Detection"]
+    sr["Simply Readable"]
+
+    %% LINKS
+    help   -- Depends on --> api
+    web   -- Depends on --> api
+    dtPii -- Depends on --> dt -- Depends on --> api
+    sr    -- Depends on --> api
+
+    api   -- Depends on --> cognitoLocal
+    api   -- Depends on --> cognitoSaml
+
+    %% GROUPS
+    subgraph Requires at least one*
+        cognitoLocal
+        cognitoSaml
+    end
+```
 
 The below shows the optional features available.
 
