@@ -13,7 +13,10 @@
 			packages = with pkgs; [
 				python3
 				python311Packages.diagrams
+				# Optional
+				bat
 			];
+			shellHook = ''bat ./README.md''; 
 		};
 	};
 }
