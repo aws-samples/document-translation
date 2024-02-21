@@ -1,5 +1,5 @@
 ---
-title: Common
+title: Shared
 weight: 2
 ---
 
