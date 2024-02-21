@@ -14,7 +14,7 @@ The client is created with [React JS](https://reactjs.org/), utilising [AWS Ampl
 
 
 {{% details title="Diagram" %}}
-{{< figure src="/document-translation/graphs/web_client.png" title="Web Client" >}}
+{{< figure src="/document-translation/diagrams/web_client.png" title="Web Client" >}}
 {{% /details %}}
 
 
