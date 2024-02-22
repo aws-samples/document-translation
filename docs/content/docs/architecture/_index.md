@@ -15,9 +15,9 @@ This documentation is split with that in mind. This page will cover a high level
 
 ### Shared Features
 {{< cards >}}
-  {{< card link="./api-auth" title="API & Auth" icon="cloud" >}}
-  {{< card link="./web-ui" title="Web UI" icon="cloud" >}}
-  {{< card link="./help-info" title="Help Info" icon="cloud" >}}
+  {{< card link="./shared/api-auth" title="API & Auth" icon="cloud" >}}
+  {{< card link="./shared/web-client" title="Web Client" icon="cloud" >}}
+  {{< card link="./shared/help-info" title="Help Info" icon="cloud" >}}
 {{< /cards >}}
 
 ### Feature Specific
@@ -63,7 +63,7 @@ flowchart TD
       subgraph Help Info
         help
       end
-      subgraph Web UI*
+      subgraph Web Client*
         web
       end
 
