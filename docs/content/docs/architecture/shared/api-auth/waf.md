@@ -1,6 +1,5 @@
 ---
 title: Web Application Firewall
-weight: 6
 ---
 
 <!--

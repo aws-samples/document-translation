@@ -1,6 +1,5 @@
 ---
 title: Web Client
-weight: 3
 ---
 
 <!--
