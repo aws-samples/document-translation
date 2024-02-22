@@ -10,7 +10,8 @@ SPDX-License-Identifier: MIT-0
 
 {{< cards >}}
   {{< card link="./services" title="Services" icon="cloud" >}}
-  {{< card link="./web-client" title="Web Client" icon="cloud" >}}
   {{< card link="./api-auth" title="API & Authentication" icon="cloud" >}}
+  {{< card link="./help-info" title="Help Info" icon="cloud" >}}
+  {{< card link="./web-client" title="Web Client" icon="cloud" >}}
 {{< /cards >}}
 
