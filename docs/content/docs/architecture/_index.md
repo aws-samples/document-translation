@@ -7,29 +7,38 @@ Copyright Amazon.com, Inc. or its affiliates. All Rights Reserved.
 SPDX-License-Identifier: MIT-0
 -->
 
-This app is created with a modular architecture. Some aspects of the architecture are `shared` across all configurations. Other aspects are only deployed if the relevant feature is deployed. This documentation splits out the architecture into features.
+This app is created with a modular architecture to enable the growth of future capabilities and managability of the code. There are shared features and non-shared features. Shared features are deployed for all configurations whilst non-shared features are only deployed when those features are enabled. 
 
+This documentation is split with that in mind. This page will cover a high level overview of how these modules are interconnected, leaving module specific details to their respective pages in this documentation.
+
+## Feature Overview
+
+### Shared Features
 {{< cards >}}
-  {{< card link="./shared" title="Shared" icon="cloud" >}}
+  {{< card link="./api-auth" title="API & Auth" icon="cloud" >}}
+  {{< card link="./web-ui" title="Web UI" icon="cloud" >}}
+  {{< card link="./help-info" title="Help Info" icon="cloud" >}}
 {{< /cards >}}
+
+### Feature Specific
 {{< cards >}}
   {{< card link="./document-translation" title="Document Translation" icon="cloud" >}}
   {{< card link="./simply-readable" title="Simply Readable" icon="cloud" >}}
 {{< /cards >}}
 
-The solution is built with modular features in mind allowing you to enable or disable particular features that you need. The below shows the feature dependencies.
+## Feature Dependency 
 
 ```mermaid
 flowchart TD
     %% NODES
     cognitoLocal["Cognito Local Users"]
     cognitoSaml["Cognito SAML Users"]
-    api["API*"]
-    help["Help Info"]
-    web["Web UI"]
-    dt["Document Translation"]
+    api["API"]
+    help["Help"]
+    web["Website"]
+    dt["Translation"]
     dtPii["PII Detection"]
-    sr["Simply Readable"]
+    sr["Readable"]
 
     %% LINKS
     help   -- Depends on --> api
@@ -41,25 +50,37 @@ flowchart TD
     api   -- Depends on --> cognitoSaml
 
     %% GROUPS
-    subgraph Requires at least one*
-        cognitoLocal
-        cognitoSaml
+    subgraph Document Translation*
+      dt
+      dtPii
+    end
+
+    subgraph Simply Readable*
+      sr
+    end
+
+    subgraph Shared
+      subgraph Help Info
+        help
+      end
+      subgraph Web UI*
+        web
+      end
+
+      subgraph API & Auth
+        api
+
+        subgraph Requires at least one**
+            cognitoLocal
+            cognitoSaml
+        end
+      end
     end
 ```
 
-The below shows the optional features available.
+**Key**: \* Optional. \*\* Requires at least one.
 
-| Feature             | Depends On  | Required  | Description                                                                 |
-| ------------------- | ----------- | --------- | --------------------------------------------------------------------------- |
-| Web UI              | -           | Optional  | A web UI for interacting with the solution                                  |
-| Translation         | -           | Optional  | Performs translation of uploaded documents                                  |
-| Translation PII     | Translation | Optional  | Performs Pii detection on uploaded files for more strict lifecycle policies |
-| Readable            | -           | Optional  | Performs text simplification for documents                                  |
-| Cognito Local Users | -           | Optional* | Provides user authentication with local Cognito users                       |
-| Cognito SAML Users  | -           | Optional* | Provides user authentication with a SAML provider                           |
-
-\* At least one of "Cognito Local Users", "Cognito SAML Users" is required.
-
-This overview shows how the different components are interconnected and where module boundaries lie. The "Shared" section shows conponents deployed for all users as they are shared by all features. 
+## Feature Architecture
+This overview shows how the differnt features are interconnected via the various services. For a detailed view of a feature please refer to the specific page for that in this documentation.
 
 ![Overview](/diagrams/overview.png)
