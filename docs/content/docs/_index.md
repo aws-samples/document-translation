@@ -1,5 +1,7 @@
 ---
 title: Documentation
+cascade:
+  type: docs
 ---
 
 {{< cards >}}

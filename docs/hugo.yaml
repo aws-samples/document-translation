@@ -23,11 +23,11 @@ markup:
 
 menu:
   main:
-    - name: Quick Start
-      pageRef: /docs/quick-start/
+    - name: Installation
+      pageRef: /docs/installation/
       weight: 1
     - name: FAQ
-      pageRef: /faq/
+      pageRef: /docs/faq/
       weight: 2
     - name: Documentation
       pageRef: /docs/
