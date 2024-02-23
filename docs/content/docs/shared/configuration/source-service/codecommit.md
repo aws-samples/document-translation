@@ -12,7 +12,7 @@ SPDX-License-Identifier: MIT-0
 This step is **required**.
 
 - If you intend to use CodeCommit as your source service this step is **required**.
-- If not the [GitHub]({{< ref "docs/shared/source-service/github" >}}) configuration is **required**.
+- If not the [GitHub]({{< ref "docs/shared/configuration/source-service/github" >}}) configuration is **required**.
 {{< /callout >}}
 
 [AWS CodeCommit](https://aws.amazon.com/codecommit/) is a secure, highly scalable, fully managed source control service that hosts private Git repositories.

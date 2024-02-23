@@ -11,5 +11,5 @@ SPDX-License-Identifier: MIT-0
 As this app includes multiple modules the FAQ is split across those respective modules. If you intend to enable a feature the FAQ for that feature will apply, if not, it can be ignored.
 
 {{< cards >}}
-  {{< card link="dt-faq" title="Document Translation FAQ" icon="chip" >}}
+  {{< card link="../translation/faq" title="Document Translation FAQ" icon="translate" >}}
 {{< /cards >}}

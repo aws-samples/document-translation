@@ -1,6 +1,5 @@
 ---
 title: Access Web UI
-slub: access-web-ui
 weight: 3
 ---
 

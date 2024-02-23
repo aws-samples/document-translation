@@ -8,7 +8,7 @@ Copyright Amazon.com, Inc. or its affiliates. All Rights Reserved.
 SPDX-License-Identifier: MIT-0
 -->
 
-This project is [configurable]({{< ref "docs/architecture" >}}) to suit your specific requirements. For a full explanation of the various options please review the [full installation guide]({{< ref "deploy" >}}). If an option is unclear to you please refer to the full guide.
+This project is [configurable]({{< ref "docs/architecture" >}}) to suit your specific requirements. For a full explanation of the various options please review the feature configuration options in the [documentation]({{< ref "docs" >}}).
 
 This form will collate your inputs and return the appropriate commands to enter for deployment. The output can be used with the [CloudShell]({{< ref "docs/shared/prerequisites/cloudshell" >}}) to quickly perform the installation. Please review the output to ensure you are happy with the values.
 
@@ -39,7 +39,7 @@ All fields in this section are required for all features you decide to enable.
 </fieldset>
 
 
-<h4>Source Service {{< info >}} {{< ref "docs/shared/source-service" >}} {{< /info >}}</h4>
+<h4>Source Service {{< info >}} {{< ref "docs/shared/configuration/source-service" >}} {{< /info >}}</h4>
 
 <fieldset>
 <div>

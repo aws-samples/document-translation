@@ -14,3 +14,18 @@ The Simply Readable feature used [Amazon Bedrock](https://aws.amazon.com/bedrock
 - If you do not select a supported region the deployment will fail. 
 
 Please review the Amazon Bedrock region for the lates[t Supported AWS Regions](https://docs.aws.amazon.com/bedrock/latest/userguide/bedrock-regions.html).
+
+## Models
+
+Within Amazon Bedrock there are lots of different models to choose from. As each model is interacted with slightly differently there is some model handling required. Currently the below models are supported by the Simply Readable app. If a model you wish to use is missing, please consider opening a GitHub Pull Request or GitHub Issue. 
+
+A full list of foundational models in Amazon Bedrock can be found [here](https://docs.aws.amazon.com/bedrock/latest/userguide/models-supported.html).
+
+### Text Models
+
+- Anthropic: Claude
+- Anthropic: Claude Instant
+
+### Image Models 
+
+- Stability AI: Stable Diffusion XL

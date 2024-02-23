@@ -1,6 +1,5 @@
 ---
 title: PII
-slub: pii
 weight: 3
 ---
 

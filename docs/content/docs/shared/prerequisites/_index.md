@@ -1,6 +1,6 @@
 ---
 title: Prerequisite
-weight: 3
+weight: 2
 excludeSearch: true
 ---
 

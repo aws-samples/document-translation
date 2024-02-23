@@ -1,6 +1,6 @@
 ---
 title: FAQ
-weight: 003
+weight: 5
 ---
 
 <!--
@@ -14,7 +14,7 @@ SPDX-License-Identifier: MIT-0
 
 Yes. The Amazon Translate service supports “Custom Terminology” which this solution can utilise. This allows you to provide terminology for things unique to your organisation such as brand names & project names. Custom Terminology files are simple CSV files with to/from mappings. 
 
-[Custom Terminology]({{< ref "docs/translation/customisation#custom-terminology" >}})
+[Custom Terminology]({{< ref "docs/translation/configuration/customisation#custom-terminology" >}})
 
 ### What document formats are supported?
 

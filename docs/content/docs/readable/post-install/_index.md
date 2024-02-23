@@ -1,6 +1,6 @@
 ---
 title: Post Install
-weight: 5
+weight: 4
 ---
 
 Congratulations on deploying this project. There are a few final pieces to cover. 

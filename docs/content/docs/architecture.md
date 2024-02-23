@@ -16,15 +16,16 @@ This documentation is split with that in mind. This page will cover a high level
 
 ### Shared Features
 {{< cards >}}
-  {{< card link="./shared/api-auth" title="API & Auth" icon="cloud" >}}
-  {{< card link="./shared/web-ui" title="Web Client" icon="cloud" >}}
-  {{< card link="./shared/help-info" title="Help Info" icon="cloud" >}}
+  {{< card link="../shared/architecture/api-auth/" title="API & Auth" icon="cloud" >}}
+  {{< card link="../shared/architecture/web-ui" title="Web UI" icon="desktop-computer" >}}
+  {{< card link="../shared/architecture/help-info" title="Help Info" icon="information-circle" >}}
 {{< /cards >}}
+
 
 ### Feature Specific
 {{< cards >}}
-  {{< card link="./document-translation" title="Document Translation" icon="cloud" >}}
-  {{< card link="./simply-readable" title="Simply Readable" icon="cloud" >}}
+  {{< card link="../translation/architecture/" title="Document Translation" icon="translate" >}}
+  {{< card link="../readable/architecture/" title="Simply Readable" icon="document-text" >}}
 {{< /cards >}}
 
 ## Feature Dependency 
@@ -64,7 +65,7 @@ flowchart TD
       subgraph Help Info
         help
       end
-      subgraph Web Client*
+      subgraph Web UI*
         web
       end
 

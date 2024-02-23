@@ -1,6 +1,6 @@
 ---
 title: Architecture
-weight: 2
+weight: 1
 ---
 
 <!--
@@ -12,5 +12,5 @@ SPDX-License-Identifier: MIT-0
   {{< card link="services" title="Services" >}}
   {{< card link="api-auth" title="API & Authentication" >}}
   {{< card link="help-info" title="Help Info" >}}
-  {{< card link="web-ui" title="Web Client" >}}
+  {{< card link="web-ui" title="Web UI" >}}
 {{< /cards >}}

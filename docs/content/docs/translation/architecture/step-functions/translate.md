@@ -1,6 +1,5 @@
 ---
 title: Translate
-slub: translate
 weight: 2
 ---
 

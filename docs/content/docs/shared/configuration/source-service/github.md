@@ -12,11 +12,11 @@ SPDX-License-Identifier: MIT-0
 This step is **required**.
 
 - If you intend to use GitHub as your source service this step is **required**.
-- If not the [CodeCommit]({{< ref "docs/shared/source-service/codecommit" >}}) configuration is **required**.
+- If not the [CodeCommit]({{< ref "docs/shared/configuration/source-service/codecommit" >}}) configuration is **required**.
 {{< /callout >}}
 
 {{< callout type="info" >}}
-If you are not familiar with GitHub and do not use it for other projects consider using the [AWS CodeCommit method]({{< ref "docs/shared/source-service/codecommit" >}}) instead. The AWS CodeCommit method has no requirements for GitHub accounts and repositories. You are expected to understand how to convert the use of CodeCommit to GitHub in other sections of the installation guide. 
+If you are not familiar with GitHub and do not use it for other projects consider using the [AWS CodeCommit method]({{< ref "docs/shared/configuration/source-service/codecommit" >}}) instead. The AWS CodeCommit method has no requirements for GitHub accounts and repositories. You are expected to understand how to convert the use of CodeCommit to GitHub in other sections of the installation guide. 
 {{< /callout >}}
 
 ## Prerequisites

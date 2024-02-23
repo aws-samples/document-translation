@@ -5,10 +5,9 @@ excludeSearch: true
 ---
 
 {{< cards >}}
-  {{< card link="architecture" title="Architecture" >}}
-  {{< card link="prerequisites" title="Prerequisite" >}}
-  {{< card link="options" title="Options" >}}
-  {{< card link="source-service" title="Source Service" >}}
-  {{< card link="post-install" title="Post Install" >}}
-  {{< card link="deploy" title="Deploy" >}}
+  {{< card link="architecture" title="Architecture" icon="cube-transparent" >}}
+  {{< card link="prerequisites" title="Prerequisite" icon="clipboard-check" >}}
+  {{< card link="configuration" title="Configuration" icon="terminal" >}}
+  {{< card link="post-install" title="Post Install" icon="view-grid-add" >}}
+  <!-- {{< card link="faq" title="FAQ" icon="information-circle" >}} -->
 {{< /cards >}}
