@@ -142,7 +142,7 @@ export class dt_web extends Construct {
 
 		if (props.webUiCustomDomain && props.webUiCustomDomainCertificate) {
 			cfnUserPoolClient.callbackUrLs.push(
-				`https://${this.websiteDistribution.domainName}/`,
+				`https://${props.webUiCustomDomain}/`,
 			);
 			cfnUserPoolClient.logoutUrLs.push(
 				`https://${props.webUiCustomDomain}/${props.signOutSuffix}`,
