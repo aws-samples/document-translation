@@ -6,7 +6,7 @@ title: Improving inclusion through automated Document Translation
 > A web user interface and workflow for document translations using the Amazon Translate service
 
 {{< cards >}}
-  {{< card link="docs/quick-start/" title="Get started now" icon="cloud-upload" >}}
+  {{< card link="docs/installation/" title="Get started now" icon="cloud-upload" >}}
   {{< card link="https://github.com/aws-samples/document-translation" title="View it on GitHub" icon="external-link" >}}
 {{< /cards >}}
 
