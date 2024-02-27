@@ -32,4 +32,4 @@ The `App Federation Metadata Url` is a dependency for this guide.
 
 # Post-Install
 
-The use of a SAML Provider has a [post-install step]({{< ref "docs/shared/post-install/saml-provider-update" >}}). 
+The use of a SAML Provider has a [post-install step]({{< ref "docs/shared/post-install/saml-provider" >}}). 
