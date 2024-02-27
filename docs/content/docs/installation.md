@@ -38,8 +38,7 @@ All fields in this section are required for all features you decide to enable.
 </div>
 </fieldset>
 
-
-<h4>Source Service {{< info >}} {{< ref "docs/shared/configuration/source-service" >}} {{< /info >}}</h4>
+<h4>Source Service {{< info >}}/document-translation/docs/shared/configuration/source-service{{< /info >}}</h4>
 
 <fieldset>
 <div>
@@ -66,7 +65,7 @@ All fields in this section are required for all features you decide to enable.
 ### Requires At Least One
 At least one selection for user store is required. Select Cognito SAML, or Cognito Local, or both.
 
-<h4><input type="checkbox" name="cognitoSamlUsers" checked/>Cognito SAML Users {{< info >}}{{ref "docs/translation/options#enable-cognito-saml-provider-users" >}}{{< /info >}}</h4>
+<h4><input type="checkbox" name="cognitoSamlUsers" checked/>Cognito SAML Users {{< info >}}/document-translation/docs/translation/configuration/options#enable-cognito-saml-provider-users{{< /info >}}</h4>
 
 <fieldset>
 <div class="isForCognitoSamlUsers">
@@ -78,7 +77,7 @@ At least one selection for user store is required. Select Cognito SAML, or Cogni
 </div>
 </fieldset>
 
-<h4><input type="checkbox" name="cognitoLocalUsers"/>Cognito Local Users {{< info >}}{{ref "docs/translation/options#enable-cognito-local-users" >}}{{< /info >}}</h4>
+<h4><input type="checkbox" name="cognitoLocalUsers"/>Cognito Local Users {{< info >}}/document-translation/docs/translation/configuration/options#enable-cognito-local-users{{< /info >}}</h4>
 
 <fieldset>
 <div class="isForCognitoLocalUsers" style="display: none;">
@@ -106,7 +105,7 @@ At least one selection for user store is required. Select Cognito SAML, or Cogni
 
 Enable and configure the features you wish to deploy.
 
-<h4><input type="checkbox" name="webUi" checked/>Web UI {{< info >}}{{ref "docs/translation/options#enable-web-u" >}}{{< /info >}}</h4>
+<h4><input type="checkbox" name="webUi" checked/>Web UI {{< info >}}/document-translation/docs/translation/configuration/options#enable-web-ui{{< /info >}}</h4>
 
 <fieldset>
 <div class="isForCognitoLocalUsers" style="display: none;">
@@ -114,7 +113,7 @@ Enable and configure the features you wish to deploy.
 </div>
 </fieldset>
 
-<h4><input type="checkbox" name="customDomainEnable"/>Custom Domain {{< info >}}{{< ref "docs/shared/prerequisites/domain" >}}{{< /info >}}</h4>
+<h4><input type="checkbox" name="customDomainEnable"/>Custom Domain {{< info >}}/document-translation/docs/shared/prerequisites/domain{{< /info >}}</h4>
 
 <fieldset>
 <div class="isForCustomDomain" style="display: none;">
@@ -128,7 +127,7 @@ Enable and configure the features you wish to deploy.
 </fieldset>
 
 ### Optional: Document Translation
-<h4><input type="checkbox" name="translation" checked/>Document Translation {{< info >}}{{ref "docs/translation/options#translation--translation-pii" >}}{{< /info >}}</h4>
+<h4><input type="checkbox" name="translation" checked/>Document Translation {{< info >}}/document-translation/docs/translation/configuration/options#translation--translation-pii{{< /info >}}</h4>
 
 <fieldset>
 <div class="isForTranslation">
@@ -137,7 +136,7 @@ Enable and configure the features you wish to deploy.
 </div>
 </fieldset>
 
-<h4><input type="checkbox" name="piiDetectionEnable" checked/>Document Translation PII Detection {{< info >}}{{ref "docs/translation/options#translation--translation-pii" >}}{{< /info >}}</h4>
+<h4><input type="checkbox" name="piiDetectionEnable" checked/>Document Translation PII Detection {{< info >}}/document-translation/docs/translation/configuration/options#translation--translation-pii{{< /info >}}</h4>
 
 <fieldset>
 <div class="isForPiiDetection">
@@ -148,7 +147,7 @@ Enable and configure the features you wish to deploy.
 
 ### Optional: Simply Readable
 
-<h4><input type="checkbox" name="readable" checked/>Readable {{< info >}}{{ref "docs/translation/options#readable" >}}{{< /info >}}</h4>
+<h4><input type="checkbox" name="readable" checked/>Readable {{< info >}}/document-translation/docs/translation/configuration/options#readable{{< /info >}}</h4>
 
 <fieldset>
 <div class="isForReadable">
