@@ -38,3 +38,7 @@ export webUiCustomDomain=""
 # export webUiCustomDomainCertificate="arn:aws:acm:us-east-1:123456789012:certificate/abcdefgh-1234-5678-9012-ijklmnopqrst"
 export webUiCustomDomainCertificate=""
 ```
+
+# Post-Install
+
+The use of a custom domain has a [post-install step]({{< ref "docs/shared/post-install/domain" >}}). 
