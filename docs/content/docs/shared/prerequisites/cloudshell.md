@@ -24,3 +24,8 @@ CloudShell is the recommended installation method. The installation is tested wi
 If this is your first time using the CloudShell it will take a minute to initiate. It is safe to continue through this installation guide whilst it initiates.
 
 ![CloudShell in the AWS Console](/img/console_cloudshell.png)
+
+{{< callout type="info" >}}
+It is possible that the CloudShell does not have enough storage space to complete the installation. The user storage of CloudShell can be deleted back to a fresh CloudShell environment. This can be done via the CloudShell Actions menu.
+{{< /callout >}}
+
