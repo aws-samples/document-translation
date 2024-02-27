@@ -1,5 +1,5 @@
 ---
-title: SAML Provider Update
+title: SAML Provider
 weight: 2
 ---
 
