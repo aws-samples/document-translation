@@ -11,28 +11,6 @@ SPDX-License-Identifier: MIT-0
 	- [Quick Start](https://aws-samples.github.io/document-translation/docs/quick-start.html)
 	- [FAQ](https://aws-samples.github.io/document-translation/docs/faq.html)
 
-## Overview
-
-The project delivers a document translation portal with a web front end and automated pipeline with machine translation powered by [Amazon Translate](https://aws.amazon.com/translate/). 
-
-This application is capable of translating all languages supported by the Amazon Translate (75 at the time of writing) and can translate to them all in a single job submission.
-
-User authentication is required and handled by [AWS Cognito](https://aws.amazon.com/cognito/). Cognito can be integrated into various Identity Providers including any that support SAML 2.0 (E.g. Active Directory).
-
-## Screenshots
-
-**Past Translations Table**
-
-![Web UI - My Translations Table](docs/assets/img/client_history.png)
-
-**Multiple Language UI**
-
-![Web UI - Multiple Languages](docs//assets/img/client_multi_lang.png)
-
-**New Translations Form**
-
-![Web UI - New Translation Form](docs/assets/img/client_create.png)
-
 ## Security
 
 See [CONTRIBUTING](CONTRIBUTING.md#security-issue-notifications) for more information.
