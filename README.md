@@ -51,6 +51,6 @@ Tags and Releases are used to mark commits considered as verions with the format
 
 ### Branches
 
-The branch `main` is used for upstream development for this project. It **may** at times be non functional and require knowledge of the project to install, update, or fix. It is not intended for general use. 
+The branch `main` is used for upstream development for this project. It **may** at times be non functional and require knowledge of the project to install, update, or fix. It is not intended for general use. Where this branch is considered stable for genearl use it will be tagged with a release as per the above section. 
 
-The branch `dev` is used for upstream development ahead of `main`. It **will** have components/functions/features that are non functional. It is not intended for general use. Features in this `dev` branch may not be documented until they are merged into the `main` branch. 
+Any and all other branches are used for feature development, testing, and exploration. When appropriate these branches will be merged with the upstream main branch. If you wish to contribute to this project please follow GitHub typical forking and branch merging methodology. 
