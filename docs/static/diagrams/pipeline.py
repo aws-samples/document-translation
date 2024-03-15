@@ -14,7 +14,7 @@ name_human = name.replace("_", " ").title()
 
 graph_attr = {
     "margin":"0",
-    "pad":"0"
+    "pad":"0.2"
 }
 
 with Diagram(name_human, filename=name, show=False, graph_attr=graph_attr):
