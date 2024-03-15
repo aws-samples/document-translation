@@ -169,22 +169,19 @@ function handleForm(event) {
 	appendStep('Install node dependencies', `npm install`)
 	appendStep('Deploy', `cdk deploy`)
 
-	const result = document.getElementById('result');
-	const buttonCopy = document.getElementById('buttonCopy');
-	const buttonCopy2 = document.getElementById('buttonCopy2');
+	const resultWrapper = document.getElementById('resultWrapper');
+	const resultOutput = document.getElementById('resultOutput');
 
-	result.innerText = output;
+	resultOutput.innerText = output;
 	form.style.display = "none";
-	result.style.display = "block";
-	buttonCopy.style.display = "block";
-	buttonCopy2.style.display = "block";
+	resultWrapper.style.display = "block";
 	console.log(output);
 }
 form.addEventListener('submit', handleForm);
 
 function copyToClipboard() {
-	const result = document.getElementById('result');
-	navigator.clipboard.writeText(result.innerText);
+	const resultOutput = document.getElementById('result');
+	navigator.clipboard.writeText(resultOutput.innerText);
 	console.log("Results copied to clipboard");
 }
 
@@ -225,8 +222,7 @@ const styles = `
 		text-decoration: none;
 	}
 	form button,
-	button#buttonCopy,
-	button#buttonCopy2  {
+	#resultWrapper button {
 		background-color: #006be6;
 		color: white;
 		padding: 1rem;
@@ -234,8 +230,7 @@ const styles = `
 		cursor: pointer;
 		border-radius: 2rem;
 	}
-	button#buttonCopy,
-	button#buttonCopy2 {
+	#resultWrapper button {
 		background-color: #00C87F;
 	}
 	form input {

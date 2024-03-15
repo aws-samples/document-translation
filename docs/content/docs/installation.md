@@ -12,9 +12,14 @@ This project is [configurable]({{< ref "docs/architecture" >}}) to suit your spe
 
 This form will collate your inputs and return the appropriate commands to enter for deployment. The output can be used with the [CloudShell]({{< ref "docs/shared/prerequisites/cloudshell" >}}) to quickly perform the installation. Please review the output to ensure you are happy with the values.
 
-<button id="buttonCopy" style="display: none;"  onclick="copyToClipboard()">Copy</button>
-<code id="result" style="display: none;"></code>
-<button id="buttonCopy2" style="display: none;"  onclick="copyToClipboard()">Copy</button>
+Installation typically takes between 30-60 minutes. This result will deploy a CloudFormation stack for the pipeline. That CodePipeline workflow will deploy a CloudFormation stack for the app. You can monitor the progress of the pipeline from the CodePipeline service. 
+
+<br/>
+<div id="resultWrapper" style="display: none;">
+	<button onclick="copyToClipboard()">Copy</button><br/><br/>
+	<code id="resultOutput" style="display: block;"></code><br/>
+	<button onclick="copyToClipboard()">Copy</button><br/>
+</div>
 <form id="form">
 
 {{% steps %}}
