@@ -41,11 +41,15 @@ See [CONTRIBUTING](CONTRIBUTING.md#security-issue-notifications) for more inform
 
 This library is licensed under the MIT-0 License. See the LICENSE file.
 
-## Tags, Releases
+## Tags, Releases, & Branches
+
+For general use please stick with the tagged released version of the main branch. GitHub lists the available [release versions for this project](https://github.com/aws-samples/document-translation/releases). The [documentation installation wizard](https://aws-samples.github.io/document-translation/docs/installation/) will default to the latest tagged release available.
+
+### Tags, Releases
 
 Tags and Releases are used to mark commits considered as verions with the format of vX.Y.Z. Any other tag is simply a tag. These versioned releases are for general use to try out this project. Tags and Releases are applied to commits in the main branch when it is functional. It is recommended to try the latest release. 
 
-## Branches
+### Branches
 
 The branch `main` is used for upstream development for this project. It **may** at times be non functional and require knowledge of the project to install, update, or fix. It is not intended for general use. 
 
