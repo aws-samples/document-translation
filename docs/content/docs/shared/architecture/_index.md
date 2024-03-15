@@ -14,3 +14,7 @@ SPDX-License-Identifier: MIT-0
   {{< card link="help-info" title="Help Info" >}}
   {{< card link="web-ui" title="Web UI" >}}
 {{< /cards >}}
+
+This overview shows how the shared components are interconnected. For an overview of all features please refer to the [overview architecture]({{< ref "docs/architecture" >}}).
+
+![Overview](/diagrams/overview_client.png)
