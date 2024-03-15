@@ -19,7 +19,7 @@ from diagrams.aws.general import SDK
 import attr
 
 name = os.path.splitext(os.path.basename(__file__))[0]
-name_human = name.replace("_", " ").capitalize()
+name_human = name.replace("_", " ").title()
 
 with Diagram(name_human, filename=name, show=False, graph_attr=attr.graph):
 
