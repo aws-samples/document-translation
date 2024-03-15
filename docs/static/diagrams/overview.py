@@ -3,15 +3,15 @@
 
 import os
 from dataclasses import replace
-from diagrams                import Diagram, Cluster
-from diagrams.aws.mobile     import Appsync
-from diagrams.aws.storage    import S3
-from diagrams.aws.database   import DDB
-from diagrams.aws.security   import Cognito
-from  diagrams.aws.general import Client
-from diagrams.aws.network    import CloudFront
-from diagrams.aws.security   import WAF, Macie
-from diagrams.aws.integration   import SF
+from diagrams import Diagram, Cluster
+from diagrams.aws.mobile import Appsync
+from diagrams.aws.storage import S3
+from diagrams.aws.database import DDB
+from diagrams.aws.security import Cognito
+from diagrams.aws.general import Client
+from diagrams.aws.network import CloudFront
+from diagrams.aws.security import WAF, Macie
+from diagrams.aws.integration import SF
 from diagrams.azure.identity import ActiveDirectory
 from diagrams.aws.ml import Translate
 from diagrams.aws.general import SDK
