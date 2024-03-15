@@ -12,7 +12,12 @@ import attr
 name = os.path.splitext(os.path.basename(__file__))[0]
 name_human = name.replace("_", " ").title()
 
-with Diagram(name_human, filename=name, show=False, graph_attr=attr.graph):
+graph_attr = {
+    "margin":"0",
+    "pad":"0"
+}
+
+with Diagram(name_human, filename=name, show=False, graph_attr=graph_attr):
 
     #
     # PIPELINE
