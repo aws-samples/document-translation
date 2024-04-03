@@ -14,7 +14,11 @@
 				nodejs_21
         awscli2
         jq
+				gnused
+				# Optional
+				bat
 			];
+			shellHook = ''bat --style=plain --paging=never ./README.md''; 
 		};
 	};
 }
