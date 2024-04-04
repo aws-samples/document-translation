@@ -2,10 +2,10 @@
 // SPDX-License-Identifier: MIT-0
 
 // REACT
-import { useState, useEffect, useRef } from "react";
+import { useState, useEffect } from "react";
 import { useTranslation } from "react-i18next";
 import { API, Hub, Auth } from "aws-amplify";
-import { CONNECTION_STATE_CHANGE, ConnectionState } from "@aws-amplify/pubsub";
+import { ConnectionState } from "@aws-amplify/pubsub";
 import debug from "debug";
 
 // CLOUDSCAPE DESIGN
@@ -20,6 +20,8 @@ import {
 	Button,
 } from "@cloudscape-design/components";
 
+import { ItemValues, ItemStatus, ItemKeys } from "./enums";
+import { UseReadableModels } from "./hooks/useReadableModels";
 import ReadableViewDetails from "./viewDetails";
 import ReadableViewEditText from "./viewEditText";
 import ReadableViewEditImage from "./viewEditImage";
@@ -29,28 +31,13 @@ const features = require("../../features.json");
 let readableCreateJobItem = null;
 let readableUpdateJobItem = null;
 let readableGetJob = null;
-let readableListModels = null;
 let subscription_readableUpdateJobItem = null;
 if (features.readable) {
 	readableCreateJobItem = require('../../graphql/mutations').readableCreateJobItem
 	readableUpdateJobItem = require('../../graphql/mutations').readableUpdateJobItem
 	readableGetJob = require('../../graphql/queries').readableGetJob
-	readableListModels = require('../../graphql/queries').readableListModels
 	subscription_readableUpdateJobItem = require('../../graphql/subscriptions').readableUpdateJobItem
 } 
-
-const initialModelState = {
-	text: [],
-	image: [],
-};
-const initialModelDefault = {
-	text: {
-		index: 0,
-	},
-	image: {
-		index: 0,
-	},
-};
 
 export default function ReadableNew() {
 	const log = debug("app:Readable:View");
@@ -58,42 +45,11 @@ export default function ReadableNew() {
 	const [metadataState, setMetadataState] = useState({});
 	const [textState, setTextState] = useState([]);
 	const [imageState, setImageState] = useState({});
-	const [modelState, setModelState] = useState(initialModelState);
-	const [modelDefault, setModelDefault] = useState(initialModelDefault);
-	const [priorConnectionState, setPriorConnectionState] = useState({});
+	
+	const [priorConnectionState] = useState({});
+	const { modelState, modelDefault } = UseReadableModels();
 	const CONNECTION_STATE_CHANGE = "CONNECTION_STATE_CHANGE";
-	const ItemStatus = {
-		PROCESSING: "processing",
-		COMPLETED: "completed",
-		UPDATED: "updated",
-		GENERATE: "generate",
-		FAILED_UNRECOGNISEDMODEL: "failed_unrecognisedModel",
-	};
-	const ItemValues = {
-		TEXT: "text",
-		IMAGE: "image",
-		METADATA: "metadata",
-	};
-	const ItemKeys = {
-		CREATEDAT: "createdAt",
-		ID: "id",
-		IDENTITY: "identity",
-		INPUT: "input",
-		ITEMID: "itemId",
-		MODELID: "modelId",
-		NAME: "name",
-		ORDER: "order",
-		OUTPUT: "output",
-		PARENT: "parent",
-		STATUS: "status",
-		TYPE: "type",
-		UPDATEDAT: "updatedAt",
-	};
 	const LoadingStatus = [ItemStatus.GENERATE, ItemStatus.PROCESSING];
-
-	useEffect(() => {
-		log("Logging enabled");
-	}, []);
 
 	// UTIL
 	function returnObjectWithItemId(allItems, itemId) {
@@ -121,80 +77,6 @@ export default function ReadableNew() {
 			return 0;
 		});
 	}
-
-	// #region // MODELS
-	// MODELS | FETCH
-	async function listModels() {
-		try {
-			return await API.graphql({
-				query: readableListModels,
-				authMode: "AMAZON_COGNITO_USER_POOLS",
-			});
-		} catch (error) {
-			console.log("Error fetching models:", error);
-		}
-	}
-
-	function createModelsSelectionInput(modelState) {
-		return modelState.map((model) => {
-			return {
-				label: model.name,
-				value: model.id,
-				default: model.default,
-				iconName: model.default ? "star" : undefined,
-			};
-		});
-	}
-
-	function findIndexOfDefault(array) {
-		return array.findIndex((item) => item.default);
-	}
-
-	function findDefaultModelId(modelState, index) {
-		return modelState[index].value;
-	}
-
-	function setModelDataOfType(modelState, modelType) {
-		const selectionInput = createModelsSelectionInput(modelState);
-		setModelState((prevModels) => {
-			return {
-				...prevModels,
-				[modelType]: selectionInput,
-			};
-		});
-
-		const defaultModelIndex = findIndexOfDefault(selectionInput);
-		const defaultModelId = findDefaultModelId(
-			selectionInput,
-			defaultModelIndex
-		);
-		setModelDefault((prevModelDefault) => {
-			return {
-				...prevModelDefault,
-				[modelType]: {
-					index: defaultModelIndex,
-					id: defaultModelId,
-				},
-			};
-		});
-	}
-
-	async function setModelData() {
-		const result = await listModels();
-		const allModels = result.data.readableListModels.items;
-
-		const textModels = returnArrayOfType(allModels, ItemValues.TEXT);
-		setModelDataOfType(textModels, ItemValues.TEXT);
-
-		const imageModels = returnArrayOfType(allModels, ItemValues.IMAGE);
-		setModelDataOfType(imageModels, ItemValues.IMAGE);
-	}
-
-	useEffect(() => {
-		setModelData();
-	}, []);
-
-	// #endregion // MODELS
 
 	//
 	// #region // JOB
@@ -336,32 +218,7 @@ export default function ReadableNew() {
 			} else {
 				possibleKeys.forEach((key) => {
 					if (newItem[key]) {
-						// if (key === "status") {
-						// 	console.log("setNewImageStateValues mewItem key", key);
-						// 	console.log("setNewImageStateValues newState before", newState);
-						// 	console.log("setNewImageStateValues newState a1", parentId);
-						// 	console.log(
-						// 		"setNewImageStateValues newState a2",
-						// 		newState[parentId]
-						// 	);
-						// 	console.log(
-						// 		"setNewImageStateValues newState b1",
-						// 		stateNestedItemIndex
-						// 	);
-						// 	console.log(
-						// 		"setNewImageStateValues newState b2",
-						// 		newState[parentId][stateNestedItemIndex]
-						// 	);
-						// 	console.log("setNewImageStateValues newState c1", key);
-						// 	console.log(
-						// 		"setNewImageStateValues newState c2",
-						// 		newState[parentId][stateNestedItemIndex][key]
-						// 	);
-						// }
 						newState[parentId][stateNestedItemIndex][key] = newItem[key];
-						// if (key === "status") {
-						// 	console.log("setNewImageStateValues newState after", newState);
-						// }
 					}
 				});
 			}
@@ -423,17 +280,13 @@ export default function ReadableNew() {
 
 	useEffect(() => {
 		handleConnectionChangesFromApi();
-		const subscription = createSubscription();
+		// const subscription = createSubscription();
+		createSubscription();
 		// return () => subscription.unsubscribe();
 	}, []);
 
 	// #endregion // SUBSCRIBE
 
-	// APPEND NEW ITEM
-	// APPEND NEW ITEM | TEXT
-	// function appendTextItemToState(item) {
-	// 	setItems([...items, item]);
-	// }
 
 	async function createNewTextItem(order) {
 		const credentials = await Auth.currentUserCredentials();
