@@ -17,6 +17,7 @@ import {
 	Grid,
 	Box,
 	Button,
+	Toggle,
 } from "@cloudscape-design/components";
 
 import { ItemValues, ItemStatus, ItemKeys } from "./enums";
@@ -25,6 +26,7 @@ import { UseReadableSubscription } from "./hooks/useReadableSubscription";
 import ReadableViewDetails from "./viewDetails";
 import ReadableViewEditText from "./viewEditText";
 import ReadableViewEditImage from "./viewEditImage";
+import ReadableViewPreview from "./viewPreview";
 
 const features = require("../../features.json");
 let readableCreateJobItem = null;
@@ -40,6 +42,7 @@ export default function ReadableNew() {
 	const [metadataState, setMetadataState] = useState({});
 	const [textState, setTextState] = useState([]);
 	const [imageState, setImageState] = useState({});
+	const [itemViewState,  setItemViewState] = useState({});
 	
 	const { modelState, modelDefault } = UseReadableModels();
 	const LoadingStatus = [ItemStatus.GENERATE, ItemStatus.PROCESSING];
@@ -240,6 +243,59 @@ export default function ReadableNew() {
 		);
 	}
 
+	function displayItemView(textItem, index) {
+		if(itemViewState[textItem.itemId] && itemViewState[textItem.itemId].edit) {
+			return displayItemEditView(textItem, index);
+		}
+		return displayItemPreviewView(textItem, index);
+	}
+	function displayItemEditView(textItem, index) {
+		return (
+			<>
+				{displayTextItem(textItem, index)}
+				<hr />
+				{imageState && (
+					<Grid>
+						{imageState[textItem.itemId] &&
+							imageState[textItem.itemId].map(
+								(imageItem, index) => (
+									<Box key={imageItem.itemId} variant="div">
+										{displayImageItem(imageItem, index, textItem)}
+									</Box>
+								)
+							)}
+						<Box margin="xxl" variant="div">
+							{displayAddImageRow(textItem, index)}
+						</Box>
+					</Grid>
+				)}
+			</>
+		);
+	}
+	function displayItemPreviewView(textItem, index) {
+		return (
+			<>
+				<ReadableViewPreview
+					text={textItem}
+					image={
+						imageState && imageState[textItem.itemId] &&
+							imageState[textItem.itemId][0]
+					}
+				/>
+			</>
+		);
+	}
+
+	function setViewState(id, value) {
+		console.log("setChecked", id, value);
+		setItemViewState({
+			...itemViewState,
+			[id]: {
+				edit: value,
+			},
+		})
+	}
+
 	return (
 		<>
 			<ContentLayout header={displayHeader()}>
@@ -251,23 +307,17 @@ export default function ReadableNew() {
 								<SpaceBetween key={textItem.itemId} size="xl">
 									<Container>
 										<SpaceBetween key={index} size="xl">
-											{displayTextItem(textItem, index)}
-											<hr />
-											{imageState && (
-												<Grid>
-													{imageState[textItem.itemId] &&
-														imageState[textItem.itemId].map(
-															(imageItem, index) => (
-																<Box key={imageItem.itemId} variant="div">
-																	{displayImageItem(imageItem, index, textItem)}
-																</Box>
-															)
-														)}
-													<Box margin="xxl" variant="div">
-														{displayAddImageRow(textItem, index)}
-													</Box>
-												</Grid>
-											)}
+										<Toggle
+											onChange={({ detail }) =>
+											setViewState(textItem.itemId, detail.checked)
+											}
+											checked={
+												itemViewState[textItem.itemId] && itemViewState[textItem.itemId].edit ? itemViewState[textItem.itemId].edit : false
+											}
+											>
+											{t("generic_edit")}
+										</Toggle>
+											{displayItemView(textItem, index)}
 										</SpaceBetween>
 										<span className="jobId">{textItem.itemId}</span>
 									</Container>
