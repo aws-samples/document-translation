@@ -50,8 +50,8 @@ export const UseReadableModels = () => {
 		return array.findIndex((item) => item.default);
 	}
 
-    function findDefaultModelId({value}, index) {
-        return value;
+    function findDefaultModelId(array, index) {
+        return array[index].value;
     }
 
 	function setModelDataOfType(modelState, modelType) {
