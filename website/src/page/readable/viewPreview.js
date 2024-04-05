@@ -48,19 +48,22 @@ export default function ReadableViewPreview(props) {
 	}, [props.image]);
 
 	return (
-		imageUrl && (
-			<>
+		<>
 				<Grid gridDefinition={[{ colspan: 4 }, { colspan: 8 }]}>
-					<img
-						className="borderRadius generatedImage"
-						src={imageUrl}
-						alt={`Generated image`}
-					/>
+					{imageUrl && (
+						<img
+							className="borderRadius generatedImage"
+							src={imageUrl}
+							alt={`Generated image`}
+						/>
+					)}
+					{!imageUrl && (
+						<div></div>
+					)}
 					<Box data-whiteSpace="preserve" variant="div">
 						{props.text.output}
 					</Box>
 				</Grid>
 			</>
-		)
 	);
 }
