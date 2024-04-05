@@ -69,7 +69,7 @@ export default function ReadableNew() {
 					{displayDetails()}
 					<SpaceBetween size="xl">
 						<Button iconName="file" variant="primary" onClick={handlePrint}>
-							Print
+						{t("generic_print")}
 						</Button>
 						<Container>
 							<div ref={componentRef}>
