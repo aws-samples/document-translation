@@ -27,3 +27,7 @@ export const ItemKeys = {
 	TYPE: "type",
 	UPDATEDAT: "updatedAt",
 };
+
+export const PrintStyles = {
+	EASYREAD: "EasyRead",
+};

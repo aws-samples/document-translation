@@ -11,7 +11,7 @@ import TranslationHistory from './page/translation/history';
 import TranslationNew from './page/translation/new';
 import ReadableHistory from './page/readable/history';
 import ReadableView from './page/readable/view';
-import { useNavigate } from "react-router-dom";
+import ReadablePrint from './page/readable/print';
 
 const features = require("./features.json");
 
@@ -34,6 +34,7 @@ export default function AppRoutes() {
 					<Route path="/readable/" element={<ReadableHistory />} />
 					<Route path="/readable/history/" element={<ReadableHistory />} />
 					<Route path="/readable/view/*" element={<ReadableView />} />
+					<Route path="/readable/print/*" element={<ReadablePrint />} />
 				</>
 			}
 			<Route path="/help/" element={<Help />} />

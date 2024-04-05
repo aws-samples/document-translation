@@ -18,15 +18,17 @@ import {
 	Box,
 	Button,
 	Toggle,
+	ButtonDropdown,
 } from "@cloudscape-design/components";
 
-import { ItemValues, ItemStatus, ItemKeys } from "./enums";
+import { ItemValues, ItemStatus, ItemKeys, PrintStyles } from "./enums";
 import { UseReadableModels } from "./hooks/useReadableModels";
 import { UseReadableSubscription } from "./hooks/useReadableSubscription";
 import ReadableViewDetails from "./viewDetails";
 import ReadableViewEditText from "./viewEditText";
 import ReadableViewEditImage from "./viewEditImage";
 import ReadableViewPreview from "./viewPreview";
+import {getPageJobId} from "../../util/getPageJobId";
 
 const features = require("../../features.json");
 let readableCreateJobItem = null;
@@ -306,6 +308,15 @@ export default function ReadableNew() {
 						{textState &&
 							textState.map((textItem, index) => (
 								<SpaceBetween key={textItem.itemId} size="xl">
+									<ButtonDropdown
+										items={Object.values(PrintStyles).map((style) => ({
+											id: style,
+											text: style,
+											href: `/readable/print?jobId=${getPageJobId()}&printStyle=${style}`,
+										}))}
+									>
+										Print Preview
+									</ButtonDropdown>
 									<Container>
 										<SpaceBetween key={index} size="xl">
 											<Toggle
