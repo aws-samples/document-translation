@@ -136,6 +136,11 @@ hr {
 	height: 2px;
 	border-width: 0;
 }
+
+[data-whiteSpace=preserve] {
+	white-space: preserve;
+}
+
 /* SMALL SCREENS | LISTS */
 @media screen and (max-width: 1080px) {
 	ul.list-can-collapse {

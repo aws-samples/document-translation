@@ -56,7 +56,7 @@ export default function ReadableViewPreview(props) {
 						src={imageUrl}
 						alt={`Generated image`}
 					/>
-					<Box variant="div">
+					<Box data-whiteSpace="preserve" variant="div">
 						{props.text.output}
 					</Box>
 				</Grid>
