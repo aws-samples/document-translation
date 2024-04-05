@@ -36,6 +36,7 @@
 	"help_description": "Helpful information for using this app",
 	"readable_description": "Convert complex text to more simply readable text",
 	"readable_title": "Simply Readable",
+	"readable_print_title": "Print Simply Readable",
 	"readable_view_input_text_placeholder": "Input your text here...",
 	"readable_view_output_text_placeholder": "Converted text will appear here...",
 	"readable_view_title": "Edit Simply Readable",
