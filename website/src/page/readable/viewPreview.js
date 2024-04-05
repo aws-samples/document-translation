@@ -21,7 +21,7 @@ export default function ReadableViewPreview(props) {
 				{!imageUrl && (
 					<div></div>
 				)}
-				<Box data-whiteSpace="preserve" variant="div">
+				<Box data-whitespace="preserve" variant="div">
 					{props.text.output}
 				</Box>
 			</Grid>

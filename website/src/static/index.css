@@ -137,7 +137,7 @@ hr {
 	border-width: 0;
 }
 
-[data-whiteSpace=preserve] {
+[data-whitespace=preserve] {
 	white-space: preserve;
 }
 
