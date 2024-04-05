@@ -28,7 +28,7 @@ import ReadableViewDetails from "./viewDetails";
 import ReadableViewEditText from "./viewEditText";
 import ReadableViewEditImage from "./viewEditImage";
 import ReadableViewPreview from "./viewPreview";
-import {getPageJobId} from "../../util/getPageJobId";
+import { getPageJobId } from "../../util/getPageJobId";
 
 const features = require("../../features.json");
 let readableCreateJobItem = null;
@@ -305,18 +305,18 @@ export default function ReadableNew() {
 				<SpaceBetween size="xxl">
 					{displayDetails()}
 					<SpaceBetween size="xl">
+						<ButtonDropdown
+							items={Object.values(PrintStyles).map((style) => ({
+								id: style,
+								text: style,
+								href: `/readable/print?jobId=${getPageJobId()}&printStyle=${style}`,
+							}))}
+						>
+							{t("generic_print_preview")}
+						</ButtonDropdown>
 						{textState &&
 							textState.map((textItem, index) => (
 								<SpaceBetween key={textItem.itemId} size="xl">
-									<ButtonDropdown
-										items={Object.values(PrintStyles).map((style) => ({
-											id: style,
-											text: style,
-											href: `/readable/print?jobId=${getPageJobId()}&printStyle=${style}`,
-										}))}
-									>
-										Print Preview
-									</ButtonDropdown>
 									<Container>
 										<SpaceBetween key={index} size="xl">
 											<Toggle
