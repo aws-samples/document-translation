@@ -1,13 +1,13 @@
 // Copyright Amazon.com, Inc. or its affiliates. All Rights Reserved.
 // SPDX-License-Identifier: MIT-0
 
-import { useTranslation } from 'react-i18next';
-import { useEffect, useState } from 'react';
-import { useNavigate } from 'react-router-dom';
-import { API, Auth, Storage } from 'aws-amplify';
+import { useTranslation } from "react-i18next";
+import { useEffect, useState } from "react";
+import { useNavigate } from "react-router-dom";
+import { API, Auth, Storage } from "aws-amplify";
 
 // CLOUDSCAPE DESIGN
-import "@cloudscape-design/global-styles/index.css"
+import "@cloudscape-design/global-styles/index.css";
 import {
 	Table,
 	Box,
@@ -18,19 +18,17 @@ import {
 } from "@cloudscape-design/components";
 
 // IMPORTS | GRAPHQL
-import {
-	CreateJob,
-} from '../../util/readableCreateJob';
+import { CreateJob } from "../../util/readableCreateJob";
 // IMPORTS | FUNCTIONS
-import sortDataByKey from '../../util/sortDataByKey';
-import { formatJobNameId } from '../../util/formatJobNameId';
-import { formatTimestamp } from '../../util/formatTimestamp';
+import sortDataByKey from "../../util/sortDataByKey";
+import { formatJobNameId } from "../../util/formatJobNameId";
+import { formatTimestamp } from "../../util/formatTimestamp";
 
 const features = require("../../features.json");
 let listJobs = null;
 if (features.readable) {
-	listJobs = require('../../graphql/queries').readableListJobs;
-} 
+	listJobs = require("../../graphql/queries").readableListJobs;
+}
 
 export default function HistoryTable() {
 	const [jobs, updateJobs] = useState([]);

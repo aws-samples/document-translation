@@ -18,12 +18,12 @@ import {
 	Select,
 } from "@cloudscape-design/components";
 
-
 const features = require("../../features.json");
 let readableUpdateJobItem = null;
 if (features.readable) {
-	readableUpdateJobItem = require('../../graphql/mutations').readableUpdateJobItem;
-} 
+	readableUpdateJobItem =
+		require("../../graphql/mutations").readableUpdateJobItem;
+}
 
 const initialFormState = [];
 

@@ -32,9 +32,11 @@ const features = require("../../features.json");
 let readableCreateJobItem = null;
 let readableUpdateJobItem = null;
 if (features.readable) {
-	readableCreateJobItem = require('../../graphql/mutations').readableCreateJobItem
-	readableUpdateJobItem = require('../../graphql/mutations').readableUpdateJobItem
-} 
+	readableCreateJobItem =
+		require("../../graphql/mutations").readableCreateJobItem;
+	readableUpdateJobItem =
+		require("../../graphql/mutations").readableUpdateJobItem;
+}
 
 export default function ReadableNew() {
 	const log = debug("app:Readable:View");
@@ -42,8 +44,8 @@ export default function ReadableNew() {
 	const [metadataState, setMetadataState] = useState({});
 	const [textState, setTextState] = useState([]);
 	const [imageState, setImageState] = useState({});
-	const [itemViewState,  setItemViewState] = useState({});
-	
+	const [itemViewState, setItemViewState] = useState({});
+
 	const { modelState, modelDefault } = UseReadableModels();
 	const LoadingStatus = [ItemStatus.GENERATE, ItemStatus.PROCESSING];
 
@@ -244,7 +246,7 @@ export default function ReadableNew() {
 	}
 
 	function displayItemView(textItem, index) {
-		if(itemViewState[textItem.itemId] && itemViewState[textItem.itemId].edit) {
+		if (itemViewState[textItem.itemId] && itemViewState[textItem.itemId].edit) {
 			return displayItemEditView(textItem, index);
 		}
 		return displayItemPreviewView(textItem, index);
@@ -257,13 +259,11 @@ export default function ReadableNew() {
 				{imageState && (
 					<Grid>
 						{imageState[textItem.itemId] &&
-							imageState[textItem.itemId].map(
-								(imageItem, index) => (
-									<Box key={imageItem.itemId} variant="div">
-										{displayImageItem(imageItem, index, textItem)}
-									</Box>
-								)
-							)}
+							imageState[textItem.itemId].map((imageItem, index) => (
+								<Box key={imageItem.itemId} variant="div">
+									{displayImageItem(imageItem, index, textItem)}
+								</Box>
+							))}
 						<Box margin="xxl" variant="div">
 							{displayAddImageRow(textItem, index)}
 						</Box>
@@ -278,8 +278,9 @@ export default function ReadableNew() {
 				<ReadableViewPreview
 					text={textItem}
 					image={
-						imageState && imageState[textItem.itemId] &&
-							imageState[textItem.itemId][0]
+						imageState &&
+						imageState[textItem.itemId] &&
+						imageState[textItem.itemId][0]
 					}
 				/>
 			</>
@@ -293,7 +294,7 @@ export default function ReadableNew() {
 			[id]: {
 				edit: value,
 			},
-		})
+		});
 	}
 
 	return (
@@ -308,8 +309,15 @@ export default function ReadableNew() {
 									<Container>
 										<SpaceBetween key={index} size="xl">
 											<Toggle
-												onChange={({ detail }) => setViewState(textItem.itemId, detail.checked) }
-												checked={ itemViewState[textItem.itemId] && itemViewState[textItem.itemId].edit ? itemViewState[textItem.itemId].edit : false }
+												onChange={({ detail }) =>
+													setViewState(textItem.itemId, detail.checked)
+												}
+												checked={
+													itemViewState[textItem.itemId] &&
+													itemViewState[textItem.itemId].edit
+														? itemViewState[textItem.itemId].edit
+														: false
+												}
 											>
 												{t("generic_edit")}
 											</Toggle>

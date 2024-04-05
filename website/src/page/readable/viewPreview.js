@@ -18,9 +18,7 @@ export default function ReadableViewPreview(props) {
 						alt={`Generated image`}
 					/>
 				)}
-				{!imageUrl && (
-					<div></div>
-				)}
+				{!imageUrl && <div></div>}
 				<Box data-whitespace="preserve" variant="div">
 					{props.text.output}
 				</Box>

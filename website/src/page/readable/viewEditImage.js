@@ -18,8 +18,9 @@ import {
 const features = require("../../features.json");
 let readableUpdateJobItem = null;
 if (features.readable) {
-	readableUpdateJobItem = require('../../graphql/mutations').readableUpdateJobItem;
-} 
+	readableUpdateJobItem =
+		require("../../graphql/mutations").readableUpdateJobItem;
+}
 
 // CONFIGURE
 // CONFIGURE | AMPLIFY

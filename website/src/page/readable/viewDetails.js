@@ -15,8 +15,9 @@ import { formatTimestamp } from "../../util/formatTimestamp";
 const features = require("../../features.json");
 let readableUpdateJobMetadata = null;
 if (features.readable) {
-	readableUpdateJobMetadata = require('../../graphql/mutations').readableUpdateJobMetadata;
-} 
+	readableUpdateJobMetadata =
+		require("../../graphql/mutations").readableUpdateJobMetadata;
+}
 
 export default function ReadableViewDetails(props) {
 	const { t } = useTranslation();

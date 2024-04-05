@@ -13,13 +13,18 @@ let subscription_readableUpdateJobItem = null;
 let readableGetJob = null;
 
 if (features.readable) {
-	subscription_readableUpdateJobItem = require('../../../graphql/subscriptions').readableUpdateJobItem
-	readableGetJob = require('../../../graphql/queries').readableGetJob
-} 
+	subscription_readableUpdateJobItem =
+		require("../../../graphql/subscriptions").readableUpdateJobItem;
+	readableGetJob = require("../../../graphql/queries").readableGetJob;
+}
 
 const CONNECTION_STATE_CHANGE = "CONNECTION_STATE_CHANGE";
 
-export const UseReadableSubscription = (setMetadataState, setTextState, setImageState) => {
+export const UseReadableSubscription = (
+	setMetadataState,
+	setTextState,
+	setImageState
+) => {
 	const log = debug("app:Readable:View:Subscription");
 	const [priorConnectionState] = useState({});
 
@@ -49,7 +54,7 @@ export const UseReadableSubscription = (setMetadataState, setTextState, setImage
 			return 0;
 		});
 	}
-	
+
 	async function fetchAllJobItems() {
 		try {
 			return await API.graphql({
@@ -137,7 +142,7 @@ export const UseReadableSubscription = (setMetadataState, setTextState, setImage
 				const itemIndex = newState.findIndex(
 					(stateItem) => stateItem.itemId === newItem.itemId
 				);
-	
+
 				if (itemIndex === -1) {
 					newState.push({ itemId: newItem.itemId });
 				} else {
@@ -157,17 +162,17 @@ export const UseReadableSubscription = (setMetadataState, setTextState, setImage
 				const parentId = newItem.parent;
 				console.log("setNewImageStateValues parentId", parentId);
 				const newState = { ...prevState };
-	
+
 				// Create an empty parent if it doesn't exist yet.
 				if (!newState[parentId]) {
 					newState[parentId] = [];
 				}
-	
+
 				// Find the udpated item within the state.
 				const stateNestedItemIndex = newState[parentId].findIndex(
 					(stateItem) => stateItem.itemId === newItem.itemId
 				);
-	
+
 				// If the item was not found, push the whole tiem
 				// Else iterate the update values
 				if (stateNestedItemIndex === -1) {
@@ -239,7 +244,7 @@ export const UseReadableSubscription = (setMetadataState, setTextState, setImage
 		createSubscription();
 
 		return () => {
-		// Unsubscribe logic
+			// Unsubscribe logic
 		};
 	}, [setMetadataState, setTextState, setImageState]);
 };
