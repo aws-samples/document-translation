@@ -2,7 +2,7 @@
 // SPDX-License-Identifier: MIT-0
 
 // REACT
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { useTranslation } from "react-i18next";
 import { API } from "aws-amplify";
 import debug from "debug";
@@ -161,10 +161,13 @@ export default function ReadableViewEditText(props) {
 		const type = props.ItemValues.TEXT;
 
 		const models = props.modelState[type];
+		console.log("models", models);
 
 		const defaultModelIndex = props.modelDefault[type].index;
+		console.log("defaultModelIndex", defaultModelIndex);
 
 		const itemModelIndex = returnIndexOfModelId(models, props.item.modelId);
+		console.log("itemModelIndex", itemModelIndex);
 
 		return (
 			<>
@@ -234,6 +237,10 @@ export default function ReadableViewEditText(props) {
 			</>
 		);
 	}
+
+	useEffect(() => {
+		console.log(props)
+	}, [props]); // eslint-disable-line react-hooks/exhaustive-deps
 
 	return (
 		<>

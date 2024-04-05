@@ -3,38 +3,24 @@
 
 import { useState, useEffect } from "react";
 import { API } from "aws-amplify";
-
 import { ItemValues } from "../enums";
 
 const features = require("../../../features.json");
-let readableListModels = null;
-if (features.readable) {
-	readableListModels = require("../../../graphql/queries").readableListModels;
-}
-
-const initialModelState = {
-	text: [],
-	image: [],
-};
-const initialModelDefault = {
-	text: {
-		index: 0,
-	},
-	image: {
-		index: 0,
-	},
-};
+const readableListModels = features.readable
+	? require("../../../graphql/queries").readableListModels
+	: null;
 
 export const UseReadableModels = () => {
-	const [modelState, setModelState] = useState(initialModelState);
-	const [modelDefault, setModelDefault] = useState(initialModelDefault);
-
+	const [modelState, setModelState] = useState({
+		text: [],
+		image: [],
+	});
+	const [modelDefault, setModelDefault] = useState({
+		text: null,
+		image: null,
+	});
 	const [loading, setLoading] = useState(true);
 	const [error, setError] = useState(null);
-
-	function returnArrayOfType(allObjects, typeToReturn) {
-		return allObjects.filter((object) => object.type === typeToReturn);
-	}
 
 	function createModelsSelectionInput(modelState) {
 		return modelState.map((model, index) => {
@@ -89,8 +75,12 @@ export const UseReadableModels = () => {
 					authMode: "AMAZON_COGNITO_USER_POOLS",
 				});
 				const allModels = result.data.readableListModels.items;
-				const textModels = returnArrayOfType(allModels, ItemValues.TEXT);
-				const imageModels = returnArrayOfType(allModels, ItemValues.IMAGE);
+				const textModels = allModels.filter(
+					(model) => model.type === ItemValues.TEXT
+				);
+				const imageModels = allModels.filter(
+					(model) => model.type === ItemValues.IMAGE
+				);
 
 				setModelDataOfType(textModels, ItemValues.TEXT);
 				setModelDataOfType(imageModels, ItemValues.IMAGE);
