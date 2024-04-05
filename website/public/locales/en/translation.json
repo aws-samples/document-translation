@@ -32,6 +32,8 @@
 	"generic_save": "Save",
 	"generic_add_new_image": "Add Image",
 	"generic_add_new_row": "Add Row",
+	"generic_print": "Print",
+	"generic_print_preview": "Print Preview",
 	"help_title": "Help",
 	"help_description": "Helpful information for using this app",
 	"readable_description": "Convert complex text to more simply readable text",
