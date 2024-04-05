@@ -307,16 +307,12 @@ export default function ReadableNew() {
 								<SpaceBetween key={textItem.itemId} size="xl">
 									<Container>
 										<SpaceBetween key={index} size="xl">
-										<Toggle
-											onChange={({ detail }) =>
-											setViewState(textItem.itemId, detail.checked)
-											}
-											checked={
-												itemViewState[textItem.itemId] && itemViewState[textItem.itemId].edit ? itemViewState[textItem.itemId].edit : false
-											}
+											<Toggle
+												onChange={({ detail }) => setViewState(textItem.itemId, detail.checked) }
+												checked={ itemViewState[textItem.itemId] && itemViewState[textItem.itemId].edit ? itemViewState[textItem.itemId].edit : false }
 											>
-											{t("generic_edit")}
-										</Toggle>
+												{t("generic_edit")}
+											</Toggle>
 											{displayItemView(textItem, index)}
 										</SpaceBetween>
 										<span className="jobId">{textItem.itemId}</span>
