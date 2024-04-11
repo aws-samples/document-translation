@@ -2,9 +2,9 @@
 // SPDX-License-Identifier: MIT-0
 
 // REACT
-import { useState, useEffect } from "react";
+import { useState } from "react";
 import { useTranslation } from "react-i18next";
-import { API, Hub, Auth } from "aws-amplify";
+import { API, Auth } from "aws-amplify";
 import debug from "debug";
 
 // CLOUDSCAPE DESIGN

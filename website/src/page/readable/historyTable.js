@@ -4,7 +4,7 @@
 import { useTranslation } from "react-i18next";
 import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
-import { API, Auth, Storage } from "aws-amplify";
+import { API } from "aws-amplify";
 
 // CLOUDSCAPE DESIGN
 import "@cloudscape-design/global-styles/index.css";

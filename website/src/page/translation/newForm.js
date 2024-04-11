@@ -2,7 +2,7 @@
 // SPDX-License-Identifier: MIT-0
 
 // REACT
-import React, { useEffect, useState } from 'react';
+import React, { useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import i18n from 'i18next';
 import { useNavigate } from 'react-router-dom';

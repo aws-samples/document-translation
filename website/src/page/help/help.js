@@ -9,7 +9,6 @@ import {
 	ContentLayout,
 	SpaceBetween,
 	Header,
-	Button,
 } from "@cloudscape-design/components";
 import HelpItems from "./helpItems";
 

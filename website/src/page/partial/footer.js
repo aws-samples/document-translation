@@ -3,7 +3,6 @@
 
 // REACT
 import React from 'react';
-import { useTranslation } from 'react-i18next';
 // CLOUDSCAPE DESIGN
 import {
 	Link,
