@@ -13,7 +13,10 @@
 			packages = with pkgs; [
 				nodejs_21
         awscli2
+				# Optional
+				bat
 			];
+			shellHook = ''bat --style=plain --paging=never ./README.md''; 
 		};
 	};
 }
