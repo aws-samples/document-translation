@@ -19,7 +19,7 @@ import { PrintStyles } from "./enums";
 import { useReactToPrint } from "react-to-print";
 import { UseReadableSubscription } from "./hooks/useReadableSubscription";
 import ReadableViewDetails from "./viewDetails";
-import { ReadablePrintPreview as ReadablePrintPreview_EasyRead } from "./print/easyRead";
+import { ReadablePrintPreview as ReadablePrintPreview_EasyRead } from "./print/tableWithImageLeft";
 import { getPrintStyle } from "../../util/getPrintStyle";
 import * as easyReadCss from "./print/easyRead.css";
 

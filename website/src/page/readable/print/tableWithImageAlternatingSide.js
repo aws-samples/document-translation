@@ -16,22 +16,44 @@ function DisplayText({ text }) {
 	);
 }
 
-function SingleRow(props) {
+function SingleImage(props) {
 	const imageUrl = useGetPresignedUrl(props.imageKey);
+
 	return (
-		<tr>
-			<td>
-				<div>
-					{props.imageKey && <img src={imageUrl} alt={`Generated image`} />}
-				</div>
-			</td>
-			<td>
-				<div>
-					<DisplayText text={props.text} />
-				</div>
-			</td>
-		</tr>
+		<td>
+			<div>
+				{props.imageKey && <img src={imageUrl} alt={`Generated image`} />}
+			</div>
+		</td>
 	);
+}
+function SingleText(props) {
+	return (
+		<td>
+			<div>
+				<DisplayText text={props.text} />
+			</div>
+		</td>
+	);
+}
+
+function SingleRow(props) {
+	// if props.key is an odd number
+	if (props.key % 2 === 1) {
+		return (
+			<tr>
+				<SingleImage key={props.key} imageKey={props.imageKey} />
+				<SingleText key={props.key} text={props.text} />
+			</tr>
+		);
+	} else {
+		return (
+			<tr>
+				<SingleText key={props.key} text={props.text} />
+				<SingleImage key={props.key} imageKey={props.imageKey} />
+			</tr>
+		);
+	}
 }
 
 export function ReadablePrintPreview(props) {

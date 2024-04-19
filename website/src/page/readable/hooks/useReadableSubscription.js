@@ -226,7 +226,6 @@ export const UseReadableSubscription = (
 		}
 
 		function createSubscription() {
-			debugger;
 			return subscriptionRequest().subscribe({
 				next: ({ value }) => {
 					const newData = value.data.readableUpdateJobItem;
