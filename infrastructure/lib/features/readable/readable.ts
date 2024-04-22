@@ -14,6 +14,7 @@ import { dt_readableJob } from "./jobMetadata";
 import { dt_readableModel } from "./model";
 import { dt_readableItem } from "./jobItem";
 import { dt_readableWorkflow } from "./workflow";
+import { dt_readablePrintStyles } from "./printStyles";
 
 export interface props {
 	api: appsync.GraphqlApi;
@@ -47,6 +48,13 @@ export class dt_readable extends Construct {
 
 		// FEATURES | MODEL
 		const readableModel = new dt_readableModel(this, "readableModel", {
+			api: props.api,
+			apiSchema: props.apiSchema,
+			removalPolicy: props.removalPolicy,
+		});
+
+		// FEATURES | PRINTSTYLES
+		const readablePrintStyles = new dt_readablePrintStyles(this, "readablePrintStyles", {
 			api: props.api,
 			apiSchema: props.apiSchema,
 			removalPolicy: props.removalPolicy,
