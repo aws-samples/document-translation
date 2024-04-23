@@ -2,8 +2,9 @@
 // SPDX-License-Identifier: MIT-0
 
 // REACT
-import { useState, useRef } from "react";
+import { useState, useRef, useEffect } from "react";
 import { useTranslation } from "react-i18next";
+import { UseReadablePrintStyles } from "./hooks/useReadablePrintStyles";
 
 // CLOUDSCAPE DESIGN
 import "@cloudscape-design/global-styles/index.css";
@@ -19,9 +20,10 @@ import { PrintStyles } from "./enums";
 import { useReactToPrint } from "react-to-print";
 import { UseReadableSubscription } from "./hooks/useReadableSubscription";
 import ReadableViewDetails from "./viewDetails";
-import { ReadablePrintPreview as ReadablePrintPreview_EasyRead } from "./print/tableWithImageLeft";
+import { ReadablePrintPreview as ReadablePrintPreview_tableWithImageLeft } from "./print/tableWithImageLeft";
+import { ReadablePrintPreview as ReadablePrintPreview_tableWithImageRight } from "./print/tableWithImageRight";
+import { ReadablePrintPreview as ReadablePrintPreview_tableWithImageAlternatingSide } from "./print/tableWithImageAlternatingSide";
 import { getPrintStyle } from "../../util/getPrintStyle";
-import * as easyReadCss from "./print/easyRead.css";
 
 export default function ReadableNew() {
 	const { t } = useTranslation();
@@ -30,8 +32,9 @@ export default function ReadableNew() {
 	const [imageState, setImageState] = useState({});
 
 	UseReadableSubscription(setMetadataState, setTextState, setImageState);
-
-	const printStyle = getPrintStyle();
+	const [printStyleSelected, setPrintStyleSelected] = useState();
+	const { printStylesState } = UseReadablePrintStyles();
+	const printStyleId = getPrintStyle();
 
 	// DISPLAY
 	// DISPLAY | HEADER
@@ -55,11 +58,27 @@ export default function ReadableNew() {
 		);
 	}
 
+	useEffect(() => {
+		if (!printStylesState) return;
+		if (!printStyleId) return;
+
+		const printStyleDetails = printStylesState.find(
+			(item) => item.id === printStyleId
+		);
+
+		if (!printStyleDetails) return;
+		setPrintStyleSelected(printStyleDetails);
+
+		const styleElement = document.createElement("style");
+		styleElement.innerHTML = printStyleDetails.css;
+		document.head.appendChild(styleElement);
+	}, [printStylesState, printStyleId]);
+
 	const componentRef = useRef();
 	const handlePrint = useReactToPrint({
 		content: () => componentRef.current,
 		copyStyles: true,
-		pageStyle: easyReadCss,
+		pageStyle: printStyleSelected?.css,
 	});
 
 	return (
@@ -69,13 +88,28 @@ export default function ReadableNew() {
 					{displayDetails()}
 					<SpaceBetween size="xl">
 						<Button iconName="file" variant="primary" onClick={handlePrint}>
-						{t("generic_print")}
+							{t("generic_print")}
 						</Button>
 						<Container>
 							<div ref={componentRef}>
-								<div id="print">
-									{printStyle === PrintStyles.EASYREAD && (
-										<ReadablePrintPreview_EasyRead
+								<div id="printPreviewWrapper">
+									{printStyleSelected?.type.toLowerCase() ===
+										PrintStyles.TABLEWITHIMAGELEFT.toLowerCase() && (
+										<ReadablePrintPreview_tableWithImageLeft
+											textState={textState}
+											imageState={imageState}
+										/>
+									)}
+									{printStyleSelected?.type.toLowerCase() ===
+										PrintStyles.TABLEWITHIMAGERIGHT.toLowerCase() && (
+										<ReadablePrintPreview_tableWithImageRight
+											textState={textState}
+											imageState={imageState}
+										/>
+									)}
+									{printStyleSelected?.type.toLowerCase() ===
+										PrintStyles.TABLEWITHIMAGEALTERNATINGSIDE.toLowerCase() && (
+										<ReadablePrintPreview_tableWithImageAlternatingSide
 											textState={textState}
 											imageState={imageState}
 										/>

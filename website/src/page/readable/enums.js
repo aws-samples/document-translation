@@ -29,5 +29,7 @@ export const ItemKeys = {
 };
 
 export const PrintStyles = {
-	EASYREAD: "EasyRead",
+	TABLEWITHIMAGELEFT: "tableWithImageLeft",
+	TABLEWITHIMAGERIGHT: "tableWithImageRight",
+	TABLEWITHIMAGEALTERNATINGSIDE: "tableWithImageAlternatingSide",
 };

@@ -78,5 +78,5 @@ export const UseReadablePrintStyles = () => {
 		}
 	}, [printStylesState]);
 
-	return { printStyleOptions, printStyleInitial };
+	return { printStyleOptions, printStyleInitial, printStylesState };
 };
