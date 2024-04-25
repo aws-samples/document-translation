@@ -91,17 +91,6 @@ export default function ReadableViewEditImage(props) {
 		imageKeyHandler(props.item.output);
 	}, [props.item.output]);
 
-	function isMultipleModelOptions(type) {
-		if (
-			props.modelState &&
-			props.modelState[type] &&
-			props.modelState[type].length > 1
-		) {
-			return true;
-		}
-		return false;
-	}
-
 	function returnIndexOfModelId(modelArray, modelId) {
 		return modelArray.findIndex((model) => model.value === modelId);
 	}
@@ -153,20 +142,19 @@ export default function ReadableViewEditImage(props) {
 					)}
 				</Box>
 				<Box variant="div">
-					{isMultipleModelOptions(props.ItemValues.IMAGE) && (
-						<Select
-							selectedOption={
-								props.item.modelId
-									? models[itemModelIndex]
-									: models[defaultModelIndex]
-							}
-							onChange={({ detail }) =>
-								onChangeModel(detail.selectedOption.value)
-							}
-							options={props.modelState.image}
-							filteringType="auto"
-						/>
-					)}
+					<Select
+						selectedOption={
+							props.item.modelId
+								? models[itemModelIndex]
+								: models[defaultModelIndex]
+						}
+						onChange={({ detail }) =>
+							onChangeModel(detail.selectedOption.value)
+						}
+						options={props.modelState.image}
+						filteringType="auto"
+						disabled={props?.modelState?.image?.length < 2}
+					/>
 				</Box>
 				<Box variant="div" textAlign="center">
 					<Button

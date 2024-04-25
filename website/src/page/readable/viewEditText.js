@@ -38,17 +38,6 @@ export default function ReadableViewEditText(props) {
 		return props.LoadingStatus.includes(status);
 	}
 
-	function isMultipleModelOptions(type) {
-		if (
-			props.modelState &&
-			props.modelState[type] &&
-			props.modelState[type].length > 1
-		) {
-			return true;
-		}
-		return false;
-	}
-
 	// // function setItemsStateStatus(index, newStatus) {
 	// // 	props.setItems((currentState) => {
 	// // 		const newState = [...currentState];
@@ -181,20 +170,19 @@ export default function ReadableViewEditText(props) {
 					rows={10}
 				/>
 				<Box variant="div">
-					{isMultipleModelOptions(props.ItemValues.TEXT) && (
-						<Select
-							selectedOption={
-								props.item.modelId
-									? models[itemModelIndex]
-									: models[defaultModelIndex]
-							}
-							onChange={({ detail }) =>
-								onChangeModel(detail.selectedOption.value)
-							}
-							options={props.modelState.text}
-							filteringType="auto"
-						/>
-					)}
+					<Select
+						selectedOption={
+							props.item.modelId
+								? models[itemModelIndex]
+								: models[defaultModelIndex]
+						}
+						onChange={({ detail }) =>
+							onChangeModel(detail.selectedOption.value)
+						}
+						options={props.modelState.text}
+						filteringType="auto"
+						disabled={props?.modelState?.text?.length < 2}
+					/>
 				</Box>
 
 				<Box variant="div" textAlign="center">
@@ -221,7 +209,7 @@ export default function ReadableViewEditText(props) {
 					value={props.item.output}
 					placeholder={t("readable_view_output_text_placeholder")}
 					spellcheck
-					rows={isMultipleModelOptions(props.ItemValues.TEXT) ? 12 : 10}
+					rows={12}
 				/>
 				<Box variant="div" textAlign="center">
 					<Button
