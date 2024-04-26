@@ -120,8 +120,6 @@ export default function ReadableViewEditText(props) {
 			input: props.item.input,
 			status: props.ItemStatus.GENERATE,
 		};
-		console.log("saveOutputTextManualEdit payload", payload);
-		log("saveOutputTextManualEdit payload", payload);
 		pushItemUpdateWithNewData(payload);
 	}
 
@@ -134,8 +132,6 @@ export default function ReadableViewEditText(props) {
 			output: props.item.output,
 			status: props.ItemStatus.UPDATED,
 		};
-		console.log("saveOutputTextManualEdit payload", payload);
-		log("saveOutputTextManualEdit payload", payload);
 		pushItemUpdateWithNewData(payload);
 		// updateFormStateWithClearedSavedEdit(index, "text", "output");
 	}
@@ -148,15 +144,9 @@ export default function ReadableViewEditText(props) {
 	// DISPLAY COMPONENTS
 	function displayInput() {
 		const type = props.ItemValues.TEXT;
-
 		const models = props.modelState[type];
-		console.log("models", models);
-
 		const defaultModelIndex = props.modelDefault[type].index;
-		console.log("defaultModelIndex", defaultModelIndex);
-
 		const itemModelIndex = returnIndexOfModelId(models, props.item.modelId);
-		console.log("itemModelIndex", itemModelIndex);
 
 		return (
 			<>
@@ -225,10 +215,6 @@ export default function ReadableViewEditText(props) {
 			</>
 		);
 	}
-
-	useEffect(() => {
-		console.log(props)
-	}, [props]); // eslint-disable-line react-hooks/exhaustive-deps
 
 	return (
 		<>
