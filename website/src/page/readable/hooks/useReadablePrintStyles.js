@@ -66,8 +66,8 @@ export const UseReadablePrintStyles = () => {
 				});
 			} else {
 				setPrintStyleInitial({
-					label: printStylesState[0].name,
-					value: printStylesState[0].id,
+					label: printStylesState[0]?.name,
+					value: printStylesState[0]?.id,
 				});
 			}
 			setLoading(false);
