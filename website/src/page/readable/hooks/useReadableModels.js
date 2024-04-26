@@ -35,7 +35,12 @@ export const UseReadableModels = () => {
 	}
 
 	function findIndexOfDefault(array) {
-		return array.findIndex((item) => item.default);
+		const indexOfDefault = array.findIndex((item) => item.default);
+		if (indexOfDefault === -1) {
+			return 0
+		} else {
+			return indexOfDefault;
+		}
 	}
 
 	function findDefaultModelId(array, index) {
