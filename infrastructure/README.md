@@ -28,7 +28,7 @@ export cognitoLocalUsersMfa="off"
 export webUi="true"
 
 export readable="true"
-export readableBedrockRegion="us-west-1"
+export readableBedrockRegion="us-west-2"
 
 export development="true"
 export appRemovalPolicy="destroy"
