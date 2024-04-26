@@ -3,8 +3,13 @@
 
 import { Construct } from "constructs";
 import * as cdk from "aws-cdk-lib";
+import { NagSuppressions } from "cdk-nag";
 
-import { aws_dynamodb as dynamodb, aws_appsync as appsync } from "aws-cdk-lib";
+import {
+	aws_dynamodb as dynamodb,
+	aws_appsync as appsync,
+	custom_resources as cr,
+} from "aws-cdk-lib";
 import {
 	CodeFirstSchema,
 	GraphqlType,
@@ -88,6 +93,61 @@ export class dt_readableModel extends Construct {
 		props.apiSchema.addQuery(
 			`${dt_enums.Feature.PREFIX}ListModels`,
 			listModelsQuery,
+		);
+
+		// EXAMPLE ENTRY
+		// EXAMPLE ENTRY | TEXT
+		const exampleEntryText = new cr.AwsCustomResource(this, 'exampleEntryText', {
+			onCreate: {
+				service: 'DynamoDB',
+				action: 'putItem',
+				parameters: {
+					TableName: this.modelTable.tableName,
+					Item: require('./defaults/text.ddb.json'),
+				},
+				physicalResourceId: cr.PhysicalResourceId.of('exampleEntryText'),
+			},
+			policy: cr.AwsCustomResourcePolicy.fromSdkCalls({
+				resources: [
+					this.modelTable.tableArn
+				],
+			}),
+		});
+
+		// EXAMPLE ENTRY | IMAGE
+		const exampleEntryImage = new cr.AwsCustomResource(this, 'exampleEntryImage', {
+			onCreate: {
+				service: 'DynamoDB',
+				action: 'putItem',
+				parameters: {
+					TableName: this.modelTable.tableName,
+					Item: require('./defaults/image.ddb.json'),
+				},
+				physicalResourceId: cr.PhysicalResourceId.of('exampleEntryImage'),
+			},
+			policy: cr.AwsCustomResourcePolicy.fromSdkCalls({
+				resources: [
+					this.modelTable.tableArn
+				],
+			}),
+		});
+
+		// EXAMPLE ENTRY | CUSTOM RESOURCE CDK LAMBDA
+		NagSuppressions.addResourceSuppressionsByPath(
+			cdk.Stack.of(this),
+			`/${cdk.Stack.of(this).node.findChild(
+				"AWS679f53fac002430cb0da5b7982bd2287",
+			).node.path
+			}/ServiceRole/Resource`,
+			[
+				{
+					id: "AwsSolutions-IAM4",
+					appliesTo: ["Policy::arn:<AWS::Partition>:iam::aws:policy/service-role/AWSLambdaBasicExecutionRole"],
+					reason:
+						"Custom Resource Lambda defined by CDK project",
+				},
+			],
+			true,
 		);
 
 		// END

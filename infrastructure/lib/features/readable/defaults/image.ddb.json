@@ -1,0 +1,73 @@
+{
+    "id": {
+        "S": "Default-Example-Image-01"
+    },
+    "name": {
+        "S": "Example Without People (Claude v2 & Stability Diffusion)"
+    },
+    "type": {
+        "S": "image"
+    },
+    "default": {
+        "BOOL": false
+    },
+    "image": {
+        "M": {
+            "modelId": {
+                "S": "stability.stable-diffusion-xl-v1"
+            },
+            "parameters": {
+                "M": {
+                    "cfg_scale": {
+                        "N": "10"
+                    },
+                    "height": {
+                        "N": "1024"
+                    },
+                    "seed": {
+                        "N": "0"
+                    },
+                    "steps": {
+                        "N": "50"
+                    },
+                    "width": {
+                        "N": "1024"
+                    }
+                }
+            }
+        }
+    },
+    "text": {
+        "M": {
+            "modelId": {
+                "S": "anthropic.claude-v2"
+            },
+            "parameters": {
+                "M": {
+                    "max_tokens_to_sample": {
+                        "N": "300"
+                    },
+                    "stop_sequences": {
+                        "L": [
+                            {
+                                "S": "Human:"
+                            }
+                        ]
+                    },
+                    "temperature": {
+                        "N": "1"
+                    },
+                    "top_k": {
+                        "N": "250"
+                    },
+                    "top_p": {
+                        "N": "0.999"
+                    }
+                }
+            },
+            "prePrompt": {
+                "S": "You're a prompt engineer, trying to design a prompt for Stable Diffusion, so it can generate a photographic image to illustrate the following text, showing no people in the image:"
+            }
+        }
+    }
+}
