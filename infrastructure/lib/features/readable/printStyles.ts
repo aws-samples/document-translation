@@ -3,8 +3,12 @@
 
 import { Construct } from "constructs";
 import * as cdk from "aws-cdk-lib";
+import { NagSuppressions } from "cdk-nag";
 
-import { aws_dynamodb as dynamodb, aws_appsync as appsync } from "aws-cdk-lib";
+import {
+	aws_dynamodb as dynamodb, aws_appsync as appsync,
+	custom_resources as cr,
+} from "aws-cdk-lib";
 import {
 	CodeFirstSchema,
 	GraphqlType,
@@ -89,6 +93,43 @@ export class dt_readablePrintStyles extends Construct {
 		props.apiSchema.addQuery(
 			`${dt_enums.Feature.PREFIX}ListPrintStyles`,
 			listStylesQuery,
+		);
+
+
+		// EXAMPLE ENTRY
+		const exampleEntryPrint1 = new cr.AwsCustomResource(this, 'exampleEntryPrint1', {
+			onCreate: {
+				service: 'DynamoDB',
+				action: 'putItem',
+				parameters: {
+					TableName: this.printStyleTable.tableName,
+					Item: require('./defaults/printStyle1.ddb.json'),
+				},
+				physicalResourceId: cr.PhysicalResourceId.of('exampleEntryPrint1'),
+			},
+			policy: cr.AwsCustomResourcePolicy.fromSdkCalls({
+				resources: [
+					this.printStyleTable.tableArn
+				],
+			}),
+		});
+
+		// EXAMPLE ENTRY | CUSTOM RESOURCE CDK LAMBDA
+		NagSuppressions.addResourceSuppressionsByPath(
+			cdk.Stack.of(this),
+			`/${cdk.Stack.of(this).node.findChild(
+				"AWS679f53fac002430cb0da5b7982bd2287",
+			).node.path
+			}/ServiceRole/Resource`,
+			[
+				{
+					id: "AwsSolutions-IAM4",
+					appliesTo: ["Policy::arn:<AWS::Partition>:iam::aws:policy/service-role/AWSLambdaBasicExecutionRole"],
+					reason:
+						"Custom Resource Lambda defined by CDK project",
+				},
+			],
+			true,
 		);
 
 		// END
