@@ -6,7 +6,20 @@
 		"S": "Example Table With Large Format Text"
 	},
 	"css": {
-		"S": "table { border-collapse: collapse; } td { border: solid 1px black; margin: 0; padding: 1rem; min-height: 1px; } img { max-width: 256px; max-height: 256px; width: 256px; height: 256px; } p { font-size: 2rem; line-height: 2rem; font-weight: bold; }"
+		"L": [
+			{
+				"S": "table { border-collapse: collapse; }"
+			},
+			{
+				"S": "td { border: solid 1px black; margin: 0; padding: 1rem; min-height: 1px; }"
+			},
+			{
+				"S": "img { max-width: 256px; max-height: 256px; width: 256px; height: 256px; }"
+			},
+			{
+				"S": "p { font-size: 2rem; line-height: 2rem; font-weight: bold; }"
+			}
+		]
 	},
 	"type": {
 		"S": "tableWithImageLeft"

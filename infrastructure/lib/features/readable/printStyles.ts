@@ -59,7 +59,7 @@ export class dt_readablePrintStyles extends Construct {
 					id: GraphqlType.string({ isRequired: true }),
 					name: GraphqlType.string({ isRequired: true }),
 					type: GraphqlType.string({ isRequired: true }),
-					css: GraphqlType.string(),
+					css: GraphqlType.string({ isList: true }),
 					default: GraphqlType.boolean(),
 				},
 				directives: [Directive.custom("@aws_cognito_user_pools")],
