@@ -16,7 +16,7 @@ const app = new cdk.App();
 const stackName = `DocTran-${sourceGitBranch}-pipeline`;
 new pipelineStack(app, `${stackName}`, {
 	stackName: `${stackName}`,
-	description: `INDSOL-0e1ec93-Pipeline`,
+	description: `(uksb-1tthgi813) (tag:pipeline)`,
 	env: {
 		account: app.account,
 		region: app.region,
