@@ -35,6 +35,7 @@ export default function ReadableNew() {
 	const [printStyleSelected, setPrintStyleSelected] = useState();
 	const { printStylesState } = UseReadablePrintStyles();
 	const printStyleId = getPrintStyle();
+	const [customCss, setCustomCss] = useState("");
 
 	// DISPLAY
 	// DISPLAY | HEADER
@@ -59,26 +60,39 @@ export default function ReadableNew() {
 	}
 
 	useEffect(() => {
-		if (!printStylesState) return;
-		if (!printStyleId) return;
-
-		const printStyleDetails = printStylesState.find(
-			(item) => item.id === printStyleId
-		);
-
-		if (!printStyleDetails) return;
-		setPrintStyleSelected(printStyleDetails);
-
-		const styleElement = document.createElement("style");
-		styleElement.innerHTML = printStyleDetails.css;
-		document.head.appendChild(styleElement);
+		const parseCss = (css) => {
+			if (!printStylesState) return;
+			if (!printStyleId) return;
+	
+			const printStyleDetails = printStylesState.find(
+				(item) => item.id === printStyleId
+			);
+	
+			if (!printStyleDetails) return;
+			setPrintStyleSelected(printStyleDetails);
+	
+			const prefix = "#printPreviewWrapper";
+			const prefixedCssArray = printStyleDetails.css.map((item) => `${prefix} ${item}`);
+			const prefixedCss = prefixedCssArray.join("\n");
+			setCustomCss(prefixedCss);
+		};
+		parseCss(printStylesState, printStyleId)
 	}, [printStylesState, printStyleId]);
+
+	useEffect(() => {
+		const applyCssToPreview = (css) => {
+			const styleElement = document.createElement("style");
+			styleElement.innerHTML = css;
+			document.head.appendChild(styleElement);
+		}
+		applyCssToPreview(customCss);
+	}, [customCss]);
 
 	const componentRef = useRef();
 	const handlePrint = useReactToPrint({
 		content: () => componentRef.current,
 		copyStyles: true,
-		pageStyle: printStyleSelected?.css,
+		pageStyle: customCss,
 	});
 
 	return (
