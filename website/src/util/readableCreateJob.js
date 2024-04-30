@@ -1,31 +1,27 @@
 // Copyright Amazon.com, Inc. or its affiliates. All Rights Reserved.
 // SPDX-License-Identifier: MIT-0
-
-import { API, Auth } from "aws-amplify";
+import { generateClient } from "aws-amplify/api";
+import { fetchAuthSession } from "aws-amplify/auth";
 
 const features = require("../features.json");
 let readableCreateJob = null;
 if (features.readable) {
-	readableCreateJob = require('../graphql/mutations').readableCreateJob;
-} 
+	readableCreateJob = require("../graphql/mutations").readableCreateJob;
+}
 
 export async function CreateJob() {
+	const client = generateClient({ authMode: "userPool" });
+
 	try {
-		const credentials = await Auth.currentUserCredentials();
-		const identity = credentials.identityId;
-		console.log("Identity:", identity);
-		const response = await API.graphql({
+		const response = await client.graphql({
 			query: readableCreateJob,
 			variables: {
-				identity: identity,
+				identity: await fetchAuthSession().identityId,
 			},
-			authMode: "AMAZON_COGNITO_USER_POOLS",
 		});
-		const jobId = response.data.readableCreateJob.id;
-		console.log(`Created job with ID "${jobId}"`);
-		return jobId;
+
+		return await response.data.readableCreateJob.id;
 	} catch (error) {
-		console.log("Error creating job");
 		throw error;
 	}
 }
