@@ -3,7 +3,7 @@
 
 import { useTranslation } from "react-i18next";
 import { useEffect, useState } from "react";
-import { API } from "aws-amplify";
+import { generateClient } from "aws-amplify/api";
 
 // CLOUDSCAPE DESIGN
 import "@cloudscape-design/global-styles/index.css";
@@ -22,6 +22,7 @@ import sortDataByKey from "../../util/sortDataByKey";
 export default function HistoryTable() {
 	const [help, updateHelps] = useState([]);
 	const { t } = useTranslation();
+	const client = generateClient({ authMode: "userPool" });
 
 	// RUN ONCE
 	// RUN ONCE | FETCH JOBS
@@ -40,7 +41,7 @@ export default function HistoryTable() {
 			if (!data) {
 				// Attempt to load user provided cloud data
 				try {
-					const response = await API.graphql({
+					const response = await client.graphql({
 						query: query,
 						authMode: "AMAZON_COGNITO_USER_POOLS",
 					});
@@ -72,11 +73,6 @@ export default function HistoryTable() {
 		}
 		fetchData(listHelps, "order", "title", updateHelps);
 	}, []);
-
-	// WATCH
-	useEffect(() => {
-		console.log("Watch:", help);
-	}, [help]);
 
 	return (
 		<Cards
