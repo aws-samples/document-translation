@@ -32,7 +32,7 @@ export default function HistoryTable() {
 
 			try {
 				// Attempt to load user provided local data
-				data = require("../../sampleData/helpData.json");
+				data = require("../../helpData.json");
 				console.log("Loaded local data:", data);
 			} catch (error) {
 				console.log("No local data found.");
