@@ -49,32 +49,32 @@ export const UseReadableModels = () => {
 		return array[index].value;
 	}
 
-	function setModelDataOfType(modelState, modelType) {
-		const selectionInput = createModelsSelectionInput(modelState);
-		setModelState((prevModels) => {
-			return {
-				...prevModels,
-				[modelType]: selectionInput,
-			};
-		});
-
-		const defaultModelIndex = findIndexOfDefault(selectionInput);
-		const defaultModelId = findDefaultModelId(
-			selectionInput,
-			defaultModelIndex
-		);
-		setModelDefault((prevModelDefault) => {
-			return {
-				...prevModelDefault,
-				[modelType]: {
-					index: defaultModelIndex,
-					id: defaultModelId,
-				},
-			};
-		});
-	}
-
 	useEffect(() => {
+		function setModelDataOfType(modelState, modelType) {
+			const selectionInput = createModelsSelectionInput(modelState);
+			setModelState((prevModels) => {
+				return {
+					...prevModels,
+					[modelType]: selectionInput,
+				};
+			});
+	
+			const defaultModelIndex = findIndexOfDefault(selectionInput);
+			const defaultModelId = findDefaultModelId(
+				selectionInput,
+				defaultModelIndex
+			);
+			setModelDefault((prevModelDefault) => {
+				return {
+					...prevModelDefault,
+					[modelType]: {
+						index: defaultModelIndex,
+						id: defaultModelId,
+					},
+				};
+			});
+		}
+
 		const fetchModels = async () => {
 			try {
 				const result = await client.graphql({
