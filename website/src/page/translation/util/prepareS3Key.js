@@ -14,7 +14,7 @@ export async function prepareS3Key(params) {
 	let keyType = params.keyType;
 
 	
-	if (keyType == S3KeyTypes.OBJECT) {
+	if (keyType === S3KeyTypes.OBJECT) {
 		// Prepend user identity ID to object key
 		try {
 			const authSession = await fetchAuthSession();
@@ -25,13 +25,13 @@ export async function prepareS3Key(params) {
 		keyType = S3KeyTypes.USER_OBJECT;
 	}
 
-	if (keyType == S3KeyTypes.USER_OBJECT) {
+	if (keyType === S3KeyTypes.USER_OBJECT) {
 		// Prepend scope to object key
 		key = S3Scopes.PRIVATE + "/" + key;
 		keyType = S3KeyTypes.SCOPE_USER_OBJECT;
 	}
 
-	if (keyType == S3KeyTypes.SCOPE_USER_OBJECT) {
+	if (keyType === S3KeyTypes.SCOPE_USER_OBJECT) {
 		return key;
 	}
 

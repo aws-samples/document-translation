@@ -464,7 +464,7 @@ export default function NewForm() {
 											<ul className="list-can-collapse list-no-bullet">
 												{languagesTarget.map((item, index) => (
 													<React.Fragment key={index}>
-														{index == 0 && (
+														{index === 0 && (
 															<li className="languageTargetsSeparator">
 																{item.label[0].toLocaleUpperCase()}
 															</li>
