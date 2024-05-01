@@ -27,7 +27,7 @@ if (features.readable) {
 
 // CONFIGURE
 // CONFIGURE | AMPLIFY
-const cfnOutputs = require("../../cfnOutputs.json");
+// const cfnOutputs = require("../../c fnOutputs.json");
 
 export default function ReadableViewEditImage(props) {
 	const { t } = useTranslation();
@@ -116,7 +116,7 @@ export default function ReadableViewEditImage(props) {
 						<img
 							className="borderRadius generatedImage"
 							src="../../../image-placeholder.png"
-							alt={`Placeholder image`}
+							alt={`Placeholder`}
 						/>
 					)}
 					{props.item.output && (
@@ -126,7 +126,7 @@ export default function ReadableViewEditImage(props) {
 									<img
 										className="borderRadius generatedImage"
 										src={imageUrl}
-										alt={`Generated image`}
+										alt={`Generated`}
 									/>
 								</>
 							)}

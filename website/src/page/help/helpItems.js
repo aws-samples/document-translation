@@ -22,12 +22,12 @@ import sortDataByKey from "../../util/sortDataByKey";
 export default function HistoryTable() {
 	const [help, updateHelps] = useState([]);
 	const { t } = useTranslation();
-	const client = generateClient({ authMode: "userPool" });
-
+	
 	// RUN ONCE
 	// RUN ONCE | FETCH JOBS
 	useEffect(() => {
 		async function fetchData(query, sortA, sortB, updateFunction) {
+			const client = generateClient({ authMode: "userPool" });
 			let data;
 
 			try {

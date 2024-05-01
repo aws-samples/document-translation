@@ -15,8 +15,8 @@ export const UseReadablePrintStyles = () => {
 	const [printStyleOptions, setPrintStyleOptions] = useState([]);
 	const [printStyleInitial, setPrintStyleInitial] = useState({});
 	const [printStylesState, setPrintStylesState] = useState([]);
-	const [loading, setLoading] = useState(true);
-	const [error, setError] = useState(null);
+	// const [loading, setLoading] = useState(true);
+	// const [error, setError] = useState(null);
 
 	useEffect(() => {
 		const fetchPrintStyles = async () => {
@@ -28,11 +28,11 @@ export const UseReadablePrintStyles = () => {
 
 				setPrintStylesState(await result.data.readableListPrintStyles.items);
 
-				setLoading(false);
+				// setLoading(false);
 			} catch (error) {
 				console.log("Error fetching printStyles:", error);
-				setError(error);
-				setLoading(false);
+				// setError(error);
+				// setLoading(false);
 			}
 		};
 
@@ -52,8 +52,8 @@ export const UseReadablePrintStyles = () => {
 			);
 		} catch (error) {
 			console.log("Error setPrintStyleOptions:", error);
-			setError(error);
-			setLoading(false);
+			// setError(error);
+			// setLoading(false);
 		}
 	}, [printStylesState]);
 
@@ -72,11 +72,11 @@ export const UseReadablePrintStyles = () => {
 					value: printStylesState[0]?.id,
 				});
 			}
-			setLoading(false);
+			// setLoading(false);
 		} catch (error) {
 			console.log("Error setPrintStyleInitial:", error);
-			setError(error);
-			setLoading(false);
+			// setError(error);
+			// setLoading(false);
 		}
 	}, [printStylesState]);
 

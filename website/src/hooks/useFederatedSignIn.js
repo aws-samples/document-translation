@@ -36,8 +36,6 @@ export function useFederatedSignIn() {
 			if (authStatus) {
 				try {
 					setCurentUser(await getCurrentUser());
-                    console.log({ currentUser });
-                    console.log({ authSession });
 				} catch (error) {
 					console.log({ error });
 				}
@@ -45,7 +43,8 @@ export function useFederatedSignIn() {
 				setCurentUser(null);
 			}
 		};
+		setUserState(authStatus);
 	}, [authStatus]);
 
-	return currentUser, authSession;
+	return { currentUser, authSession };
 }

@@ -2,9 +2,8 @@
 // SPDX-License-Identifier: MIT-0
 
 // REACT
-import { useEffect, useState } from "react";
+// import { useEffect, useState } from "react";
 import { useTranslation } from "react-i18next";
-import debug from "debug";
 
 // CLOUDSCAPE DESIGN
 import "@cloudscape-design/global-styles/index.css";
@@ -25,12 +24,11 @@ if (features.readable) {
 		require("../../graphql/mutations").readableUpdateJobItem;
 }
 
-const initialFormState = [];
+// const initialFormState = [];
 
 export default function ReadableViewEditText(props) {
-	const log = debug("app:Readable:View:EditText");
 	const { t } = useTranslation();
-	const [formState, setFormState] = useState(initialFormState);
+	// const [formState, setFormState] = useState(initialFormState);
 
 	// UTIL
 	function isStatusLoading(status) {
