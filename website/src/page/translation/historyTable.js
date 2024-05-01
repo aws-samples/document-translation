@@ -2,7 +2,6 @@
 // SPDX-License-Identifier: MIT-0
 
 import { useTranslation } from "react-i18next";
-import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 
 // CLOUDSCAPE DESIGN
@@ -23,7 +22,6 @@ import { formatTimestamp } from "../../util/formatTimestamp";
 import { amplifyConfigureAppend } from "../../util/amplifyConfigure";
 import { useTranslationJobs } from "./hooks/useTranslationJobs";
 import { getPresignedUrl } from "./util/getPresignedUrl";
-import { Amplify } from "aws-amplify";
 import { S3KeyTypes } from "./enums";
 
 const cfnOutputs = require("../../cfnOutputs.json");
