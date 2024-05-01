@@ -13,10 +13,11 @@ export async function CreateJob() {
 	const client = generateClient({ authMode: "userPool" });
 
 	try {
+		const authSession = await fetchAuthSession();
 		const response = await client.graphql({
 			query: readableCreateJob,
 			variables: {
-				identity: await fetchAuthSession().identityId,
+				identity: authSession.identityId,
 			},
 		});
 
