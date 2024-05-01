@@ -4,7 +4,6 @@
 // REACT
 import { useEffect, useState } from "react";
 import { useTranslation } from "react-i18next";
-import { Auth, Storage } from "aws-amplify";
 
 // CLOUDSCAPE DESIGN
 import "@cloudscape-design/global-styles/index.css";
