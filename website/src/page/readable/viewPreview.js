@@ -19,7 +19,7 @@ export default async function ReadableViewPreview(props) {
 					<img
 						className="borderRadius generatedImage"
 						src={imageUrl}
-						alt={`Generated image`}
+						alt={`Generated`}
 					/>
 				)}
 				{!imageUrl && <div></div>}
