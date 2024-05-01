@@ -23,7 +23,6 @@ export const UseReadablePrintStyles = () => {
 			try {
 				const result = await client.graphql({
 					query: readableListPrintStyles,
-					authMode: "AMAZON_COGNITO_USER_POOLS",
 				});
 
 				setPrintStylesState(await result.data.readableListPrintStyles.items);
