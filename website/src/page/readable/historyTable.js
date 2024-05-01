@@ -2,9 +2,7 @@
 // SPDX-License-Identifier: MIT-0
 
 import { useTranslation } from "react-i18next";
-import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
-import { API } from "aws-amplify";
 
 // CLOUDSCAPE DESIGN
 import "@cloudscape-design/global-styles/index.css";
@@ -20,43 +18,14 @@ import {
 // IMPORTS | GRAPHQL
 import { CreateJob } from "../../util/readableCreateJob";
 // IMPORTS | FUNCTIONS
-import sortDataByKey from "../../util/sortDataByKey";
 import { formatJobNameId } from "../../util/formatJobNameId";
 import { formatTimestamp } from "../../util/formatTimestamp";
-
-const features = require("../../features.json");
-let listJobs = null;
-if (features.readable) {
-	listJobs = require("../../graphql/queries").readableListJobs;
-}
+import { useReadableJobs } from "./hooks/useReadableJobs";
 
 export default function HistoryTable() {
-	const [jobs, updateJobs] = useState([]);
+	const jobs = useReadableJobs();
 	const { t } = useTranslation();
 	const navigate = useNavigate();
-
-	// RUN ONCE
-	// RUN ONCE | FETCH JOBS
-	useEffect(() => {
-		async function fetchJobs() {
-			let data;
-			try {
-				// Fetch jobs
-				const response = await API.graphql({
-					query: listJobs,
-					authMode: "AMAZON_COGNITO_USER_POOLS",
-				});
-				data = response.data.readableListJobs.items;
-				console.log(data);
-				updateJobs(sortDataByKey("updatedAt", "id", data));
-			} catch (error) {
-				console.error(error);
-				console.error("ERROR: " + error.errors[0].message);
-			}
-			return true;
-		}
-		fetchJobs();
-	}, []);
 
 	async function createAndNavigate() {
 		const jobId = await CreateJob();
