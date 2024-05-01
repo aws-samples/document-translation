@@ -6,7 +6,6 @@
 import { Suspense } from "react";
 // import AppRoutes from './appRoutes';
 // IMPORTS | AMPLIFY
-import { Amplify } from "aws-amplify";
 import { useFederatedSignIn } from "./hooks/useFederatedSignIn";
 // IMPORTS | LANGUAGES
 import "./util/i18n";
@@ -17,41 +16,12 @@ import Footer from "./page/partial/footer";
 // CLOUDSCAPE DESIGN
 import { AppLayout } from "@cloudscape-design/components";
 import AppRoutes from "./appRoutes";
-// CONFIGURE
-// CONFIGURE | AMPLIFY
-const cfnOutputs = require("./cfnOutputs.json");
+import { amplifyConfigure } from "./util/amplifyConfigure";
 
-Amplify.configure({
-	Auth: {
-		Cognito: {
-			userPoolId: cfnOutputs.awsUserPoolsId,
-			userPoolClientId: cfnOutputs.awsUserPoolsWebClientId,
-			identityPoolId: cfnOutputs.awsCognitoIdentityPoolId,
-			allowGuestAccess: false,
-			loginWith: {
-				oauth: {
-					domain:
-						cfnOutputs.awsCognitoOauthDomain +
-						".auth." +
-						cfnOutputs.awsRegion +
-						".amazoncognito.com",
-					scopes: ["openid"],
-					redirectSignIn: [cfnOutputs.awsCognitoOauthRedirectSignIn],
-					redirectSignOut: [cfnOutputs.awsCognitoOauthRedirectSignOut],
-					responseType: "code",
-				},
-			},
-		},
-	},
-	API: {
-		GraphQL: {
-			endpoint: cfnOutputs.awsAppsyncGraphqlEndpoint,
-		}
-	}
-});
 
 // FUNCTIONS
 export default function App() {
+	amplifyConfigure();
 	const currentUser = useFederatedSignIn();
 
 	return (
