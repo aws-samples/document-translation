@@ -2,7 +2,8 @@
 // SPDX-License-Identifier: MIT-0
 
 import "@cloudscape-design/global-styles/index.css";
-import { useGetPresignedUrl } from "../hooks/useGetPresignedUrl";
+import { getPresignedUrl } from "../util/getPresignedUrl";
+import { S3KeyTypes } from "./util/s3KeyTypes";
 
 function DisplayText({ text }) {
 	const lines = text.split("\n").filter((line) => line.trim());
@@ -16,8 +17,11 @@ function DisplayText({ text }) {
 	);
 }
 
-function SingleImage(props) {
-	const imageUrl = useGetPresignedUrl(props.imageKey);
+async function SingleImage(props) {
+	const imageUrl = await getPresignedUrl({
+		key: props.imageKey,
+		keyType: S3KeyTypes.SCOPE_USER_OBJECT,
+	});
 
 	return (
 		<td>

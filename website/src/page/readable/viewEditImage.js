@@ -4,7 +4,7 @@
 // REACT
 import { useEffect, useState } from "react";
 import { useTranslation } from "react-i18next";
-import { API, Auth, Storage } from "aws-amplify";
+import { Auth, Storage } from "aws-amplify";
 
 // CLOUDSCAPE DESIGN
 import "@cloudscape-design/global-styles/index.css";
@@ -14,6 +14,9 @@ import {
 	SpaceBetween,
 	Select,
 } from "@cloudscape-design/components";
+import {getPresignedUrl} from "./util/getPresignedUrl";
+import { generateClient } from "aws-amplify/api";
+const client = generateClient({ authMode: "userPool" });
 
 const features = require("../../features.json");
 let readableUpdateJobItem = null;
@@ -46,9 +49,8 @@ export default function ReadableViewEditImage(props) {
 
 	async function pushItemUpdateWithNewData(payload) {
 		try {
-			API.graphql({
+			client.graphql({
 				query: readableUpdateJobItem,
-				authMode: "AMAZON_COGNITO_USER_POOLS",
 				variables: payload,
 			});
 		} catch (error) {
@@ -70,18 +72,8 @@ export default function ReadableViewEditImage(props) {
 	// DOWNLOAD IMAGE
 	async function imageKeyHandler(key) {
 		try {
-			const credentials = await Auth.currentUserCredentials();
-			const userPrefix = "private/" + credentials.identityId + "/";
-			const downloadKey = key.replace(userPrefix, "");
-
-			const signedURL = await Storage.get(downloadKey, {
-				level: "private",
-				expires: 120,
-				region: cfnOutputs.awsRegion,
-				bucket: cfnOutputs.awsReadableS3Bucket,
-			});
-
-			setImageUrl(signedURL);
+			const signedUrl = await getPresignedUrl(key)
+			setImageUrl(signedUrl);
 		} catch (error) {
 			console.log("error: ", error);
 		}

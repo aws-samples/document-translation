@@ -3,10 +3,14 @@
 
 import "@cloudscape-design/global-styles/index.css";
 import { Grid, Box } from "@cloudscape-design/components";
-import { useGetPresignedUrl } from "./hooks/useGetPresignedUrl";
+import { getPresignedUrl } from "./util/getPresignedUrl";
+import { S3KeyTypes } from "../../enums";
 
-export default function ReadableViewPreview(props) {
-	const imageUrl = useGetPresignedUrl(props.image?.output);
+export default async function ReadableViewPreview(props) {
+	const imageUrl = await getPresignedUrl({
+		key: props.image?.output,
+		keyType: S3KeyTypes.SCOPE_USER_OBJECT,
+	});
 
 	return (
 		<>

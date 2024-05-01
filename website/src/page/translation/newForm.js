@@ -31,7 +31,7 @@ import {
 import { v4 as uuid } from "uuid";
 import { amplifyConfigureAppend } from "../../util/amplifyConfigure";
 import { putObjectS3 } from "./util/putObjectS3"
-import { S3KeyTypes } from "./enums"
+import { S3KeyTypes } from "../../enums"
 
 const features = require("../../features.json");
 let createJob = null;

@@ -4,7 +4,6 @@
 // REACT
 import { useEffect, useState } from "react";
 import { useTranslation } from "react-i18next";
-import { API } from "aws-amplify";
 import debug from "debug";
 
 // CLOUDSCAPE DESIGN
@@ -17,7 +16,8 @@ import {
 	SpaceBetween,
 	Select,
 } from "@cloudscape-design/components";
-
+import { generateClient } from "aws-amplify/api";
+const client = generateClient({ authMode: "userPool" });
 const features = require("../../features.json");
 let readableUpdateJobItem = null;
 if (features.readable) {
@@ -101,9 +101,8 @@ export default function ReadableViewEditText(props) {
 	async function pushItemUpdateWithNewData(payload) {
 		// TODO Move to util
 		try {
-			await API.graphql({
+			await client.graphql({
 				query: readableUpdateJobItem,
-				authMode: "AMAZON_COGNITO_USER_POOLS",
 				variables: payload,
 			});
 		} catch (error) {

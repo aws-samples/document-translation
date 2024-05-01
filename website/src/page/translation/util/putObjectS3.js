@@ -3,7 +3,7 @@
 
 import { configureS3Bucket } from "./configureS3Bucket";
 import { prepareS3Key } from "./prepareS3Key";
-// import { S3KeyTypes } from "../enums";
+// import { S3KeyTypes } from "../../../enums";
 import { uploadData } from "aws-amplify/storage";
 
 // interface Params {

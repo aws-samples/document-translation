@@ -2,7 +2,9 @@
 // SPDX-License-Identifier: MIT-0
 
 import { useState, useEffect } from "react";
-import { API } from "aws-amplify";
+
+import { generateClient } from "aws-amplify/api";
+const client = generateClient({ authMode: "userPool" });
 
 const features = require("../../../features.json");
 const readableListPrintStyles = features.readable
@@ -19,7 +21,7 @@ export const UseReadablePrintStyles = () => {
 	useEffect(() => {
 		const fetchPrintStyles = async () => {
 			try {
-				const result = await API.graphql({
+				const result = await client.graphql({
 					query: readableListPrintStyles,
 					authMode: "AMAZON_COGNITO_USER_POOLS",
 				});

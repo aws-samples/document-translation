@@ -4,7 +4,6 @@
 // REACT
 import { useState } from "react";
 import { useTranslation } from "react-i18next";
-import { API, Auth } from "aws-amplify";
 import debug from "debug";
 
 // CLOUDSCAPE DESIGN
@@ -28,6 +27,10 @@ import ReadableViewEditText from "./viewEditText";
 import ReadableViewEditImage from "./viewEditImage";
 import ReadableViewPreview from "./viewPreview";
 import ReadableViewPrintButton from "./viewPrintButton";
+
+import { fetchAuthSession } from "aws-amplify/auth";
+import { generateClient } from "aws-amplify/api";
+const client = generateClient({ authMode: "userPool" });
 
 const features = require("../../features.json");
 let readableCreateJobItem = null;
@@ -53,16 +56,15 @@ export default function ReadableNew() {
 	UseReadableSubscription(setMetadataState, setTextState, setImageState);
 
 	async function createNewTextItem(order) {
-		const credentials = await Auth.currentUserCredentials();
-		const identity = credentials.identityId;
+		const authSession = await fetchAuthSession();
 		try {
-			const result = await API.graphql({
+			const result = await client.graphql({
 				query: readableCreateJobItem,
 				authMode: "AMAZON_COGNITO_USER_POOLS",
 				variables: {
 					id: metadataState.id,
 					order: order,
-					identity: identity,
+					identity: authSession.identityId,
 					type: ItemValues.TEXT,
 				},
 			});
@@ -73,16 +75,15 @@ export default function ReadableNew() {
 	}
 
 	async function createNewImageItem(parentId, order) {
-		const credentials = await Auth.currentUserCredentials();
-		const identity = credentials.identityId;
+		const authSession = await fetchAuthSession();
 		try {
-			const result = await API.graphql({
+			const result = await client.graphql({
 				query: readableCreateJobItem,
 				authMode: "AMAZON_COGNITO_USER_POOLS",
 				variables: {
 					id: metadataState.id,
 					order: order,
-					identity: identity,
+					identity: authSession.identityId,
 					type: ItemValues.IMAGE,
 					parent: parentId,
 				},
@@ -96,7 +97,7 @@ export default function ReadableNew() {
 	async function pushItemUpdateWithNewData(payload) {
 		// TODO Move to util
 		try {
-			API.graphql({
+			client.graphql({
 				query: readableUpdateJobItem,
 				authMode: "AMAZON_COGNITO_USER_POOLS",
 				variables: payload,

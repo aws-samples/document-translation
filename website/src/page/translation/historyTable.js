@@ -22,7 +22,7 @@ import { formatTimestamp } from "../../util/formatTimestamp";
 import { amplifyConfigureAppend } from "../../util/amplifyConfigure";
 import { useTranslationJobs } from "./hooks/useTranslationJobs";
 import { getPresignedUrl } from "./util/getPresignedUrl";
-import { S3KeyTypes } from "./enums";
+import { S3KeyTypes } from "../../enums";
 
 const cfnOutputs = require("../../cfnOutputs.json");
 

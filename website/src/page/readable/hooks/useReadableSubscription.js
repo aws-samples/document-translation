@@ -2,11 +2,17 @@
 // SPDX-License-Identifier: MIT-0
 
 import { useState, useEffect } from "react";
-import { API, Hub } from "aws-amplify";
-import { ConnectionState } from "@aws-amplify/pubsub";
 import debug from "debug";
 import { getPageJobId } from "../../../util/getPageJobId";
 import { ItemValues, ItemKeys } from "../enums";
+
+import { orderArrayByKey } from "../../../util/orderArrayByKey";
+import { returnArrayOfType } from "../../../util/returnArrayOfType";
+import {groupItemsByParent } from  "../util/groupItemsByParent";
+
+import { Hub } from 'aws-amplify/utils';
+import { generateClient,  CONNECTION_STATE_CHANGE, ConnectionState } from 'aws-amplify/api';
+const client = generateClient({ authMode: "userPool" });
 
 const features = require("../../../features.json");
 let subscription_readableUpdateJobItem = null;
@@ -18,8 +24,6 @@ if (features.readable) {
 	readableGetJob = require("../../../graphql/queries").readableGetJob;
 }
 
-const CONNECTION_STATE_CHANGE = "CONNECTION_STATE_CHANGE";
-
 export const UseReadableSubscription = (
 	setMetadataState,
 	setTextState,
@@ -29,37 +33,10 @@ export const UseReadableSubscription = (
 	const [priorConnectionState] = useState({});
 
 	// UTIL
-	function returnObjectWithItemId(allItems, itemId) {
-		return allItems.find((item) => item.itemId === itemId);
-	}
-
-	function returnArrayOfType(allObjects, typeToReturn) {
-		const result = [];
-		allObjects.map((object) => {
-			if (object.type === typeToReturn) {
-				result.push(object);
-			}
-		});
-		return result;
-	}
-
-	function orderArrayByKey(array, key) {
-		return array.sort((a, b) => {
-			if (a[key] < b[key]) {
-				return -1;
-			}
-			if (a[key] > b[key]) {
-				return 1;
-			}
-			return 0;
-		});
-	}
-
 	async function fetchAllJobItems() {
 		try {
-			return await API.graphql({
+			return await client.graphql({
 				query: readableGetJob,
-				authMode: "AMAZON_COGNITO_USER_POOLS",
 				variables: {
 					id: getPageJobId(),
 				},
@@ -81,20 +58,11 @@ export const UseReadableSubscription = (
 		}
 	}
 
-	function groupItemsByParent(items) {
-		const groupedItems = {};
-		items.forEach((item) => {
-			groupedItems[item.parent] = groupedItems[item.parent] || [];
-			groupedItems[item.parent].push(item);
-		});
-		return groupedItems;
-	}
-
 	async function fetchInitialStates() {
 		const result = await fetchAllJobItems();
 		const allItems = result.data.readableGetJob.items;
 		// METADATA
-		const metatdataItem = returnObjectWithItemId(allItems, ItemValues.METADATA);
+		const metatdataItem = allItems.find((item) => item.itemId === ItemValues.METADATA);
 		setMetadataState(metatdataItem);
 		// TEXT & IMAGE
 		createItemStateForType(setTextState, allItems, ItemValues.TEXT);
@@ -126,9 +94,8 @@ export const UseReadableSubscription = (
 
 		function subscriptionRequest() {
 			try {
-				return API.graphql({
+				return client.graphql({
 					query: subscription_readableUpdateJobItem,
-					authMode: "AMAZON_COGNITO_USER_POOLS",
 					variables: { id: getPageJobId() },
 				});
 			} catch (error) {

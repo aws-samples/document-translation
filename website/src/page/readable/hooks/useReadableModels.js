@@ -2,8 +2,10 @@
 // SPDX-License-Identifier: MIT-0
 
 import { useState, useEffect } from "react";
-import { API } from "aws-amplify";
 import { ItemValues } from "../enums";
+
+import { generateClient } from "aws-amplify/api";
+const client = generateClient({ authMode: "userPool" });
 
 const features = require("../../../features.json");
 const readableListModels = features.readable
@@ -75,9 +77,8 @@ export const UseReadableModels = () => {
 	useEffect(() => {
 		const fetchModels = async () => {
 			try {
-				const result = await API.graphql({
+				const result = await client.graphql({
 					query: readableListModels,
-					authMode: "AMAZON_COGNITO_USER_POOLS",
 				});
 				const allModels = result.data.readableListModels.items;
 				const textModels = allModels.filter(
