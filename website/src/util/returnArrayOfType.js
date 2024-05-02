@@ -1,7 +1,7 @@
 // Copyright Amazon.com, Inc. or its affiliates. All Rights Reserved.
 // SPDX-License-Identifier: MIT-0
 
-function returnArrayOfType(allObjects, typeToReturn) {
+export function returnArrayOfType(allObjects, typeToReturn) {
     const result = [];
     allObjects.map((object) => {
         if (object.type === typeToReturn) {
