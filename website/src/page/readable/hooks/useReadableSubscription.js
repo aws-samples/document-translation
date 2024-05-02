@@ -2,7 +2,6 @@
 // SPDX-License-Identifier: MIT-0
 
 import { useState, useEffect } from "react";
-import debug from "debug";
 import { getPageJobId } from "../../../util/getPageJobId";
 import { ItemValues, ItemKeys } from "../enums";
 
@@ -29,7 +28,6 @@ export const UseReadableSubscription = (
 	setTextState,
 	setImageState
 ) => {
-	const log = debug("app:Readable:View:Subscription");
 	const [priorConnectionState] = useState({});
 
 	// UTIL
@@ -83,7 +81,6 @@ export const UseReadableSubscription = (
 
 		function handleConnectionChangesFromApi() {
 			Hub.listen("api", (data) => {
-				log("handleConnectionChangesFromApi data", data);
 				const payload = data.payload;
 				if (ifSubscriptionConnectionStateChange(payload)) {
 					fetchInitialStates();
