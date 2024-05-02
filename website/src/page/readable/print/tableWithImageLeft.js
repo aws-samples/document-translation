@@ -3,7 +3,7 @@
 
 import "@cloudscape-design/global-styles/index.css";
 import { getPresignedUrl } from "../util/getPresignedUrl";
-import { S3KeyTypes } from "./util/s3KeyTypes";
+import { S3KeyTypes } from "../../../enums";
 
 function DisplayText({ text }) {
 	const lines = text.split("\n").filter((line) => line.trim());

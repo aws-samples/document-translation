@@ -16,7 +16,7 @@ import {
 	Button,
 } from "@cloudscape-design/components";
 
-import { PrintStyles } from "../../enums";
+import { PrintStyles } from "./enums";
 import { useReactToPrint } from "react-to-print";
 import { UseReadableSubscription } from "./hooks/useReadableSubscription";
 import ReadableViewDetails from "./viewDetails";
