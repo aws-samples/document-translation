@@ -7,10 +7,14 @@ import { ItemValues, ItemKeys } from "../enums";
 
 import { orderArrayByKey } from "../../../util/orderArrayByKey";
 import { returnArrayOfType } from "../../../util/returnArrayOfType";
-import {groupItemsByParent } from  "../util/groupItemsByParent";
+import { groupItemsByParent } from "../util/groupItemsByParent";
 
-import { Hub } from 'aws-amplify/utils';
-import { generateClient,  CONNECTION_STATE_CHANGE, ConnectionState } from 'aws-amplify/api';
+import { Hub } from "aws-amplify/utils";
+import {
+	generateClient,
+	CONNECTION_STATE_CHANGE,
+	ConnectionState,
+} from "aws-amplify/api";
 const client = generateClient({ authMode: "userPool" });
 
 const features = require("../../../features.json");
@@ -60,7 +64,9 @@ export const UseReadableSubscription = (
 		const result = await fetchAllJobItems();
 		const allItems = result.data.readableGetJob.items;
 		// METADATA
-		const metatdataItem = allItems.find((item) => item.itemId === ItemValues.METADATA);
+		const metatdataItem = allItems.find(
+			(item) => item.itemId === ItemValues.METADATA
+		);
 		setMetadataState(metatdataItem);
 		// TEXT & IMAGE
 		createItemStateForType(setTextState, allItems, ItemValues.TEXT);
@@ -87,17 +93,6 @@ export const UseReadableSubscription = (
 					priorConnectionState.current = payload.data.connectionState;
 				}
 			});
-		}
-
-		function subscriptionRequest() {
-			try {
-				return client.graphql({
-					query: subscription_readableUpdateJobItem,
-					variables: { id: getPageJobId() },
-				});
-			} catch (error) {
-				console.log("Error fetching subscription:", error);
-			}
 		}
 
 		function setNewTextStateValues(newItem, possibleKeys) {
@@ -168,7 +163,6 @@ export const UseReadableSubscription = (
 		}
 
 		function handleNewDataFromSubscription(item) {
-			console.log("handleNewDataFromSubscription item", item);
 			const possibleUpdateKeysForItems = [
 				ItemKeys.UPDATEDAT,
 				ItemKeys.STATUS,
@@ -189,18 +183,16 @@ export const UseReadableSubscription = (
 			}
 		}
 
-		function createSubscription() {
-			return subscriptionRequest().subscribe({
-				next: ({ value }) => {
-					const newData = value.data.readableUpdateJobItem;
-					handleNewDataFromSubscription(newData);
-				},
-				error: (error) => {
-					error.error.errors.forEach((e) => {
-						console.error(e.message);
-					});
-				},
-			});
+		const createSubscription = async () => {
+			client
+				.graphql({
+					query: subscription_readableUpdateJobItem,
+					variables: { id: getPageJobId() },
+				})
+				.subscribe({
+					next: ({ data }) => handleNewDataFromSubscription(data.readableUpdateJobItem),
+					error: (error) => console.warn(error),
+				});
 		}
 
 		handleConnectionChangesFromApi();
