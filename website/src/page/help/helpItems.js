@@ -43,7 +43,6 @@ export default function HistoryTable() {
 				try {
 					const response = await client.graphql({
 						query: query,
-						authMode: "AMAZON_COGNITO_USER_POOLS",
 					});
 
 					data = response.data[query]?.items || null;

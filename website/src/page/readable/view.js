@@ -60,7 +60,6 @@ export default function ReadableNew() {
 		try {
 			const result = await client.graphql({
 				query: readableCreateJobItem,
-				authMode: "AMAZON_COGNITO_USER_POOLS",
 				variables: {
 					id: metadataState.id,
 					order: order,
@@ -79,7 +78,6 @@ export default function ReadableNew() {
 		try {
 			const result = await client.graphql({
 				query: readableCreateJobItem,
-				authMode: "AMAZON_COGNITO_USER_POOLS",
 				variables: {
 					id: metadataState.id,
 					order: order,
@@ -99,7 +97,6 @@ export default function ReadableNew() {
 		try {
 			client.graphql({
 				query: readableUpdateJobItem,
-				authMode: "AMAZON_COGNITO_USER_POOLS",
 				variables: payload,
 			});
 		} catch (error) {
