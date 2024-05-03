@@ -1,11 +1,11 @@
 // Copyright Amazon.com, Inc. or its affiliates. All Rights Reserved.
 // SPDX-License-Identifier: MIT-0
 
-import { useEffect } from "react";
-import { Auth } from 'aws-amplify';
+import { signOut } from 'aws-amplify/auth';
 
 export default function SignOut() {
-	useEffect(() => {
-		Auth.signOut();
-	}, []);
+	const handleSignOut = async () => {
+		await signOut();
+	}
+	handleSignOut()
 };

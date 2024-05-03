@@ -3,7 +3,7 @@
 
 import { useTranslation } from "react-i18next";
 import { useEffect, useState } from "react";
-import { API } from "aws-amplify";
+import { generateClient } from "aws-amplify/api";
 
 // CLOUDSCAPE DESIGN
 import "@cloudscape-design/global-styles/index.css";
@@ -22,16 +22,17 @@ import sortDataByKey from "../../util/sortDataByKey";
 export default function HistoryTable() {
 	const [help, updateHelps] = useState([]);
 	const { t } = useTranslation();
-
+	
 	// RUN ONCE
 	// RUN ONCE | FETCH JOBS
 	useEffect(() => {
 		async function fetchData(query, sortA, sortB, updateFunction) {
+			const client = generateClient({ authMode: "userPool" });
 			let data;
 
 			try {
 				// Attempt to load user provided local data
-				data = require("../../sampleData/helpData.json");
+				data = require("../../helpData.json");
 				console.log("Loaded local data:", data);
 			} catch (error) {
 				console.log("No local data found.");
@@ -40,9 +41,8 @@ export default function HistoryTable() {
 			if (!data) {
 				// Attempt to load user provided cloud data
 				try {
-					const response = await API.graphql({
+					const response = await client.graphql({
 						query: query,
-						authMode: "AMAZON_COGNITO_USER_POOLS",
 					});
 
 					data = response.data[query]?.items || null;
@@ -72,11 +72,6 @@ export default function HistoryTable() {
 		}
 		fetchData(listHelps, "order", "title", updateHelps);
 	}, []);
-
-	// WATCH
-	useEffect(() => {
-		console.log("Watch:", help);
-	}, [help]);
 
 	return (
 		<Cards

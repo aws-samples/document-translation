@@ -4,13 +4,15 @@
 // REACT
 import React from "react";
 import { useTranslation } from "react-i18next";
-import { API } from "aws-amplify";
 // CLOUDSCAPE DESIGN
 import "@cloudscape-design/global-styles/index.css";
 import { Header, Table, Input } from "@cloudscape-design/components";
 
 import { formatJobNameId } from "../../util/formatJobNameId";
 import { formatTimestamp } from "../../util/formatTimestamp";
+
+import { generateClient } from "aws-amplify/api";
+const client = generateClient({ authMode: "userPool" });
 
 const features = require("../../features.json");
 let readableUpdateJobMetadata = null;
@@ -24,9 +26,8 @@ export default function ReadableViewDetails(props) {
 
 	async function saveJobNameToDb() {
 		try {
-			await API.graphql({
+			await client.graphql({
 				query: readableUpdateJobMetadata,
-				authMode: "AMAZON_COGNITO_USER_POOLS",
 				variables: {
 					id: props.metadataState.id,
 					name: props.metadataState.name,

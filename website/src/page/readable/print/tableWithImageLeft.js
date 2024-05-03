@@ -1,8 +1,10 @@
 // Copyright Amazon.com, Inc. or its affiliates. All Rights Reserved.
 // SPDX-License-Identifier: MIT-0
 
+import { useState, useEffect } from "react";
 import "@cloudscape-design/global-styles/index.css";
-import { useGetPresignedUrl } from "../hooks/useGetPresignedUrl";
+import { getPresignedUrl } from "../util/getPresignedUrl";
+import { S3KeyTypes } from "../../../enums";
 
 function DisplayText({ text }) {
 	const lines = text.split("\n").filter((line) => line.trim());
@@ -17,7 +19,20 @@ function DisplayText({ text }) {
 }
 
 function SingleImage(props) {
-	const imageUrl = useGetPresignedUrl(props.imageKey);
+	const [imageUrl, setImageUrl] = useState(null);
+	useEffect(() => {
+		const asyncGetPresignedUrl = async () => {
+			const url = await getPresignedUrl({
+				key: props.imageKey,
+				keyType: S3KeyTypes.SCOPE_USER_OBJECT,
+			});
+			setImageUrl(url);
+		};
+
+		if (props.imageKey) {
+			asyncGetPresignedUrl();
+		}
+	}, [props.imageKey]);
 
 	return (
 		<td>
@@ -27,6 +42,7 @@ function SingleImage(props) {
 		</td>
 	);
 }
+
 function SingleText(props) {
 	return (
 		<td>
@@ -40,10 +56,7 @@ function SingleText(props) {
 function SingleRow(props) {
 	return (
 		<tr>
-			<SingleImage
-				key={props.key}
-				imageKey={props.imageKey}
-			/>
+			<SingleImage key={props.key} imageKey={props.imageKey} />
 			<SingleText key={props.key} text={props.text} />
 		</tr>
 	);

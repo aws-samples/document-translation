@@ -2,7 +2,9 @@
 // SPDX-License-Identifier: MIT-0
 
 import { useState, useEffect } from "react";
-import { API } from "aws-amplify";
+
+import { generateClient } from "aws-amplify/api";
+const client = generateClient({ authMode: "userPool" });
 
 const features = require("../../../features.json");
 const readableListPrintStyles = features.readable
@@ -13,24 +15,23 @@ export const UseReadablePrintStyles = () => {
 	const [printStyleOptions, setPrintStyleOptions] = useState([]);
 	const [printStyleInitial, setPrintStyleInitial] = useState({});
 	const [printStylesState, setPrintStylesState] = useState([]);
-	const [loading, setLoading] = useState(true);
-	const [error, setError] = useState(null);
+	// const [loading, setLoading] = useState(true);
+	// const [error, setError] = useState(null);
 
 	useEffect(() => {
 		const fetchPrintStyles = async () => {
 			try {
-				const result = await API.graphql({
+				const result = await client.graphql({
 					query: readableListPrintStyles,
-					authMode: "AMAZON_COGNITO_USER_POOLS",
 				});
 
 				setPrintStylesState(await result.data.readableListPrintStyles.items);
 
-				setLoading(false);
+				// setLoading(false);
 			} catch (error) {
 				console.log("Error fetching printStyles:", error);
-				setError(error);
-				setLoading(false);
+				// setError(error);
+				// setLoading(false);
 			}
 		};
 
@@ -50,8 +51,8 @@ export const UseReadablePrintStyles = () => {
 			);
 		} catch (error) {
 			console.log("Error setPrintStyleOptions:", error);
-			setError(error);
-			setLoading(false);
+			// setError(error);
+			// setLoading(false);
 		}
 	}, [printStylesState]);
 
@@ -70,11 +71,11 @@ export const UseReadablePrintStyles = () => {
 					value: printStylesState[0]?.id,
 				});
 			}
-			setLoading(false);
+			// setLoading(false);
 		} catch (error) {
 			console.log("Error setPrintStyleInitial:", error);
-			setError(error);
-			setLoading(false);
+			// setError(error);
+			// setLoading(false);
 		}
 	}, [printStylesState]);
 

@@ -4,7 +4,6 @@
 // REACT
 import { useEffect, useState } from "react";
 import { useTranslation } from "react-i18next";
-import { API, Auth, Storage } from "aws-amplify";
 
 // CLOUDSCAPE DESIGN
 import "@cloudscape-design/global-styles/index.css";
@@ -14,6 +13,11 @@ import {
 	SpaceBetween,
 	Select,
 } from "@cloudscape-design/components";
+import { getPresignedUrl } from "./util/getPresignedUrl";
+import { generateClient } from "aws-amplify/api";
+import { S3KeyTypes } from "../../enums";
+
+const client = generateClient({ authMode: "userPool" });
 
 const features = require("../../features.json");
 let readableUpdateJobItem = null;
@@ -24,7 +28,7 @@ if (features.readable) {
 
 // CONFIGURE
 // CONFIGURE | AMPLIFY
-const cfnOutputs = require("../../cfnOutputs.json");
+// const cfnOutputs = require("../../c fnOutputs.json");
 
 export default function ReadableViewEditImage(props) {
 	const { t } = useTranslation();
@@ -46,9 +50,8 @@ export default function ReadableViewEditImage(props) {
 
 	async function pushItemUpdateWithNewData(payload) {
 		try {
-			API.graphql({
+			client.graphql({
 				query: readableUpdateJobItem,
-				authMode: "AMAZON_COGNITO_USER_POOLS",
 				variables: payload,
 			});
 		} catch (error) {
@@ -68,27 +71,18 @@ export default function ReadableViewEditImage(props) {
 	}
 
 	// DOWNLOAD IMAGE
-	async function imageKeyHandler(key) {
-		try {
-			const credentials = await Auth.currentUserCredentials();
-			const userPrefix = "private/" + credentials.identityId + "/";
-			const downloadKey = key.replace(userPrefix, "");
-
-			const signedURL = await Storage.get(downloadKey, {
-				level: "private",
-				expires: 120,
-				region: cfnOutputs.awsRegion,
-				bucket: cfnOutputs.awsReadableS3Bucket,
-			});
-
-			setImageUrl(signedURL);
-		} catch (error) {
-			console.log("error: ", error);
-		}
-	}
 	useEffect(() => {
-		if (!props.item.output) return;
-		imageKeyHandler(props.item.output);
+		const asyncGetPresignedUrl = async () => {
+			const url = await getPresignedUrl({
+				key: props.item.output,
+				keyType: S3KeyTypes.SCOPE_USER_OBJECT,
+			});
+			setImageUrl(url);
+		};
+
+		if (props.item.output) {
+			asyncGetPresignedUrl();
+		}
 	}, [props.item.output]);
 
 	function returnIndexOfModelId(modelArray, modelId) {
@@ -110,11 +104,8 @@ export default function ReadableViewEditImage(props) {
 	// DISPLAY COMPONENTS
 	function displayImage() {
 		const type = props.ItemValues.IMAGE;
-
 		const models = props.modelState[type];
-
 		const defaultModelIndex = props.modelDefault[type].index;
-
 		const itemModelIndex = returnIndexOfModelId(models, props.item.modelId);
 
 		return (
@@ -124,7 +115,7 @@ export default function ReadableViewEditImage(props) {
 						<img
 							className="borderRadius generatedImage"
 							src="../../../image-placeholder.png"
-							alt={`Placeholder image`}
+							alt={`Placeholder`}
 						/>
 					)}
 					{props.item.output && (
@@ -134,7 +125,7 @@ export default function ReadableViewEditImage(props) {
 									<img
 										className="borderRadius generatedImage"
 										src={imageUrl}
-										alt={`Generated image`}
+										alt={`Generated`}
 									/>
 								</>
 							)}
