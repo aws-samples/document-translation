@@ -13,8 +13,10 @@ import {
 	SpaceBetween,
 	Select,
 } from "@cloudscape-design/components";
-import {getPresignedUrl} from "./util/getPresignedUrl";
+import { getPresignedUrl } from "./util/getPresignedUrl";
 import { generateClient } from "aws-amplify/api";
+import { S3KeyTypes } from "../../enums";
+
 const client = generateClient({ authMode: "userPool" });
 
 const features = require("../../features.json");
@@ -69,17 +71,18 @@ export default function ReadableViewEditImage(props) {
 	}
 
 	// DOWNLOAD IMAGE
-	async function imageKeyHandler(key) {
-		try {
-			const signedUrl = await getPresignedUrl(key)
-			setImageUrl(signedUrl);
-		} catch (error) {
-			console.log("error: ", error);
-		}
-	}
 	useEffect(() => {
-		if (!props.item.output) return;
-		imageKeyHandler(props.item.output);
+		const asyncGetPresignedUrl = async () => {
+			const url = await getPresignedUrl({
+				key: props.item.output,
+				keyType: S3KeyTypes.SCOPE_USER_OBJECT,
+			});
+			setImageUrl(url);
+		};
+
+		if (props.item.output) {
+			asyncGetPresignedUrl();
+		}
 	}, [props.item.output]);
 
 	function returnIndexOfModelId(modelArray, modelId) {
@@ -101,11 +104,8 @@ export default function ReadableViewEditImage(props) {
 	// DISPLAY COMPONENTS
 	function displayImage() {
 		const type = props.ItemValues.IMAGE;
-
 		const models = props.modelState[type];
-
 		const defaultModelIndex = props.modelDefault[type].index;
-
 		const itemModelIndex = returnIndexOfModelId(models, props.item.modelId);
 
 		return (
