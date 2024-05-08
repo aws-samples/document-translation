@@ -1,7 +1,7 @@
 // Copyright Amazon.com, Inc. or its affiliates. All Rights Reserved.
 // SPDX-License-Identifier: MIT-0
-import { generateClient } from "aws-amplify/api";
-import { fetchAuthSession } from "aws-amplify/auth";
+import { generateClient } from "@aws-amplify/api";
+import { fetchAuthSession } from "@aws-amplify/auth";
 
 const features = require("../features.json");
 let readableCreateJob = null;

@@ -1,8 +1,8 @@
 // Copyright Amazon.com, Inc. or its affiliates. All Rights Reserved.
 // SPDX-License-Identifier: MIT-0
 
-export function getPrintStyle() {
+export function getPageJobId() {
 	const queryParameters = new URLSearchParams(window.location.search);
-	const printStyle = queryParameters.get("printStyle");
-	return printStyle;
+	const jobId = queryParameters.get("jobId");
+	return jobId;
 }
