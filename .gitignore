@@ -25,6 +25,9 @@ schema.graphql
 mutations.js
 queries.js
 subscriptions.js
+mutations.ts
+queries.ts
+subscriptions.ts
 
 # REACT
 build/

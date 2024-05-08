@@ -5,13 +5,13 @@ projects:
   Codegen Project:
     schemaPath: schema.graphql
     includes:
-      - ./**/*.js
+      - ./**/*.ts
     excludes:
       - ./amplify/**
     extensions:
       amplify:
-        codeGenTarget: javascript
-        generatedFileName: ''
+        codeGenTarget: typescript
+        generatedFileName: ""
         apiId: null
         frontend: javascript
         framework: react
