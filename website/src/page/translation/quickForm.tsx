@@ -80,6 +80,7 @@ export default function QuickForm() {
 									formAction="none"
 									variant="link"
 									onClick={(e) => navigate("/translation/history")}
+									disabled={translationTextInput.length === 0}
 								>
 									{t("generic_cancel")}
 								</Button>
