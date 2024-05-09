@@ -2,6 +2,8 @@
 	"generic_cancel": "Peruuta",
 	"generic_create_new": "Luo uusi",
 	"generic_created": "Luotu",
+	"generic_copy": "Kopioi",
+	"generic_copied": "Kopioitu",
 	"generic_updated": "Päivitetty",
 	"generic_details": "Yksityiskohdat",
 	"generic_download": "Lataa",

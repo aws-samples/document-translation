@@ -2,6 +2,8 @@
 	"generic_cancel": "취소",
 	"generic_create_new": "새로 만들었대용",
 	"generic_created": "창조했대용",
+	"generic_copy": "복사",
+	"generic_copied": "복사했어두",
 	"generic_updated": "업데이트했어용",
 	"generic_details": "세부 정보",
 	"generic_download": "다운로드",

@@ -2,6 +2,8 @@
 	"generic_cancel": "İptal",
 	"generic_create_new": "Yeni Oluştur",
 	"generic_created": "Oluşturuldu",
+	"generic_copy": "Kopyalama",
+	"generic_copied": "Kopyalandı",
 	"generic_updated": "Güncellendi",
 	"generic_details": "Ayrıntılar",
 	"generic_download": "İndir",

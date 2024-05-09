@@ -2,6 +2,8 @@
 	"generic_cancel": "Cancel",
 	"generic_create_new": "Create New",
 	"generic_created": "Created",
+	"generic_copy": "Copy",
+	"generic_copied": "Copied",
 	"generic_updated": "Updated",
 	"generic_details": "Details",
 	"generic_download": "Download",

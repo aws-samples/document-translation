@@ -2,6 +2,8 @@
 	"generic_cancel": "キャンセルします",
 	"generic_create_new": "新規作成",
 	"generic_created": "作成しました",
+	"generic_copy": "コピーします",
+	"generic_copied": "コピーしました",
 	"generic_updated": "更新しました",
 	"generic_details": "詳細",
 	"generic_download": "ダウンロードしてください",

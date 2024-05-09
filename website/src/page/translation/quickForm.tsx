@@ -2,6 +2,8 @@
 // SPDX-License-Identifier: MIT-0
 import "@cloudscape-design/global-styles/index.css";
 
+
+
 import React, { useState } from "react";
 import { useTranslation } from "react-i18next";
 import { FcFinePrint } from "react-icons/fc";
@@ -18,10 +20,16 @@ import {
 	SpaceBetween,
 	Textarea,
 } from "@cloudscape-design/components";
+import CopyToClipboard from "@cloudscape-design/components/copy-to-clipboard";
+
+
 
 import { Predictions } from "@aws-amplify/predictions";
 
+
+
 import { amplifyConfigureAppend } from "../../util/amplifyConfigure";
+
 
 const cfnOutputs = require("../../cfnOutputs.json");
 interface Item {
@@ -84,6 +92,12 @@ export default function QuickForm() {
 								>
 									{t("generic_cancel")}
 								</Button>
+								<CopyToClipboard
+									copyButtonText={t("generic_copy")}
+									copyErrorText={t("generic_tag_error")}
+									copySuccessText={t("generic_copied")}
+									textToCopy={translationTextOutput}
+								/>
 								<Button variant="primary" onClick={submit}>
 									{t("generic_submit")}
 								</Button>
@@ -126,6 +140,8 @@ export default function QuickForm() {
 													readOnly
 													rows={16}
 													value={translationTextOutput}
+													autoComplete={false}
+													spellcheck={false}
 												/>
 											</SpaceBetween>
 										</FormField>

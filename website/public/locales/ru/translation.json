@@ -2,6 +2,8 @@
 	"generic_cancel": "Отменить",
 	"generic_create_new": "Создать новое",
 	"generic_created": "Создан",
+	"generic_copy": "Копировать",
+	"generic_copied": "Скопировано",
 	"generic_updated": "Обновлено",
 	"generic_details": "Подробности",
 	"generic_download": "Загрузить",
