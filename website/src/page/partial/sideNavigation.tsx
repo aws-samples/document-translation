@@ -4,9 +4,14 @@ import React from "react";
 import { useTranslation } from "react-i18next";
 import { useNavigate } from "react-router-dom";
 
+
+
 import { SideNavigation } from "@cloudscape-design/components";
 
+
+
 import { CreateJob as ReadableCreateJob } from "../../util/readableCreateJob";
+
 
 const features = require("../../features.json");
 
@@ -32,7 +37,7 @@ export default function Navigation() {
 				},
 				{
 					type: "link",
-					text: t("generic_create_quick"),
+					text: t("translation_quick_text"),
 					href: "/translation/quick",
 				},
 			],
