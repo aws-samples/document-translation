@@ -138,6 +138,43 @@ export class dt_translate extends Construct {
 			true,
 		);
 
+		// INFRA | QUICK TEXT TRANSLATION ROLE
+		const policyAuthenticatedPermitQuickTextTranslation = new iam.Policy(
+			this,
+			"policyAuthenticatedPermitQuickTextTranslation",
+			{
+				policyName: "Translate-Text-Comprehend-Detect-Dominate",
+				statements: [
+					new iam.PolicyStatement({
+						// ASM-IAM // ASM-COG7
+						actions: [
+							"translate:TranslateText",
+							"comprehend:DetectDominantLanguage",
+						],
+						resources: ["*"],
+					}),
+				],
+			},
+		);
+		props.identityPool.authenticatedRole.attachInlinePolicy(
+			policyAuthenticatedPermitQuickTextTranslation,
+		);
+		NagSuppressions.addResourceSuppressions(
+			policyAuthenticatedPermitQuickTextTranslation,
+			[
+				{
+					id: "AwsSolutions-IAM5",
+					reason: "Action does not apply to a resource. Restricted by action.",
+					appliesTo: [
+						"Action::translate:TranslateText",
+						"Action::comprehend:DetectDominantLanguage",
+						"Resource::*",
+					],
+				},
+			],
+			true,
+		);
+
 		// INFRA | DYNAMODB
 		// INFRA | DYNAMODB | JOBS
 		this.jobTable = new dynamodb.Table(this, "jobTable", {
@@ -357,10 +394,9 @@ export class dt_translate extends Construct {
 
 		NagSuppressions.addResourceSuppressionsByPath(
 			cdk.Stack.of(this),
-			`/${
-				cdk.Stack.of(this).node.findChild(
-					"LogRetentionaae0aa3c5b4d4f87b02d85b201efdd8a",
-				).node.path
+			`/${cdk.Stack.of(this).node.findChild(
+				"LogRetentionaae0aa3c5b4d4f87b02d85b201efdd8a",
+			).node.path
 			}/ServiceRole/Resource`,
 			[
 				{
@@ -373,10 +409,9 @@ export class dt_translate extends Construct {
 		);
 		NagSuppressions.addResourceSuppressionsByPath(
 			cdk.Stack.of(this),
-			`/${
-				cdk.Stack.of(this).node.findChild(
-					"LogRetentionaae0aa3c5b4d4f87b02d85b201efdd8a",
-				).node.path
+			`/${cdk.Stack.of(this).node.findChild(
+				"LogRetentionaae0aa3c5b4d4f87b02d85b201efdd8a",
+			).node.path
 			}/ServiceRole/DefaultPolicy/Resource`,
 			[
 				{

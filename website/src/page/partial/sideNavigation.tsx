@@ -30,6 +30,11 @@ export default function Navigation() {
 					text: t("generic_create_new"),
 					href: "/translation/new",
 				},
+				{
+					type: "link",
+					text: t("generic_create_quick"),
+					href: "/translation/quick",
+				},
 			],
 		});
 	}

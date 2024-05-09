@@ -11,6 +11,7 @@ import ReadablePrint from "./page/readable/print";
 import ReadableView from "./page/readable/view";
 import TranslationHistory from "./page/translation/history";
 import TranslationNew from "./page/translation/new";
+import TranslationQuick from "./page/translation/quick";
 
 const features = require("./features.json");
 
@@ -26,6 +27,7 @@ export default function AppRoutes() {
 						element={<TranslationHistory />}
 					/>
 					<Route path="/translation/new/" element={<TranslationNew />} />
+					<Route path="/translation/quick/" element={<TranslationQuick />} />
 				</>
 			)}
 			{!features.translation && features.readable && (
