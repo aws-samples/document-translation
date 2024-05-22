@@ -9,9 +9,11 @@ import {
 	aws_iam as iam,
 	aws_dynamodb as dynamodb,
 	aws_s3 as s3,
-	aws_s3_notifications as s3n,
+	// aws_s3_notifications as s3n,
 	aws_stepfunctions as sfn,
 	aws_stepfunctions_tasks as tasks,
+	aws_events as events,
+	aws_events_targets as targets,
 } from "aws-cdk-lib";
 import { dt_lambda } from "../../components/lambda";
 import { dt_stepfunction } from "../../components/stepfunction";
@@ -30,12 +32,6 @@ export class dt_translationLifecycle extends Construct {
 		// EVENT HANDLER
 		// EVENT HANDLER | STEP FUNCTION
 		// EVENT HANDLER | STEP FUNCTION | TASKS
-		// EVENT HANDLER | STEP FUNCTION | TASKS | loopObjects
-		const loopObjects = new sfn.Map(this, "loopObjects", {
-			resultPath: "$.loopObjects",
-			itemsPath: sfn.JsonPath.stringAt("$.Records"),
-		});
-
 		// EVENT HANDLER | STEP FUNCTION | TASKS | parseS3Key
 		// EVENT HANDLER | STEP FUNCTION | TASKS | parseS3Key | ROLE
 		const parseS3KeyRole = new iam.Role(this, "parseS3KeyRole", {
@@ -80,7 +76,7 @@ export class dt_translationLifecycle extends Construct {
 			{
 				nameSuffix: "TranslationLifecycle",
 				removalPolicy: props.removalPolicy,
-				definition: loopObjects.iterator(parseS3Key.next(updateDbStatus)),
+				definition: parseS3Key.next(updateDbStatus),
 			},
 		);
 		NagSuppressions.addResourceSuppressions(
@@ -94,128 +90,24 @@ export class dt_translationLifecycle extends Construct {
 			true,
 		);
 
-		// EVENT PASS
-		// EVENT PASS | LAMBDA
-		// EVENT PASS | LAMBDA | ROLE
-		const lambdaPassEventToStepFunctionRole = new iam.Role(
-			this,
-			"lambdaPassEventToStepFunctionRole",
-			{
-				// ASM-L6 // ASM-L8
-				assumedBy: new iam.ServicePrincipal("lambda.amazonaws.com"),
-				description: "Lambda Role (Pass Event to StepFunction)",
-			},
-		);
-		// EVENT PASS | LAMBDA | FUNCTION
-		const lambdaPassS3LifecycleToStepFunctionError = new dt_lambda(
-			this,
-			"lambdaPassS3LifecycleToStepFunctionError",
-			{
-				role: lambdaPassEventToStepFunctionRole,
-				path: "lambda/passEventToStepFunction",
-				description: "Pass Event to StepFunction",
-				environment: {
-					stateMachineArn: sfnMain.StateMachine.stateMachineArn,
+		// EVENT
+		const onDeleteObjectRule = new events.Rule(this, "onDeleteObjectRule", {
+			description: "dt_translationLifecycle onDeleteObjectRule",
+		});
+		onDeleteObjectRule.addEventPattern({
+			source: ["aws.s3"],
+			detailType: ["Object Deleted"],
+			detail: {
+				bucket: {
+					name: [props.contentBucket.bucketName],
+				},
+				object: {
+					key: [{ prefix: "private/" }],
 				},
 			},
-		);
-
-		// EVENT SOURCE
-		// EVENT SOURCE | BUCKET NOTIFICATIONS
-		// EVENT SOURCE | BUCKET NOTIFICATIONS | ADMIN DELETE
-		props.contentBucket.addEventNotification(
-			s3.EventType.OBJECT_REMOVED,
-			new s3n.LambdaDestination(
-				lambdaPassS3LifecycleToStepFunctionError.lambdaFunction,
-			),
-		);
-		NagSuppressions.addResourceSuppressionsByPath(
-			cdk.Stack.of(this),
-			`/${
-				cdk.Stack.of(this).node.findChild(
-					"BucketNotificationsHandler050a0587b7544547bf325f094a3db834",
-				).node.path
-			}/Role/Resource`,
-			[
-				{
-					id: "AwsSolutions-IAM4",
-					reason: "CDK managed policy without override option.",
-				},
-			],
-			true,
-		);
-		NagSuppressions.addResourceSuppressionsByPath(
-			cdk.Stack.of(this),
-			`/${
-				cdk.Stack.of(this).node.findChild(
-					"BucketNotificationsHandler050a0587b7544547bf325f094a3db834",
-				).node.path
-			}/Role/DefaultPolicy/Resource`,
-			[
-				{
-					id: "AwsSolutions-IAM5",
-					reason: "CDK managed policy without override option.",
-				},
-			],
-			true,
-		);
-		// EVENT SOURCE | BUCKET NOTIFICATIONS | LIFECYCLE DELETE
-		props.contentBucket.addEventNotification(
-			s3.EventType.LIFECYCLE_EXPIRATION,
-			new s3n.LambdaDestination(
-				lambdaPassS3LifecycleToStepFunctionError.lambdaFunction,
-			),
-		);
-		NagSuppressions.addResourceSuppressionsByPath(
-			cdk.Stack.of(this),
-			`/${
-				cdk.Stack.of(this).node.findChild(
-					"BucketNotificationsHandler050a0587b7544547bf325f094a3db834",
-				).node.path
-			}/Role/Resource`,
-			[
-				{
-					id: "AwsSolutions-IAM4",
-					reason: "CDK managed policy without override option.",
-				},
-			],
-			true,
-		);
-		NagSuppressions.addResourceSuppressionsByPath(
-			cdk.Stack.of(this),
-			`/${
-				cdk.Stack.of(this).node.findChild(
-					"BucketNotificationsHandler050a0587b7544547bf325f094a3db834",
-				).node.path
-			}/Role/DefaultPolicy/Resource`,
-			[
-				{
-					id: "AwsSolutions-IAM5",
-					reason: "CDK managed policy without override option.",
-				},
-			],
-			true,
-		);
-
-		// PERMISSIONS
-		// PERMISSIONS | EVENT PASS | LAMBDA | POLICY
-		const permitStartExecutionOfStepFunction = new iam.Policy(
-			this,
-			"permitStartExecutionOfStepFunction",
-			{
-				policyName: "Start-Sfn-TranslationMain",
-				statements: [
-					new iam.PolicyStatement({
-						// ASM-IAM
-						actions: ["states:StartExecution"],
-						resources: [sfnMain.StateMachine.stateMachineArn],
-					}),
-				],
-			},
-		);
-		lambdaPassEventToStepFunctionRole?.attachInlinePolicy(
-			permitStartExecutionOfStepFunction,
-		);
+		});
+		onDeleteObjectRule.addTarget(new targets.SfnStateMachine(sfnMain.StateMachine));
+		props.contentBucket.enableEventBridgeNotification();
 
 		// END
 	}
