@@ -17,6 +17,7 @@ import {
 } from "aws-cdk-lib";
 import { dt_lambda } from "../../components/lambda";
 import { dt_stepfunction } from "../../components/stepfunction";
+import { dt_parseS3Key } from "./parseS3Key";
 
 export interface props {
 	namedStrings: { [key: string]: string };
@@ -32,25 +33,17 @@ export class dt_translationLifecycle extends Construct {
 		// EVENT HANDLER
 		// EVENT HANDLER | STEP FUNCTION
 		// EVENT HANDLER | STEP FUNCTION | TASKS
-		// EVENT HANDLER | STEP FUNCTION | TASKS | parseS3Key
-		// EVENT HANDLER | STEP FUNCTION | TASKS | parseS3Key | ROLE
-		const parseS3KeyRole = new iam.Role(this, "parseS3KeyRole", {
-			// ASM-L6 // ASM-L8
-			assumedBy: new iam.ServicePrincipal("lambda.amazonaws.com"),
-			description: "Lambda Role (Parse S3 Key)",
-		});
-		// EVENT HANDLER | STEP FUNCTION | TASKS | parseS3Key | FUNCTION
-		const lambdaParseS3Key = new dt_lambda(this, "lambdaParseS3Key", {
-			role: parseS3KeyRole,
-			path: "lambda/parseS3Key",
-			description: "Parse S3 Key",
-		});
 		// EVENT HANDLER | STEP FUNCTION | TASKS | parseS3Key | TASK
-		const parseS3Key = new tasks.LambdaInvoke(this, "parseS3Key", {
-			lambdaFunction: lambdaParseS3Key.lambdaFunction,
-			resultSelector: {
-				"parseS3Key.$": "$.Payload",
-			},
+		const parseS3KeySfn = new dt_parseS3Key(this, "parseS3KeySfn", {
+			removalPolicy: props.removalPolicy,
+		})
+		const parseS3Key = new tasks.StepFunctionsStartExecution(this, "parseS3Key", {
+			resultPath: "$.parseS3Key",
+			stateMachine: parseS3KeySfn.sfnMain,
+			integrationPattern: sfn.IntegrationPattern.RUN_JOB,
+			input: sfn.TaskInput.fromObject({
+				key: sfn.JsonPath.stringAt("$.detail.object.key")
+			}),
 		});
 
 		// EVENT HANDLER | STEP FUNCTION | TASKS | updateDbStatus
@@ -58,7 +51,7 @@ export class dt_translationLifecycle extends Construct {
 			table: props.jobTable,
 			key: {
 				id: tasks.DynamoAttributeValue.fromString(
-					sfn.JsonPath.stringAt("$.parseS3Key.jobId"),
+					sfn.JsonPath.stringAt("$.parseS3Key.jobId.value"),
 				),
 			},
 			updateExpression:
