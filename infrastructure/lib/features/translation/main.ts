@@ -3,6 +3,7 @@
 
 import { Construct } from "constructs";
 import * as cdk from "aws-cdk-lib";
+import { aws_pipes as pipes } from 'aws-cdk-lib';
 import { NagSuppressions } from "cdk-nag";
 
 import {
@@ -12,7 +13,6 @@ import {
 	aws_stepfunctions_tasks as tasks,
 } from "aws-cdk-lib";
 import { dt_stepfunction } from "../../components/stepfunction";
-import { aws_pipes as pipes } from 'aws-cdk-lib';
 
 export interface props {
 	namedStrings: { [key: string]: string };
