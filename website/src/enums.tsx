@@ -7,3 +7,10 @@ export const S3KeyTypes: Record<string, string> = {
 export const S3Scopes: Record<string, string> = {
 	PRIVATE: "private",
 };
+
+export const VisualModes = {
+	AUTO: "auto",
+	LIGHT: "light",
+	DARK: "dark",
+};
+export type VisualMode = (typeof VisualModes)[keyof typeof VisualModes];
