@@ -4,9 +4,9 @@
 
 This folder holds all the source files related to the app backend. The configuration is modelled in the Cloud Development Kit (CDK) in Typescript. 
 
-Both the CICD pipeline and app are defined here. They can be udpated independently for development (E.g. if working on app there is no need to update pipeline and wait for that to complete).
+Both the CI/CD pipeline and app are defined here. They can be udpated independently for development (e.g. if working on the app, there is no need to update pipeline as well and wait for that to complete).
 
-## Pipleine Development
+## Pipeline Development
 
 ### Pipeline Prerequisites
 
@@ -49,7 +49,7 @@ cdk deploy
 
 ## App Development
 
-The app template is a child of the pipeline template. With CDK we can target the specific child template we want to manipulate so that we can focus our efforts. This will deploy app changes directly to CloudFormation without going via Git/CodePipeline. This will create a diff between what is in Git/CodePipeline and what is in CloudFormation. Only use this for development/testing of changes which are not ready to be committed yet. 
+The app template is a child of the pipeline template. With CDK we can target the specific child template we want to manipulate so that we can focus our efforts on that specifically. This will deploy app changes directly to CloudFormation without going via Git/CodePipeline. However, this will create a diff between what is in Git/CodePipeline and what is in CloudFormation. So only use this for development/testing of changes which are not yet ready to be committed.
 
 ### App Prerequisites
 
@@ -60,9 +60,9 @@ The app template is a child of the pipeline template. With CDK we can target the
 ```sh
 echo "Deployment DocTran-${sourceGitBranch}"
 # Synthesise CDK TS to CloudFormation
-cdk synth  "DocTran-${sourceGitBranch}-pipeline/DocTran-appStack/DocTran-${sourceGitBranch}-app" -a 'npx ts-node ./bin/doctran.ts'
+cdk synth "DocTran-${sourceGitBranch}-pipeline/DocTran-appStack/DocTran-${sourceGitBranch}-app" -a 'npx ts-node ./bin/doctran.ts'
 # Show a diff of changes
-cdk diff   "DocTran-${sourceGitBranch}-pipeline/DocTran-appStack/DocTran-${sourceGitBranch}-app" -a 'npx ts-node ./bin/doctran.ts'
+cdk diff "DocTran-${sourceGitBranch}-pipeline/DocTran-appStack/DocTran-${sourceGitBranch}-app" -a 'npx ts-node ./bin/doctran.ts'
 # Deploy changes (performs synth & deploy)
 cdk deploy "DocTran-${sourceGitBranch}-pipeline/DocTran-appStack/DocTran-${sourceGitBranch}-app" -a 'npx ts-node ./bin/doctran.ts'
 ```
