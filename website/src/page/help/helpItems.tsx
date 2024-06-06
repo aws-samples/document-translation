@@ -23,6 +23,7 @@ interface Item {
 export default function HistoryTable() {
 	const [help, updateHelps] = useState([]);
 	const { t } = useTranslation();
+	const [loading, setLoading] = useState<boolean>(true);
 
 	// RUN ONCE
 	// RUN ONCE | FETCH JOBS
@@ -74,6 +75,7 @@ export default function HistoryTable() {
 				// Local or cloud data found
 				const dataSorted = sortDataByKey(sortA, sortB, data);
 				updateFunction(dataSorted);
+				setLoading(false);
 			} else {
 				console.log("Unable to load any help data");
 			}
@@ -98,6 +100,7 @@ export default function HistoryTable() {
 			}}
 			items={help}
 			loadingText={t("generic_loading")}
+			loading={loading}
 			empty={
 				<Box margin={{ vertical: "xs" }} textAlign="center" color="inherit">
 					<SpaceBetween size="m">
