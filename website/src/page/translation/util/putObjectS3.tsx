@@ -2,8 +2,6 @@
 // SPDX-License-Identifier: MIT-0
 import { uploadData } from "@aws-amplify/storage";
 
-
-
 import { configureS3Bucket } from "../../../util/configureS3Bucket";
 import { prepareS3Key } from "../../../util/prepareS3Key";
 

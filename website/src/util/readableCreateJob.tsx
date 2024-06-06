@@ -3,7 +3,6 @@
 import { generateClient } from "@aws-amplify/api";
 import { fetchAuthSession } from "@aws-amplify/auth";
 
-
 const features = require("../features.json");
 let readableCreateJob: string | null = null;
 if (features.readable) {
