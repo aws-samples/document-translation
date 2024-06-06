@@ -34,6 +34,7 @@ export class dt_translationErrors extends Construct {
 			this,
 			"onSfnExecutionStateNotSuccess",
 			{
+				description: "dt_translationErrors onSfnExecutionStateNotSuccess",
 				eventPattern: {
 					source: ["aws.states"],
 					detail: {

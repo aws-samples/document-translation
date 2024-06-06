@@ -116,8 +116,7 @@ export class dt_translationPii extends Construct {
 					},
 				},
 				iamResources: [
-					`arn:aws:macie2:${cdk.Stack.of(this).region}:${
-						cdk.Stack.of(this).account
+					`arn:aws:macie2:${cdk.Stack.of(this).region}:${cdk.Stack.of(this).account
 					}:classification-job/*`,
 				],
 			},
@@ -178,8 +177,7 @@ export class dt_translationPii extends Construct {
 					},
 				},
 				iamResources: [
-					`arn:aws:macie2:${cdk.Stack.of(this).region}:${
-						cdk.Stack.of(this).account
+					`arn:aws:macie2:${cdk.Stack.of(this).region}:${cdk.Stack.of(this).account
 					}:*`,
 				],
 			},
@@ -338,6 +336,7 @@ export class dt_translationPii extends Construct {
 		).sfnMain;
 
 		new events.Rule(this, "onSfnExecutionStateNotSuccess", {
+			description: "dt_translationPii onSfnExecutionStateNotSuccess",
 			eventPattern: {
 				source: ["aws.states"],
 				detail: {
