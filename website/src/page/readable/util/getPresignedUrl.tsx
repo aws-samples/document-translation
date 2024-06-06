@@ -4,20 +4,21 @@ import { getUrl } from "@aws-amplify/storage";
 
 import { prepareS3Key } from "../../../util/prepareS3Key";
 
+import { S3KeyTypes } from "../../../enums";
 import { configureS3Bucket } from "./configureS3Bucket";
 
-// import { S3KeyTypes } from "../../../enums";
+interface Props {
+	key: string;
+	keyType: typeof S3KeyTypes.Record;
+}
 
-// interface Params {
-// 	key: String;
-//  keyType: S3KeyTypes;
-// }
-
-export async function getPresignedUrl(params) {
+export async function getPresignedUrl(props: Props) {
 	const key = await prepareS3Key({
-		key: params.key,
-		keyType: params.keyType,
+		key: props.key,
+		keyType: props.keyType,
 	});
+
+	if (!key) return;
 
 	try {
 		configureS3Bucket();
