@@ -9,27 +9,16 @@ import { useTranslation } from "react-i18next";
 import { FcFinePrint } from "react-icons/fc";
 import { useNavigate } from "react-router-dom";
 
-import {
-	Button,
-	Container,
-	Form,
-	FormField,
-	Grid,
-	Header,
-	Select,
-	SpaceBetween,
-	Textarea,
-} from "@cloudscape-design/components";
+
+
+import { Button, Container, Form, FormField, Grid, Header, Select, SpaceBetween, Textarea } from "@cloudscape-design/components";
 import CopyToClipboard from "@cloudscape-design/components/copy-to-clipboard";
 
 
 
 import { Predictions } from "@aws-amplify/predictions";
 
-
-
 import { amplifyConfigureAppend } from "../../util/amplifyConfigure";
-
 
 const cfnOutputs = require("../../cfnOutputs.json");
 interface Item {
@@ -45,6 +34,7 @@ export default function QuickForm() {
 	const [selectedTarget, updateSelectedTarget] = useState<Item>(targets[0]);
 	const navigate = useNavigate();
 	const { t } = useTranslation();
+	const [loading, setLoading] = useState<boolean>(false);
 
 	function onChangeLanguageSource(selected: Item) {
 		console.log(selected);
@@ -64,6 +54,7 @@ export default function QuickForm() {
 
 	const submit = () => {
 		if (translationTextInput.length === 0) return;
+		setLoading(true);
 		Predictions.convert({
 			translateText: {
 				source: {
@@ -73,7 +64,11 @@ export default function QuickForm() {
 				targetLanguage: selectedTarget.value,
 			},
 		})
-			.then((result) => setTranslationTextOutput(result.text))
+			.then((result) => {
+				setTranslationTextOutput(result.text);
+				setLoading(false);
+			})
+
 			.catch((err) => console.log({ err }));
 	};
 
@@ -98,7 +93,12 @@ export default function QuickForm() {
 									copySuccessText={t("generic_copied")}
 									textToCopy={translationTextOutput}
 								/>
-								<Button variant="primary" onClick={submit}>
+								<Button
+									variant="primary"
+									onClick={submit}
+									loadingText={t("generic_loading")}
+									loading={loading}
+								>
 									{t("generic_submit")}
 								</Button>
 							</SpaceBetween>
