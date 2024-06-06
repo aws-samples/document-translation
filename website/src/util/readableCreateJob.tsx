@@ -3,8 +3,9 @@
 import { generateClient } from "@aws-amplify/api";
 import { fetchAuthSession } from "@aws-amplify/auth";
 
+
 const features = require("../features.json");
-let readableCreateJob = null;
+let readableCreateJob: string | null = null;
 if (features.readable) {
 	readableCreateJob = require("../graphql/mutations").readableCreateJob;
 }
@@ -13,15 +14,17 @@ export async function CreateJob() {
 	const client = generateClient({ authMode: "userPool" });
 
 	try {
-		const authSession = await fetchAuthSession();
-		const response = await client.graphql({
-			query: readableCreateJob,
-			variables: {
-				identity: authSession.identityId,
-			},
-		});
+		if (readableCreateJob) {
+			const authSession = await fetchAuthSession();
+			const response = await client.graphql({
+				query: readableCreateJob,
+				variables: {
+					identity: authSession.identityId,
+				},
+			});
 
-		return await response.data.readableCreateJob.id;
+			return await response.data.readableCreateJob.id;
+		}
 	} catch (error) {
 		throw error;
 	}
