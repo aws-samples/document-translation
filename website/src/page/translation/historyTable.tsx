@@ -47,7 +47,7 @@ export default function HistoryTable() {
 		},
 	};
 	amplifyConfigureAppend(storageConfig);
-	const jobs = useTranslationJobs();
+	const {jobs, loading} = useTranslationJobs();
 	const { t } = useTranslation();
 	const navigate = useNavigate();
 
@@ -171,7 +171,8 @@ export default function HistoryTable() {
 			]}
 			stickyColumns={{ first: 0, last: 1 }}
 			items={jobs}
-			loadingText="Loading jobs"
+			loadingText={t("generic_loading")}
+			loading={loading}
 			trackBy="id"
 			empty={
 				<Box margin={{ vertical: "xs" }} textAlign="center" color="inherit">
