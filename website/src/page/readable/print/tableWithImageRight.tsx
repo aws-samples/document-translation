@@ -2,11 +2,18 @@
 // SPDX-License-Identifier: MIT-0
 import "@cloudscape-design/global-styles/index.css";
 
+
+
 import { useEffect, useState } from "react";
 
-import { getPresignedUrl } from "../util/getPresignedUrl";
+
+
+import { getPresignedUrl } from "../../../util/getPresignedUrl";
+
+
 
 import { S3KeyTypes } from "../../../enums";
+
 
 function DisplayText({ text }) {
 	const lines = text.split("\n").filter((line) => line.trim());
@@ -27,6 +34,7 @@ function SingleImage(props) {
 			const url = await getPresignedUrl({
 				key: props.imageKey,
 				keyType: S3KeyTypes.SCOPE_USER_OBJECT,
+				bucketKey: "awsReadableS3Bucket",
 			});
 			setImageUrl(url);
 		};

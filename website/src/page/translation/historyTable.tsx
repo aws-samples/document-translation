@@ -21,7 +21,7 @@ import { useTranslationJobs } from "./hooks/useTranslationJobs";
 import { amplifyConfigureAppend } from "../../util/amplifyConfigure";
 import { formatJobNameId } from "../../util/formatJobNameId";
 import { formatTimestamp } from "../../util/formatTimestamp";
-import { getPresignedUrl } from "./util/getPresignedUrl";
+import { getPresignedUrl } from "../../util/getPresignedUrl";
 
 import { S3KeyTypes } from "../../enums";
 
@@ -47,7 +47,7 @@ export default function HistoryTable() {
 		},
 	};
 	amplifyConfigureAppend(storageConfig);
-	const {jobs, loading} = useTranslationJobs();
+	const { jobs, loading } = useTranslationJobs();
 	const { t } = useTranslation();
 	const navigate = useNavigate();
 
@@ -131,6 +131,7 @@ export default function HistoryTable() {
 				const presignedUrl = await getPresignedUrl({
 					key: keys[i],
 					keyType: S3KeyTypes.SCOPE_USER_OBJECT,
+					bucketKey: "awsUserFilesS3Bucket",
 				});
 				window.open(presignedUrl, "_blank", "noopener,noreferrer");
 			}

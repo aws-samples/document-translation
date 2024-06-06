@@ -2,11 +2,12 @@
 // SPDX-License-Identifier: MIT-0
 import { uploadData } from "@aws-amplify/storage";
 
+
+
+import { configureS3Bucket } from "../../../util/configureS3Bucket";
 import { prepareS3Key } from "../../../util/prepareS3Key";
 
 import { S3KeyTypes } from "../../../enums";
-import { configureS3Bucket } from "./configureS3Bucket";
-
 
 interface Props {
 	key: string;
@@ -21,7 +22,7 @@ export async function putObjectS3(props: Props) {
 	});
 
 	try {
-		configureS3Bucket();
+		configureS3Bucket("awsUserFilesS3Bucket");
 		if (key) {
 			const result = await uploadData({
 				path: key,

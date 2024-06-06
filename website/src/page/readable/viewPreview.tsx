@@ -6,7 +6,7 @@ import { useEffect, useState } from "react";
 
 import { Box, Grid } from "@cloudscape-design/components";
 
-import { getPresignedUrl } from "./util/getPresignedUrl";
+import { getPresignedUrl } from "../../util/getPresignedUrl";
 
 import { S3KeyTypes } from "../../enums";
 
@@ -18,6 +18,7 @@ export default function ReadableViewPreview(props) {
 			const url = await getPresignedUrl({
 				key: props.image.output,
 				keyType: S3KeyTypes.SCOPE_USER_OBJECT,
+				bucketKey: "awsReadableS3Bucket",
 			});
 			setImageUrl(url);
 		};
