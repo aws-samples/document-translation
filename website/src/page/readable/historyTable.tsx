@@ -21,7 +21,7 @@ import { formatTimestamp } from "../../util/formatTimestamp";
 import { CreateJob } from "../../util/readableCreateJob";
 
 export default function HistoryTable() {
-	const jobs = useReadableJobs();
+	const {jobs, loading} = useReadableJobs();
 	const { t } = useTranslation();
 	const navigate = useNavigate();
 
@@ -63,7 +63,8 @@ export default function HistoryTable() {
 				},
 			]}
 			items={jobs}
-			loadingText="Loading jobs"
+			loadingText={t("generic_loading")}
+			loading={loading}
 			trackBy="id"
 			empty={
 				<Box margin={{ vertical: "xs" }} textAlign="center" color="inherit">

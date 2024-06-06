@@ -2,9 +2,14 @@
 // SPDX-License-Identifier: MIT-0
 import { useEffect, useState } from "react";
 
+
+
 import { generateClient } from "@aws-amplify/api";
 
+
+
 import sortDataByKey from "../../../util/sortDataByKey";
+
 
 const features = require("../../../features.json");
 let listJobs = null;
@@ -15,6 +20,7 @@ const client = generateClient({ authMode: "userPool" });
 
 export const useReadableJobs = () => {
 	const [jobs, updateJobs] = useState([]);
+	const [loading, setLoading] = useState<Boolean>(true);
 
 	useEffect(() => {
 		async function fetchJobs() {
@@ -29,10 +35,11 @@ export const useReadableJobs = () => {
 			} catch (error) {
 				console.error(error);
 			}
+			setLoading(false);
 			return true;
 		}
 		fetchJobs();
 	}, []);
 
-	return jobs;
+	return { jobs, loading };
 };
