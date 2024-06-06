@@ -2,7 +2,7 @@
 // SPDX-License-Identifier: MIT-0
 import { fetchAuthSession } from "@aws-amplify/auth";
 
-import { S3KeyTypes, S3Scopes } from "../../../enums";
+import { S3KeyTypes, S3Scopes } from "../enums";
 
 interface Props {
 	key: string;

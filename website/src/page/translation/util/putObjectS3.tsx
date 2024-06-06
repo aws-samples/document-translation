@@ -2,9 +2,11 @@
 // SPDX-License-Identifier: MIT-0
 import { uploadData } from "@aws-amplify/storage";
 
+import { prepareS3Key } from "../../../util/prepareS3Key";
+
 import { S3KeyTypes } from "../../../enums";
 import { configureS3Bucket } from "./configureS3Bucket";
-import { prepareS3Key } from "./prepareS3Key";
+
 
 interface Props {
 	key: string;
