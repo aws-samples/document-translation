@@ -9,7 +9,6 @@ import {
 	aws_iam as iam,
 	aws_dynamodb as dynamodb,
 	aws_s3 as s3,
-	// aws_s3_notifications as s3n,
 	aws_stepfunctions as sfn,
 	aws_stepfunctions_tasks as tasks,
 	aws_events as events,
@@ -101,6 +100,39 @@ export class dt_translationLifecycle extends Construct {
 		});
 		onDeleteObjectRule.addTarget(new targets.SfnStateMachine(sfnMain.StateMachine));
 		props.contentBucket.enableEventBridgeNotification();
+
+		NagSuppressions.addResourceSuppressionsByPath(
+			cdk.Stack.of(this),
+			`/${cdk.Stack.of(this).node.findChild(
+				"BucketNotificationsHandler050a0587b7544547bf325f094a3db834",
+			).node.path
+			}/Role/Resource`,
+			[
+				{
+					id: "AwsSolutions-IAM4",
+					appliesTo: ["Policy::arn:<AWS::Partition>:iam::aws:policy/service-role/AWSLambdaBasicExecutionRole"],
+					reason:
+						"Custom Resource Lambda defined by CDK project for S3 EventBridge notifications",
+				},
+			],
+			true,
+		);
+		NagSuppressions.addResourceSuppressionsByPath(
+			cdk.Stack.of(this),
+			`/${cdk.Stack.of(this).node.findChild(
+				"BucketNotificationsHandler050a0587b7544547bf325f094a3db834",
+			).node.path
+			}/Role/DefaultPolicy/Resource`,
+			[
+				{
+					id: "AwsSolutions-IAM5",
+					appliesTo: ["Resource::*"],
+					reason:
+						"Custom Resource Lambda defined by CDK project for S3 EventBridge notifications",
+				},
+			],
+			true,
+		);
 
 		// END
 	}
