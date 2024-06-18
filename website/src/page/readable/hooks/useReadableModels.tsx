@@ -83,25 +83,29 @@ export const UseReadableModels = () => {
 				});
 				const allModels = result.data.readableListModels.items;
 				const textModels = allModels.filter(
-					(model) => model.type === ItemValues.TEXT
+					(model) => model.type === ItemValues.TEXT  
 				);
 				const imageModels = allModels.filter(
 					(model) => model.type === ItemValues.IMAGE
 				);
 
-				setModelDataOfType(textModels, ItemValues.TEXT);
+				if (textModels.length === 0 && imageModels.length === 0) {
+					throw new Error("No models found. Please make sure models are configured correctly. See https://aws-samples.github.io/document-translation/docs/readable/post-install/models/ for details.");
+				}
+
+				setModelDataOfType(textModels, ItemValues.TEXT);  
 				setModelDataOfType(imageModels, ItemValues.IMAGE);
 
 				setLoading(false);
 			} catch (error) {
 				console.log("Error fetching models:", error);
-				setError(error);
-				setLoading(false);
+				setError(error.message);
+				setLoading(false); 
 			}
 		};
 
 		fetchModels();
 	}, []);
 
-	return { modelState, modelDefault, loading, error };
+	return { modelState, modelDefault, loading, error };  
 };

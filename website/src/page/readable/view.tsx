@@ -48,10 +48,18 @@ export default function ReadableNew() {
 	const [imageState, setImageState] = useState({});
 	const [itemViewState, setItemViewState] = useState({});
 
-	const { modelState, modelDefault } = UseReadableModels();
+	const { modelState, modelDefault, loading, error } = UseReadableModels();
 	const LoadingStatus = [ItemStatus.GENERATE, ItemStatus.PROCESSING];
 
 	UseReadableSubscription(setMetadataState, setTextState, setImageState);
+
+	if (error) {
+		return (
+			<div className="alert alert-danger" role="alert">
+				{error} <a href="https://aws-samples.github.io/document-translation/docs/readable/post-install/models/" target="_blank" rel="noopener noreferrer">Learn more</a>
+			</div>
+		);
+	}
 
 	async function createNewTextItem(order) {
 		const authSession = await fetchAuthSession();
