@@ -4,10 +4,10 @@ import React from "react";
 
 export function formatJobNameId(name: string, id: string) {
 	return (
-		<>
+		<span>
 			<span>{name}</span>
 			<br />
 			<span className="jobId">{id}</span>
-		</>
+		</span>
 	);
 }
