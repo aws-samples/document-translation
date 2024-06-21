@@ -34,8 +34,11 @@
     "@typescript-eslint/parser": "^7.8.0",
     "aws-sdk": "^2.1609.0",
     "eslint-config-prettier": "^9.1.0",
+    "jest-environment-jsdom": "^29.7.0",
+    "jsdom": "^24.1.0",
     "prettier": "3.2.5",
     "react-scripts": "^5.0.1",
+    "text-encoding": "^0.7.0",
     "typescript": "^5.4.5"
   },
   "overrides": {
