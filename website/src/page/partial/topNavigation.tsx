@@ -4,12 +4,18 @@ import React from "react";
 import { useTranslation } from "react-i18next";
 import { useNavigate } from "react-router-dom";
 
-import { TopNavigation } from "@cloudscape-design/components";
+
+
+import { IconProps, TopNavigation } from "@cloudscape-design/components";
+
+import { useVisualMode } from "../../hooks/useVisualMode";
+
+import { VisualModes } from "../../enums";
 
 function getLogo() {
 	const fileExtensions = ["png", "svg"];
 
-	let logo = {};
+	let logo = { src: "" };
 	for (let ext of fileExtensions) {
 		try {
 			const logoSrc = require(`../../logo.${ext}`);
@@ -20,19 +26,43 @@ function getLogo() {
 		}
 	}
 	if (!logo.src) {
-		logo = false;
+		logo.src = "";
 	}
 	return logo;
 }
+``;
 
-export default function Header(user) {
+export default function Header(user: {
+	user: { currentUser: { username: string } };
+}) {
 	const { t } = useTranslation();
 	const navigate = useNavigate();
+	const [visualMode, setVisualMode] = useVisualMode();
 
-	let username = "";
-	if (user && user.user && user.user.username) {
-		username = user.user.username;
-	}
+	const username = user?.user?.currentUser?.username;
+
+	const displayVisualModeIcon = () => {
+		if (visualMode === VisualModes.LIGHT) {
+			return "star-filled" as IconProps.Name;
+		} else if (visualMode === VisualModes.DARK) {
+			return "star" as IconProps.Name;
+		} else {
+			return "star-half" as IconProps.Name;
+		}
+	};
+
+	const toggleVisualMode = () => {
+		const setMode = setVisualMode as Function;
+		setMode(() => {
+			if (visualMode === VisualModes.LIGHT) {
+				return VisualModes.DARK;
+			} else if (visualMode === VisualModes.DARK) {
+				return VisualModes.AUTO;
+			} else if (visualMode === VisualModes.AUTO || visualMode === undefined) {
+				return VisualModes.LIGHT;
+			}
+		});
+	};
 
 	return (
 		<TopNavigation
@@ -40,8 +70,14 @@ export default function Header(user) {
 				title: "Document Transformation",
 				// TODO BUSINESS NAME
 				logo: getLogo(),
+				href: "/",
 			}}
 			utilities={[
+				{
+					type: "button",
+					iconName: displayVisualModeIcon(),
+					onClick: () => toggleVisualMode(),
+				},
 				{
 					type: "button",
 					text: t("help_title"),
@@ -58,4 +94,4 @@ export default function Header(user) {
 			]}
 		/>
 	);
-}
+};
