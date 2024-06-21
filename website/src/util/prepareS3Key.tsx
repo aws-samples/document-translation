@@ -34,5 +34,7 @@ export async function prepareS3Key(props: Props) {
 		return key;
 	}
 
-	console.log("Error: Invalid keyType '" + keyType + "'");
+	const errorMessage = "Error: Invalid keyType '" + keyType + "'";
+	console.error(errorMessage);
+	return new Error(errorMessage);
 }
