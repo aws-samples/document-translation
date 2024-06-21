@@ -1,7 +1,7 @@
 {
 	description = "React Development";
 	
-	inputs.nixpkgs.url = "github:NixOS/nixpkgs/nixos-23.11-small";
+	inputs.nixpkgs.url = "github:NixOS/nixpkgs/nixos-24.05-small";
 
 	outputs = {
 		self,
@@ -11,7 +11,7 @@
 	in {
 		devShells.x86_64-linux.default = pkgs.mkShell {
 			packages = with pkgs; [
-				nodejs_21
+				nodejs_22
         awscli2
         jq
 				gnused
