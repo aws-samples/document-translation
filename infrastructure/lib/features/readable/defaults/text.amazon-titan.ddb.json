@@ -1,0 +1,48 @@
+{
+	"id": {
+		"S": "Default-Example-Text-02"
+	},
+	"default": {
+		"BOOL": false
+	},
+	"name": {
+		"S": "Example Simplifier (Amazon Titan Express)"
+	},
+	"text": {
+		"M": {
+			"modelId": {
+				"S": "amazon.titan-text-express-v1"
+			},
+			"parameters": {
+				"M": {
+					"textGenerationConfig": {
+						"M": {
+							"maxTokenCount": {
+								"N": "2048"
+							},
+							"stopSequences": {
+								"L": [
+									{
+										"S": "User:"
+									}
+								]
+							},
+							"temperature": {
+								"N": "0"
+							},
+							"topP": {
+								"N": "0.9"
+							}
+						}
+					}
+				}
+			},
+			"prePrompt": {
+				"S": "Simplify the following text so it can be easily understood by those with a low reading age, use short sentences, explain any abbreviations or words that can have two meanings. Separate the sentences as separate lines, but not as a list."
+			}
+		}
+	},
+	"type": {
+		"S": "text"
+	}
+}

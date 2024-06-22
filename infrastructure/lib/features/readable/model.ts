@@ -97,13 +97,13 @@ export class dt_readableModel extends Construct {
 
 		// EXAMPLE ENTRY
 		// EXAMPLE ENTRY | TEXT
-		const exampleEntryText = new cr.AwsCustomResource(this, 'exampleEntryText', {
+		const exampleEntryText_anthropicClaude = new cr.AwsCustomResource(this, 'exampleEntryText', {
 			onCreate: {
 				service: 'DynamoDB',
 				action: 'putItem',
 				parameters: {
 					TableName: this.modelTable.tableName,
-					Item: require('./defaults/text.ddb.json'),
+					Item: require('./defaults/text.anthropic-claude.ddb.json'),
 				},
 				physicalResourceId: cr.PhysicalResourceId.of('exampleEntryText'),
 			},
@@ -112,16 +112,37 @@ export class dt_readableModel extends Construct {
 					this.modelTable.tableArn
 				],
 			}),
+			installLatestAwsSdk: true,
 		});
 
+		// https://github.com/aws/aws-cdk/issues/30067
+		// // EXAMPLE ENTRY | TEXT
+		// const exampleEntryText_amazonTitan = new cr.AwsCustomResource(this, 'exampleEntryText_amazonTitan', {
+		// 	onCreate: {
+		// 		service: 'DynamoDB',
+		// 		action: 'putItem',
+		// 		parameters: {
+		// 			TableName: this.modelTable.tableName,
+		// 			Item: require('./defaults/text.amazon-titan.ddb.json'),
+		// 		},
+		// 		physicalResourceId: cr.PhysicalResourceId.of('exampleEntryText_amazonTitan'),
+		// 	},
+		// 	policy: cr.AwsCustomResourcePolicy.fromSdkCalls({
+		// 		resources: [
+		// 			this.modelTable.tableArn
+		// 		],
+		// 	}),
+		// 	installLatestAwsSdk: true,
+		// });
+
 		// EXAMPLE ENTRY | IMAGE
-		const exampleEntryImage = new cr.AwsCustomResource(this, 'exampleEntryImage', {
+		const exampleEntryImage_stabilityAiStableDiffusion = new cr.AwsCustomResource(this, 'exampleEntryImage', {
 			onCreate: {
 				service: 'DynamoDB',
 				action: 'putItem',
 				parameters: {
 					TableName: this.modelTable.tableName,
-					Item: require('./defaults/image.ddb.json'),
+					Item: require('./defaults/image.stabilityai-stablediffusion.ddb.json'),
 				},
 				physicalResourceId: cr.PhysicalResourceId.of('exampleEntryImage'),
 			},
@@ -130,6 +151,7 @@ export class dt_readableModel extends Construct {
 					this.modelTable.tableArn
 				],
 			}),
+			installLatestAwsSdk: true,
 		});
 
 		// EXAMPLE ENTRY | CUSTOM RESOURCE CDK LAMBDA

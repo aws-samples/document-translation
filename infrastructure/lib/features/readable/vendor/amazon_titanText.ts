@@ -20,6 +20,7 @@ export interface props {
 
 enum Strings {
 	modelVendor = "amazon",
+	modelType = "text",
 	modelNamePrefix = "titan-text-",
 }
 
@@ -38,8 +39,8 @@ export class dt_readableWorkflow extends Construct {
 		const createPrompt = new sfn.Pass(this, "createPrompt", {
 			resultPath: "$.createPrompt",
 			parameters: {
-				prompt: sfn.JsonPath.format(
-					"\n\nHuman: {}\n\n{}\n\nAssistant:",
+				inputText: sfn.JsonPath.format(
+					"{}\n\n{}",
 					sfn.JsonPath.stringAt("$.jobDetails.prePrompt"),
 					sfn.JsonPath.stringAt("$.jobDetails.input"),
 				),
@@ -73,7 +74,7 @@ export class dt_readableWorkflow extends Construct {
 		const filterOutput = new sfn.Pass(this, "filterOutput", {
 			parameters: {
 				payload: sfn.JsonPath.stringAt(
-					"$.invokeBedrock.Payload.Body.completion",
+					"$.invokeBedrock.Payload.Body.results[0].outputText",
 				),
 			},
 		});
@@ -81,9 +82,9 @@ export class dt_readableWorkflow extends Construct {
 		// STATE MACHINE | DEF
 		this.sfnMain = new dt_stepfunction(
 			this,
-			`${cdk.Stack.of(this).stackName}_Readable_${Strings.modelVendor}`,
+			`${cdk.Stack.of(this).stackName}_Readable_${Strings.modelVendor}_${Strings.modelType}`,
 			{
-				nameSuffix: `Readable_${Strings.modelVendor}`,
+				nameSuffix: `Readable_${Strings.modelVendor}_${Strings.modelType}`,
 				removalPolicy: props.removalPolicy,
 				definition: createPrompt
 					.next(createBody)
