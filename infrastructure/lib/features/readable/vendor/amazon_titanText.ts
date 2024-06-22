@@ -117,7 +117,7 @@ export class dt_readableWorkflow extends Construct {
 		// PARENT | TASK
 		this.invokeModel = new tasks.StepFunctionsStartExecution(
 			this,
-			`invokeModel_${Strings.modelVendor}`,
+			`invokeModel_${Strings.modelVendor}_${Strings.modelType}`,
 			{
 				stateMachine: this.sfnMain,
 				resultSelector: {

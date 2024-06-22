@@ -71,8 +71,6 @@ export const handler = async (event: event) => {
 	const stringResult = new TextDecoder().decode(encodedResult);
 	const resultBody: any = JSON.parse(stringResult);
 
-	console.log("Bedrock result:", resultBody.result);
-
 	// WRITE TO S3
 	if (!event.ResultS3Bucket) {
 		throw new Error("Missing ResultS3Bucket");
@@ -80,12 +78,22 @@ export const handler = async (event: event) => {
 	if (!event.ResultS3Key) {
 		throw new Error("Missing ResultS3Key");
 	}
+	if (!event.PathToResult) {
+		throw new Error("Missing PathToResult");
+	}
+
+	const getResultFromPath = (object: any, path: string) => {
+		return path.split(".").reduce(
+			(callbackFn, initialValue) => callbackFn[initialValue],
+			object,
+		)
+	}
 
 	const putObjectRequestInput: PutObjectCommandInput = {
 		ContentType: "image/png",
 		Key: event.ResultS3Key,
 		Bucket: event.ResultS3Bucket,
-		Body: Buffer.from(resultBody.artifacts[0].base64, "base64"),
+		Body: Buffer.from(getResultFromPath(resultBody, event.PathToResult), "base64"),
 		ContentEncoding: "base64",
 	};
 	const putObjectRequestCommand = new PutObjectCommand(putObjectRequestInput);

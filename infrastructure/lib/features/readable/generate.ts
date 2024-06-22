@@ -20,6 +20,7 @@ import * as dt_enums from "./enum";
 import { dt_stepfunction } from "../../components/stepfunction";
 import { dt_lambda } from "../../components/lambda";
 
+import { dt_readableWorkflow as dt_readableWorkflow_amazon_titanImage } from "./vendor/amazon_titanImage";
 import { dt_readableWorkflow as dt_readableWorkflow_amazon_titanText } from "./vendor/amazon_titanText";
 import { dt_readableWorkflow as dt_readableWorkflow_anthropic_claudeText } from "./vendor/anthropic_claudeText";
 import { dt_readableWorkflow as dt_readableWorkflow_stabilityai_stableDiffusion } from "./vendor/stabilityai_stableDiffusion";
@@ -60,8 +61,8 @@ export class dt_readableWorkflowGenerate extends Construct {
 						// ASM-IAM
 						actions: ["bedrock:InvokeModel"],
 						resources: [
-							"arn:aws:bedrock:*::foundation-model/*", // Foundational Models
-							`arn:aws:bedrock:*:${cdk.Stack.of(this).account}:custom-model/*`,
+							`arn:aws:bedrock:${props.bedrockRegion}::foundation-model/*`, // Foundational Models
+							`arn:aws:bedrock:${props.bedrockRegion}:${cdk.Stack.of(this).account}:custom-model/*`,
 						],
 					}),
 				],
@@ -74,13 +75,13 @@ export class dt_readableWorkflowGenerate extends Construct {
 				{
 					id: "AwsSolutions-IAM5",
 					reason: "Preferred model for prompt is unknown at deploy time",
-					appliesTo: ["Resource::arn:aws:bedrock:*::foundation-model/*"],
+					appliesTo: [`Resource::arn:aws:bedrock:${props.bedrockRegion}::foundation-model/*`],
 				},
 				{
 					id: "AwsSolutions-IAM5",
 					reason: "User provided model for prompt is unknown at deploy time",
 					appliesTo: [
-						"Resource::arn:aws:bedrock:*:<AWS::AccountId>:custom-model/*",
+						`Resource::arn:aws:bedrock:${props.bedrockRegion}:<AWS::AccountId>:custom-model/*`,
 					],
 				},
 			],
@@ -129,11 +130,21 @@ export class dt_readableWorkflowGenerate extends Construct {
 		});
 
 		// MODEL WORKFLOWS | TEXT | AMAZON
-		const workflow_amazon = new dt_readableWorkflow_amazon_titanText(
+		const workflow_amazon_text = new dt_readableWorkflow_amazon_titanText(
 			this,
-			"workflow_amazon",
+			"workflow_amazon_text",
 			{
 				invokeBedrockLambda: invokeBedrockLambda.lambdaFunction,
+				removalPolicy: props.removalPolicy,
+			},
+		);
+		// MODEL WORKFLOWS | IMAGE | AMAZON
+		const workflow_amazon_image = new dt_readableWorkflow_amazon_titanImage(
+			this,
+			"workflow_amazon_image",
+			{
+				bedrockRegion: props.bedrockRegion,
+				contentBucket: props.contentBucket,
 				removalPolicy: props.removalPolicy,
 			},
 		);
@@ -169,8 +180,12 @@ export class dt_readableWorkflowGenerate extends Construct {
 				removalPolicy: props.removalPolicy,
 				definition: modelChoice
 					.when(
-						workflow_amazon.modelChoiceCondition,
-						workflow_amazon.invokeModel,
+						workflow_amazon_text.modelChoiceCondition,
+						workflow_amazon_text.invokeModel,
+					)
+					.when(
+						workflow_amazon_image.modelChoiceCondition,
+						workflow_amazon_image.invokeModel,
 					)
 					.when(
 						workflow_anthropic.modelChoiceCondition,
@@ -193,7 +208,11 @@ export class dt_readableWorkflowGenerate extends Construct {
 						"Permission scoped to project specific resources. Execution ID unknown at deploy time.",
 					appliesTo: [
 						`Resource::arn:<AWS::Partition>:states:<AWS::Region>:<AWS::AccountId>:execution:{"Fn::Select":[6,{"Fn::Split":[":",{"Ref":"${cdk.Stack.of(this).getLogicalId(
-							workflow_amazon.sfnMain.node
+							workflow_amazon_text.sfnMain.node
+								.defaultChild as cdk.CfnElement,
+						)}"}]}]}*`,
+						`Resource::arn:<AWS::Partition>:states:<AWS::Region>:<AWS::AccountId>:execution:{"Fn::Select":[6,{"Fn::Split":[":",{"Ref":"${cdk.Stack.of(this).getLogicalId(
+							workflow_amazon_image.sfnMain.node
 								.defaultChild as cdk.CfnElement,
 						)}"}]}]}*`,
 						`Resource::arn:<AWS::Partition>:states:<AWS::Region>:<AWS::AccountId>:execution:{"Fn::Select":[6,{"Fn::Split":[":",{"Ref":"${cdk.Stack.of(this).getLogicalId(

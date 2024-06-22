@@ -154,6 +154,26 @@ export class dt_readableModel extends Construct {
 			installLatestAwsSdk: true,
 		});
 
+		// https://github.com/aws/aws-cdk/issues/30067
+		// // EXAMPLE ENTRY | TEXT
+		// const exampleEntryImage_amazonTitan = new cr.AwsCustomResource(this, 'exampleEntryImage_amazonTitan', {
+		// 	onCreate: {
+		// 		service: 'DynamoDB',
+		// 		action: 'putItem',
+		// 		parameters: {
+		// 			TableName: this.modelTable.tableName,
+		// 			Item: require('./defaults/image.amazon-titan.ddb.json'),
+		// 		},
+		// 		physicalResourceId: cr.PhysicalResourceId.of('exampleEntryImage_amazonTitan'),
+		// 	},
+		// 	policy: cr.AwsCustomResourcePolicy.fromSdkCalls({
+		// 		resources: [
+		// 			this.modelTable.tableArn
+		// 		],
+		// 	}),
+		// 	installLatestAwsSdk: true,
+		// });
+
 		// EXAMPLE ENTRY | CUSTOM RESOURCE CDK LAMBDA
 		NagSuppressions.addResourceSuppressionsByPath(
 			cdk.Stack.of(this),

@@ -23,8 +23,9 @@ export interface props {
 }
 
 enum Strings {
-	modelVendor = "stability",
-	modelNamePrefix = "stable-diffusion-",
+	modelVendor = "amazon",
+	modelType = "image",
+	modelNamePrefix = "titan-image-",
 }
 
 export class dt_readableWorkflow extends Construct {
@@ -130,12 +131,9 @@ export class dt_readableWorkflow extends Construct {
 			resultPath: "$.prompt",
 			parameters: {
 				Payload: {
-					text_prompts: [
-						{
-							text: sfn.JsonPath.stringAt("$.jobDetails.prePrompt"),
-							weight: 1,
-						},
-					],
+					textToImageParams: {
+						text: sfn.JsonPath.stringAt("$.jobDetails.prePrompt")
+					},
 				},
 			},
 		});
@@ -160,7 +158,7 @@ export class dt_readableWorkflow extends Construct {
 			payload: sfn.TaskInput.fromObject({
 				ModelId: sfn.JsonPath.objectAt("$.jobDetails.modelId"),
 				Body: sfn.JsonPath.stringAt("$.body.Payload"),
-				PathToResult: "artifacts.0.base64",
+				PathToResult: "images.0",
 				ResultS3Bucket: props.contentBucket.bucketName,
 				ResultS3Key: sfn.JsonPath.format(
 					`${Bucket.PREFIX_PRIVATE}/{}/{}/{}_{}.png`,
@@ -183,9 +181,9 @@ export class dt_readableWorkflow extends Construct {
 		// STATE MACHINE | DEF
 		this.sfnMain = new dt_stepfunction(
 			this,
-			`${cdk.Stack.of(this).stackName}_Readable_${Strings.modelVendor}`,
+			`${cdk.Stack.of(this).stackName}_Readable_${Strings.modelVendor}_${Strings.modelType}`,
 			{
-				nameSuffix: `Readable_${Strings.modelVendor}`,
+				nameSuffix: `Readable_${Strings.modelVendor}_${Strings.modelType}`,
 				removalPolicy: props.removalPolicy,
 				definition: createPrompt
 					.next(createBody)
@@ -219,7 +217,7 @@ export class dt_readableWorkflow extends Construct {
 		// PARENT | TASK
 		this.invokeModel = new tasks.StepFunctionsStartExecution(
 			this,
-			`invokeModel_${Strings.modelVendor}`,
+			`invokeModel_${Strings.modelVendor}_${Strings.modelType}`,
 			{
 				stateMachine: this.sfnMain,
 				resultSelector: {
