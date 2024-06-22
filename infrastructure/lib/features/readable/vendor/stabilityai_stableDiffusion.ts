@@ -8,7 +8,6 @@ import { NagSuppressions } from "cdk-nag";
 import {
 	aws_stepfunctions as sfn,
 	aws_stepfunctions_tasks as tasks,
-	aws_lambda as lambda,
 	aws_iam as iam,
 	aws_s3 as s3,
 } from "aws-cdk-lib";
