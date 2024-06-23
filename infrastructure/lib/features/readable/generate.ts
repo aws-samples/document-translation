@@ -23,6 +23,7 @@ import { dt_lambda } from "../../components/lambda";
 import { dt_readableWorkflow as dt_readableWorkflow_amazon_titanImage } from "./vendor/image.amazon.titan-image-generator-v1";
 import { dt_readableWorkflow as dt_readableWorkflow_amazon_titanText } from "./vendor/text.amazon.titan-text-*-v1";
 import { dt_readableWorkflow as dt_readableWorkflow_anthropic_claudeText } from "./vendor/text.anthropic.claude-v2";
+import { dt_readableWorkflow as dt_readableWorkflow_anthropic_claude3Text } from "./vendor/text.anthropic.claude-3-*-*-v1";
 import { dt_readableWorkflow as dt_readableWorkflow_stabilityai_stableDiffusion } from "./vendor/image.stability.stable-diffusion-xl-v1";
 
 export interface props {
@@ -149,9 +150,19 @@ export class dt_readableWorkflowGenerate extends Construct {
 			},
 		);
 		// MODEL WORKFLOWS | TEXT | ANTHRHOPIC
+		// MODEL WORKFLOWS | TEXT | ANTHRHOPIC | CLAUDE v2
 		const workflow_anthropic = new dt_readableWorkflow_anthropic_claudeText(
 			this,
 			"workflow_anthropic",
+			{
+				invokeBedrockLambda: invokeBedrockLambda.lambdaFunction,
+				removalPolicy: props.removalPolicy,
+			},
+		);
+		// MODEL WORKFLOWS | TEXT | ANTHRHOPIC | CLAUDE 3 SONNET HAIKU
+		const workflow_anthropic3 = new dt_readableWorkflow_anthropic_claude3Text(
+			this,
+			"workflow_anthropic3",
 			{
 				invokeBedrockLambda: invokeBedrockLambda.lambdaFunction,
 				removalPolicy: props.removalPolicy,
@@ -192,6 +203,10 @@ export class dt_readableWorkflowGenerate extends Construct {
 						workflow_anthropic.invokeModel,
 					)
 					.when(
+						workflow_anthropic3.modelChoiceCondition,
+						workflow_anthropic3.invokeModel,
+					)
+					.when(
 						workflow_stabilityai.modelChoiceCondition,
 						workflow_stabilityai.invokeModel,
 					)
@@ -217,6 +232,10 @@ export class dt_readableWorkflowGenerate extends Construct {
 						)}"}]}]}*`,
 						`Resource::arn:<AWS::Partition>:states:<AWS::Region>:<AWS::AccountId>:execution:{"Fn::Select":[6,{"Fn::Split":[":",{"Ref":"${cdk.Stack.of(this).getLogicalId(
 							workflow_anthropic.sfnMain.node
+								.defaultChild as cdk.CfnElement,
+						)}"}]}]}*`,
+						`Resource::arn:<AWS::Partition>:states:<AWS::Region>:<AWS::AccountId>:execution:{"Fn::Select":[6,{"Fn::Split":[":",{"Ref":"${cdk.Stack.of(this).getLogicalId(
+							workflow_anthropic3.sfnMain.node
 								.defaultChild as cdk.CfnElement,
 						)}"}]}]}*`,
 						`Resource::arn:<AWS::Partition>:states:<AWS::Region>:<AWS::AccountId>:execution:{"Fn::Select":[6,{"Fn::Split":[":",{"Ref":"${cdk.Stack.of(this).getLogicalId(

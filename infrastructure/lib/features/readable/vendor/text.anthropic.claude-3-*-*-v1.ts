@@ -22,7 +22,8 @@ export interface props {
 
 enum Strings {
 	modelVendor = "anthropic",
-	modelMatch = "claude-v2"
+	modelMatch = "claude-3-*-*-v1:0",
+	modelVersion = "3",
 }
 
 export class dt_readableWorkflow extends Construct {
@@ -79,11 +80,21 @@ export class dt_readableWorkflow extends Construct {
 		const createPrompt = new sfn.Pass(this, "createPrompt", {
 			resultPath: "$.createPrompt",
 			parameters: {
-				prompt: sfn.JsonPath.format(
-					"\n\nHuman: {}\n\n{}\n\nAssistant:",
-					sfn.JsonPath.stringAt("$.jobDetails.prePrompt"),
-					sfn.JsonPath.stringAt("$.jobDetails.input"),
-				),
+				messages: [
+					{
+						role: "user",
+						content: [
+							{
+								type: "text",
+								text: sfn.JsonPath.format(
+									"{}\n\n{}",
+									sfn.JsonPath.stringAt("$.jobDetails.prePrompt"),
+									sfn.JsonPath.stringAt("$.jobDetails.input"),
+								)
+							}
+						]
+					}
+				]
 			},
 		});
 		// STATE MACHINE | TASKS | createBody
@@ -119,7 +130,7 @@ export class dt_readableWorkflow extends Construct {
 				"Payload.$": "$.Payload",
 			},
 			payload: sfn.TaskInput.fromObject({
-				string: sfn.JsonPath.stringAt("$.invokeBedrock.Payload.Body.completion"),
+				string: sfn.JsonPath.stringAt("$.invokeBedrock.Payload.Body.content[0].text"),
 				pattern: regexStringLeadingToColon,
 			}),
 		});
@@ -148,9 +159,9 @@ export class dt_readableWorkflow extends Construct {
 		// STATE MACHINE | DEF
 		this.sfnMain = new dt_stepfunction(
 			this,
-			`${cdk.Stack.of(this).stackName}_Readable_${Strings.modelVendor}`,
+			`${cdk.Stack.of(this).stackName}_Readable_${Strings.modelVendor}_${Strings.modelVersion}`,
 			{
-				nameSuffix: `Readable_${Strings.modelVendor}`,
+				nameSuffix: `Readable_${Strings.modelVendor}_${Strings.modelVersion}`,
 				removalPolicy: props.removalPolicy,
 				definition: createPrompt
 					.next(createBody)
@@ -204,7 +215,7 @@ export class dt_readableWorkflow extends Construct {
 		// PARENT | TASK
 		this.invokeModel = new tasks.StepFunctionsStartExecution(
 			this,
-			`invokeModel_${Strings.modelVendor}`,
+			`invokeModel_${Strings.modelVendor}_${Strings.modelVersion}`,
 			{
 				stateMachine: this.sfnMain,
 				resultSelector: {
