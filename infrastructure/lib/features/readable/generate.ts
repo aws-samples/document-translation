@@ -20,10 +20,10 @@ import * as dt_enums from "./enum";
 import { dt_stepfunction } from "../../components/stepfunction";
 import { dt_lambda } from "../../components/lambda";
 
-import { dt_readableWorkflow as dt_readableWorkflow_amazon_titanImage } from "./vendor/amazon_titanImage";
-import { dt_readableWorkflow as dt_readableWorkflow_amazon_titanText } from "./vendor/amazon_titanText";
-import { dt_readableWorkflow as dt_readableWorkflow_anthropic_claudeText } from "./vendor/anthropic_claudeText";
-import { dt_readableWorkflow as dt_readableWorkflow_stabilityai_stableDiffusion } from "./vendor/stabilityai_stableDiffusion";
+import { dt_readableWorkflow as dt_readableWorkflow_amazon_titanImage } from "./vendor/image.amazon.titan-image-generator-v1";
+import { dt_readableWorkflow as dt_readableWorkflow_amazon_titanText } from "./vendor/text.amazon.titan-text-*-v1";
+import { dt_readableWorkflow as dt_readableWorkflow_anthropic_claudeText } from "./vendor/text.anthropic.claude-v2";
+import { dt_readableWorkflow as dt_readableWorkflow_stabilityai_stableDiffusion } from "./vendor/image.stability.stable-diffusion-xl-v1";
 
 export interface props {
 	bedrockRegion: string;
