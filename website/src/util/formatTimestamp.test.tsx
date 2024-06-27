@@ -1,5 +1,3 @@
-import React from "react";
-
 import { formatTimestamp } from "./formatTimestamp";
 
 import "@testing-library/jest-dom";
