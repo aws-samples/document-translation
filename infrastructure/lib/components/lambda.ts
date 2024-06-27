@@ -29,7 +29,7 @@ export class dt_lambda extends Construct {
 		super(scope, id);
 
 		const runtime: lambda.Runtime =
-			props.runtime !== undefined ? props.runtime : lambda.Runtime.NODEJS_16_X; // ASM-L1
+			props.runtime !== undefined ? props.runtime : lambda.Runtime.NODEJS_18_X; // ASM-L1
 
 		const architecture: lambda.Architecture =
 			props.architecture !== undefined
@@ -67,9 +67,8 @@ export class dt_lambda extends Construct {
 			false,
 		);
 		// PERMISSIONS
-		const logGroupArn = `arn:aws:logs:${cdk.Stack.of(this).region}:${
-			cdk.Stack.of(this).account
-		}:log-group:${this.lambdaFunction.logGroup.logGroupName}`;
+		const logGroupArn = `arn:aws:logs:${cdk.Stack.of(this).region}:${cdk.Stack.of(this).account
+			}:log-group:${this.lambdaFunction.logGroup.logGroupName}`;
 
 		// PERMISSIONS | LOGGING | CREATE
 		const iamPolicyPermitLogging = new iam.Policy(
