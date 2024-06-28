@@ -12,124 +12,36 @@ import {
 	aws_codecommit as codecommit,
 } from "aws-cdk-lib";
 import { DocTranAppStage } from "./pipeline-app-stage";
+import { getSharedConfiguration } from "./shared";
 
 export class pipelineStack extends cdk.Stack {
 	constructor(scope: Construct, id: string, props?: cdk.StackProps) {
 		super(scope, id, props);
-		// ENVIRONMENT VARIABLES
-		// ENVIRONMENT VARIABLES | DEVELOPMENT
-		const development: boolean =
-			process.env.development &&
-			process.env.development.toLowerCase() === "true"
-				? true
-				: false;
-		// ENVIRONMENT VARIABLES | FEATURES (Default: false)
-		// Cognito local users
-		const cognitoLocalUsers: boolean =
-			process.env.cognitoLocalUsers &&
-			process.env.cognitoLocalUsers.toLowerCase() === "true"
-				? true
-				: false;
-		const cognitoLocalUsersMfa: string =
-			process.env.cognitoLocalUsersMfa !== undefined
-				? process.env.cognitoLocalUsersMfa.toLowerCase()
-				: "off";
-		const cognitoLocalUsersMfaOtp: boolean =
-			process.env.cognitoLocalUsersMfaOtp &&
-			process.env.cognitoLocalUsersMfaOtp.toLowerCase() === "true"
-				? true
-				: false;
-		const cognitoLocalUsersMfaSms: boolean =
-			process.env.cognitoLocalUsersMfaSms &&
-			process.env.cognitoLocalUsersMfaSms.toLowerCase() === "true"
-				? true
-				: false;
-		// Cognito SAML users
-		const cognitoSamlUsers: boolean =
-			process.env.cognitoSamlUsers &&
-			process.env.cognitoSamlUsers.toLowerCase() === "true"
-				? true
-				: false;
-		const cognitoSamlMetadataUrl: string =
-			process.env.cognitoSamlMetadataUrl !== undefined
-				? process.env.cognitoSamlMetadataUrl
-				: "";
-		// Translation
-		const translation: boolean =
-			process.env.translation &&
-			process.env.translation.toLowerCase() === "true"
-				? true
-				: false;
-		const translationPii: boolean =
-			process.env.translationPii &&
-			process.env.translationPii.toLowerCase() === "true"
-				? true
-				: false;
-		const translationLifecycleDefault: number =
-			process.env.translationLifecycleDefault &&
-			parseInt(process.env.translationLifecycleDefault) > 0
-				? parseInt(process.env.translationLifecycleDefault)
-				: 7;
-		const translationLifecyclePii: number =
-			process.env.translationLifecyclePii &&
-			parseInt(process.env.translationLifecyclePii) > 0
-				? parseInt(process.env.translationLifecyclePii)
-				: 3;
-		// Readable
-		const readable: boolean =
-			process.env.readable && process.env.readable.toLowerCase() === "true"
-				? true
-				: false;
-		const readableBedrockRegion: string =
-			process.env.readableBedrockRegion !== undefined
-				? process.env.readableBedrockRegion.toLowerCase()
-				: "";
-		if (readable && readableBedrockRegion === "") {
-			throw new Error("readableBedrockRegion is required when readable is true");
-		}
-		// Web UI
-		const webUi: boolean =
-			process.env.webUi && process.env.webUi.toLowerCase() === "true"
-				? true
-				: false;
-		const webUiCustomDomain: string =
-			process.env.webUiCustomDomain !== undefined &&
-			process.env.webUiCustomDomain !== ""
-				? process.env.webUiCustomDomain.toLowerCase()
-				: "";
-		const webUiCustomDomainCertificate: string =
-			process.env.webUiCustomDomainCertificate !== undefined &&
-			process.env.webUiCustomDomainCertificate !== ""
-				? process.env.webUiCustomDomainCertificate
-				: "";
-		// ENVIRONMENT VARIABLES | GIT
-		// ENVIRONMENT VARIABLES | GIT | SERVICE
-		const sourceGitService: string =
-			process.env.sourceGitService !== undefined
-				? process.env.sourceGitService.toLowerCase()
-				: "";
-		// ENVIRONMENT VARIABLES | GIT | REPO
-		const sourceGitRepo: string =
-			process.env.sourceGitRepo !== undefined ? process.env.sourceGitRepo : "";
-		if (sourceGitRepo === "") {
-			throw new Error("sourceGitRepo is required");
-		}
-		// ENVIRONMENT VARIABLES | GIT | BRANCH
-		const sourceGitBranch: string =
-			process.env.sourceGitBranch !== undefined
-				? process.env.sourceGitBranch
-				: "main";
-		// ENVIRONMENT VARIABLES | REMOVAL POLICY
-		// ENVIRONMENT VARIABLES | REMOVAL POLICY | APP
-		const appRemovalPolicy: string =
-			process.env.appRemovalPolicy !== undefined
-				? process.env.appRemovalPolicy
-				: "";
-		// ENVIRONMENT VARIABLES | REMOVAL POLICY | PIPELINE
-		const pipelineRemovalPolicy: string =
-			process.env.pipelineRemovalPolicy !== undefined
-				? process.env.pipelineRemovalPolicy.toLowerCase()
-				: "";
+
+		const {
+			development,
+			cognitoLocalUsers,
+			cognitoLocalUsersMfa,
+			cognitoLocalUsersMfaOtp,
+			cognitoLocalUsersMfaSms,
+			cognitoSamlUsers,
+			cognitoSamlMetadataUrl,
+			translation,
+			translationPii,
+			translationLifecycleDefault,
+			translationLifecyclePii,
+			readable,
+			readableBedrockRegion,
+			webUi,
+			webUiCustomDomain,
+			webUiCustomDomainCertificate,
+			sourceGitService,
+			sourceGitRepo,
+			sourceGitBranch,
+			appRemovalPolicy,
+			pipelineRemovalPolicy,
+		} = getSharedConfiguration();
+
 		let removalPolicy: cdk.RemovalPolicy;
 		switch (pipelineRemovalPolicy) {
 			case "destroy":
@@ -143,7 +55,7 @@ export class pipelineStack extends cdk.Stack {
 		}
 
 		// S3
-		// S3 | LOGGING BUCKET
+		// S3 | LOGGING BUCKET  
 		const serverAccessLogsBucket = new s3.Bucket(
 			this,
 			"serverAccessLogsBucket",

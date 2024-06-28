@@ -13,6 +13,7 @@ import { dt_web } from "./features/web";
 import { dt_sharedPreferences } from "./features/preferences";
 import { dt_translate } from "./features/translation/translation";
 import { dt_readable } from "./features/readable/readable";
+import { getSharedConfiguration } from "./shared";
 
 // STATIC VARS
 const s3PrefixPrivate = "private";
@@ -46,87 +47,25 @@ export class DocTranStack extends cdk.Stack {
 
 	constructor(scope: Construct, id: string, props?: cdk.StackProps) {
 		super(scope, id, props);
-		// ENVIRONMENT VARIABLES
-		// ENVIRONMENT VARIABLES | DEVELOPMENT
-		const development: boolean =
-			process.env.development &&
-			process.env.development.toLowerCase() === "true"
-				? true
-				: false;
-		// ENVIRONMENT VARIABLES | FEATURES (Default: false)
-		// Cognito local users
-		const cognitoLocalUsers: boolean =
-			process.env.cognitoLocalUsers &&
-			process.env.cognitoLocalUsers.toLowerCase() === "true"
-				? true
-				: false;
-		const cognitoLocalUsersMfa: string =
-			process.env.cognitoLocalUsersMfa !== undefined
-				? process.env.cognitoLocalUsersMfa.toLowerCase()
-				: "off";
-		const cognitoLocalUsersMfaOtp: boolean =
-			process.env.cognitoLocalUsersMfaOtp &&
-			process.env.cognitoLocalUsersMfaOtp.toLowerCase() === "true"
-				? true
-				: false;
-		const cognitoLocalUsersMfaSms: boolean =
-			process.env.cognitoLocalUsersMfaSms &&
-			process.env.cognitoLocalUsersMfaSms.toLowerCase() === "true"
-				? true
-				: false;
-		// Cognito SAML users
-		const cognitoSamlUsers: boolean =
-			process.env.cognitoSamlUsers &&
-			process.env.cognitoSamlUsers.toLowerCase() === "true"
-				? true
-				: false;
-		const cognitoSamlMetadataUrl: string =
-			process.env.cognitoSamlMetadataUrl !== undefined
-				? process.env.cognitoSamlMetadataUrl
-				: "";
-		// Translation
-		const translation: boolean =
-			process.env.translation &&
-			process.env.translation.toLowerCase() === "true"
-				? true
-				: false;
-		const translationPii: boolean =
-			process.env.translationPii &&
-			process.env.translationPii.toLowerCase() === "true"
-				? true
-				: false;
-		// Readable
-		const readable: boolean =
-			process.env.readable && process.env.readable.toLowerCase() === "true"
-				? true
-				: false;
-		const readableBedrockRegion: string =
-			process.env.readableBedrockRegion !== undefined
-				? process.env.readableBedrockRegion.toLowerCase()
-				: "";
-		if (readable && readableBedrockRegion === "") {
-			throw new Error("readableBedrockRegion is required when readable is true");
-		}
-		// Web UI
-		const webUi: boolean =
-			process.env.webUi && process.env.webUi.toLowerCase() === "true"
-				? true
-				: false;
-		const webUiCustomDomain: string =
-			process.env.webUiCustomDomain !== undefined &&
-			process.env.webUiCustomDomain !== ""
-				? process.env.webUiCustomDomain.toLowerCase()
-				: "";
-		const webUiCustomDomainCertificate: string =
-			process.env.webUiCustomDomainCertificate !== undefined &&
-			process.env.webUiCustomDomainCertificate !== ""
-				? process.env.webUiCustomDomainCertificate
-				: "";
-		// ENVIRONMENT VARIABLES | REMOVAL POLICY
-		const appRemovalPolicy: string =
-			process.env.appRemovalPolicy !== undefined
-				? process.env.appRemovalPolicy.toLowerCase()
-				: "";
+
+		const {
+			development,
+			cognitoLocalUsers,
+			cognitoLocalUsersMfa,
+			cognitoLocalUsersMfaOtp,
+			cognitoLocalUsersMfaSms,
+			cognitoSamlUsers,
+			cognitoSamlMetadataUrl,
+			translation,
+			translationPii,
+			readable,
+			readableBedrockRegion,
+			webUi,
+			webUiCustomDomain,
+			webUiCustomDomainCertificate,
+			appRemovalPolicy,
+		} = getSharedConfiguration();
+
 		let removalPolicy: cdk.RemovalPolicy;
 		switch (appRemovalPolicy) {
 			case "destroy":
@@ -225,14 +164,14 @@ export class DocTranStack extends cdk.Stack {
 		if (translation) {
 			const translationLifecycleDefault: number =
 				process.env.translationLifecycleDefault &&
-				parseInt(process.env.translationLifecycleDefault) >= 1 &&
-				parseInt(process.env.translationLifecycleDefault) <= 2147483647
+					parseInt(process.env.translationLifecycleDefault) >= 1 &&
+					parseInt(process.env.translationLifecycleDefault) <= 2147483647
 					? parseInt(process.env.translationLifecycleDefault)
 					: 7;
 			const translationLifecyclePii: number =
 				process.env.translationLifecyclePii &&
-				parseInt(process.env.translationLifecyclePii) >= 1 &&
-				parseInt(process.env.translationLifecyclePii) <= 2147483647
+					parseInt(process.env.translationLifecyclePii) >= 1 &&
+					parseInt(process.env.translationLifecyclePii) <= 2147483647
 					? parseInt(process.env.translationLifecyclePii)
 					: 3;
 
