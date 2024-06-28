@@ -2,7 +2,7 @@
 // SPDX-License-Identifier: MIT-0
 import "@cloudscape-design/global-styles/index.css";
 
-import React from "react";
+import React, { useState } from "react";
 import { useTranslation } from "react-i18next";
 import { useNavigate } from "react-router-dom";
 
@@ -14,6 +14,7 @@ import {
 	Spinner,
 	Table,
 	TextContent,
+	Toggle,
 } from "@cloudscape-design/components";
 
 import { useTranslationJobs } from "./hooks/useTranslationJobs";
@@ -50,6 +51,9 @@ export default function HistoryTable() {
 	const { jobs, loading } = useTranslationJobs();
 	const { t } = useTranslation();
 	const navigate = useNavigate();
+	const [hideExpired, setHideExpired] = useState(true);
+
+	const toggleExpired = () => setHideExpired(!hideExpired);
 
 	/* formatTargets */
 	const formatTargets = (stringTargets: string) => {
@@ -171,7 +175,9 @@ export default function HistoryTable() {
 				},
 			]}
 			stickyColumns={{ first: 0, last: 1 }}
-			items={jobs}
+			items={jobs.filter(
+				(job) => !hideExpired || job.jobStatus.toUpperCase() !== "EXPIRED"
+			)}
 			loadingText={t("generic_loading")}
 			loading={loading}
 			trackBy="id"
@@ -190,6 +196,14 @@ export default function HistoryTable() {
 			}
 			header={
 				<Header counter={`(${jobs.length})`}>{t("generic_history")}</Header>
+			}
+			preferences={
+				<Toggle
+					onChange={({ detail }) => toggleExpired(detail.checked)}
+					checked={hideExpired ? false : true}
+				>
+					{t("generic_status_expired")}
+				</Toggle>
 			}
 		/>
 	);
