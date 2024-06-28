@@ -308,9 +308,6 @@ export class dt_translate extends Construct {
 				s3PrefixPrivate: props.s3PrefixPrivate,
 			},
 		);
-		handleErrorsFromSfnArns.push(
-			featTranslationTranslate.sfnCallback.stateMachineArn,
-		);
 
 		let sfnPii: undefined | sfn.StateMachine = undefined;
 		let sfnTag: undefined | sfn.StateMachine = undefined;
@@ -379,7 +376,6 @@ export class dt_translate extends Construct {
 			s3PrefixPrivate: props.s3PrefixPrivate,
 			removalPolicy: props.removalPolicy, // ASM-CFN1
 			stepFunctionArns: handleErrorsFromSfnArns,
-			sfnCallback: featTranslationTranslate.sfnCallback,
 			contentBucket: this.contentBucket,
 			jobTable: this.jobTable,
 		});

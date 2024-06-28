@@ -20,7 +20,6 @@ export interface props {
 	s3PrefixPrivate: string;
 	removalPolicy: cdk.RemovalPolicy;
 	stepFunctionArns: string[];
-	sfnCallback: sfn.StateMachine;
 	jobTable: dynamodb.Table;
 	contentBucket: s3.Bucket;
 }
