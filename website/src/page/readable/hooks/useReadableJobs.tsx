@@ -2,14 +2,7 @@
 // SPDX-License-Identifier: MIT-0
 import { useEffect, useState } from "react";
 
-
-
 import { generateClient } from "@aws-amplify/api";
-
-
-
-import sortDataByKey from "../../../util/sortDataByKey";
-
 
 const features = require("../../../features.json");
 let listJobs = null;
@@ -31,7 +24,6 @@ export const useReadableJobs = () => {
 					query: listJobs,
 				});
 				data = response.data.readableListJobs.items;
-				updateJobs(sortDataByKey("updatedAt", "id", data));
 			} catch (error) {
 				console.error(error);
 			}

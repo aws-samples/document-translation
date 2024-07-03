@@ -137,7 +137,8 @@ export class dt_readableJob extends Construct {
 					"expressionValues": {
 						":sub": $util.dynamodb.toDynamoDBJson($ctx.identity.sub)
 					}
-				}
+				},
+				"scanIndexForward": false
 			}
 		`),
 			responseMappingTemplate: appsync.MappingTemplate.fromString(`

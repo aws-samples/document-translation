@@ -22,7 +22,7 @@ import { dt_translationMain } from "./main";
 import {
 	CodeFirstSchema,
 	GraphqlType,
-	ObjectType,
+	ObjectType as OutputType,
 	InputType,
 	ResolvableField,
 	Field,
@@ -189,106 +189,205 @@ export class dt_translate extends Construct {
 			removalPolicy: props.removalPolicy, // ASM-CFN1
 		});
 
-		// INFRA | DYNAMODB | JOBS | API
-		// INFRA | DYNAMODB | JOBS | API | DATA SOURCE
+		// DYNAMODB | INDEX
+		const GSI_OWNER = "byOwnerAndCreatedAt"
+		const GSI_OWNER_PK = "jobOwner"
+		const GSI_OWNER_SK = "createdAt"
+		this.jobTable.addGlobalSecondaryIndex({
+			indexName: GSI_OWNER,
+			partitionKey: {
+				name: GSI_OWNER_PK,
+				type: dynamodb.AttributeType.STRING,
+			},
+			sortKey: {
+				name: GSI_OWNER_SK, // TODO variableise me
+				type: dynamodb.AttributeType.NUMBER,
+			},
+			projectionType: dynamodb.ProjectionType.INCLUDE,
+			nonKeyAttributes: [
+				"id",	 // TODO variableise me
+				"jobName",	 // TODO variableise me
+				"jobStatus",	 // TODO variableise me
+				"languageSource",	 // TODO variableise me
+				"languageTargets",	 // TODO variableise me
+				"translateKey"	 // TODO variableise me
+			],
+		});
+
+		// API | DATA SOURCE
+		const FEATURE_PREFIX = "translation";
 		const apiDsJobTable = props.api.addDynamoDbDataSource(
-			"apiDsJobTable",
+			`${FEATURE_PREFIX}JobTable`,
 			this.jobTable,
 		);
+		NagSuppressions.addResourceSuppressions(
+			props.api,
+			[
+				{
+					id: "AwsSolutions-IAM5",
+					reason: "Permission is scoped to dedicated DDB table",
+					appliesTo: [
+						`Resource::<${cdk.Stack.of(this).getLogicalId(
+							this.jobTable.node.defaultChild as cdk.CfnElement,
+						)}.Arn>/index/*`,
+					],
+				},
+			],
+			true,
+		);
 
-		// INFRA | DYNAMODB | JOBS | API | QUERY
-		const jobNodeDefinition = {
-			contentType: GraphqlType.string({ isRequired: true }),
-			createdAt: GraphqlType.awsTimestamp(),
-			id: GraphqlType.id({ isRequired: true }),
-			jobIdentity: GraphqlType.string({ isRequired: true }),
-			jobName: GraphqlType.string({ isRequired: true }),
-			jobOwner: GraphqlType.string(),
-			jobStatus: GraphqlType.string(),
-			languageSource: GraphqlType.string({ isRequired: true }),
-			languageTargets: GraphqlType.awsJson(),
-			sourceKey: GraphqlType.string(),
-			sourceStatus: GraphqlType.string(),
-			translateCallback: GraphqlType.awsJson(),
-			translateKey: GraphqlType.awsJson(),
-			translateStatus: GraphqlType.awsJson(),
-		};
-
-		const jobNode = new ObjectType("jobNode", {
-			definition: jobNodeDefinition,
-		});
-
-		const jobNodeConnection = new ObjectType(`jobNodeConnection`, {
-			definition: {
-				items: jobNode.attribute({ isList: true, isRequired: true }),
-				nextToken: GraphqlType.string(),
+		// API | QUERY
+		// API | QUERY listJobs
+		// INPUT
+		// NA
+		// OUTPUT
+		const listJobs_output_item = new OutputType(
+			`${FEATURE_PREFIX}_listJobs_output_item`,
+			{
+				definition: {
+					jobOwner: GraphqlType.string({ isRequired: true }),
+					createdAt: GraphqlType.awsTimestamp({ isRequired: true }),
+					id: GraphqlType.id(),
+					jobName: GraphqlType.string(),
+					jobStatus: GraphqlType.string(),
+					languageSource: GraphqlType.string(),
+					languageTargets: GraphqlType.awsJson(),
+					translateKey: GraphqlType.awsJson(),
+				},
+				directives: [Directive.custom("@aws_cognito_user_pools")],
 			},
-		});
+		);
+		const listJobs_output = new OutputType(
+			`${FEATURE_PREFIX}_listJobs_output`,
+			{
+				definition: {
+					items: listJobs_output_item.attribute({ isList: true }),
+					nextToken: GraphqlType.string(),
+				},
+				directives: [Directive.custom("@aws_cognito_user_pools")],
+			},
+		);
+		props.apiSchema.addType(listJobs_output_item);
+		props.apiSchema.addType(listJobs_output);
 
+		// QUERY
 		const listJobsQuery = new ResolvableField({
-			returnType: jobNodeConnection.attribute(),
+			returnType: listJobs_output.attribute(),
+			dataSource: apiDsJobTable,
 			args: {
 				limit: GraphqlType.int(),
 				nextToken: GraphqlType.string(),
 			},
-			dataSource: apiDsJobTable,
 			requestMappingTemplate: appsync.MappingTemplate.fromString(`
 				{
 					"version" : "2017-02-28",
-					"operation" : "Scan",
-					"filter": {
-						"expression": "#jobOwnerKey = :jobOwnerValue",
-						"expressionNames" : {
-							"#jobOwnerKey": "jobOwner",
+					"operation" : "Query",
+					"index": "${GSI_OWNER}",
+					"query": {
+						"expression": "#owner = :sub",
+						"expressionNames": {
+							"#owner": "${GSI_OWNER_PK}"
 						},
-						"expressionValues" : {
-							":jobOwnerValue": $util.dynamodb.toDynamoDBJson($ctx.identity.sub),
-						},
-					}
+						"expressionValues": {
+							":sub": $util.dynamodb.toDynamoDBJson($ctx.identity.sub)
+						}
+					},
+					"scanIndexForward": false
 				}
 			`),
-			responseMappingTemplate: appsync.MappingTemplate.dynamoDbResultItem(),
+			responseMappingTemplate: appsync.MappingTemplate.fromString(`
+				{
+					"items": $util.toJson($ctx.result.items),
+					"nextToken": $util.toJson($util.defaultIfNullOrBlank($context.result.nextToken, null))
+				}
+			`),
+			directives: [Directive.custom("@aws_cognito_user_pools")],
 		});
+		props.apiSchema.addQuery(
+			`${FEATURE_PREFIX}ListJobs`,
+			listJobsQuery
+		);
 
-		props.apiSchema.addType(jobNode);
-		props.apiSchema.addType(jobNodeConnection);
-		props.apiSchema.addQuery("translationListJobs", listJobsQuery);
-
-		// INFRA | DYNAMODB | JOBS | API | MUTATION
-		const jobNodeInput = new InputType("jobNodeInput", {
-			definition: jobNodeDefinition,
+		// API | MUTATION
+		// API | MUTATION createJob
+		// INPUT
+		const createJob_input = new InputType(`${FEATURE_PREFIX}_createJob_input`, {
+			definition: {
+				contentType: GraphqlType.string({ isRequired: true }),
+				createdAt: GraphqlType.awsTimestamp(),
+				id: GraphqlType.id({ isRequired: true }),
+				jobIdentity: GraphqlType.string({ isRequired: true }),
+				jobName: GraphqlType.string({ isRequired: true }),
+				jobOwner: GraphqlType.string(),
+				jobStatus: GraphqlType.string(),
+				languageSource: GraphqlType.string({ isRequired: true }),
+				languageTargets: GraphqlType.awsJson(),
+				sourceKey: GraphqlType.string(),
+				sourceStatus: GraphqlType.string(),
+				translateCallback: GraphqlType.awsJson(),
+				translateKey: GraphqlType.awsJson(),
+				translateStatus: GraphqlType.awsJson(),
+			},
+			directives: [Directive.custom("@aws_cognito_user_pools")],
 		});
+		props.apiSchema.addType(createJob_input);
 
+		// OUTPUT
+		const createJob_output = new OutputType(
+			`${FEATURE_PREFIX}_createJob_output`,
+			{
+				definition: {
+					contentType: GraphqlType.string({ isRequired: true }),
+					createdAt: GraphqlType.awsTimestamp(),
+					id: GraphqlType.id({ isRequired: true }),
+					jobIdentity: GraphqlType.string({ isRequired: true }),
+					jobName: GraphqlType.string({ isRequired: true }),
+					jobOwner: GraphqlType.string(),
+					jobStatus: GraphqlType.string(),
+					languageSource: GraphqlType.string({ isRequired: true }),
+					languageTargets: GraphqlType.awsJson(),
+					sourceKey: GraphqlType.string(),
+					sourceStatus: GraphqlType.string(),
+					translateCallback: GraphqlType.awsJson(),
+					translateKey: GraphqlType.awsJson(),
+					translateStatus: GraphqlType.awsJson(),
+				},
+				directives: [Directive.custom("@aws_cognito_user_pools")],
+			},
+		);
+		props.apiSchema.addType(createJob_output);
+
+		// MUTATION
 		const createJobMutation = new ResolvableField({
-			returnType: jobNodeConnection.attribute(),
+			returnType: createJob_output.attribute(),
 			args: {
 				limit: GraphqlType.int(),
 				nextToken: GraphqlType.string(),
-				input: jobNodeInput.attribute(),
+				input: createJob_input.attribute(),
 			},
 			dataSource: apiDsJobTable,
-			requestMappingTemplate: appsync.MappingTemplate.fromFile(
-				"./appsync/mutation-createJob-request.vtl",
-			),
+			requestMappingTemplate: appsync.MappingTemplate.fromString(`
+				#set($input = $ctx.args.input)
+				#set($input.jobOwner = $ctx.identity.sub)
+
+				#set($input.createdAt = $util.time.nowEpochSeconds())
+
+				{
+					"version": "2017-02-28",
+					"operation": "PutItem",
+					"key" : {
+						"id" : $util.dynamodb.toDynamoDBJson($ctx.args.input.id)
+					},
+					"attributeValues": $util.dynamodb.toMapValuesJson($input)
+				}
+			`),
 			responseMappingTemplate: appsync.MappingTemplate.dynamoDbResultItem(),
+			directives: [Directive.custom("@aws_cognito_user_pools")],
 		});
 
-		props.apiSchema.addType(jobNodeInput);
-		props.apiSchema.addMutation("translationCreateJob", createJobMutation);
-
-		// SUBSCRIPTION
-		// SUBSCRIPTION | updateJob
-		const subscribeUpdateJobSubscription = new Field({
-			returnType: jobNodeConnection.attribute(),
-			args: {
-				id: GraphqlType.id({ isRequired: true }),
-			},
-			directives: [
-			],
-		});
-		props.apiSchema.addSubscription(
-			'translationUpdateJob',
-			subscribeUpdateJobSubscription,
+		props.apiSchema.addMutation(
+			`${FEATURE_PREFIX}CreateJob`,
+			createJobMutation
 		);
 
 		//
