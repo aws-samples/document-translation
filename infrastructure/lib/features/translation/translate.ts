@@ -8,13 +8,12 @@ import { NagSuppressions } from "cdk-nag";
 import {
 	aws_dynamodb as dynamodb,
 	aws_s3 as s3,
-	aws_s3_notifications as s3n,
 	aws_stepfunctions as sfn,
 	aws_stepfunctions_tasks as tasks,
 	aws_iam as iam,
 } from "aws-cdk-lib";
 import { dt_lambda } from "../../components/lambda";
-import { dt_callback } from "../../components/callback";
+import { dt_resumeTable, dt_resumePauseTask, dt_resumeWorkflow } from "../../components/sfnResume";
 import { dt_stepfunction } from "../../components/stepfunction";
 
 export interface props {
@@ -27,14 +26,24 @@ export interface props {
 
 export class dt_translationTranslate extends Construct {
 	public readonly sfnMain: sfn.StateMachine;
-	public readonly sfnCallback: sfn.StateMachine;
+	public readonly sfnResume: sfn.StateMachine;
 
 	constructor(scope: Construct, id: string, props: props) {
 		super(scope, id);
 
 		//
-		// STATE MACHINE | TRANSLATE
+		// STATE MACHINE
 		//
+		// STATE MACHINE | RESUME
+		// STATE MACHINE | RESUME | TABLE
+		const resumeTable = new dt_resumeTable(
+			this,
+			`${cdk.Stack.of(this).stackName}_TranslationTranslateResumeTable`,
+			{
+				removalPolicy: props.removalPolicy,
+			},
+		).table;
+
 		// STATE MACHINE | TRANSLATE
 		// STATE MACHINE | TRANSLATE | TASKS
 		// STATE MACHINE | TRANSLATE | TASKS | updateDbStatusProcessing - Log to DB, jobStatus processing
@@ -220,18 +229,18 @@ export class dt_translationTranslate extends Construct {
 						"ContentType.$": "$.jobDetails.contentType",
 						S3Uri: sfn.JsonPath.format(
 							"s3://" +
-								props.contentBucket.bucketName +
-								"/{}/" +
-								props.namedStrings.s3StageUpload,
+							props.contentBucket.bucketName +
+							"/{}/" +
+							props.namedStrings.s3StageUpload,
 							sfn.JsonPath.stringAt("$.jobDetails.s3PrefixToJobId"),
 						),
 					},
 					OutputDataConfig: {
 						S3Uri: sfn.JsonPath.format(
 							"s3://" +
-								props.contentBucket.bucketName +
-								"/{}/" +
-								props.namedStrings.s3StageOutput,
+							props.contentBucket.bucketName +
+							"/{}/" +
+							props.namedStrings.s3StageOutput,
 							sfn.JsonPath.stringAt("$.jobDetails.s3PrefixToJobId"),
 						),
 					},
@@ -242,8 +251,7 @@ export class dt_translationTranslate extends Construct {
 						"$.iterationDetails.setCustomTerminology.Payload",
 				},
 				iamResources: [
-					`arn:aws:translate:${cdk.Stack.of(this).region}:${
-						cdk.Stack.of(this).account
+					`arn:aws:translate:${cdk.Stack.of(this).region}:${cdk.Stack.of(this).account
 					}:*`,
 				],
 			},
@@ -255,43 +263,12 @@ export class dt_translationTranslate extends Construct {
 			backoffRate: 1.2,
 		});
 
-		// STATE MACHINE | TRANSLATE | TASKS | updateDbTranslateCallback - Log to DB, Translate callback token
-		// SDK task required for TaskToken with DynamoDB
-		const updateDbTranslateCallback = new tasks.CallAwsService(
-			this,
-			"updateDbTranslateCallback",
-			{
-				resultPath: "$.updateDbTranslateCallback",
-				service: "dynamodb",
-				action: "updateItem",
-				integrationPattern: sfn.IntegrationPattern.WAIT_FOR_TASK_TOKEN,
-				parameters: {
-					TableName: props.jobTable.tableName,
-					Key: {
-						id: {
-							S: sfn.JsonPath.stringAt("$.jobDetails.jobId"),
-						},
-					},
-					UpdateExpression:
-						"SET " +
-						props.namedStrings.mapForTranslateCallback +
-						".#attribute = :value",
-					ExpressionAttributeNames: {
-						"#attribute": sfn.JsonPath.format(
-							"{}{}",
-							props.namedStrings.attributeSafePrefix,
-							sfn.JsonPath.stringAt("$.iterationDetails.languageTarget"),
-						),
-					},
-					ExpressionAttributeValues: {
-						":value": {
-							S: sfn.JsonPath.taskToken,
-						},
-					},
-				},
-				iamResources: [props.jobTable.tableArn],
-			},
-		);
+		// STATE MACHINE | TRANSLATE | TASKS | updateDbTranslateResume
+		const updateDbTranslateResume = new dt_resumePauseTask(this, 'updateDbTranslateResume', {
+			pathToId: "$.createTranslationJob.JobId",
+			table: resumeTable,
+			removalPolicy: props.removalPolicy,
+		}).task;
 
 		// STATE MACHINE | TRANSLATE | TASKS | updateDbTranslateResultKey - Log to DB, Translated new file S3 Key
 		const updateDbTranslateResultKey = new tasks.DynamoUpdateItem(
@@ -380,7 +357,7 @@ export class dt_translationTranslate extends Construct {
 				"objectKey.$": "$.Payload",
 			},
 			payload: sfn.TaskInput.fromObject({
-				payload: sfn.JsonPath.stringAt("$.updateDbTranslateCallback.Payload"),
+				payload: sfn.JsonPath.stringAt("$.updateDbTranslateResume.Payload"),
 			}),
 		});
 
@@ -425,7 +402,7 @@ export class dt_translationTranslate extends Construct {
 									// CHOICE EXIT - useCustomTerminologyAvailable
 									.afterwards()
 									.next(createTranslationJob)
-									.next(updateDbTranslateCallback)
+									.next(updateDbTranslateResume)
 									.next(decodeS3Key)
 									.next(updateDbTranslateResultKey)
 									.next(updateDbTranslateResultStatus),
@@ -601,115 +578,48 @@ export class dt_translationTranslate extends Construct {
 		);
 		sfnMainRole?.attachInlinePolicy(policyPermitPassTranslateRole);
 
-		// STATE MACHINE | CALLBACKSEND
-		this.sfnCallback = new dt_callback(
+		// STATE MACHINE | RESUME
+		this.sfnResume = new dt_resumeWorkflow(
 			this,
-			`${cdk.Stack.of(this).stackName}_TranslationTranslateCallback`,
+			`${cdk.Stack.of(this).stackName}_TranslationTranslateResume`,
 			{
-				nameSuffix: "TranslationTranslateCallback",
-				jobTable: props.jobTable,
+				nameSuffix: "TranslationTranslateResume",
+				pathToId: "$.id",
 				removalPolicy: props.removalPolicy,
-				dbCallbackParameters: {
-					TableName: props.jobTable.tableName,
-					Key: {
-						id: {
-							S: sfn.JsonPath.stringAt("$.jobId"),
-						},
-					},
-					ProjectionExpression: sfn.JsonPath.format(
-						"{}.{}",
-						props.namedStrings.mapForTranslateCallback,
-						"#attribute",
-					),
-					ExpressionAttributeNames: {
-						"#attribute": sfn.JsonPath.format(
-							"{}{}",
-							props.namedStrings.attributeSafePrefix,
-							sfn.JsonPath.stringAt("$.callbackAttribute"),
-						),
-					},
-				},
+				stepFunction: this.sfnMain,
+				table: resumeTable,
 			},
 		).sfnMain;
-		// STATE MACHINE | CALLBACKSEND | DEP | LAMBDA passS3EventToStepFunctionCallbackSend - Pass event to StepFunction
-		const lambdaPassS3EventToStepFunctionCallbackSendRole = new iam.Role(
-			this,
-			"lambdaPassS3EventToStepFunctionCallbackSendRole",
-			{
-				// ASM-L6 // ASM-L8
-				assumedBy: new iam.ServicePrincipal("lambda.amazonaws.com"),
-				description:
-					"Lambda Role (Pass S3 Event to StepFunction for Translate Callback)",
-			},
-		);
-		const lambdaPassS3EventToStepFunctionCallbackSend = new dt_lambda(
-			this,
-			"lambdaPassS3EventToStepFunctionCallbackSend",
-			{
-				role: lambdaPassS3EventToStepFunctionCallbackSendRole,
-				path: "lambda/passS3EventToStepFunction",
-				description: "Pass S3 Event to StepFunction for Translate Callback",
-				environment: {
-					stateMachineArn: this.sfnCallback.stateMachineArn,
-					mapForTranslateCallback: props.namedStrings.mapForTranslateCallback,
-					attributeSafePrefix: props.namedStrings.attributeSafePrefix,
-				},
-			},
-		);
-		const permitStartExecutionOfCallbackSendForTranslate = new iam.Policy(
-			this,
-			"permitStartExecutionOfCallbackSendForTranslate",
-			{
-				policyName: "Start-Sfn-translationTranslateCallback",
-				statements: [
-					new iam.PolicyStatement({
-						// ASM-IAM
-						actions: ["states:StartExecution"],
-						resources: [this.sfnCallback.stateMachineArn],
-					}),
-				],
-			},
-		);
-		lambdaPassS3EventToStepFunctionCallbackSendRole?.attachInlinePolicy(
-			permitStartExecutionOfCallbackSendForTranslate,
-		);
-		props.contentBucket.addEventNotification(
-			s3.EventType.OBJECT_CREATED,
-			new s3n.LambdaDestination(
-				lambdaPassS3EventToStepFunctionCallbackSend.lambdaFunction,
-			),
-			{ prefix: props.s3PrefixPrivate },
-		);
-		NagSuppressions.addResourceSuppressionsByPath(
-			cdk.Stack.of(this),
-			`/${
-				cdk.Stack.of(this).node.findChild(
-					"BucketNotificationsHandler050a0587b7544547bf325f094a3db834",
-				).node.path
-			}/Role/Resource`,
-			[
-				{
-					id: "AwsSolutions-IAM4",
-					reason: "CDK managed policy without override option.",
-				},
-			],
-			true,
-		);
-		NagSuppressions.addResourceSuppressionsByPath(
-			cdk.Stack.of(this),
-			`/${
-				cdk.Stack.of(this).node.findChild(
-					"BucketNotificationsHandler050a0587b7544547bf325f094a3db834",
-				).node.path
-			}/Role/DefaultPolicy/Resource`,
-			[
-				{
-					id: "AwsSolutions-IAM5",
-					reason: "CDK managed policy without override option.",
-				},
-			],
-			true,
-		);
+
+
+		// NagSuppressions.addResourceSuppressionsByPath(
+		// 	cdk.Stack.of(this),
+		// 	`/${cdk.Stack.of(this).node.findChild(
+		// 		"BucketNotificationsHandler050a0587b7544547bf325f094a3db834",
+		// 	).node.path
+		// 	}/Role/Resource`,
+		// 	[
+		// 		{
+		// 			id: "AwsSolutions-IAM4",
+		// 			reason: "CDK managed policy without override option.",
+		// 		},
+		// 	],
+		// 	true,
+		// );
+		// NagSuppressions.addResourceSuppressionsByPath(
+		// 	cdk.Stack.of(this),
+		// 	`/${cdk.Stack.of(this).node.findChild(
+		// 		"BucketNotificationsHandler050a0587b7544547bf325f094a3db834",
+		// 	).node.path
+		// 	}/Role/DefaultPolicy/Resource`,
+		// 	[
+		// 		{
+		// 			id: "AwsSolutions-IAM5",
+		// 			reason: "CDK managed policy without override option.",
+		// 		},
+		// 	],
+		// 	true,
+		// );
 
 		// END
 	}
