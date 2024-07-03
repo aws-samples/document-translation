@@ -52,7 +52,7 @@ export class dt_readableJob extends Construct {
 
 		// DYNAMODB | INDEX
 		this.jobTable.addGlobalSecondaryIndex({
-			indexName: "byOwnerAndUpdatedAt",
+			indexName: dt_enums.JobTable.GSI_OWNER,
 			partitionKey: {
 				name: dt_enums.JobTable.GSI_OWNER_PK,
 				type: dynamodb.AttributeType.STRING,
