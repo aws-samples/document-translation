@@ -435,9 +435,6 @@ export class dt_translate extends Construct {
 					s3PrefixPrivate: props.s3PrefixPrivate,
 				},
 			);
-			handleErrorsFromSfnArns.push(
-				featTranslationPii.sfnCallback.stateMachineArn,
-			);
 			sfnPii = featTranslationPii.sfnMain;
 
 			// STATE MACHINE | PII

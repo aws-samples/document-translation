@@ -18,7 +18,7 @@ import {
 	aws_logs_destinations as destinations,
 } from "aws-cdk-lib";
 import { dt_lambda } from "../../components/lambda";
-import { dt_callback } from "../../components/callback";
+import { dt_resumeWorkflow } from "../../components/sfnResume";
 import { dt_stepfunction } from "../../components/stepfunction";
 
 export interface props {
@@ -35,7 +35,6 @@ export class dt_translationPii extends Construct {
 	public readonly jobTable: dynamodb.Table;
 	public readonly helpTable: dynamodb.Table;
 	public readonly sfnMain: sfn.StateMachine;
-	public readonly sfnCallback: sfn.StateMachine;
 
 	constructor(scope: Construct, id: string, props: props) {
 		super(scope, id);
@@ -128,34 +127,21 @@ export class dt_translationPii extends Construct {
 			backoffRate: 1.1,
 		});
 
-		// STATE MACHINE | MAIN | TASKS | updateDbPiiDetectCallback - Log to DB, PIIDetect callback token
-		// SDK task required for TaskToken with DynamoDB
-		const updateDbPiiDetectCallback = new tasks.CallAwsService(
-			this,
-			"updateDbPiiDetectCallback",
-			{
-				resultPath: sfn.JsonPath.DISCARD,
-				service: "dynamodb",
-				action: "updateItem",
-				integrationPattern: sfn.IntegrationPattern.WAIT_FOR_TASK_TOKEN,
-				parameters: {
-					TableName: props.jobTable.tableName,
-					Key: {
-						id: {
-							S: sfn.JsonPath.stringAt("$.jobDetails.jobId"),
-						},
-					},
-					UpdateExpression:
-						"SET " + props.namedStrings.attributeForPiiCallback + " = :value",
-					ExpressionAttributeValues: {
-						":value": {
-							S: sfn.JsonPath.taskToken,
-						},
-					},
+		// STATE MACHINE | MAIN | TASKS | updateDbPiiResume
+		const resumeWorkflow = new dt_resumeWorkflow(this, 'resumeWorkflow', {
+			pathToIdPauseTask: "$.createClassificationJob.JobId",
+			removalPolicy: props.removalPolicy,
+			nameSuffix: "TranslationPiiResume",
+			pathToIdWorkflow: "$.detail.jobId",
+			eventPattern: {
+				source: ["doctran.macie"],
+				detailType: ["JOB_COMPLETED"],
+				detail: {
+					eventType: ["JOB_COMPLETED"],
 				},
-				iamResources: [props.jobTable.tableArn],
 			},
-		);
+		});
+		const updateDbPiiResume = resumeWorkflow.task;
 
 		// STATE MACHINE | MAIN | TASKS | listMacieFindings - Get Macie findings from results
 		const listMacieFindings = new tasks.CallAwsService(
@@ -266,7 +252,7 @@ export class dt_translationPii extends Construct {
 				removalPolicy: props.removalPolicy,
 				definition: updateDbPrePiiDetect
 					.next(createClassificationJob)
-					.next(updateDbPiiDetectCallback)
+					.next(updateDbPiiResume)
 					.next(listMacieFindings)
 					.next(updateDbPostPiiDetect)
 					.next(
@@ -312,75 +298,44 @@ export class dt_translationPii extends Construct {
 			],
 			true,
 		);
-
 		const sfnMainArn = this.sfnMain.stateMachineArn;
 
-		// STATE MACHINE | CALLBACKSEND
-		this.sfnCallback = new dt_callback(
+		// MACIE CLOUDWATCH LOG | LAMBDA PassMacieLogToEventBridgeRole - Map Macie result to job
+		const lambdaPassMacieLogToEventBridgeRole = new iam.Role(
 			this,
-			`${cdk.Stack.of(this).stackName}_TranslationPiiCallback`,
-			{
-				nameSuffix: "TranslationPiiCallback",
-				jobTable: props.jobTable,
-				removalPolicy: props.removalPolicy,
-				dbCallbackParameters: {
-					TableName: props.jobTable.tableName,
-					Key: {
-						id: {
-							S: sfn.JsonPath.stringAt("$.jobId"),
-						},
-					},
-					ProjectionExpression: sfn.JsonPath.stringAt("$.callbackAttribute"),
-				},
-			},
-		).sfnMain;
-
-		new events.Rule(this, "onSfnExecutionStateNotSuccess", {
-			description: "dt_translationPii onSfnExecutionStateNotSuccess",
-			eventPattern: {
-				source: ["aws.states"],
-				detail: {
-					status: ["FAILED", "TIMED_OUT", "ABORTED"],
-					stateMachineArn: [sfnMainArn, this.sfnCallback.stateMachineArn],
-				},
-			},
-		});
-		// STATE MACHINE | CALLBACKSEND | DEP | LAMBDA parseMacieResult - Map Macie result to job
-		const lambdaParseMacieResultRole = new iam.Role(
-			this,
-			"lambdaParseMacieResultRole",
+			"lambdaPassMacieLogToEventBridgeRole",
 			{
 				// ASM-L6 // ASM-L8
 				assumedBy: new iam.ServicePrincipal("lambda.amazonaws.com"),
-				description: "Lambda Role (Parse Macie result)",
+				description: "Lambda Role (Pass Macie log to EventBridge)",
 			},
 		);
 
-		const lambdaParseMacieResult = new dt_lambda(this, "parseMacieResult", {
-			role: lambdaParseMacieResultRole,
-			path: "lambda/parseMacieResult",
-			description: "Parse Macie result",
+		const lambdaPassMacieLogToEventBridge = new dt_lambda(this, "lambdaPassMacieLogToEventBridge", {
+			role: lambdaPassMacieLogToEventBridgeRole,
+			path: "lambda/passLogToEventBridge",
+			description: "Pass Macie log to EventBridge",
 			environment: {
-				stateMachineArn: this.sfnCallback.stateMachineArn,
-				attributeForPiiCallback: props.namedStrings.attributeForPiiCallback,
+				eventSource: "macie",
+				pathToDetailType: "eventType",
 			},
 		}).lambdaFunction;
 
-		const permitStartCallbackPii = new iam.Policy(
+		const permitPutEventsIntoDefaultBus = new iam.Policy(
 			this,
-			"permitStartCallbackPii",
+			"permitPutEventsIntoDefaultBus",
 			{
-				policyName: "Start-Sfn-TranslationPiiCallback",
+				policyName: "permitPutEventsIntoDefaultBus",
 				statements: [
 					new iam.PolicyStatement({
 						// ASM-IAM
-						actions: ["states:StartExecution"],
-						resources: [this.sfnCallback.stateMachineArn],
+						actions: ["events:PutEvents"],
+						resources: [`arn:aws:events:${cdk.Stack.of(this).region}:${cdk.Stack.of(this).account}:event-bus/default`],
 					}),
 				],
 			},
 		);
-		lambdaParseMacieResultRole?.attachInlinePolicy(permitStartCallbackPii);
+		lambdaPassMacieLogToEventBridgeRole?.attachInlinePolicy(permitPutEventsIntoDefaultBus);
 
 		new logs.SubscriptionFilter(this, "macieLogSubscription", {
 			logGroup: logs.LogGroup.fromLogGroupName(
@@ -388,7 +343,7 @@ export class dt_translationPii extends Construct {
 				"macieClassificationJobs",
 				"/aws/macie/classificationjobs",
 			),
-			destination: new destinations.LambdaDestination(lambdaParseMacieResult),
+			destination: new destinations.LambdaDestination(lambdaPassMacieLogToEventBridge),
 			filterPattern: logs.FilterPattern.stringValue(
 				"$.eventType",
 				"=",

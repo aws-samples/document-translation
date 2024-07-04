@@ -14,19 +14,21 @@ import {
 } from "aws-cdk-lib";
 import { dt_stepfunction } from "./stepfunction";
 
-export interface pauseProps {
+export interface props {
+	pathToIdPauseTask: string;
+	pathToIdWorkflow: string;
 	removalPolicy: cdk.RemovalPolicy;
-	pathToId: string;
+	nameSuffix: string;
+	eventPattern: events.EventPattern;
 }
 
-export class dt_resumePause extends Construct {
-	public readonly table: dynamodb.Table;
+export class dt_resumeWorkflow extends Construct {
 	public readonly task: tasks.CallAwsService;
 
-	constructor(scope: Construct, id: string, props: pauseProps) {
+	constructor(scope: Construct, id: string, props: props) {
 		super(scope, id);
 
-		this.table = new dynamodb.Table(this, "table", {
+		const table = new dynamodb.Table(this, "table", {
 			partitionKey: { name: "id", type: dynamodb.AttributeType.STRING },
 			billingMode: dynamodb.BillingMode.PAY_PER_REQUEST,
 			removalPolicy: props.removalPolicy,
@@ -41,8 +43,8 @@ export class dt_resumePause extends Construct {
 				action: "updateItem",
 				integrationPattern: sfn.IntegrationPattern.WAIT_FOR_TASK_TOKEN,
 				parameters: {
-					TableName: this.table.tableName,
-					Key: { id: { "S.$": props.pathToId } },
+					TableName: table.tableName,
+					Key: { id: { "S.$": props.pathToIdPauseTask } },
 					UpdateExpression: 'SET #taskToken = :taskToken',
 					ExpressionAttributeNames: {
 						'#taskToken': "token",
@@ -53,26 +55,9 @@ export class dt_resumePause extends Construct {
 						}
 					},
 				},
-				iamResources: [this.table.tableArn],
+				iamResources: [table.tableArn],
 			},
 		);
-	}
-}
-
-export interface workflowProps {
-	stepFunction: sfn.StateMachine;
-	pathToId: string;
-	removalPolicy: cdk.RemovalPolicy;
-	nameSuffix: string;
-	table: dynamodb.Table;
-	eventPattern: events.EventPattern;
-}
-
-export class dt_resumeWorkflow extends Construct {
-	public readonly sfnMain: sfn.StateMachine;
-
-	constructor(scope: Construct, id: string, props: workflowProps) {
-		super(scope, id);
 
 		//
 		// STATE MACHINE
@@ -84,10 +69,10 @@ export class dt_resumeWorkflow extends Construct {
 			resultPath: "$.getResumeToken",
 			key: {
 				id: tasks.DynamoAttributeValue.fromString(
-					sfn.JsonPath.stringAt(props.pathToId)
+					sfn.JsonPath.stringAt(props.pathToIdWorkflow)
 				)
 			},
-			table: props.table,
+			table: table,
 		});
 
 		// STATE MACHINE | RESUME | TASKS | sendTaskSuccess
@@ -109,13 +94,13 @@ export class dt_resumeWorkflow extends Construct {
 		// STATE MACHINE | RESUME | TASKS | deleteResumeToken
 		const deleteResumeToken = new tasks.DynamoDeleteItem(this, 'deleteResumeToken', {
 			key: {
-				id: tasks.DynamoAttributeValue.fromString(sfn.JsonPath.stringAt(props.pathToId))
+				id: tasks.DynamoAttributeValue.fromString(sfn.JsonPath.stringAt(props.pathToIdWorkflow))
 			},
-			table: props.table,
+			table: table,
 		});
 
 		// STATE MACHINE | MAIN | DEF
-		this.sfnMain = new dt_stepfunction(
+		const sfnMain = new dt_stepfunction(
 			this,
 			`${cdk.Stack.of(this).stackName}_${props.nameSuffix}`,
 			{
@@ -128,7 +113,7 @@ export class dt_resumeWorkflow extends Construct {
 		).StateMachine;
 
 		NagSuppressions.addResourceSuppressions(
-			this.sfnMain.role,
+			sfnMain.role,
 			[
 				{
 					id: "AwsSolutions-IAM5",
@@ -148,7 +133,7 @@ export class dt_resumeWorkflow extends Construct {
 			eventPattern: props.eventPattern
 		});
 
-		eventRule.addTarget(new targets.SfnStateMachine(this.sfnMain));
+		eventRule.addTarget(new targets.SfnStateMachine(sfnMain));
 		// END
 	}
 }

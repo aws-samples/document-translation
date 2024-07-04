@@ -13,7 +13,7 @@ import {
 	aws_iam as iam,
 } from "aws-cdk-lib";
 import { dt_lambda } from "../../components/lambda";
-import { dt_resumePause, dt_resumeWorkflow } from "../../components/sfnResume";
+import { dt_resumeWorkflow } from "../../components/sfnResume";
 import { dt_stepfunction } from "../../components/stepfunction";
 
 export interface props {
@@ -26,7 +26,6 @@ export interface props {
 
 export class dt_translationTranslate extends Construct {
 	public readonly sfnMain: sfn.StateMachine;
-	public readonly sfnResume: sfn.StateMachine;
 
 	constructor(scope: Construct, id: string, props: props) {
 		super(scope, id);
@@ -254,12 +253,21 @@ export class dt_translationTranslate extends Construct {
 		});
 
 		// STATE MACHINE | TRANSLATE | TASKS | updateDbTranslateResume
-		const resumePause = new dt_resumePause(this, 'resumePause', {
-			pathToId: "$.createTranslationJob.JobId",
+		const resumeWorkflow = new dt_resumeWorkflow(this, 'resumeWorkflow', {
+			pathToIdPauseTask: "$.createTranslationJob.JobId",
 			removalPolicy: props.removalPolicy,
+			nameSuffix: "TranslationTranslateResume",
+			pathToIdWorkflow: "$.detail.jobId",
+			eventPattern: {
+				source: ["aws.translate"],
+				detailType: ["Translate TextTranslationJob State Change"],
+				detail: {
+					jobStatus: ["COMPLETED"],
+				},
+			},
 		});
-		const updateDbTranslateResume = resumePause.task;
 
+		const updateDbTranslateResumeTask = resumeWorkflow.task;
 
 		// STATE MACHINE | TRANSLATE | TASKS | updateDbTranslateResultKey - Log to DB, Translated new file S3 Key
 		const updateDbTranslateResultKey = new tasks.DynamoUpdateItem(
@@ -373,7 +381,7 @@ export class dt_translationTranslate extends Construct {
 									// CHOICE EXIT - useCustomTerminologyAvailable
 									.afterwards()
 									.next(createTranslationJob)
-									.next(updateDbTranslateResume)
+									.next(updateDbTranslateResumeTask)
 									.next(updateDbTranslateResultKey)
 									.next(updateDbTranslateResultStatus),
 							),
@@ -547,26 +555,6 @@ export class dt_translationTranslate extends Construct {
 			},
 		);
 		sfnMainRole?.attachInlinePolicy(policyPermitPassTranslateRole);
-
-		// STATE MACHINE | RESUME
-		this.sfnResume = new dt_resumeWorkflow(
-			this,
-			`${cdk.Stack.of(this).stackName}_TranslationTranslateResume`,
-			{
-				nameSuffix: "TranslationTranslateResume",
-				pathToId: "$.detail.jobId",
-				removalPolicy: props.removalPolicy,
-				stepFunction: this.sfnMain,
-				table: resumePause.table,
-				eventPattern: {
-					source: ["aws.translate"],
-					detailType: ["Translate TextTranslationJob State Change"],
-					detail: {
-						jobStatus: ["COMPLETED"],
-					},
-				},
-			},
-		).sfnMain;
 
 		// END
 	}
