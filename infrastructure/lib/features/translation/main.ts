@@ -60,6 +60,9 @@ export class dt_translationMain extends Construct {
 					jobIdentity: sfn.JsonPath.stringAt(
 						"$.dynamodb.NewImage.jobIdentity.S",
 					),
+					jobName: sfn.JsonPath.stringAt(
+						"$.dynamodb.NewImage.jobName.S",
+					),
 					s3PrefixToJobId: sfn.JsonPath.format(
 						props.s3PrefixPrivate + "/{}/{}",
 						sfn.JsonPath.stringAt("$.dynamodb.NewImage.jobIdentity.S"),
@@ -67,9 +70,9 @@ export class dt_translationMain extends Construct {
 					),
 					s3PrefixToObject: sfn.JsonPath.format(
 						props.s3PrefixPrivate +
-							"/{}/{}/" +
-							props.namedStrings.s3StageUpload +
-							"/{}",
+						"/{}/{}/" +
+						props.namedStrings.s3StageUpload +
+						"/{}",
 						sfn.JsonPath.stringAt("$.dynamodb.NewImage.jobIdentity.S"),
 						sfn.JsonPath.stringAt("$.dynamodb.Keys.id.S"),
 						sfn.JsonPath.stringAt("$.dynamodb.NewImage.jobName.S"),
@@ -228,7 +231,7 @@ export class dt_translationMain extends Construct {
 			// PIPE | DDB JOB TO STEPFUNCTION | PERMISSIONS
 			const pipeJobToSfnRole = new iam.Role(this, "pipeJobToSfnRole",
 				{
-		// ASM-L6 // ASM-L8
+					// ASM-L6 // ASM-L8
 					assumedBy: new iam.ServicePrincipal("pipes.amazonaws.com"),
 					description: "Pipe Role (Pass DynamoDB job to StepFunction)",
 				},
@@ -253,7 +256,7 @@ export class dt_translationMain extends Construct {
 						policyName: "Read-DynamoDB-Stream",
 						statements: [
 							new iam.PolicyStatement({
-						// ASM-IAM
+								// ASM-IAM
 								actions: ["dynamodb:DescribeStream", "dynamodb:GetRecords", "dynamodb:GetShardIterator"],
 								resources: [props.jobTable.tableStreamArn],
 							}),

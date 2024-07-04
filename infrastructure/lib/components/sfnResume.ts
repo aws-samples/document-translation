@@ -9,17 +9,21 @@ import {
 	aws_dynamodb as dynamodb,
 	aws_stepfunctions as sfn,
 	aws_stepfunctions_tasks as tasks,
+	aws_events as events,
+	aws_events_targets as targets,
 } from "aws-cdk-lib";
 import { dt_stepfunction } from "./stepfunction";
 
-export interface tableProps {
+export interface pauseProps {
 	removalPolicy: cdk.RemovalPolicy;
+	pathToId: string;
 }
 
-export class dt_resumeTable extends Construct {
+export class dt_resumePause extends Construct {
 	public readonly table: dynamodb.Table;
+	public readonly task: tasks.CallAwsService;
 
-	constructor(scope: Construct, id: string, props: tableProps) {
+	constructor(scope: Construct, id: string, props: pauseProps) {
 		super(scope, id);
 
 		this.table = new dynamodb.Table(this, "table", {
@@ -27,21 +31,6 @@ export class dt_resumeTable extends Construct {
 			billingMode: dynamodb.BillingMode.PAY_PER_REQUEST,
 			removalPolicy: props.removalPolicy,
 		});
-		// END
-	}
-}
-
-export interface pauseProps {
-	removalPolicy: cdk.RemovalPolicy;
-	pathToId: string;
-	table: dynamodb.Table
-}
-
-export class dt_resumePauseTask extends Construct {
-	public readonly task: tasks.CallAwsService;
-
-	constructor(scope: Construct, id: string, props: pauseProps) {
-		super(scope, id);
 
 		this.task = new tasks.CallAwsService(
 			this,
@@ -52,14 +41,19 @@ export class dt_resumePauseTask extends Construct {
 				action: "updateItem",
 				integrationPattern: sfn.IntegrationPattern.WAIT_FOR_TASK_TOKEN,
 				parameters: {
-					TableName: props.table.tableName,
+					TableName: this.table.tableName,
 					Key: { id: { "S.$": props.pathToId } },
-					UpdateExpression: 'SET token = :taskToken',
+					UpdateExpression: 'SET #taskToken = :taskToken',
+					ExpressionAttributeNames: {
+						'#taskToken': "token",
+					},
 					ExpressionAttributeValues: {
-						':taskToken': sfn.JsonPath.taskToken,
+						':taskToken': {
+							"S": sfn.JsonPath.taskToken,
+						}
 					},
 				},
-				iamResources: [props.table.tableArn],
+				iamResources: [this.table.tableArn],
 			},
 		);
 	}
@@ -71,6 +65,7 @@ export interface workflowProps {
 	removalPolicy: cdk.RemovalPolicy;
 	nameSuffix: string;
 	table: dynamodb.Table;
+	eventPattern: events.EventPattern;
 }
 
 export class dt_resumeWorkflow extends Construct {
@@ -86,6 +81,7 @@ export class dt_resumeWorkflow extends Construct {
 		// STATE MACHINE | RESUME | TASKS
 		// STATE MACHINE | RESUME | TASKS | getResumeToken
 		const getResumeToken = new tasks.DynamoGetItem(this, 'getResumeToken', {
+			resultPath: "$.getResumeToken",
 			key: {
 				id: tasks.DynamoAttributeValue.fromString(
 					sfn.JsonPath.stringAt(props.pathToId)
@@ -96,12 +92,13 @@ export class dt_resumeWorkflow extends Construct {
 
 		// STATE MACHINE | RESUME | TASKS | sendTaskSuccess
 		const sendTaskSuccess = new tasks.CallAwsService(this, "sendTaskSuccess", {
+			resultPath: "$.sendTaskSuccess",
 			service: "sfn",
 			action: "sendTaskSuccess",
 			parameters: {
-				TaskToken: sfn.JsonPath.stringAt("$.token.S"),
+				TaskToken: sfn.JsonPath.stringAt("$.getResumeToken.Item.token.S"),
 				Output: {
-					Payload: sfn.JsonPath.stringAt("$.payload"),
+					jobStatus: sfn.JsonPath.stringAt("$.detail.jobStatus"),
 				},
 			},
 			iamResources: [
@@ -109,10 +106,10 @@ export class dt_resumeWorkflow extends Construct {
 			]
 		});
 
-		// STATE MACHINE | RESUME | TASKS | getResumeToken
+		// STATE MACHINE | RESUME | TASKS | deleteResumeToken
 		const deleteResumeToken = new tasks.DynamoDeleteItem(this, 'deleteResumeToken', {
 			key: {
-				id: tasks.DynamoAttributeValue.fromString(props.pathToId)
+				id: tasks.DynamoAttributeValue.fromString(sfn.JsonPath.stringAt(props.pathToId))
 			},
 			table: props.table,
 		});
@@ -145,6 +142,13 @@ export class dt_resumeWorkflow extends Construct {
 			true,
 		);
 
+		// EVENT RULE
+		const eventRule = new events.Rule(this, "resumeRule", {
+			description: `${props.nameSuffix} sfnResume`,
+			eventPattern: props.eventPattern
+		});
+
+		eventRule.addTarget(new targets.SfnStateMachine(this.sfnMain));
 		// END
 	}
 }

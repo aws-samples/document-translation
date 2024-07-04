@@ -13,7 +13,7 @@ import {
 	aws_iam as iam,
 } from "aws-cdk-lib";
 import { dt_lambda } from "../../components/lambda";
-import { dt_resumeTable, dt_resumePauseTask, dt_resumeWorkflow } from "../../components/sfnResume";
+import { dt_resumePause, dt_resumeWorkflow } from "../../components/sfnResume";
 import { dt_stepfunction } from "../../components/stepfunction";
 
 export interface props {
@@ -34,16 +34,6 @@ export class dt_translationTranslate extends Construct {
 		//
 		// STATE MACHINE
 		//
-		// STATE MACHINE | RESUME
-		// STATE MACHINE | RESUME | TABLE
-		const resumeTable = new dt_resumeTable(
-			this,
-			`${cdk.Stack.of(this).stackName}_TranslationTranslateResumeTable`,
-			{
-				removalPolicy: props.removalPolicy,
-			},
-		).table;
-
 		// STATE MACHINE | TRANSLATE
 		// STATE MACHINE | TRANSLATE | TASKS
 		// STATE MACHINE | TRANSLATE | TASKS | updateDbStatusProcessing - Log to DB, jobStatus processing
@@ -217,7 +207,7 @@ export class dt_translationTranslate extends Construct {
 			this,
 			"createTranslationJob",
 			{
-				resultPath: sfn.JsonPath.DISCARD,
+				resultPath: "$.createTranslationJob",
 				service: "translate",
 				action: "startTextTranslationJob",
 				parameters: {
@@ -264,11 +254,12 @@ export class dt_translationTranslate extends Construct {
 		});
 
 		// STATE MACHINE | TRANSLATE | TASKS | updateDbTranslateResume
-		const updateDbTranslateResume = new dt_resumePauseTask(this, 'updateDbTranslateResume', {
+		const resumePause = new dt_resumePause(this, 'resumePause', {
 			pathToId: "$.createTranslationJob.JobId",
-			table: resumeTable,
 			removalPolicy: props.removalPolicy,
-		}).task;
+		});
+		const updateDbTranslateResume = resumePause.task;
+
 
 		// STATE MACHINE | TRANSLATE | TASKS | updateDbTranslateResultKey - Log to DB, Translated new file S3 Key
 		const updateDbTranslateResultKey = new tasks.DynamoUpdateItem(
@@ -295,7 +286,18 @@ export class dt_translationTranslate extends Construct {
 				},
 				expressionAttributeValues: {
 					":value": tasks.DynamoAttributeValue.fromString(
-						sfn.JsonPath.stringAt("$.decodeS3Key.objectKey"),
+						sfn.JsonPath.format(
+							"{}{}{}{}{}{}{}{}{}",
+							`s3://${props.contentBucket.bucketName}/`,
+							sfn.JsonPath.stringAt("$.jobDetails.s3PrefixToJobId"),
+							`/${props.namedStrings.s3StageOutput}`,
+							`/${cdk.Stack.of(this).account}-TranslateText-`,
+							sfn.JsonPath.stringAt("$.createTranslationJob.JobId"),
+							"/",
+							sfn.JsonPath.stringAt("$.iterationDetails.languageTarget"),
+							".",
+							sfn.JsonPath.stringAt("$.jobDetails.jobName"),
+						),
 					),
 				},
 			},
@@ -329,37 +331,6 @@ export class dt_translationTranslate extends Construct {
 				},
 			},
 		);
-
-		// STATE MACHINE | TRANSLATE | TASKS | decodeS3Key
-		const lambdaReplacePlusWithSpaceLambdaRole = new iam.Role(
-			this,
-			"lambdaReplacePlusWithSpaceLambdaRole",
-			{
-				// ASM-L6 // ASM-L8
-				assumedBy: new iam.ServicePrincipal("lambda.amazonaws.com"),
-				description:
-					"Lambda Role (Replace plus `+` with an empty space ` ` in string)",
-			},
-		);
-		const lambdaReplacePlusWithSpaceLambda = new dt_lambda(
-			this,
-			"lambdaReplacePlusWithSpaceLambda",
-			{
-				role: lambdaReplacePlusWithSpaceLambdaRole,
-				path: "lambda/decodeS3Key",
-				description: "Replace plus `+` with an empty space ` ` in string",
-			},
-		);
-		const decodeS3Key = new tasks.LambdaInvoke(this, "decodeS3Key", {
-			lambdaFunction: lambdaReplacePlusWithSpaceLambda.lambdaFunction,
-			resultPath: "$.decodeS3Key",
-			resultSelector: {
-				"objectKey.$": "$.Payload",
-			},
-			payload: sfn.TaskInput.fromObject({
-				payload: sfn.JsonPath.stringAt("$.updateDbTranslateResume.Payload"),
-			}),
-		});
 
 		// STATE MACHINE | TRANSLATE | DEF
 		// STATE MACHINE | TRANSLATE | DEF | LOOP loopLangForTranslate - Loop through target languages for translation
@@ -403,7 +374,6 @@ export class dt_translationTranslate extends Construct {
 									.afterwards()
 									.next(createTranslationJob)
 									.next(updateDbTranslateResume)
-									.next(decodeS3Key)
 									.next(updateDbTranslateResultKey)
 									.next(updateDbTranslateResultStatus),
 							),
@@ -584,42 +554,19 @@ export class dt_translationTranslate extends Construct {
 			`${cdk.Stack.of(this).stackName}_TranslationTranslateResume`,
 			{
 				nameSuffix: "TranslationTranslateResume",
-				pathToId: "$.id",
+				pathToId: "$.detail.jobId",
 				removalPolicy: props.removalPolicy,
 				stepFunction: this.sfnMain,
-				table: resumeTable,
+				table: resumePause.table,
+				eventPattern: {
+					source: ["aws.translate"],
+					detailType: ["Translate TextTranslationJob State Change"],
+					detail: {
+						jobStatus: ["COMPLETED"],
+					},
+				},
 			},
 		).sfnMain;
-
-
-		// NagSuppressions.addResourceSuppressionsByPath(
-		// 	cdk.Stack.of(this),
-		// 	`/${cdk.Stack.of(this).node.findChild(
-		// 		"BucketNotificationsHandler050a0587b7544547bf325f094a3db834",
-		// 	).node.path
-		// 	}/Role/Resource`,
-		// 	[
-		// 		{
-		// 			id: "AwsSolutions-IAM4",
-		// 			reason: "CDK managed policy without override option.",
-		// 		},
-		// 	],
-		// 	true,
-		// );
-		// NagSuppressions.addResourceSuppressionsByPath(
-		// 	cdk.Stack.of(this),
-		// 	`/${cdk.Stack.of(this).node.findChild(
-		// 		"BucketNotificationsHandler050a0587b7544547bf325f094a3db834",
-		// 	).node.path
-		// 	}/Role/DefaultPolicy/Resource`,
-		// 	[
-		// 		{
-		// 			id: "AwsSolutions-IAM5",
-		// 			reason: "CDK managed policy without override option.",
-		// 		},
-		// 	],
-		// 	true,
-		// );
 
 		// END
 	}
