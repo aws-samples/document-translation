@@ -83,7 +83,7 @@ export class dt_resumeWorkflow extends Construct {
 			parameters: {
 				TaskToken: sfn.JsonPath.stringAt("$.getResumeToken.Item.token.S"),
 				Output: {
-					jobStatus: sfn.JsonPath.stringAt("$.detail.jobStatus"),
+					staus: "resume",
 				},
 			},
 			iamResources: [

@@ -3,10 +3,9 @@
 
 import { EventBridgeClient, PutEventsCommand } from "@aws-sdk/client-eventbridge";
 const client = new EventBridgeClient();
+const zlib = require("zlib");
 
 export const handler = async (event) => {
-	console.log("Event:", JSON.stringify(event, null, 4));
-
 	if (!process.env.eventSource) {
 		throw new Error("eventSource is not defined.");
 	}
@@ -14,15 +13,24 @@ export const handler = async (event) => {
 		throw new Error("pathToDetailType is not defined.");
 	}
 
+	console.log("event:", JSON.stringify(event, null, 4));
+	const payload = Buffer.from(event.awslogs.data, "base64");
+	const parsed = JSON.parse(zlib.gunzipSync(payload).toString("utf8"));
+	const message = parsed.logEvents[0].message;
+	const parsedMessage = JSON.parse(message);
+	console.log("Decoded payload:", JSON.stringify(parsed));
+
 	const input = {
 		Entries: [
 			{
 				Source: `doctran.${process.env.eventSource}`,
-				DetailType: event[process.env.eventSource],
-				Detail: JSON.stringify(event),
+				DetailType: parsedMessage[`${process.env.pathToDetailType}`],
+				Detail: message,
 			},
 		],
 	};
+
+	console.log("Input:", input)
 
 	const command = new PutEventsCommand(input);
 	const response = await client.send(command);
