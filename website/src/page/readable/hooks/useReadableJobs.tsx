@@ -24,6 +24,7 @@ export const useReadableJobs = () => {
 					query: listJobs,
 				});
 				data = response.data.readableListJobs.items;
+				updateJobs(data);
 			} catch (error) {
 				console.error(error);
 			}
