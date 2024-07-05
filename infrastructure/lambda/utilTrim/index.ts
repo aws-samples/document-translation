@@ -6,9 +6,5 @@ interface event {
 }
 
 export const handler = async (event: event) => {
-	if (!event.string) {
-		throw new Error("string (string) is required");
-	}
-
 	return event.string.trim();
 };

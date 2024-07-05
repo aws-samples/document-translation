@@ -1,10 +1,10 @@
 // Copyright Amazon.com, Inc. or its affiliates. All Rights Reserved.
 // SPDX-License-Identifier: MIT-0
 
-const myHandler = require("../lambda/utilTrim/index").handler;
+import { handler as myHandler } from "../lambda/utilTrim/index";
 
 interface testDataPayload {
-	string?: string;
+	string: string;
 }
 
 interface testData {
@@ -45,27 +45,11 @@ const testSuccess: testData[] = [
 	},
 ];
 
-const testFail: testData[] = [
-	{
-		name: "No string",
-		payload: {},
-		result: "string (string) is required",
-	},
-];
 // SUCCESS
 testSuccess.forEach((item) => {
 	describe("handler", function () {
 		test(item.name, async function () {
 			await expect(myHandler(item.payload)).resolves.toEqual(item.result);
-		});
-	});
-});
-
-// FAILURES
-testFail.forEach((item) => {
-	describe("handler", function () {
-		test(item.name, async function () {
-			await expect(myHandler(item.payload)).rejects.toThrow(item.result);
 		});
 	});
 });
