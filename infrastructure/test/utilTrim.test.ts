@@ -1,7 +1,6 @@
 // Copyright Amazon.com, Inc. or its affiliates. All Rights Reserved.
 // SPDX-License-Identifier: MIT-0
 
-const LambdaTester = require("lambda-tester");
 const myHandler = require("../lambda/utilTrim/index").handler;
 
 interface testDataPayload {

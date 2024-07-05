@@ -97,25 +97,21 @@ export class dt_readableModel extends Construct {
 
 		// EXAMPLE ENTRY
 		// EXAMPLE ENTRY | TEXT
-		const exampleEntryText_anthropicClaude = new cr.AwsCustomResource(
-			this,
-			"exampleEntryText",
-			{
-				onCreate: {
-					service: "DynamoDB",
-					action: "putItem",
-					parameters: {
-						TableName: this.modelTable.tableName,
-						Item: require("./defaults/text.anthropic-claude.ddb.json"),
-					},
-					physicalResourceId: cr.PhysicalResourceId.of("exampleEntryText"),
+		new cr.AwsCustomResource(this, "exampleEntryText", {
+			onCreate: {
+				service: "DynamoDB",
+				action: "putItem",
+				parameters: {
+					TableName: this.modelTable.tableName,
+					Item: require("./defaults/text.anthropic-claude.ddb.json"),
 				},
-				policy: cr.AwsCustomResourcePolicy.fromSdkCalls({
-					resources: [this.modelTable.tableArn],
-				}),
-				installLatestAwsSdk: true,
+				physicalResourceId: cr.PhysicalResourceId.of("exampleEntryText"),
 			},
-		);
+			policy: cr.AwsCustomResourcePolicy.fromSdkCalls({
+				resources: [this.modelTable.tableArn],
+			}),
+			installLatestAwsSdk: true,
+		});
 
 		// https://github.com/aws/aws-cdk/issues/30067
 		// // EXAMPLE ENTRY | TEXT
@@ -138,22 +134,21 @@ export class dt_readableModel extends Construct {
 		// });
 
 		// EXAMPLE ENTRY | IMAGE
-		const exampleEntryImage_stabilityAiStableDiffusion =
-			new cr.AwsCustomResource(this, "exampleEntryImage", {
-				onCreate: {
-					service: "DynamoDB",
-					action: "putItem",
-					parameters: {
-						TableName: this.modelTable.tableName,
-						Item: require("./defaults/image.stabilityai-stablediffusion.ddb.json"),
-					},
-					physicalResourceId: cr.PhysicalResourceId.of("exampleEntryImage"),
+		new cr.AwsCustomResource(this, "exampleEntryImage", {
+			onCreate: {
+				service: "DynamoDB",
+				action: "putItem",
+				parameters: {
+					TableName: this.modelTable.tableName,
+					Item: require("./defaults/image.stabilityai-stablediffusion.ddb.json"),
 				},
-				policy: cr.AwsCustomResourcePolicy.fromSdkCalls({
-					resources: [this.modelTable.tableArn],
-				}),
-				installLatestAwsSdk: true,
-			});
+				physicalResourceId: cr.PhysicalResourceId.of("exampleEntryImage"),
+			},
+			policy: cr.AwsCustomResourcePolicy.fromSdkCalls({
+				resources: [this.modelTable.tableArn],
+			}),
+			installLatestAwsSdk: true,
+		});
 
 		// https://github.com/aws/aws-cdk/issues/30067
 		// // EXAMPLE ENTRY | TEXT

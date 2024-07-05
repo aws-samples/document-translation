@@ -572,7 +572,7 @@ export class dt_readableWorkflow extends Construct {
 			};
 
 			// PIPE | DDB JOB TO STEPFUNCTION | PIPE | DEF
-			const pipeJobToSfn = new pipes.CfnPipe(this, "pipeJobToSfn", {
+			new pipes.CfnPipe(this, "pipeJobToSfn", {
 				roleArn: pipeJobToSfnRole.roleArn,
 				source: props.jobTable.tableStreamArn,
 				target: sfnMainRename.stateMachineArn,

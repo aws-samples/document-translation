@@ -6,13 +6,8 @@ import * as cdk from "aws-cdk-lib";
 import { NagSuppressions } from "cdk-nag";
 
 import {
-	aws_dynamodb as dynamodb,
 	aws_iam as iam,
 	aws_stepfunctions as sfn,
-	aws_stepfunctions_tasks as tasks,
-	aws_lambda as lambda,
-	aws_lambda_event_sources as eventsources,
-	aws_appsync as appsync,
 	aws_s3 as s3,
 } from "aws-cdk-lib";
 

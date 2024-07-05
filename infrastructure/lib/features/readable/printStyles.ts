@@ -97,24 +97,20 @@ export class dt_readablePrintStyles extends Construct {
 		);
 
 		// EXAMPLE ENTRY
-		const exampleEntryPrint1 = new cr.AwsCustomResource(
-			this,
-			"exampleEntryPrint1",
-			{
-				onCreate: {
-					service: "DynamoDB",
-					action: "putItem",
-					parameters: {
-						TableName: this.printStyleTable.tableName,
-						Item: require("./defaults/printStyle1.ddb.json"),
-					},
-					physicalResourceId: cr.PhysicalResourceId.of("exampleEntryPrint1"),
+		new cr.AwsCustomResource(this, "exampleEntryPrint1", {
+			onCreate: {
+				service: "DynamoDB",
+				action: "putItem",
+				parameters: {
+					TableName: this.printStyleTable.tableName,
+					Item: require("./defaults/printStyle1.ddb.json"),
 				},
-				policy: cr.AwsCustomResourcePolicy.fromSdkCalls({
-					resources: [this.printStyleTable.tableArn],
-				}),
+				physicalResourceId: cr.PhysicalResourceId.of("exampleEntryPrint1"),
 			},
-		);
+			policy: cr.AwsCustomResourcePolicy.fromSdkCalls({
+				resources: [this.printStyleTable.tableArn],
+			}),
+		});
 
 		// EXAMPLE ENTRY | CUSTOM RESOURCE CDK LAMBDA
 		NagSuppressions.addResourceSuppressionsByPath(

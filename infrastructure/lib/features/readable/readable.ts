@@ -54,15 +54,11 @@ export class dt_readable extends Construct {
 		});
 
 		// FEATURES | PRINTSTYLES
-		const readablePrintStyles = new dt_readablePrintStyles(
-			this,
-			"readablePrintStyles",
-			{
-				api: props.api,
-				apiSchema: props.apiSchema,
-				removalPolicy: props.removalPolicy,
-			},
-		);
+		new dt_readablePrintStyles(this, "readablePrintStyles", {
+			api: props.api,
+			apiSchema: props.apiSchema,
+			removalPolicy: props.removalPolicy,
+		});
 
 		// API
 		const readableItem = new dt_readableItem(this, "readableItem", {
@@ -75,7 +71,7 @@ export class dt_readable extends Construct {
 		});
 
 		// WORKFLOW
-		const readableWorkflow = new dt_readableWorkflow(this, "readableWorkflow", {
+		new dt_readableWorkflow(this, "readableWorkflow", {
 			api: props.api,
 			bedrockRegion: props.bedrockRegion,
 			jobTable: readableJob.jobTable,
