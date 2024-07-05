@@ -5,8 +5,14 @@ import { handler as myHandler } from "../lambda/unmarshallDdb/index";
 
 interface testData {
 	name: string;
-	payload: any;
-	result: any;
+	payload: {
+		id: { S: string };
+		order: { N: string };
+	};
+	result: {
+		id: string;
+		order: number;
+	};
 }
 
 // TEST DATA

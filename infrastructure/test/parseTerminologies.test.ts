@@ -4,16 +4,33 @@
 import LambdaTester from "lambda-tester";
 import { handler as myHandler } from "../lambda/parseTerminologies/index";
 
+interface Terminology {
+	Arn: string;
+	CreatedAt: string;
+	Directionality: string;
+	Format: string;
+	LastUpdatedAt: string;
+	Name: string;
+	SizeBytes: number;
+	SourceLanguageCode: string;
+	TargetLanguageCodes: string[];
+	TermCount: number;
+}
+
+interface EventObject {
+	terminologies: Terminology[];
+}
+
 describe("handler", function () {
 	it("test success empty", async function () {
 		await LambdaTester(myHandler)
-			.event({ terminologies: [] })
+			.event({ terminologies: [] } as EventObject)
 			.expectResult((result) => {
 				expect(result).toEqual(expect.arrayContaining([]));
 			});
 	});
 
-	const singleTerminology = {
+	const singleTerminology: EventObject = {
 		terminologies: [
 			{
 				Arn: "arn:aws:translate:eu-west-2:006919394233:terminology/es/LATEST",
@@ -37,7 +54,7 @@ describe("handler", function () {
 			});
 	});
 
-	const multiTerminology = {
+	const multiTerminology: EventObject = {
 		terminologies: [
 			{
 				Arn: "arn:aws:translate:eu-west-2:123456789012:terminology/es/LATEST",
