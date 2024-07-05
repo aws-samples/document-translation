@@ -6,7 +6,6 @@ import * as cdk from "aws-cdk-lib";
 import { NagSuppressions } from "cdk-nag";
 
 import {
-	aws_iam as iam,
 	aws_dynamodb as dynamodb,
 	aws_s3 as s3,
 	aws_stepfunctions as sfn,
@@ -14,7 +13,6 @@ import {
 	aws_events as events,
 	aws_events_targets as targets,
 } from "aws-cdk-lib";
-import { dt_lambda } from "../../components/lambda";
 import { dt_stepfunction } from "../../components/stepfunction";
 import { dt_parseS3Key } from "./parseS3Key";
 

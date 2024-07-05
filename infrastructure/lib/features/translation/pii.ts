@@ -12,7 +12,6 @@ import {
 	aws_stepfunctions_tasks as tasks,
 	aws_iam as iam,
 	aws_macie as macie,
-	aws_events as events,
 	aws_cloudfront as cloudfront,
 	aws_logs as logs,
 	aws_logs_destinations as destinations,
@@ -300,7 +299,6 @@ export class dt_translationPii extends Construct {
 			],
 			true,
 		);
-		const sfnMainArn = this.sfnMain.stateMachineArn;
 
 		// MACIE CLOUDWATCH LOG | LAMBDA PassMacieLogToEventBridgeRole - Map Macie result to job
 		const lambdaPassMacieLogToEventBridgeRole = new iam.Role(

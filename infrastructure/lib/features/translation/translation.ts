@@ -25,7 +25,6 @@ import {
 	ObjectType as OutputType,
 	InputType,
 	ResolvableField,
-	Field,
 	Directive,
 } from "awscdk-appsync-utils";
 
