@@ -164,14 +164,14 @@ export class DocTranStack extends cdk.Stack {
 		if (translation) {
 			const translationLifecycleDefault: number =
 				process.env.translationLifecycleDefault &&
-					parseInt(process.env.translationLifecycleDefault) >= 1 &&
-					parseInt(process.env.translationLifecycleDefault) <= 2147483647
+				parseInt(process.env.translationLifecycleDefault) >= 1 &&
+				parseInt(process.env.translationLifecycleDefault) <= 2147483647
 					? parseInt(process.env.translationLifecycleDefault)
 					: 7;
 			const translationLifecyclePii: number =
 				process.env.translationLifecyclePii &&
-					parseInt(process.env.translationLifecyclePii) >= 1 &&
-					parseInt(process.env.translationLifecyclePii) <= 2147483647
+				parseInt(process.env.translationLifecyclePii) >= 1 &&
+				parseInt(process.env.translationLifecyclePii) <= 2147483647
 					? parseInt(process.env.translationLifecyclePii)
 					: 3;
 
@@ -228,11 +228,15 @@ export class DocTranStack extends cdk.Stack {
 				signOutSuffix: signOutSuffix,
 				development: development,
 			});
-			const base_sharedPreferences = new dt_sharedPreferences(this, "base_sharedPreferences", {
-				api: base_api.api,
-				apiSchema: base_api.apiSchema,
-				removalPolicy: removalPolicy, // ASM-CFN1
-			});
+			const base_sharedPreferences = new dt_sharedPreferences(
+				this,
+				"base_sharedPreferences",
+				{
+					api: base_api.api,
+					apiSchema: base_api.apiSchema,
+					removalPolicy: removalPolicy, // ASM-CFN1
+				},
+			);
 			// OUTPUTS
 			this.appWebsiteS3Bucket = new cdk.CfnOutput(this, "appWebsiteS3Bucket", {
 				value: base_web.websiteBucket.bucketName,

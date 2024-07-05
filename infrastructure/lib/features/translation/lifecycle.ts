@@ -35,15 +35,19 @@ export class dt_translationLifecycle extends Construct {
 		// EVENT HANDLER | STEP FUNCTION | TASKS | parseS3Key | TASK
 		const parseS3KeySfn = new dt_parseS3Key(this, "parseS3KeySfn", {
 			removalPolicy: props.removalPolicy,
-		})
-		const parseS3Key = new tasks.StepFunctionsStartExecution(this, "parseS3Key", {
-			resultPath: "$.parseS3Key",
-			stateMachine: parseS3KeySfn.sfnMain,
-			integrationPattern: sfn.IntegrationPattern.RUN_JOB,
-			input: sfn.TaskInput.fromObject({
-				key: sfn.JsonPath.stringAt("$.detail.object.key")
-			}),
 		});
+		const parseS3Key = new tasks.StepFunctionsStartExecution(
+			this,
+			"parseS3Key",
+			{
+				resultPath: "$.parseS3Key",
+				stateMachine: parseS3KeySfn.sfnMain,
+				integrationPattern: sfn.IntegrationPattern.RUN_JOB,
+				input: sfn.TaskInput.fromObject({
+					key: sfn.JsonPath.stringAt("$.detail.object.key"),
+				}),
+			},
+		);
 
 		// EVENT HANDLER | STEP FUNCTION | TASKS | updateDbStatus
 		const updateDbStatus = new tasks.DynamoUpdateItem(this, "updateDbStatus", {
@@ -98,19 +102,24 @@ export class dt_translationLifecycle extends Construct {
 				},
 			},
 		});
-		onDeleteObjectRule.addTarget(new targets.SfnStateMachine(sfnMain.StateMachine));
+		onDeleteObjectRule.addTarget(
+			new targets.SfnStateMachine(sfnMain.StateMachine),
+		);
 		props.contentBucket.enableEventBridgeNotification();
 
 		NagSuppressions.addResourceSuppressionsByPath(
 			cdk.Stack.of(this),
-			`/${cdk.Stack.of(this).node.findChild(
-				"BucketNotificationsHandler050a0587b7544547bf325f094a3db834",
-			).node.path
+			`/${
+				cdk.Stack.of(this).node.findChild(
+					"BucketNotificationsHandler050a0587b7544547bf325f094a3db834",
+				).node.path
 			}/Role/Resource`,
 			[
 				{
 					id: "AwsSolutions-IAM4",
-					appliesTo: ["Policy::arn:<AWS::Partition>:iam::aws:policy/service-role/AWSLambdaBasicExecutionRole"],
+					appliesTo: [
+						"Policy::arn:<AWS::Partition>:iam::aws:policy/service-role/AWSLambdaBasicExecutionRole",
+					],
 					reason:
 						"Custom Resource Lambda defined by CDK project for S3 EventBridge notifications",
 				},
@@ -119,9 +128,10 @@ export class dt_translationLifecycle extends Construct {
 		);
 		NagSuppressions.addResourceSuppressionsByPath(
 			cdk.Stack.of(this),
-			`/${cdk.Stack.of(this).node.findChild(
-				"BucketNotificationsHandler050a0587b7544547bf325f094a3db834",
-			).node.path
+			`/${
+				cdk.Stack.of(this).node.findChild(
+					"BucketNotificationsHandler050a0587b7544547bf325f094a3db834",
+				).node.path
 			}/Role/DefaultPolicy/Resource`,
 			[
 				{

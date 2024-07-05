@@ -54,11 +54,15 @@ export class dt_readable extends Construct {
 		});
 
 		// FEATURES | PRINTSTYLES
-		const readablePrintStyles = new dt_readablePrintStyles(this, "readablePrintStyles", {
-			api: props.api,
-			apiSchema: props.apiSchema,
-			removalPolicy: props.removalPolicy,
-		});
+		const readablePrintStyles = new dt_readablePrintStyles(
+			this,
+			"readablePrintStyles",
+			{
+				api: props.api,
+				apiSchema: props.apiSchema,
+				removalPolicy: props.removalPolicy,
+			},
+		);
 
 		// API
 		const readableItem = new dt_readableItem(this, "readableItem", {

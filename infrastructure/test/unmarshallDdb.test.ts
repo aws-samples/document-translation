@@ -16,21 +16,21 @@ const testSuccess: testData[] = [
 		name: "Simple string",
 		payload: {
 			id: {
-				S: "01234567-abcd-efgh-ijkl-891011121314"
+				S: "01234567-abcd-efgh-ijkl-891011121314",
 			},
 			order: {
-				N: "1"
+				N: "1",
 			},
 		},
 		result: {
 			id: "01234567-abcd-efgh-ijkl-891011121314",
 			order: 1,
-		}
+		},
 	},
 ];
 
 // SUCCESS
-testSuccess.forEach(item => {
+testSuccess.forEach((item) => {
 	describe("handler", function () {
 		test(item.name, async function () {
 			await expect(myHandler(item.payload)).resolves.toEqual(item.result);

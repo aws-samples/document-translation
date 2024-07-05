@@ -19,7 +19,7 @@ const testSuccess: testData[] = [
 	{
 		name: "Trim spaces",
 		payload: {
-			string:	" This is a string ",
+			string: " This is a string ",
 		},
 		result: "This is a string",
 	},
@@ -54,7 +54,7 @@ const testFail: testData[] = [
 	},
 ];
 // SUCCESS
-testSuccess.forEach(item => {
+testSuccess.forEach((item) => {
 	describe("handler", function () {
 		test(item.name, async function () {
 			await expect(myHandler(item.payload)).resolves.toEqual(item.result);
@@ -63,7 +63,7 @@ testSuccess.forEach(item => {
 });
 
 // FAILURES
-testFail.forEach(item => {
+testFail.forEach((item) => {
 	describe("handler", function () {
 		test(item.name, async function () {
 			await expect(myHandler(item.payload)).rejects.toThrow(item.result);

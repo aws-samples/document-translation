@@ -8,30 +8,31 @@ interface event {
 	flags: string;
 }
 
-export const handler = async (event: event) => {	
-
-	if ( ! event.pattern ) {
+export const handler = async (event: event) => {
+	if (!event.pattern) {
 		throw new Error("pattern (string) is required");
-	};
-	if ( ! event.string ) {
+	}
+	if (!event.string) {
 		throw new Error("string (string) is required");
-	};
-	
+	}
+
 	let replaceValue: string;
-	if ( event.replacement ) {
+	if (event.replacement) {
 		replaceValue = event.replacement;
 	} else {
-		console.log('No replacement (string) provided, defaulting to empty string ""');
+		console.log(
+			'No replacement (string) provided, defaulting to empty string ""',
+		);
 		replaceValue = "";
-	};
-	
+	}
+
 	let searchValue: RegExp | string;
-	if ( event.flags ) {
+	if (event.flags) {
 		searchValue = new RegExp(event.pattern, event.flags);
 	} else {
-		console.log('No regexp flags (string) provided, defaulting to no flag');
+		console.log("No regexp flags (string) provided, defaulting to no flag");
 		searchValue = new RegExp(event.pattern);
-	};
+	}
 
 	return event.string.replace(searchValue, replaceValue);
 };

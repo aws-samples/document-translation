@@ -34,30 +34,26 @@ export class dt_resumeWorkflow extends Construct {
 			removalPolicy: props.removalPolicy,
 		});
 
-		this.task = new tasks.CallAwsService(
-			this,
-			"updateDbResumeToken",
-			{
-				resultPath: sfn.JsonPath.DISCARD,
-				service: "dynamodb",
-				action: "updateItem",
-				integrationPattern: sfn.IntegrationPattern.WAIT_FOR_TASK_TOKEN,
-				parameters: {
-					TableName: table.tableName,
-					Key: { id: { "S.$": props.pathToIdPauseTask } },
-					UpdateExpression: 'SET #taskToken = :taskToken',
-					ExpressionAttributeNames: {
-						'#taskToken': "token",
-					},
-					ExpressionAttributeValues: {
-						':taskToken': {
-							"S": sfn.JsonPath.taskToken,
-						}
+		this.task = new tasks.CallAwsService(this, "updateDbResumeToken", {
+			resultPath: sfn.JsonPath.DISCARD,
+			service: "dynamodb",
+			action: "updateItem",
+			integrationPattern: sfn.IntegrationPattern.WAIT_FOR_TASK_TOKEN,
+			parameters: {
+				TableName: table.tableName,
+				Key: { id: { "S.$": props.pathToIdPauseTask } },
+				UpdateExpression: "SET #taskToken = :taskToken",
+				ExpressionAttributeNames: {
+					"#taskToken": "token",
+				},
+				ExpressionAttributeValues: {
+					":taskToken": {
+						S: sfn.JsonPath.taskToken,
 					},
 				},
-				iamResources: [table.tableArn],
 			},
-		);
+			iamResources: [table.tableArn],
+		});
 
 		//
 		// STATE MACHINE
@@ -65,12 +61,12 @@ export class dt_resumeWorkflow extends Construct {
 		// STATE MACHINE | RESUME
 		// STATE MACHINE | RESUME | TASKS
 		// STATE MACHINE | RESUME | TASKS | getResumeToken
-		const getResumeToken = new tasks.DynamoGetItem(this, 'getResumeToken', {
+		const getResumeToken = new tasks.DynamoGetItem(this, "getResumeToken", {
 			resultPath: "$.getResumeToken",
 			key: {
 				id: tasks.DynamoAttributeValue.fromString(
-					sfn.JsonPath.stringAt(props.pathToIdWorkflow)
-				)
+					sfn.JsonPath.stringAt(props.pathToIdWorkflow),
+				),
 			},
 			table: table,
 		});
@@ -87,17 +83,25 @@ export class dt_resumeWorkflow extends Construct {
 				},
 			},
 			iamResources: [
-				`arn:aws:states:${cdk.Stack.of(this).region}:${cdk.Stack.of(this).account}:*`,
-			]
+				`arn:aws:states:${cdk.Stack.of(this).region}:${
+					cdk.Stack.of(this).account
+				}:*`,
+			],
 		});
 
 		// STATE MACHINE | RESUME | TASKS | deleteResumeToken
-		const deleteResumeToken = new tasks.DynamoDeleteItem(this, 'deleteResumeToken', {
-			key: {
-				id: tasks.DynamoAttributeValue.fromString(sfn.JsonPath.stringAt(props.pathToIdWorkflow))
+		const deleteResumeToken = new tasks.DynamoDeleteItem(
+			this,
+			"deleteResumeToken",
+			{
+				key: {
+					id: tasks.DynamoAttributeValue.fromString(
+						sfn.JsonPath.stringAt(props.pathToIdWorkflow),
+					),
+				},
+				table: table,
 			},
-			table: table,
-		});
+		);
 
 		// STATE MACHINE | MAIN | DEF
 		const sfnMain = new dt_stepfunction(
@@ -130,7 +134,7 @@ export class dt_resumeWorkflow extends Construct {
 		// EVENT RULE
 		const eventRule = new events.Rule(this, "resumeRule", {
 			description: `${props.nameSuffix} sfnResume`,
-			eventPattern: props.eventPattern
+			eventPattern: props.eventPattern,
 		});
 
 		eventRule.addTarget(new targets.SfnStateMachine(sfnMain));

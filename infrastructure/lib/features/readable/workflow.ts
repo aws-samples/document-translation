@@ -3,7 +3,7 @@
 
 import { Construct } from "constructs";
 import * as cdk from "aws-cdk-lib";
-import { aws_pipes as pipes } from 'aws-cdk-lib';
+import { aws_pipes as pipes } from "aws-cdk-lib";
 import { NagSuppressions } from "cdk-nag";
 
 import {
@@ -85,9 +85,7 @@ export class dt_readableWorkflow extends Construct {
 		// STATE MACHINE | TASKS | unNestJobDetails
 		const unNestJobDetails = new sfn.Pass(this, "unNestJobDetails", {
 			parameters: {
-				dynamodb: sfn.JsonPath.objectAt(
-					"$.[0].dynamodb",
-				),
+				dynamodb: sfn.JsonPath.objectAt("$.[0].dynamodb"),
 			},
 		});
 		// STATE MACHINE | TASKS | unmarshallDdb
@@ -445,9 +443,10 @@ export class dt_readableWorkflow extends Construct {
 					reason:
 						"Permission scoped to project specific resources. Execution ID unknown at deploy time.",
 					appliesTo: [
-						`Resource::arn:<AWS::Partition>:states:<AWS::Region>:<AWS::AccountId>:execution:{"Fn::Select":[6,{"Fn::Split":[":",{"Ref":"${cdk.Stack.of(this).getLogicalId(
-							workflowGenerate.sfnMain.node
-								.defaultChild as cdk.CfnElement,
+						`Resource::arn:<AWS::Partition>:states:<AWS::Region>:<AWS::AccountId>:execution:{"Fn::Select":[6,{"Fn::Split":[":",{"Ref":"${cdk.Stack.of(
+							this,
+						).getLogicalId(
+							workflowGenerate.sfnMain.node.defaultChild as cdk.CfnElement,
 						)}"}]}]}*`,
 					],
 				},
@@ -463,15 +462,19 @@ export class dt_readableWorkflow extends Construct {
 			{
 				nameSuffix: "ReadableMainRename",
 				removalPolicy: props.removalPolicy,
-				definition: new tasks.StepFunctionsStartExecution(this, "startSfnMain", {
-					stateMachine: sfnMain,
-					integrationPattern: sfn.IntegrationPattern.RUN_JOB,
-					name: sfn.JsonPath.format(
-						"{}_{}",
-						sfn.JsonPath.stringAt("$.[0].dynamodb.Keys.itemId.S"),
-						sfn.JsonPath.stringAt("$.[0].eventID"),
-					),
-				})
+				definition: new tasks.StepFunctionsStartExecution(
+					this,
+					"startSfnMain",
+					{
+						stateMachine: sfnMain,
+						integrationPattern: sfn.IntegrationPattern.RUN_JOB,
+						name: sfn.JsonPath.format(
+							"{}_{}",
+							sfn.JsonPath.stringAt("$.[0].dynamodb.Keys.itemId.S"),
+							sfn.JsonPath.stringAt("$.[0].eventID"),
+						),
+					},
+				),
 			},
 		).StateMachine;
 		// Required for "RUN_JOB"
@@ -487,88 +490,93 @@ export class dt_readableWorkflow extends Construct {
 		);
 
 		// PIPE | DDB JOB TO STEPFUNCTION
-		if (props.jobTable.tableStreamArn) { // tableStreamArn may be undefined
+		if (props.jobTable.tableStreamArn) {
+			// tableStreamArn may be undefined
 			// PIPE | DDB JOB TO STEPFUNCTION | PERMISSIONS
-			const pipeJobToSfnRole = new iam.Role(this, "pipeJobToSfnRole",
-				{
-					// ASM-L6 // ASM-L8
-					assumedBy: new iam.ServicePrincipal("pipes.amazonaws.com"),
-					description: "Pipe Role (Pass DynamoDB job to StepFunction)",
-				},
+			const pipeJobToSfnRole = new iam.Role(this, "pipeJobToSfnRole", {
+				// ASM-L6 // ASM-L8
+				assumedBy: new iam.ServicePrincipal("pipes.amazonaws.com"),
+				description: "Pipe Role (Pass DynamoDB job to StepFunction)",
+			});
+			pipeJobToSfnRole.attachInlinePolicy(
+				new iam.Policy(this, "permitStartExecutionOfMain", {
+					policyName: "Start-Sfn-ReadablenMain",
+					statements: [
+						new iam.PolicyStatement({
+							// ASM-IAM
+							actions: ["states:StartExecution"],
+							resources: [sfnMainRename.stateMachineArn],
+						}),
+					],
+				}),
 			);
 			pipeJobToSfnRole.attachInlinePolicy(
-				new iam.Policy(this, "permitStartExecutionOfMain",
-					{
-						policyName: "Start-Sfn-ReadablenMain",
-						statements: [
-							new iam.PolicyStatement({
-								// ASM-IAM
-								actions: ["states:StartExecution"],
-								resources: [sfnMainRename.stateMachineArn],
-							}),
-						],
-					},
-				)
-			);
-			pipeJobToSfnRole.attachInlinePolicy(
-				new iam.Policy(this, "permitReadDynamoDBStream",
-					{
-						policyName: "Read-DynamoDB-Stream",
-						statements: [
-							new iam.PolicyStatement({
-						// ASM-IAM
-								actions: ["dynamodb:DescribeStream", "dynamodb:GetRecords", "dynamodb:GetShardIterator"],
-								resources: [props.jobTable.tableStreamArn],
-							}),
-						],
-					},
-				)
+				new iam.Policy(this, "permitReadDynamoDBStream", {
+					policyName: "Read-DynamoDB-Stream",
+					statements: [
+						new iam.PolicyStatement({
+							// ASM-IAM
+							actions: [
+								"dynamodb:DescribeStream",
+								"dynamodb:GetRecords",
+								"dynamodb:GetShardIterator",
+							],
+							resources: [props.jobTable.tableStreamArn],
+						}),
+					],
+				}),
 			);
 
 			// PIPE | DDB JOB TO STEPFUNCTION | PIPE
 			// PIPE | DDB JOB TO STEPFUNCTION | PIPE | SOURCE
-			const pipeSourceDynamoDBStreamParametersProperty: pipes.CfnPipe.PipeSourceDynamoDBStreamParametersProperty = {
-				startingPosition: 'TRIM_HORIZON',
-				batchSize: 1,
-			};
+			const pipeSourceDynamoDBStreamParametersProperty: pipes.CfnPipe.PipeSourceDynamoDBStreamParametersProperty =
+				{
+					startingPosition: "TRIM_HORIZON",
+					batchSize: 1,
+				};
 			const filterPattern = {
-				"eventName": ["INSERT", "MODIFY"],
-				"dynamodb": {
-					"NewImage": {
-						"status": {
-							"S": [{
-								"equals-ignore-case": dt_enums.ItemStatus.GENERATE
-							}]
-						}
-					}
-				}
-			}
-			const pipeSourceDynamoDBStreamFiltersProperty: pipes.CfnPipe.FilterCriteriaProperty = {
-				filters: [
-					{
-						pattern: JSON.stringify(filterPattern),
+				eventName: ["INSERT", "MODIFY"],
+				dynamodb: {
+					NewImage: {
+						status: {
+							S: [
+								{
+									"equals-ignore-case": dt_enums.ItemStatus.GENERATE,
+								},
+							],
+						},
 					},
-				],
-			}
+				},
+			};
+			const pipeSourceDynamoDBStreamFiltersProperty: pipes.CfnPipe.FilterCriteriaProperty =
+				{
+					filters: [
+						{
+							pattern: JSON.stringify(filterPattern),
+						},
+					],
+				};
 			const sourceParameters = {
 				dynamoDbStreamParameters: pipeSourceDynamoDBStreamParametersProperty,
 				filterCriteria: pipeSourceDynamoDBStreamFiltersProperty,
-			}
+			};
 
 			// PIPE | DDB JOB TO STEPFUNCTION | PIPE | TARGET
-			const pipeTargetStateMachineParametersProperty: pipes.CfnPipe.PipeTargetStateMachineParametersProperty = {
-				invocationType: 'FIRE_AND_FORGET',
-			};
+			const pipeTargetStateMachineParametersProperty: pipes.CfnPipe.PipeTargetStateMachineParametersProperty =
+				{
+					invocationType: "FIRE_AND_FORGET",
+				};
 			const targetParameters = {
-				stepFunctionStateMachineParameters: pipeTargetStateMachineParametersProperty
-			}
+				stepFunctionStateMachineParameters:
+					pipeTargetStateMachineParametersProperty,
+			};
 
 			// PIPE | DDB JOB TO STEPFUNCTION | PIPE | DEF
 			const pipeJobToSfn = new pipes.CfnPipe(this, "pipeJobToSfn", {
 				roleArn: pipeJobToSfnRole.roleArn,
 				source: props.jobTable.tableStreamArn,
 				target: sfnMainRename.stateMachineArn,
-				description: 'DocTran Readable Job to StepFunction',
+				description: "DocTran Readable Job to StepFunction",
 				sourceParameters,
 				targetParameters,
 			});

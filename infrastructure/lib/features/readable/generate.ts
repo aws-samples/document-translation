@@ -63,7 +63,9 @@ export class dt_readableWorkflowGenerate extends Construct {
 						actions: ["bedrock:InvokeModel"],
 						resources: [
 							`arn:aws:bedrock:${props.bedrockRegion}::foundation-model/*`, // Foundational Models
-							`arn:aws:bedrock:${props.bedrockRegion}:${cdk.Stack.of(this).account}:custom-model/*`,
+							`arn:aws:bedrock:${props.bedrockRegion}:${
+								cdk.Stack.of(this).account
+							}:custom-model/*`,
 						],
 					}),
 				],
@@ -76,7 +78,9 @@ export class dt_readableWorkflowGenerate extends Construct {
 				{
 					id: "AwsSolutions-IAM5",
 					reason: "Preferred model for prompt is unknown at deploy time",
-					appliesTo: [`Resource::arn:aws:bedrock:${props.bedrockRegion}::foundation-model/*`],
+					appliesTo: [
+						`Resource::arn:aws:bedrock:${props.bedrockRegion}::foundation-model/*`,
+					],
 				},
 				{
 					id: "AwsSolutions-IAM5",
@@ -222,25 +226,30 @@ export class dt_readableWorkflowGenerate extends Construct {
 					reason:
 						"Permission scoped to project specific resources. Execution ID unknown at deploy time.",
 					appliesTo: [
-						`Resource::arn:<AWS::Partition>:states:<AWS::Region>:<AWS::AccountId>:execution:{"Fn::Select":[6,{"Fn::Split":[":",{"Ref":"${cdk.Stack.of(this).getLogicalId(
-							workflow_amazon_text.sfnMain.node
-								.defaultChild as cdk.CfnElement,
+						`Resource::arn:<AWS::Partition>:states:<AWS::Region>:<AWS::AccountId>:execution:{"Fn::Select":[6,{"Fn::Split":[":",{"Ref":"${cdk.Stack.of(
+							this,
+						).getLogicalId(
+							workflow_amazon_text.sfnMain.node.defaultChild as cdk.CfnElement,
 						)}"}]}]}*`,
-						`Resource::arn:<AWS::Partition>:states:<AWS::Region>:<AWS::AccountId>:execution:{"Fn::Select":[6,{"Fn::Split":[":",{"Ref":"${cdk.Stack.of(this).getLogicalId(
-							workflow_amazon_image.sfnMain.node
-								.defaultChild as cdk.CfnElement,
+						`Resource::arn:<AWS::Partition>:states:<AWS::Region>:<AWS::AccountId>:execution:{"Fn::Select":[6,{"Fn::Split":[":",{"Ref":"${cdk.Stack.of(
+							this,
+						).getLogicalId(
+							workflow_amazon_image.sfnMain.node.defaultChild as cdk.CfnElement,
 						)}"}]}]}*`,
-						`Resource::arn:<AWS::Partition>:states:<AWS::Region>:<AWS::AccountId>:execution:{"Fn::Select":[6,{"Fn::Split":[":",{"Ref":"${cdk.Stack.of(this).getLogicalId(
-							workflow_anthropic.sfnMain.node
-								.defaultChild as cdk.CfnElement,
+						`Resource::arn:<AWS::Partition>:states:<AWS::Region>:<AWS::AccountId>:execution:{"Fn::Select":[6,{"Fn::Split":[":",{"Ref":"${cdk.Stack.of(
+							this,
+						).getLogicalId(
+							workflow_anthropic.sfnMain.node.defaultChild as cdk.CfnElement,
 						)}"}]}]}*`,
-						`Resource::arn:<AWS::Partition>:states:<AWS::Region>:<AWS::AccountId>:execution:{"Fn::Select":[6,{"Fn::Split":[":",{"Ref":"${cdk.Stack.of(this).getLogicalId(
-							workflow_anthropic3.sfnMain.node
-								.defaultChild as cdk.CfnElement,
+						`Resource::arn:<AWS::Partition>:states:<AWS::Region>:<AWS::AccountId>:execution:{"Fn::Select":[6,{"Fn::Split":[":",{"Ref":"${cdk.Stack.of(
+							this,
+						).getLogicalId(
+							workflow_anthropic3.sfnMain.node.defaultChild as cdk.CfnElement,
 						)}"}]}]}*`,
-						`Resource::arn:<AWS::Partition>:states:<AWS::Region>:<AWS::AccountId>:execution:{"Fn::Select":[6,{"Fn::Split":[":",{"Ref":"${cdk.Stack.of(this).getLogicalId(
-							workflow_stabilityai.sfnMain.node
-								.defaultChild as cdk.CfnElement,
+						`Resource::arn:<AWS::Partition>:states:<AWS::Region>:<AWS::AccountId>:execution:{"Fn::Select":[6,{"Fn::Split":[":",{"Ref":"${cdk.Stack.of(
+							this,
+						).getLogicalId(
+							workflow_stabilityai.sfnMain.node.defaultChild as cdk.CfnElement,
 						)}"}]}]}*`,
 					],
 				},

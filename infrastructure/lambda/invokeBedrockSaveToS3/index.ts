@@ -83,17 +83,19 @@ export const handler = async (event: event) => {
 	}
 
 	const getResultFromPath = (object: any, path: string) => {
-		return path.split(".").reduce(
-			(callbackFn, initialValue) => callbackFn[initialValue],
-			object,
-		)
-	}
+		return path
+			.split(".")
+			.reduce((callbackFn, initialValue) => callbackFn[initialValue], object);
+	};
 
 	const putObjectRequestInput: PutObjectCommandInput = {
 		ContentType: "image/png",
 		Key: event.ResultS3Key,
 		Bucket: event.ResultS3Bucket,
-		Body: Buffer.from(getResultFromPath(resultBody, event.PathToResult), "base64"),
+		Body: Buffer.from(
+			getResultFromPath(resultBody, event.PathToResult),
+			"base64",
+		),
 		ContentEncoding: "base64",
 	};
 	const putObjectRequestCommand = new PutObjectCommand(putObjectRequestInput);
