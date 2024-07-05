@@ -4,8 +4,6 @@ import React from "react";
 import { useTranslation } from "react-i18next";
 import { useNavigate } from "react-router-dom";
 
-
-
 import { IconProps, TopNavigation } from "@cloudscape-design/components";
 
 import { useVisualMode } from "../../hooks/useVisualMode";
@@ -94,4 +92,4 @@ export default function Header(user: {
 			]}
 		/>
 	);
-};
+}

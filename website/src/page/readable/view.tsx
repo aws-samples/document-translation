@@ -56,7 +56,14 @@ export default function ReadableNew() {
 	if (error) {
 		return (
 			<div className="alert alert-danger" role="alert">
-				{error} <a href="https://aws-samples.github.io/document-translation/docs/readable/post-install/models/" target="_blank" rel="noopener noreferrer">Learn more</a>
+				{error}{" "}
+				<a
+					href="https://aws-samples.github.io/document-translation/docs/readable/post-install/models/"
+					target="_blank"
+					rel="noopener noreferrer"
+				>
+					Learn more
+				</a>
 			</div>
 		);
 	}

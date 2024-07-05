@@ -13,12 +13,10 @@ import {
 	TextContent,
 } from "@cloudscape-design/components";
 
-export default function NewFormSavingJob(props:
-	{
-		uploadDocument: boolean;
-		submitJobInfo: boolean;
-	}
-	) {
+export default function NewFormSavingJob(props: {
+	uploadDocument: boolean;
+	submitJobInfo: boolean;
+}) {
 	const { t } = useTranslation();
 
 	return (

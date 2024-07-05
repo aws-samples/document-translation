@@ -1,31 +1,29 @@
 {
-    "plugins": [
-        "@trivago/prettier-plugin-sort-imports"
-    ],
-    "arrowParens": "always",
-    "bracketSpacing": true,
-    "endOfLine": "lf",
-    "semi": true,
-    "useTabs": true,
-    "trailingComma": "es5",
-    "importOrder": [
-        // Non JS/TS files
-        "^(.*).css",
-        "^(.*).json",
-        // JS/TS files
-        "^[@]?react(.*)$",
-        "^[@]?cloudscape-design/(.*)$",
-        "^[@]?aws-amplify/(.*)$",
-        "^(.*)/graphql/(.*)$",
-        "^(.*)/hooks/(.*)$",
-        "^(.*)/util/(.*)$",
-        // Current or root
-        "^[./](.*)$", 
-        // Else
-        "^(.*)$"
-    ],
-    "importOrderSeparation": true,
-    "importOrderSortSpecifiers": true,
-    "importOrderCaseInsensitive": true,
-    "importOrderGroupNamespaceSpecifiers": true
+	plugins: ["@trivago/prettier-plugin-sort-imports"],
+	arrowParens: "always",
+	bracketSpacing: true,
+	endOfLine: "lf",
+	semi: true,
+	useTabs: true,
+	trailingComma: "es5",
+	importOrder: [
+		// Non JS/TS files
+		"^(.*).css",
+		"^(.*).json",
+		// JS/TS files
+		"^[@]?react(.*)$",
+		"^[@]?cloudscape-design/(.*)$",
+		"^[@]?aws-amplify/(.*)$",
+		"^(.*)/graphql/(.*)$",
+		"^(.*)/hooks/(.*)$",
+		"^(.*)/util/(.*)$",
+		// Current or root
+		"^[./](.*)$",
+		// Else
+		"^(.*)$",
+	],
+	importOrderSeparation: true,
+	importOrderSortSpecifiers: true,
+	importOrderCaseInsensitive: true,
+	importOrderGroupNamespaceSpecifiers: true,
 }

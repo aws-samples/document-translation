@@ -26,11 +26,11 @@ const supportedFileSizeMegaBytes = 20;
 const supportedFileSizeKiloBytes = supportedFileSizeMegaBytes * 1000;
 const supportedFileSizeBytes = supportedFileSizeKiloBytes * 1000;
 
-export default function NewFormOriginalDocument(props:{
-	fileState: File | undefined,
-	updateFileState: Function,
-	formErrors: { [key: string]: boolean },
-	updateFormErrors: Function
+export default function NewFormOriginalDocument(props: {
+	fileState: File | undefined;
+	updateFileState: Function;
+	formErrors: { [key: string]: boolean };
+	updateFormErrors: Function;
 }) {
 	function onChangeFile(file: File | undefined) {
 		if (!file) {

@@ -21,7 +21,7 @@ import { formatTimestamp } from "../../util/formatTimestamp";
 import { CreateJob } from "../../util/readableCreateJob";
 
 export default function HistoryTable() {
-	const {jobs, loading} = useReadableJobs();
+	const { jobs, loading } = useReadableJobs();
 	const { t } = useTranslation();
 	const navigate = useNavigate();
 
