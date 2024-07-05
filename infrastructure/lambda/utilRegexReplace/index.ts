@@ -8,7 +8,7 @@ interface event {
 	flags: string;
 }
 
-export const handler = async (event: event) => {
+export const handler = (event: event) => {
 	if (!event.pattern) {
 		throw new Error("pattern (string) is required");
 	}

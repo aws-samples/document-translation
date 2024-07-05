@@ -3,7 +3,7 @@
 
 import { unmarshall } from "@aws-sdk/util-dynamodb";
 
-export const handler = async (event: any) => {
+export const handler = (event: any) => {
 	const result = unmarshall(event);
 	return result;
 };

@@ -5,6 +5,6 @@ interface event {
 	string: string;
 }
 
-export const handler = async (event: event) => {
+export const handler = (event: event) => {
 	return event.string.trim();
 };
