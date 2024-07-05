@@ -1,7 +1,7 @@
 // Copyright Amazon.com, Inc. or its affiliates. All Rights Reserved.
 // SPDX-License-Identifier: MIT-0
 
-const myHandler = require("../lambda/utilRegexReplace/index").handler;
+import { handler as myHandler } from "../lambda/utilRegexReplace/index";
 
 interface testDataPayload {
 	pattern?: string;

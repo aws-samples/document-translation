@@ -1,7 +1,7 @@
 // Copyright Amazon.com, Inc. or its affiliates. All Rights Reserved.
 // SPDX-License-Identifier: MIT-0
 
-const myHandler = require("../lambda/unmarshallDdb/index").handler;
+import { handler as myHandler } from "../lambda/unmarshallDdb/index";
 
 interface testData {
 	name: string;

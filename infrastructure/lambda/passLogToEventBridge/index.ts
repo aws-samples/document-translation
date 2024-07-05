@@ -5,8 +5,8 @@ import {
 	EventBridgeClient,
 	PutEventsCommand,
 } from "@aws-sdk/client-eventbridge";
+import zlib from "zlib";
 const client = new EventBridgeClient();
-const zlib = require("zlib");
 
 export const handler = async (event) => {
 	if (!process.env.eventSource) {

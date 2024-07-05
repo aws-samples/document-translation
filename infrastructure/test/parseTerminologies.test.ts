@@ -1,9 +1,8 @@
 // Copyright Amazon.com, Inc. or its affiliates. All Rights Reserved.
 // SPDX-License-Identifier: MIT-0
 
-const LambdaTester = require("lambda-tester");
-
-const myHandler = require("../lambda/parseTerminologies/index").handler;
+import LambdaTester from "lambda-tester";
+import { handler as myHandler } from "../lambda/parseTerminologies/index";
 
 describe("handler", function () {
 	it("test success empty", async function () {
