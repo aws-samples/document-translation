@@ -243,6 +243,7 @@ export class pipelineStack extends cdk.Stack {
 						'echo "{}" > ${FEATURESFILE}',
 						'jq -r ".translation = \"${translation}\"" ${FEATURESFILE} > ${FEATURESFILE}.tmp && mv ${FEATURESFILE}.tmp ${FEATURESFILE}',
 						'jq -r ".readable    = \"${readable}\""    ${FEATURESFILE} > ${FEATURESFILE}.tmp && mv ${FEATURESFILE}.tmp ${FEATURESFILE}',
+						'echo "Features enabled: $(cat ${FEATURESFILE})"',
 						// BUILD REACT | BUILD
 						'cd ${WEBDIR}',
 						'npm ci',
