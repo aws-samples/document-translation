@@ -39,10 +39,10 @@ git fetch upstream
 git tag
 # Checkout the version you wish to use
 # Check the output fof the available version tags
-git checkout upstream/v2.2.0 -b v2.2.0
-git checkout origin/main
-# Merge the latest changes from upstream into your curren branch
-git merge v2.2.0
+git checkout tags/v2.3.0 -b v2.3.0
+git checkout main
+# Merge the latest changes from upstream into your current branch
+git merge v2.3.0
 # Push the merged changes to your CodeCommit
 git push origin
 ```
