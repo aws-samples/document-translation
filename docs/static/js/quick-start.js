@@ -232,7 +232,7 @@ function handleForm(event) {
 		"Add CodeCommit as a remote",
 		`git remote add codecommit https://git-codecommit.\${AWS_REGION}.amazonaws.com/v1/repos/${data.sourceGitRepo}`
 	);
-	appendStep("Push files", `git push codecommit ${data.sourceGitBranch}`);
+	appendStep("Push files", `git push codecommit ${data.sourceGitTag}:${data.sourceGitBranch}`);
 
 	appendSection("Deploy the pipeline ");
 	appendStep(
