@@ -218,8 +218,6 @@ function handleForm(event) {
 	appendStep("Fetch available tags", "git fetch --all --tags");
 	appendStep("View tags", "git tag");
 	appendStep("Checkout tag", `git checkout tags/${data.sourceGitTag}`);
-	appendStep("Delete existing main branch", "git branch -d main");
-	appendStep("Checkout new main branch", "git checkout -b main");
 
 	appendSection("Push source code to your CodeCommit");
 	appendStep(
@@ -234,7 +232,7 @@ function handleForm(event) {
 		"Add CodeCommit as a remote",
 		`git remote add codecommit https://git-codecommit.\${AWS_REGION}.amazonaws.com/v1/repos/${data.sourceGitRepo}`
 	);
-	appendStep("Push files", `git push codecommit ${data.sourceGitBranch}`);
+	appendStep("Push files", `git push codecommit ${data.sourceGitTag}:${data.sourceGitBranch}`);
 
 	appendSection("Deploy the pipeline ");
 	appendStep(
