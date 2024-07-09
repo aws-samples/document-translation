@@ -23,12 +23,12 @@ let subscription_readableUpdateJobItem: string;
 let readableGetJob: string;
 
 try {
-  if (features.readable) {
-    subscription_readableUpdateJobItem = require("../../../graphql/subscriptions").readableUpdateJobItem;
-    readableGetJob = require("../../../graphql/queries").readableGetJob;
-  }
+	if (features.readable) {
+		subscription_readableUpdateJobItem = require("../../../graphql/subscriptions").readableUpdateJobItem;
+		readableGetJob = require("../../../graphql/queries").readableGetJob;
+	}
 } catch (error) {
-  // Ignore the error and continue
+	// Ignore the error and continue
 }
 
 export const UseReadableSubscription = (
