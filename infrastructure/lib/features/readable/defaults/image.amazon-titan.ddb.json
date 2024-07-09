@@ -1,81 +1,81 @@
 {
-    "id": {
-        "S": "Default-Example-Image-02"
-    },
-    "name": {
-        "S": "Example Without People  (Amazon Titan Express)"
-    },
-    "type": {
-        "S": "image"
-    },
-    "default": {
-        "BOOL": false
-    },
-    "image": {
-        "M": {
-            "modelId": {
-                "S": "amazon.titan-image-generator-v1"
-            },
-            "parameters": {
-                "M": {
-                    "taskType": {
-                        "S": "TEXT_IMAGE"
-                    },
-                    "textGenerationConfig": {
-                        "M": {
-                            "cfgScale": {
-                                "N": "8"
-                            },
-                            "seed": {
-                                "N": "0"
-                            },
-                            "width": {
-                                "N": "1024"
-                            },
-                            "height": {
-                                "N": "1024"
-                            },
-                            "numberOfImages": {
-                                "N": "1"
-                            }
-                        }
-                    }
-                }
-            }
-        }
-    },
-    "text": {
-        "M": {
-            "modelId": {
-                "S": "amazon.titan-text-express-v1"
-            },
-            "parameters": {
-                "M": {
-                    "textGenerationConfig": {
-                        "M": {
-                            "maxTokenCount": {
-                                "N": "2048"
-                            },
-                            "stopSequences": {
-                                "L": [
-                                    {
-                                        "S": "User:"
-                                    }
-                                ]
-                            },
-                            "temperature": {
-                                "N": "0"
-                            },
-                            "topP": {
-                                "N": "0.9"
-                            }
-                        }
-                    }
-                }
-            },
-            "prePrompt": {
-                "S": "You're a prompt engineer, trying to design a prompt for Stable Diffusion, so it can generate a photographic image to illustrate the following text, showing no people in the image:"
-            }
-        }
-    }
+	"id": {
+		"S": "Default-Example-Image-02"
+	},
+	"name": {
+		"S": "Example Without People  (Amazon Titan Express)"
+	},
+	"type": {
+		"S": "image"
+	},
+	"default": {
+		"BOOL": false
+	},
+	"image": {
+		"M": {
+			"modelId": {
+				"S": "amazon.titan-image-generator-v1"
+			},
+			"parameters": {
+				"M": {
+					"taskType": {
+						"S": "TEXT_IMAGE"
+					},
+					"textGenerationConfig": {
+						"M": {
+							"cfgScale": {
+								"N": "8"
+							},
+							"seed": {
+								"N": "0"
+							},
+							"width": {
+								"N": "1024"
+							},
+							"height": {
+								"N": "1024"
+							},
+							"numberOfImages": {
+								"N": "1"
+							}
+						}
+					}
+				}
+			}
+		}
+	},
+	"text": {
+		"M": {
+			"modelId": {
+				"S": "amazon.titan-text-express-v1"
+			},
+			"parameters": {
+				"M": {
+					"textGenerationConfig": {
+						"M": {
+							"maxTokenCount": {
+								"N": "2048"
+							},
+							"stopSequences": {
+								"L": [
+									{
+										"S": "User:"
+									}
+								]
+							},
+							"temperature": {
+								"N": "0"
+							},
+							"topP": {
+								"N": "0.9"
+							}
+						}
+					}
+				}
+			},
+			"prePrompt": {
+				"S": "You're a prompt engineer, trying to design a prompt for Stable Diffusion, so it can generate a photographic image to illustrate the following text, showing no people in the image:"
+			}
+		}
+	}
 }

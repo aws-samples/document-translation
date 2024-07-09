@@ -46,8 +46,8 @@ export class dt_help extends Construct {
 		const apiDsHelpTable = props.api.addDynamoDbDataSource(
 			"apiDsHelpTable",
 			helpTable,
-			);
-			
+		);
+
 		const helpNode = new ObjectType("helpNode", {
 			definition: {
 				description: GraphqlType.string(),

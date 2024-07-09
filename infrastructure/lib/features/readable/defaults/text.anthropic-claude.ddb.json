@@ -1,7 +1,7 @@
 {
-    "id": {
-        "S": "Default-Example-Text-01"
-    },
+	"id": {
+		"S": "Default-Example-Text-01"
+	},
 	"name": {
 		"S": "Example Simplifier (Claude v2)"
 	},

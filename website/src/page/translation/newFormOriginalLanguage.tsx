@@ -24,7 +24,6 @@ export default function NewFormOriginalLanguage(props: {
 	languageSource: string;
 	updateLanguageSource: Function;
 }) {
-
 	function onChangeLanguageSource(selectedLanguage: string) {
 		props.updateLanguageSource(selectedLanguage);
 	}

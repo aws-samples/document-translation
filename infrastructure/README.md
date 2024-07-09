@@ -2,7 +2,7 @@
 
 ## Overview
 
-This folder holds all the source files related to the app backend. The configuration is modelled in the Cloud Development Kit (CDK) in Typescript. 
+This folder holds all the source files related to the app backend. The configuration is modelled in the Cloud Development Kit (CDK) in Typescript.
 
 Both the CI/CD pipeline and app are defined here. They can be udpated independently for development (e.g. if working on the app, there is no need to update pipeline as well and wait for that to complete).
 

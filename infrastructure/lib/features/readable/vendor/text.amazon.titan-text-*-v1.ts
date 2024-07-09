@@ -82,7 +82,9 @@ export class dt_readableWorkflow extends Construct {
 		// STATE MACHINE | DEF
 		this.sfnMain = new dt_stepfunction(
 			this,
-			`${cdk.Stack.of(this).stackName}_Readable_${Strings.modelVendor}_${Strings.modelType}`,
+			`${cdk.Stack.of(this).stackName}_Readable_${Strings.modelVendor}_${
+				Strings.modelType
+			}`,
 			{
 				nameSuffix: `Readable_${Strings.modelVendor}_${Strings.modelType}`,
 				removalPolicy: props.removalPolicy,

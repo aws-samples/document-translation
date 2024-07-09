@@ -48,23 +48,23 @@ export class dt_readableWorkflow extends Construct {
 		);
 
 		// LAMBDA | UTIL REGEX REPLACE | FUNCTION
-		const utilRegexReplaceLambda = new dt_lambda(this, "utilRegexReplaceLambda", {
-			role: utilRegexReplaceLambdaRole,
-			path: "lambda/utilRegexReplace",
-			description: "Util regex replace on a string",
-		});
+		const utilRegexReplaceLambda = new dt_lambda(
+			this,
+			"utilRegexReplaceLambda",
+			{
+				role: utilRegexReplaceLambdaRole,
+				path: "lambda/utilRegexReplace",
+				description: "Util regex replace on a string",
+			},
+		);
 
 		// LAMBDA | UTIL TRIM
 		// LAMBDA | UTIL TRIM | ROLE
-		const utilTrimLambdaRole = new iam.Role(
-			this,
-			"utilTrimRole",
-			{
-				// ASM-L6 // ASM-L8
-				assumedBy: new iam.ServicePrincipal("lambda.amazonaws.com"),
-				description: "Lambda Role (Util regex replace on a string)",
-			},
-		);
+		const utilTrimLambdaRole = new iam.Role(this, "utilTrimRole", {
+			// ASM-L6 // ASM-L8
+			assumedBy: new iam.ServicePrincipal("lambda.amazonaws.com"),
+			description: "Lambda Role (Util regex replace on a string)",
+		});
 
 		// LAMBDA | UTIL TRIME | FUNCTION
 		const utilTrimLambda = new dt_lambda(this, "utilTrimLambda", {
@@ -90,11 +90,11 @@ export class dt_readableWorkflow extends Construct {
 									"{}\n\n{}",
 									sfn.JsonPath.stringAt("$.jobDetails.prePrompt"),
 									sfn.JsonPath.stringAt("$.jobDetails.input"),
-								)
-							}
-						]
-					}
-				]
+								),
+							},
+						],
+					},
+				],
 			},
 		});
 		// STATE MACHINE | TASKS | createBody
@@ -122,7 +122,7 @@ export class dt_readableWorkflow extends Construct {
 		});
 
 		// STATE MACHINE | TASKS | utilRegexReplace
-		const regexStringLeadingToColon = '^[\\w\\s]+:';
+		const regexStringLeadingToColon = "^[\\w\\s]+:";
 		const utilRegexReplace = new tasks.LambdaInvoke(this, "utilRegexReplace", {
 			lambdaFunction: utilRegexReplaceLambda.lambdaFunction,
 			resultPath: "$.utilRegexReplace",
@@ -130,7 +130,9 @@ export class dt_readableWorkflow extends Construct {
 				"Payload.$": "$.Payload",
 			},
 			payload: sfn.TaskInput.fromObject({
-				string: sfn.JsonPath.stringAt("$.invokeBedrock.Payload.Body.content[0].text"),
+				string: sfn.JsonPath.stringAt(
+					"$.invokeBedrock.Payload.Body.content[0].text",
+				),
 				pattern: regexStringLeadingToColon,
 			}),
 		});
@@ -150,16 +152,16 @@ export class dt_readableWorkflow extends Construct {
 		// STATE MACHINE | TASKS | filterOutput
 		const filterOutput = new sfn.Pass(this, "filterOutput", {
 			parameters: {
-				payload: sfn.JsonPath.stringAt(
-					"$.utilTrim.Payload",
-				),
+				payload: sfn.JsonPath.stringAt("$.utilTrim.Payload"),
 			},
 		});
 
 		// STATE MACHINE | DEF
 		this.sfnMain = new dt_stepfunction(
 			this,
-			`${cdk.Stack.of(this).stackName}_Readable_${Strings.modelVendor}_${Strings.modelVersion}`,
+			`${cdk.Stack.of(this).stackName}_Readable_${Strings.modelVendor}_${
+				Strings.modelVersion
+			}`,
 			{
 				nameSuffix: `Readable_${Strings.modelVendor}_${Strings.modelVersion}`,
 				removalPolicy: props.removalPolicy,
@@ -188,7 +190,8 @@ export class dt_readableWorkflow extends Construct {
 					reason: "Permissions scoped to dedicated resources.",
 					appliesTo: [
 						`Resource::<${cdk.Stack.of(this).getLogicalId(
-							utilRegexReplaceLambda.lambdaFunction.node.defaultChild as cdk.CfnElement,
+							utilRegexReplaceLambda.lambdaFunction.node
+								.defaultChild as cdk.CfnElement,
 						)}.Arn>:*`,
 					],
 				},

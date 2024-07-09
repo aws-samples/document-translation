@@ -218,18 +218,18 @@ export class dt_translationTranslate extends Construct {
 						"ContentType.$": "$.jobDetails.contentType",
 						S3Uri: sfn.JsonPath.format(
 							"s3://" +
-							props.contentBucket.bucketName +
-							"/{}/" +
-							props.namedStrings.s3StageUpload,
+								props.contentBucket.bucketName +
+								"/{}/" +
+								props.namedStrings.s3StageUpload,
 							sfn.JsonPath.stringAt("$.jobDetails.s3PrefixToJobId"),
 						),
 					},
 					OutputDataConfig: {
 						S3Uri: sfn.JsonPath.format(
 							"s3://" +
-							props.contentBucket.bucketName +
-							"/{}/" +
-							props.namedStrings.s3StageOutput,
+								props.contentBucket.bucketName +
+								"/{}/" +
+								props.namedStrings.s3StageOutput,
 							sfn.JsonPath.stringAt("$.jobDetails.s3PrefixToJobId"),
 						),
 					},
@@ -240,7 +240,8 @@ export class dt_translationTranslate extends Construct {
 						"$.iterationDetails.setCustomTerminology.Payload",
 				},
 				iamResources: [
-					`arn:aws:translate:${cdk.Stack.of(this).region}:${cdk.Stack.of(this).account
+					`arn:aws:translate:${cdk.Stack.of(this).region}:${
+						cdk.Stack.of(this).account
 					}:*`,
 				],
 			},
@@ -253,7 +254,7 @@ export class dt_translationTranslate extends Construct {
 		});
 
 		// STATE MACHINE | TRANSLATE | TASKS | updateDbTranslateResume
-		const resumeWorkflow = new dt_resumeWorkflow(this, 'resumeWorkflow', {
+		const resumeWorkflow = new dt_resumeWorkflow(this, "resumeWorkflow", {
 			pathToIdPauseTask: "$.createTranslationJob.JobId",
 			removalPolicy: props.removalPolicy,
 			nameSuffix: "TranslationTranslateResume",

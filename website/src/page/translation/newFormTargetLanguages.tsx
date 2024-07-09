@@ -69,7 +69,7 @@ export default function NewFormTargetLanguages(props: {
 		onChangeLanguageTarget({
 			state: false,
 			language: props.originalLanguage,
-		})
+		});
 	}, [props.originalLanguage]);
 
 	const { t } = useTranslation();

@@ -12,7 +12,6 @@ import {
 	aws_stepfunctions_tasks as tasks,
 	aws_iam as iam,
 	aws_macie as macie,
-	aws_events as events,
 	aws_cloudfront as cloudfront,
 	aws_logs as logs,
 	aws_logs_destinations as destinations,
@@ -115,7 +114,8 @@ export class dt_translationPii extends Construct {
 					},
 				},
 				iamResources: [
-					`arn:aws:macie2:${cdk.Stack.of(this).region}:${cdk.Stack.of(this).account
+					`arn:aws:macie2:${cdk.Stack.of(this).region}:${
+						cdk.Stack.of(this).account
 					}:classification-job/*`,
 				],
 			},
@@ -128,7 +128,7 @@ export class dt_translationPii extends Construct {
 		});
 
 		// STATE MACHINE | MAIN | TASKS | updateDbPiiResume
-		const resumeWorkflow = new dt_resumeWorkflow(this, 'resumeWorkflow', {
+		const resumeWorkflow = new dt_resumeWorkflow(this, "resumeWorkflow", {
 			pathToIdPauseTask: "$.createClassificationJob.JobId",
 			removalPolicy: props.removalPolicy,
 			nameSuffix: "TranslationPiiResume",
@@ -163,7 +163,8 @@ export class dt_translationPii extends Construct {
 					},
 				},
 				iamResources: [
-					`arn:aws:macie2:${cdk.Stack.of(this).region}:${cdk.Stack.of(this).account
+					`arn:aws:macie2:${cdk.Stack.of(this).region}:${
+						cdk.Stack.of(this).account
 					}:*`,
 				],
 			},
@@ -298,7 +299,6 @@ export class dt_translationPii extends Construct {
 			],
 			true,
 		);
-		const sfnMainArn = this.sfnMain.stateMachineArn;
 
 		// MACIE CLOUDWATCH LOG | LAMBDA PassMacieLogToEventBridgeRole - Map Macie result to job
 		const lambdaPassMacieLogToEventBridgeRole = new iam.Role(
@@ -311,15 +311,19 @@ export class dt_translationPii extends Construct {
 			},
 		);
 
-		const lambdaPassMacieLogToEventBridge = new dt_lambda(this, "lambdaPassMacieLogToEventBridge", {
-			role: lambdaPassMacieLogToEventBridgeRole,
-			path: "lambda/passLogToEventBridge",
-			description: "Pass Macie log to EventBridge",
-			environment: {
-				eventSource: "macie",
-				pathToDetailType: "eventType",
+		const lambdaPassMacieLogToEventBridge = new dt_lambda(
+			this,
+			"lambdaPassMacieLogToEventBridge",
+			{
+				role: lambdaPassMacieLogToEventBridgeRole,
+				path: "lambda/passLogToEventBridge",
+				description: "Pass Macie log to EventBridge",
+				environment: {
+					eventSource: "macie",
+					pathToDetailType: "eventType",
+				},
 			},
-		}).lambdaFunction;
+		).lambdaFunction;
 
 		const permitPutEventsIntoDefaultBus = new iam.Policy(
 			this,
@@ -330,12 +334,18 @@ export class dt_translationPii extends Construct {
 					new iam.PolicyStatement({
 						// ASM-IAM
 						actions: ["events:PutEvents"],
-						resources: [`arn:aws:events:${cdk.Stack.of(this).region}:${cdk.Stack.of(this).account}:event-bus/default`],
+						resources: [
+							`arn:aws:events:${cdk.Stack.of(this).region}:${
+								cdk.Stack.of(this).account
+							}:event-bus/default`,
+						],
 					}),
 				],
 			},
 		);
-		lambdaPassMacieLogToEventBridgeRole?.attachInlinePolicy(permitPutEventsIntoDefaultBus);
+		lambdaPassMacieLogToEventBridgeRole?.attachInlinePolicy(
+			permitPutEventsIntoDefaultBus,
+		);
 
 		new logs.SubscriptionFilter(this, "macieLogSubscription", {
 			logGroup: logs.LogGroup.fromLogGroupName(
@@ -343,7 +353,9 @@ export class dt_translationPii extends Construct {
 				"macieClassificationJobs",
 				"/aws/macie/classificationjobs",
 			),
-			destination: new destinations.LambdaDestination(lambdaPassMacieLogToEventBridge),
+			destination: new destinations.LambdaDestination(
+				lambdaPassMacieLogToEventBridge,
+			),
 			filterPattern: logs.FilterPattern.stringValue(
 				"$.eventType",
 				"=",

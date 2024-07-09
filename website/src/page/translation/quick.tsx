@@ -21,7 +21,10 @@ export default function TranslationQuick() {
 			<ContentLayout
 				header={
 					<SpaceBetween size="m">
-						<Header variant="h1" description={t("translation_quick_text_description")}>
+						<Header
+							variant="h1"
+							description={t("translation_quick_text_description")}
+						>
 							{t("translation_quick_text_title")}
 						</Header>
 					</SpaceBetween>

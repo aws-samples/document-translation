@@ -3,7 +3,6 @@
 
 import { Construct } from "constructs";
 import * as cdk from "aws-cdk-lib";
-import { NagSuppressions } from "cdk-nag";
 
 import { aws_dynamodb as dynamodb, aws_appsync as appsync } from "aws-cdk-lib";
 import {

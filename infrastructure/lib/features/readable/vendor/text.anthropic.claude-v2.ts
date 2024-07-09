@@ -22,7 +22,7 @@ export interface props {
 
 enum Strings {
 	modelVendor = "anthropic",
-	modelMatch = "claude-v2"
+	modelMatch = "claude-v2",
 }
 
 export class dt_readableWorkflow extends Construct {
@@ -47,23 +47,23 @@ export class dt_readableWorkflow extends Construct {
 		);
 
 		// LAMBDA | UTIL REGEX REPLACE | FUNCTION
-		const utilRegexReplaceLambda = new dt_lambda(this, "utilRegexReplaceLambda", {
-			role: utilRegexReplaceLambdaRole,
-			path: "lambda/utilRegexReplace",
-			description: "Util regex replace on a string",
-		});
+		const utilRegexReplaceLambda = new dt_lambda(
+			this,
+			"utilRegexReplaceLambda",
+			{
+				role: utilRegexReplaceLambdaRole,
+				path: "lambda/utilRegexReplace",
+				description: "Util regex replace on a string",
+			},
+		);
 
 		// LAMBDA | UTIL TRIM
 		// LAMBDA | UTIL TRIM | ROLE
-		const utilTrimLambdaRole = new iam.Role(
-			this,
-			"utilTrimRole",
-			{
-				// ASM-L6 // ASM-L8
-				assumedBy: new iam.ServicePrincipal("lambda.amazonaws.com"),
-				description: "Lambda Role (Util regex replace on a string)",
-			},
-		);
+		const utilTrimLambdaRole = new iam.Role(this, "utilTrimRole", {
+			// ASM-L6 // ASM-L8
+			assumedBy: new iam.ServicePrincipal("lambda.amazonaws.com"),
+			description: "Lambda Role (Util regex replace on a string)",
+		});
 
 		// LAMBDA | UTIL TRIME | FUNCTION
 		const utilTrimLambda = new dt_lambda(this, "utilTrimLambda", {
@@ -111,7 +111,7 @@ export class dt_readableWorkflow extends Construct {
 		});
 
 		// STATE MACHINE | TASKS | utilRegexReplace
-		const regexStringLeadingToColon = '^[\\w\\s]+:';
+		const regexStringLeadingToColon = "^[\\w\\s]+:";
 		const utilRegexReplace = new tasks.LambdaInvoke(this, "utilRegexReplace", {
 			lambdaFunction: utilRegexReplaceLambda.lambdaFunction,
 			resultPath: "$.utilRegexReplace",
@@ -119,7 +119,9 @@ export class dt_readableWorkflow extends Construct {
 				"Payload.$": "$.Payload",
 			},
 			payload: sfn.TaskInput.fromObject({
-				string: sfn.JsonPath.stringAt("$.invokeBedrock.Payload.Body.completion"),
+				string: sfn.JsonPath.stringAt(
+					"$.invokeBedrock.Payload.Body.completion",
+				),
 				pattern: regexStringLeadingToColon,
 			}),
 		});
@@ -139,9 +141,7 @@ export class dt_readableWorkflow extends Construct {
 		// STATE MACHINE | TASKS | filterOutput
 		const filterOutput = new sfn.Pass(this, "filterOutput", {
 			parameters: {
-				payload: sfn.JsonPath.stringAt(
-					"$.utilTrim.Payload",
-				),
+				payload: sfn.JsonPath.stringAt("$.utilTrim.Payload"),
 			},
 		});
 
@@ -177,7 +177,8 @@ export class dt_readableWorkflow extends Construct {
 					reason: "Permissions scoped to dedicated resources.",
 					appliesTo: [
 						`Resource::<${cdk.Stack.of(this).getLogicalId(
-							utilRegexReplaceLambda.lambdaFunction.node.defaultChild as cdk.CfnElement,
+							utilRegexReplaceLambda.lambdaFunction.node
+								.defaultChild as cdk.CfnElement,
 						)}.Arn>:*`,
 					],
 				},

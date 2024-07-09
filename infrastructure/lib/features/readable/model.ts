@@ -97,20 +97,18 @@ export class dt_readableModel extends Construct {
 
 		// EXAMPLE ENTRY
 		// EXAMPLE ENTRY | TEXT
-		const exampleEntryText_anthropicClaude = new cr.AwsCustomResource(this, 'exampleEntryText', {
+		new cr.AwsCustomResource(this, "exampleEntryText", {
 			onCreate: {
-				service: 'DynamoDB',
-				action: 'putItem',
+				service: "DynamoDB",
+				action: "putItem",
 				parameters: {
 					TableName: this.modelTable.tableName,
-					Item: require('./defaults/text.anthropic-claude.ddb.json'),
+					Item: require("./defaults/text.anthropic-claude.ddb.json"),
 				},
-				physicalResourceId: cr.PhysicalResourceId.of('exampleEntryText'),
+				physicalResourceId: cr.PhysicalResourceId.of("exampleEntryText"),
 			},
 			policy: cr.AwsCustomResourcePolicy.fromSdkCalls({
-				resources: [
-					this.modelTable.tableArn
-				],
+				resources: [this.modelTable.tableArn],
 			}),
 			installLatestAwsSdk: true,
 		});
@@ -136,20 +134,18 @@ export class dt_readableModel extends Construct {
 		// });
 
 		// EXAMPLE ENTRY | IMAGE
-		const exampleEntryImage_stabilityAiStableDiffusion = new cr.AwsCustomResource(this, 'exampleEntryImage', {
+		new cr.AwsCustomResource(this, "exampleEntryImage", {
 			onCreate: {
-				service: 'DynamoDB',
-				action: 'putItem',
+				service: "DynamoDB",
+				action: "putItem",
 				parameters: {
 					TableName: this.modelTable.tableName,
-					Item: require('./defaults/image.stabilityai-stablediffusion.ddb.json'),
+					Item: require("./defaults/image.stabilityai-stablediffusion.ddb.json"),
 				},
-				physicalResourceId: cr.PhysicalResourceId.of('exampleEntryImage'),
+				physicalResourceId: cr.PhysicalResourceId.of("exampleEntryImage"),
 			},
 			policy: cr.AwsCustomResourcePolicy.fromSdkCalls({
-				resources: [
-					this.modelTable.tableArn
-				],
+				resources: [this.modelTable.tableArn],
 			}),
 			installLatestAwsSdk: true,
 		});
@@ -177,16 +173,17 @@ export class dt_readableModel extends Construct {
 		// EXAMPLE ENTRY | CUSTOM RESOURCE CDK LAMBDA
 		NagSuppressions.addResourceSuppressionsByPath(
 			cdk.Stack.of(this),
-			`/${cdk.Stack.of(this).node.findChild(
-				"AWS679f53fac002430cb0da5b7982bd2287",
-			).node.path
+			`/${
+				cdk.Stack.of(this).node.findChild("AWS679f53fac002430cb0da5b7982bd2287")
+					.node.path
 			}/ServiceRole/Resource`,
 			[
 				{
 					id: "AwsSolutions-IAM4",
-					appliesTo: ["Policy::arn:<AWS::Partition>:iam::aws:policy/service-role/AWSLambdaBasicExecutionRole"],
-					reason:
-						"Custom Resource Lambda defined by CDK project",
+					appliesTo: [
+						"Policy::arn:<AWS::Partition>:iam::aws:policy/service-role/AWSLambdaBasicExecutionRole",
+					],
+					reason: "Custom Resource Lambda defined by CDK project",
 				},
 			],
 			true,

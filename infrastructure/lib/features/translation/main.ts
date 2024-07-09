@@ -3,7 +3,7 @@
 
 import { Construct } from "constructs";
 import * as cdk from "aws-cdk-lib";
-import { aws_pipes as pipes } from 'aws-cdk-lib';
+import { aws_pipes as pipes } from "aws-cdk-lib";
 import { NagSuppressions } from "cdk-nag";
 
 import {
@@ -38,9 +38,7 @@ export class dt_translationMain extends Construct {
 		// STATE MACHINE | MAIN | TASKS | unNestJobDetails
 		const unNestJobDetails = new sfn.Pass(this, "unNestJobDetails", {
 			parameters: {
-				dynamodb: sfn.JsonPath.objectAt(
-					"$.[0].dynamodb",
-				),
+				dynamodb: sfn.JsonPath.objectAt("$.[0].dynamodb"),
 			},
 		});
 		// STATE MACHINE | MAIN | TASKS | mapJobDetails - Name job variables
@@ -60,9 +58,7 @@ export class dt_translationMain extends Construct {
 					jobIdentity: sfn.JsonPath.stringAt(
 						"$.dynamodb.NewImage.jobIdentity.S",
 					),
-					jobName: sfn.JsonPath.stringAt(
-						"$.dynamodb.NewImage.jobName.S",
-					),
+					jobName: sfn.JsonPath.stringAt("$.dynamodb.NewImage.jobName.S"),
 					s3PrefixToJobId: sfn.JsonPath.format(
 						props.s3PrefixPrivate + "/{}/{}",
 						sfn.JsonPath.stringAt("$.dynamodb.NewImage.jobIdentity.S"),
@@ -70,9 +66,9 @@ export class dt_translationMain extends Construct {
 					),
 					s3PrefixToObject: sfn.JsonPath.format(
 						props.s3PrefixPrivate +
-						"/{}/{}/" +
-						props.namedStrings.s3StageUpload +
-						"/{}",
+							"/{}/{}/" +
+							props.namedStrings.s3StageUpload +
+							"/{}",
 						sfn.JsonPath.stringAt("$.dynamodb.NewImage.jobIdentity.S"),
 						sfn.JsonPath.stringAt("$.dynamodb.Keys.id.S"),
 						sfn.JsonPath.stringAt("$.dynamodb.NewImage.jobName.S"),
@@ -203,15 +199,19 @@ export class dt_translationMain extends Construct {
 			{
 				nameSuffix: "TranslationMainRename",
 				removalPolicy: props.removalPolicy,
-				definition: new tasks.StepFunctionsStartExecution(this, "startSfnMain", {
-					stateMachine: this.sfnMain,
-					integrationPattern: sfn.IntegrationPattern.RUN_JOB,
-					name: sfn.JsonPath.format(
-						"{}_{}",
-						sfn.JsonPath.stringAt("$.[0].dynamodb.Keys.id.S"),
-						sfn.JsonPath.stringAt("$.[0].eventID"),
-					),
-				})
+				definition: new tasks.StepFunctionsStartExecution(
+					this,
+					"startSfnMain",
+					{
+						stateMachine: this.sfnMain,
+						integrationPattern: sfn.IntegrationPattern.RUN_JOB,
+						name: sfn.JsonPath.format(
+							"{}_{}",
+							sfn.JsonPath.stringAt("$.[0].dynamodb.Keys.id.S"),
+							sfn.JsonPath.stringAt("$.[0].eventID"),
+						),
+					},
+				),
 			},
 		).StateMachine;
 		// Required for "RUN_JOB"
@@ -227,93 +227,98 @@ export class dt_translationMain extends Construct {
 		);
 
 		// PIPE | DDB JOB TO STEPFUNCTION
-		if (props.jobTable.tableStreamArn) { // tableStreamArn may be undefined
+		if (props.jobTable.tableStreamArn) {
+			// tableStreamArn may be undefined
 			// PIPE | DDB JOB TO STEPFUNCTION | PERMISSIONS
-			const pipeJobToSfnRole = new iam.Role(this, "pipeJobToSfnRole",
-				{
-					// ASM-L6 // ASM-L8
-					assumedBy: new iam.ServicePrincipal("pipes.amazonaws.com"),
-					description: "Pipe Role (Pass DynamoDB job to StepFunction)",
-				},
+			const pipeJobToSfnRole = new iam.Role(this, "pipeJobToSfnRole", {
+				// ASM-L6 // ASM-L8
+				assumedBy: new iam.ServicePrincipal("pipes.amazonaws.com"),
+				description: "Pipe Role (Pass DynamoDB job to StepFunction)",
+			});
+			pipeJobToSfnRole.attachInlinePolicy(
+				new iam.Policy(this, "permitStartExecutionOfMain", {
+					policyName: "Start-Sfn-TranslationMain",
+					statements: [
+						new iam.PolicyStatement({
+							// ASM-IAM
+							actions: ["states:StartExecution"],
+							resources: [sfnMainRename.stateMachineArn],
+						}),
+					],
+				}),
 			);
 			pipeJobToSfnRole.attachInlinePolicy(
-				new iam.Policy(this, "permitStartExecutionOfMain",
-					{
-						policyName: "Start-Sfn-TranslationMain",
-						statements: [
-							new iam.PolicyStatement({
-								// ASM-IAM
-								actions: ["states:StartExecution"],
-								resources: [sfnMainRename.stateMachineArn],
-							}),
-						],
-					},
-				)
-			);
-			pipeJobToSfnRole.attachInlinePolicy(
-				new iam.Policy(this, "permitReadDynamoDBStream",
-					{
-						policyName: "Read-DynamoDB-Stream",
-						statements: [
-							new iam.PolicyStatement({
-								// ASM-IAM
-								actions: ["dynamodb:DescribeStream", "dynamodb:GetRecords", "dynamodb:GetShardIterator"],
-								resources: [props.jobTable.tableStreamArn],
-							}),
-						],
-					},
-				)
+				new iam.Policy(this, "permitReadDynamoDBStream", {
+					policyName: "Read-DynamoDB-Stream",
+					statements: [
+						new iam.PolicyStatement({
+							// ASM-IAM
+							actions: [
+								"dynamodb:DescribeStream",
+								"dynamodb:GetRecords",
+								"dynamodb:GetShardIterator",
+							],
+							resources: [props.jobTable.tableStreamArn],
+						}),
+					],
+				}),
 			);
 
 			// PIPE | DDB JOB TO STEPFUNCTION | PIPE
 			// PIPE | DDB JOB TO STEPFUNCTION | PIPE | SOURCE
-			const pipeSourceDynamoDBStreamParametersProperty: pipes.CfnPipe.PipeSourceDynamoDBStreamParametersProperty = {
-				startingPosition: 'TRIM_HORIZON',
-				batchSize: 1,
-			};
+			const pipeSourceDynamoDBStreamParametersProperty: pipes.CfnPipe.PipeSourceDynamoDBStreamParametersProperty =
+				{
+					startingPosition: "TRIM_HORIZON",
+					batchSize: 1,
+				};
 			const filterPattern = {
-				"eventName": ["INSERT"],
-				"dynamodb": {
-					"NewImage": {
-						"jobStatus": {
-							"S": [{
-								"equals-ignore-case": "UPLOADED"
-							}]
-						}
-					}
-				}
-			}
-			const pipeSourceDynamoDBStreamFiltersProperty: pipes.CfnPipe.FilterCriteriaProperty = {
-				filters: [
-					{
-						pattern: JSON.stringify(filterPattern),
+				eventName: ["INSERT"],
+				dynamodb: {
+					NewImage: {
+						jobStatus: {
+							S: [
+								{
+									"equals-ignore-case": "UPLOADED",
+								},
+							],
+						},
 					},
-				],
-			}
+				},
+			};
+			const pipeSourceDynamoDBStreamFiltersProperty: pipes.CfnPipe.FilterCriteriaProperty =
+				{
+					filters: [
+						{
+							pattern: JSON.stringify(filterPattern),
+						},
+					],
+				};
 			const sourceParameters = {
 				dynamoDbStreamParameters: pipeSourceDynamoDBStreamParametersProperty,
 				filterCriteria: pipeSourceDynamoDBStreamFiltersProperty,
-			}
+			};
 
 			// PIPE | DDB JOB TO STEPFUNCTION | PIPE | TARGET
-			const pipeTargetStateMachineParametersProperty: pipes.CfnPipe.PipeTargetStateMachineParametersProperty = {
-				invocationType: 'FIRE_AND_FORGET',
-			};
+			const pipeTargetStateMachineParametersProperty: pipes.CfnPipe.PipeTargetStateMachineParametersProperty =
+				{
+					invocationType: "FIRE_AND_FORGET",
+				};
 			const targetParameters = {
-				stepFunctionStateMachineParameters: pipeTargetStateMachineParametersProperty
-			}
+				stepFunctionStateMachineParameters:
+					pipeTargetStateMachineParametersProperty,
+			};
 
 			// PIPE | DDB JOB TO STEPFUNCTION | PIPE | DEF
-			const pipeJobToSfn = new pipes.CfnPipe(this, "pipeJobToSfn", {
+			new pipes.CfnPipe(this, "pipeJobToSfn", {
 				roleArn: pipeJobToSfnRole.roleArn,
 				source: props.jobTable.tableStreamArn,
 				target: sfnMainRename.stateMachineArn,
-				description: 'DocTran Translation Job to StepFunction',
+				description: "DocTran Translation Job to StepFunction",
 				sourceParameters,
 				targetParameters,
 			});
 		}
 
-		// END 
+		// END
 	}
 }

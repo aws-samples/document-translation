@@ -25,7 +25,6 @@ import {
 	ObjectType as OutputType,
 	InputType,
 	ResolvableField,
-	Field,
 	Directive,
 } from "awscdk-appsync-utils";
 
@@ -190,9 +189,9 @@ export class dt_translate extends Construct {
 		});
 
 		// DYNAMODB | INDEX
-		const GSI_OWNER = "byOwnerAndCreatedAt"
-		const GSI_OWNER_PK = "jobOwner"
-		const GSI_OWNER_SK = "createdAt"
+		const GSI_OWNER = "byOwnerAndCreatedAt";
+		const GSI_OWNER_PK = "jobOwner";
+		const GSI_OWNER_SK = "createdAt";
 		this.jobTable.addGlobalSecondaryIndex({
 			indexName: GSI_OWNER,
 			partitionKey: {
@@ -205,12 +204,12 @@ export class dt_translate extends Construct {
 			},
 			projectionType: dynamodb.ProjectionType.INCLUDE,
 			nonKeyAttributes: [
-				"id",	 // TODO variableise me
-				"jobName",	 // TODO variableise me
-				"jobStatus",	 // TODO variableise me
-				"languageSource",	 // TODO variableise me
-				"languageTargets",	 // TODO variableise me
-				"translateKey"	 // TODO variableise me
+				"id", // TODO variableise me
+				"jobName", // TODO variableise me
+				"jobStatus", // TODO variableise me
+				"languageSource", // TODO variableise me
+				"languageTargets", // TODO variableise me
+				"translateKey", // TODO variableise me
 			],
 		});
 
@@ -303,10 +302,7 @@ export class dt_translate extends Construct {
 			`),
 			directives: [Directive.custom("@aws_cognito_user_pools")],
 		});
-		props.apiSchema.addQuery(
-			`${FEATURE_PREFIX}ListJobs`,
-			listJobsQuery
-		);
+		props.apiSchema.addQuery(`${FEATURE_PREFIX}ListJobs`, listJobsQuery);
 
 		// API | MUTATION
 		// API | MUTATION createJob
@@ -387,7 +383,7 @@ export class dt_translate extends Construct {
 
 		props.apiSchema.addMutation(
 			`${FEATURE_PREFIX}CreateJob`,
-			createJobMutation
+			createJobMutation,
 		);
 
 		//
@@ -486,9 +482,10 @@ export class dt_translate extends Construct {
 
 		NagSuppressions.addResourceSuppressionsByPath(
 			cdk.Stack.of(this),
-			`/${cdk.Stack.of(this).node.findChild(
-				"LogRetentionaae0aa3c5b4d4f87b02d85b201efdd8a",
-			).node.path
+			`/${
+				cdk.Stack.of(this).node.findChild(
+					"LogRetentionaae0aa3c5b4d4f87b02d85b201efdd8a",
+				).node.path
 			}/ServiceRole/Resource`,
 			[
 				{
@@ -501,9 +498,10 @@ export class dt_translate extends Construct {
 		);
 		NagSuppressions.addResourceSuppressionsByPath(
 			cdk.Stack.of(this),
-			`/${cdk.Stack.of(this).node.findChild(
-				"LogRetentionaae0aa3c5b4d4f87b02d85b201efdd8a",
-			).node.path
+			`/${
+				cdk.Stack.of(this).node.findChild(
+					"LogRetentionaae0aa3c5b4d4f87b02d85b201efdd8a",
+				).node.path
 			}/ServiceRole/DefaultPolicy/Resource`,
 			[
 				{

@@ -1,14 +1,13 @@
 // Copyright Amazon.com, Inc. or its affiliates. All Rights Reserved.
 // SPDX-License-Identifier: MIT-0
 
-const LambdaTester = require("lambda-tester");
-const myHandler = require("../lambda/utilRegexReplace/index").handler;
+import { handler as myHandler } from "../lambda/utilRegexReplace/index";
 
 interface testDataPayload {
-	pattern?: string,
-	string?: string,
-	replacement?: string,
-	flags?: string,
+	pattern?: string;
+	string?: string;
+	replacement?: string;
+	flags?: string;
 }
 
 interface testData {
@@ -16,7 +15,6 @@ interface testData {
 	payload: testDataPayload;
 	result: string;
 }
-
 
 // TEST DATA
 const testSuccess: testData[] = [
@@ -107,7 +105,8 @@ const testSuccess: testData[] = [
 		name: "Regex remove pattern, leading to colon, non-greedy",
 		payload: {
 			pattern: "^[\\w\\s]+:",
-			string: "PATTERN TO FIND: PATTERN TO IGNORE: This is a PATTERN and another PATTERN",
+			string:
+				"PATTERN TO FIND: PATTERN TO IGNORE: This is a PATTERN and another PATTERN",
 		},
 		result: " PATTERN TO IGNORE: This is a PATTERN and another PATTERN",
 	},
@@ -116,17 +115,21 @@ const testSuccess: testData[] = [
 		name: "Anthopic text simplifier",
 		payload: {
 			pattern: "^[\\w\\s]+:",
-			string: " Lorem ipsum dolor sit amet:\n\nConsectetur adipiscing elit.  \n\nSed sed tempus arcu, ac scelerisque lorem.  \n\nAliquam erat volutpat.",
+			string:
+				" Lorem ipsum dolor sit amet:\n\nConsectetur adipiscing elit.  \n\nSed sed tempus arcu, ac scelerisque lorem.  \n\nAliquam erat volutpat.",
 		},
-		result: "\n\nConsectetur adipiscing elit.  \n\nSed sed tempus arcu, ac scelerisque lorem.  \n\nAliquam erat volutpat.",
+		result:
+			"\n\nConsectetur adipiscing elit.  \n\nSed sed tempus arcu, ac scelerisque lorem.  \n\nAliquam erat volutpat.",
 	},
 	{
 		name: "Anthopic text simplifier, double colon",
 		payload: {
 			pattern: "^[\\w\\s]+:",
-			string: " Lorem ipsum dolor sit amet: Consectetur adipiscing elit:\n\nSed sed tempus arcu, ac scelerisque lorem.  \n\nAliquam erat volutpat.",
+			string:
+				" Lorem ipsum dolor sit amet: Consectetur adipiscing elit:\n\nSed sed tempus arcu, ac scelerisque lorem.  \n\nAliquam erat volutpat.",
 		},
-		result: " Consectetur adipiscing elit:\n\nSed sed tempus arcu, ac scelerisque lorem.  \n\nAliquam erat volutpat.",
+		result:
+			" Consectetur adipiscing elit:\n\nSed sed tempus arcu, ac scelerisque lorem.  \n\nAliquam erat volutpat.",
 	},
 ];
 
@@ -147,7 +150,7 @@ const testFail: testData[] = [
 	},
 ];
 // SUCCESS
-testSuccess.forEach(item => {
+testSuccess.forEach((item) => {
 	describe("handler", function () {
 		test(item.name, async function () {
 			await expect(myHandler(item.payload)).resolves.toEqual(item.result);
@@ -156,7 +159,7 @@ testSuccess.forEach(item => {
 });
 
 // FAILURES
-testFail.forEach(item => {
+testFail.forEach((item) => {
 	describe("handler", function () {
 		test(item.name, async function () {
 			await expect(myHandler(item.payload)).rejects.toThrow(item.result);

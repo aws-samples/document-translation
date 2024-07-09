@@ -5,64 +5,64 @@ import { Construct } from "constructs";
 import * as cdk from "aws-cdk-lib";
 
 import {
-    aws_dynamodb as dynamodb,
-    aws_s3 as s3,
-    aws_appsync as appsync,
+	aws_dynamodb as dynamodb,
+	aws_s3 as s3,
+	aws_appsync as appsync,
 } from "aws-cdk-lib";
 import {
-    CodeFirstSchema,
-    GraphqlType,
-    ObjectType as OutputType,
-    ResolvableField,
-    Directive,
+	CodeFirstSchema,
+	GraphqlType,
+	ObjectType as OutputType,
+	ResolvableField,
+	Directive,
 } from "awscdk-appsync-utils";
 
 export interface props {
-    api: appsync.GraphqlApi;
-    apiSchema: CodeFirstSchema;
-    removalPolicy: cdk.RemovalPolicy;
+	api: appsync.GraphqlApi;
+	apiSchema: CodeFirstSchema;
+	removalPolicy: cdk.RemovalPolicy;
 }
 
 export class dt_sharedPreferences extends Construct {
-    public readonly contentBucket: s3.Bucket;
-    public readonly jobTable: dynamodb.Table;
+	public readonly contentBucket: s3.Bucket;
+	public readonly jobTable: dynamodb.Table;
 
-    constructor(scope: Construct, id: string, props: props) {
-        super(scope, id);
+	constructor(scope: Construct, id: string, props: props) {
+		super(scope, id);
 
-        const pk = "id"
-        //
-        // DYNAMODB
-        const table = new dynamodb.Table(this, "userPreferencesTable", {
-            partitionKey: {
-                name: pk,
-                type: dynamodb.AttributeType.STRING,
-            },
-            billingMode: dynamodb.BillingMode.PAY_PER_REQUEST,
-            tableClass: dynamodb.TableClass.STANDARD_INFREQUENT_ACCESS,
-            pointInTimeRecovery: true, // ASM-DDB3
-            removalPolicy: props.removalPolicy, // ASM-CFN1
-        });
+		const pk = "id";
+		//
+		// DYNAMODB
+		const table = new dynamodb.Table(this, "userPreferencesTable", {
+			partitionKey: {
+				name: pk,
+				type: dynamodb.AttributeType.STRING,
+			},
+			billingMode: dynamodb.BillingMode.PAY_PER_REQUEST,
+			tableClass: dynamodb.TableClass.STANDARD_INFREQUENT_ACCESS,
+			pointInTimeRecovery: true, // ASM-DDB3
+			removalPolicy: props.removalPolicy, // ASM-CFN1
+		});
 
-        // API
-        const apiDataSource = props.api.addDynamoDbDataSource(
-            "apiDsPreferencesTable",
-            table,
-        );
+		// API
+		const apiDataSource = props.api.addDynamoDbDataSource(
+			"apiDsPreferencesTable",
+			table,
+		);
 
-        // API | GET
-        const apiOutput = new OutputType("shared_preferences_output", {
-            definition: {
-                visualMode: GraphqlType.string(),
-                visualDensity: GraphqlType.string(),
-            },
-        });
-        props.apiSchema.addType(apiOutput);
+		// API | GET
+		const apiOutput = new OutputType("shared_preferences_output", {
+			definition: {
+				visualMode: GraphqlType.string(),
+				visualDensity: GraphqlType.string(),
+			},
+		});
+		props.apiSchema.addType(apiOutput);
 
-        const apiQuery = new ResolvableField({
-            returnType: apiOutput.attribute(),
-            dataSource: apiDataSource,
-            requestMappingTemplate: appsync.MappingTemplate.fromString(`
+		const apiQuery = new ResolvableField({
+			returnType: apiOutput.attribute(),
+			dataSource: apiDataSource,
+			requestMappingTemplate: appsync.MappingTemplate.fromString(`
             {
                 "version": "2017-02-28",
                 "operation": "GetItem",
@@ -70,21 +70,19 @@ export class dt_sharedPreferences extends Construct {
                     "${pk}": $util.dynamodb.toDynamoDBJson($ctx.identity.sub),
                 }
             }`),
-            responseMappingTemplate: appsync.MappingTemplate.dynamoDbResultItem(),
-            directives: [
-                Directive.custom("@aws_cognito_user_pools"),
-            ],
-        });
-        props.apiSchema.addQuery("sharedGetPreferences", apiQuery);
+			responseMappingTemplate: appsync.MappingTemplate.dynamoDbResultItem(),
+			directives: [Directive.custom("@aws_cognito_user_pools")],
+		});
+		props.apiSchema.addQuery("sharedGetPreferences", apiQuery);
 
-        const apiMutation = new ResolvableField({
-            returnType: apiOutput.attribute(),
-            args: {
-                visualMode: GraphqlType.string(),
-                visualDensity: GraphqlType.string(),
-            },
-            dataSource: apiDataSource,
-            requestMappingTemplate: appsync.MappingTemplate.fromString(`
+		const apiMutation = new ResolvableField({
+			returnType: apiOutput.attribute(),
+			args: {
+				visualMode: GraphqlType.string(),
+				visualDensity: GraphqlType.string(),
+			},
+			dataSource: apiDataSource,
+			requestMappingTemplate: appsync.MappingTemplate.fromString(`
 				{
 					"version" : "2017-02-28",
 					"operation" : "UpdateItem",
@@ -107,16 +105,11 @@ export class dt_sharedPreferences extends Construct {
 					}
 				}
 		`),
-            responseMappingTemplate: appsync.MappingTemplate.dynamoDbResultItem(),
-            directives: [
-                Directive.custom("@aws_cognito_user_pools"),
-            ],
-        });
-        props.apiSchema.addMutation(
-            "sharedUpdatePreferences",
-            apiMutation,
-        );
+			responseMappingTemplate: appsync.MappingTemplate.dynamoDbResultItem(),
+			directives: [Directive.custom("@aws_cognito_user_pools")],
+		});
+		props.apiSchema.addMutation("sharedUpdatePreferences", apiMutation);
 
-        // END
-    }
+		// END
+	}
 }

@@ -24,45 +24,57 @@ export interface SharedConfiguration {
 
 export function getSharedConfiguration(): SharedConfiguration {
 	// Development
-	const development = process.env.development?.toLowerCase() === 'true';
+	const development = process.env.development?.toLowerCase() === "true";
 
 	// Cognito
-	const cognitoLocalUsers = process.env.cognitoLocalUsers?.toLowerCase() === 'true';
-	const cognitoLocalUsersMfa = process.env.cognitoLocalUsersMfa?.toLowerCase() || 'off';
-	const cognitoLocalUsersMfaOtp = process.env.cognitoLocalUsersMfaOtp?.toLowerCase() === 'true';
-	const cognitoLocalUsersMfaSms = process.env.cognitoLocalUsersMfaSms?.toLowerCase() === 'true';
-	const cognitoSamlUsers = process.env.cognitoSamlUsers?.toLowerCase() === 'true';
-	const cognitoSamlMetadataUrl = process.env.cognitoSamlMetadataUrl || '';
+	const cognitoLocalUsers =
+		process.env.cognitoLocalUsers?.toLowerCase() === "true";
+	const cognitoLocalUsersMfa =
+		process.env.cognitoLocalUsersMfa?.toLowerCase() || "off";
+	const cognitoLocalUsersMfaOtp =
+		process.env.cognitoLocalUsersMfaOtp?.toLowerCase() === "true";
+	const cognitoLocalUsersMfaSms =
+		process.env.cognitoLocalUsersMfaSms?.toLowerCase() === "true";
+	const cognitoSamlUsers =
+		process.env.cognitoSamlUsers?.toLowerCase() === "true";
+	const cognitoSamlMetadataUrl = process.env.cognitoSamlMetadataUrl || "";
 
 	// Translation
-	const translation = process.env.translation?.toLowerCase() === 'true';
-	const translationPii = process.env.translationPii?.toLowerCase() === 'true';
-	const translationLifecycleDefault = parseInt(process.env.translationLifecycleDefault || '7');
-	const translationLifecyclePii = parseInt(process.env.translationLifecyclePii || '3');
+	const translation = process.env.translation?.toLowerCase() === "true";
+	const translationPii = process.env.translationPii?.toLowerCase() === "true";
+	const translationLifecycleDefault = parseInt(
+		process.env.translationLifecycleDefault || "7",
+	);
+	const translationLifecyclePii = parseInt(
+		process.env.translationLifecyclePii || "3",
+	);
 
 	// Readable
-	const readable = process.env.readable?.toLowerCase() === 'true';
-	const readableBedrockRegion = process.env.readableBedrockRegion?.toLowerCase() || '';
+	const readable = process.env.readable?.toLowerCase() === "true";
+	const readableBedrockRegion =
+		process.env.readableBedrockRegion?.toLowerCase() || "";
 	if (readable && !readableBedrockRegion) {
 		throw new Error("readableBedrockRegion is required when readable is true");
 	}
 
 	// Web UI
-	const webUi = process.env.webUi?.toLowerCase() === 'true';
-	const webUiCustomDomain = process.env.webUiCustomDomain?.toLowerCase() || '';
-	const webUiCustomDomainCertificate = process.env.webUiCustomDomainCertificate || '';
+	const webUi = process.env.webUi?.toLowerCase() === "true";
+	const webUiCustomDomain = process.env.webUiCustomDomain?.toLowerCase() || "";
+	const webUiCustomDomainCertificate =
+		process.env.webUiCustomDomainCertificate || "";
 
 	// Source
-	const sourceGitService = process.env.sourceGitService?.toLowerCase() || '';
-	const sourceGitRepo = process.env.sourceGitRepo || '';
+	const sourceGitService = process.env.sourceGitService?.toLowerCase() || "";
+	const sourceGitRepo = process.env.sourceGitRepo || "";
 	if (!sourceGitRepo) {
 		throw new Error("sourceGitRepo is required");
 	}
-	const sourceGitBranch = process.env.sourceGitBranch || 'main';
+	const sourceGitBranch = process.env.sourceGitBranch || "main";
 
 	// Removal
-	const appRemovalPolicy = process.env.appRemovalPolicy?.toLowerCase() || '';
-	const pipelineRemovalPolicy = process.env.pipelineRemovalPolicy?.toLowerCase() || '';
+	const appRemovalPolicy = process.env.appRemovalPolicy?.toLowerCase() || "";
+	const pipelineRemovalPolicy =
+		process.env.pipelineRemovalPolicy?.toLowerCase() || "";
 
 	return {
 		appRemovalPolicy,

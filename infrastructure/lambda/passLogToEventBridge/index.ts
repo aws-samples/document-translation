@@ -1,9 +1,12 @@
 // Copyright Amazon.com, Inc. or its affiliates. All Rights Reserved.
 // SPDX-License-Identifier: MIT-0
 
-import { EventBridgeClient, PutEventsCommand } from "@aws-sdk/client-eventbridge";
+import {
+	EventBridgeClient,
+	PutEventsCommand,
+} from "@aws-sdk/client-eventbridge";
+import zlib from "zlib";
 const client = new EventBridgeClient();
-const zlib = require("zlib");
 
 export const handler = async (event) => {
 	if (!process.env.eventSource) {
@@ -30,7 +33,7 @@ export const handler = async (event) => {
 		],
 	};
 
-	console.log("Input:", input)
+	console.log("Input:", input);
 
 	const command = new PutEventsCommand(input);
 	const response = await client.send(command);

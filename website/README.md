@@ -2,22 +2,24 @@
 
 ## Overview
 
-This folder holds all the source files related to the app website. The site is a React based site. React has a development server for working on the website. 
+This folder holds all the source files related to the app website. The site is a React based site. React has a development server for working on the website.
 
 ## Prerequisites
 
 - Deployment of infrastructure stack for authentication and data storage
 - Deployment of infrastructure stack with `development = true` which allows `localhost` websites to authenticate with Cognito
-    - Or manually setting the signin/signout URLs of Cognito to allow `localhost`/`127.0.0.1`
+  - Or manually setting the signin/signout URLs of Cognito to allow `localhost`/`127.0.0.1`
 
 ## Commands
 
 ### Specify the infrastructure stack
+
 ```sh
 export appStackName=DocTran-dev-app
 ```
 
 ### Configure Site Settings
+
 ```sh
 # Get the CloudFormation outputs
 aws cloudformation describe-stacks \
@@ -39,6 +41,7 @@ echo '{ "translation": true, "readable": true }' > ./src/features.json
 ```
 
 ### Start the dev server
+
 ```sh
 npm run start
 ```

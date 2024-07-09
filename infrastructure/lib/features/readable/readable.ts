@@ -54,7 +54,7 @@ export class dt_readable extends Construct {
 		});
 
 		// FEATURES | PRINTSTYLES
-		const readablePrintStyles = new dt_readablePrintStyles(this, "readablePrintStyles", {
+		new dt_readablePrintStyles(this, "readablePrintStyles", {
 			api: props.api,
 			apiSchema: props.apiSchema,
 			removalPolicy: props.removalPolicy,
@@ -71,7 +71,7 @@ export class dt_readable extends Construct {
 		});
 
 		// WORKFLOW
-		const readableWorkflow = new dt_readableWorkflow(this, "readableWorkflow", {
+		new dt_readableWorkflow(this, "readableWorkflow", {
 			api: props.api,
 			bedrockRegion: props.bedrockRegion,
 			jobTable: readableJob.jobTable,

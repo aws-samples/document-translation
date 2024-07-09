@@ -375,7 +375,10 @@ export class dt_readableJob extends Construct {
 			directives: [Directive.custom("@aws_cognito_user_pools")],
 		});
 		const updateJobMetadataMutation_name = `${dt_enums.Feature.PREFIX}UpdateJobMetadata`;
-		props.apiSchema.addMutation(updateJobMetadataMutation_name, updateJobMetadataMutation);
+		props.apiSchema.addMutation(
+			updateJobMetadataMutation_name,
+			updateJobMetadataMutation,
+		);
 
 		// SUBSCRIPTION | updateJobMetadata
 		const subscribeUpdateJobMetadataSubscription = new Field({
