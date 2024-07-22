@@ -15,8 +15,7 @@ import {
 import { generateClient } from "@aws-amplify/api";
 
 import { getPresignedUrl } from "../../util/getPresignedUrl";
-
-import { S3KeyTypes } from "../../enums";
+import { describeS3Key } from "./util/describeS3Key";
 
 const client = generateClient({ authMode: "userPool" });
 
@@ -74,9 +73,11 @@ export default function ReadableViewEditImage(props) {
 	// DOWNLOAD IMAGE
 	useEffect(() => {
 		const asyncGetPresignedUrl = async () => {
-			const url = await getPresignedUrl({
+			const k = describeS3Key({
 				key: props.item.output,
-				keyType: S3KeyTypes.SCOPE_USER_OBJECT,
+			});
+			const url = await getPresignedUrl({
+				path: `${k.scope}/${k.identity}/${k.jobId}/${k.filename}`,
 				bucketKey: "awsReadableS3Bucket",
 			});
 			setImageUrl(url);

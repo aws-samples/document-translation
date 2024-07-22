@@ -5,8 +5,7 @@ import "@cloudscape-design/global-styles/index.css";
 import { useEffect, useState } from "react";
 
 import { getPresignedUrl } from "../../../util/getPresignedUrl";
-
-import { S3KeyTypes } from "../../../enums";
+import { describeS3Key } from "../util/describeS3Key";
 
 function DisplayText({ text }) {
 	if (!text) {
@@ -28,9 +27,11 @@ function SingleImage(props) {
 	const [imageUrl, setImageUrl] = useState(null);
 	useEffect(() => {
 		const asyncGetPresignedUrl = async () => {
-			const url = await getPresignedUrl({
+			const k = describeS3Key({
 				key: props.imageKey,
-				keyType: S3KeyTypes.SCOPE_USER_OBJECT,
+			});
+			const url = await getPresignedUrl({
+				path: `${k.scope}/${k.identity}/${k.jobId}/${k.filename}`,
 				bucketKey: "awsReadableS3Bucket",
 			});
 			setImageUrl(url);

@@ -11,11 +11,9 @@ import { Button, Form, SpaceBetween } from "@cloudscape-design/components";
 import { generateClient } from "@aws-amplify/api";
 import { fetchAuthSession } from "@aws-amplify/auth";
 
-import { amplifyConfigureAppend } from "../../util/amplifyConfigure";
 import { getBrowserLanguage } from "./util/getBrowserLanguage";
 import { putObjectS3 } from "./util/putObjectS3";
 
-import { S3KeyTypes } from "../../enums";
 import NewFormOriginalDocument from "./newFormOriginalDocument";
 import NewFormOriginalLanguage from "./newFormOriginalLanguage";
 import NewFormSavingJob from "./newFormSavingJob";
@@ -28,8 +26,6 @@ let createJob: string;
 if (features.translation) {
 	createJob = require("../../graphql/mutations").translationCreateJob;
 }
-
-const cfnOutputs = require("../../cfnOutputs.json");
 
 const initialFormState: {
 	saving: boolean;
@@ -80,19 +76,16 @@ export default function NewForm() {
 	};
 
 	const uploadFile = async (file: File, jobId: string) => {
-		const storageConfig = {
-			Storage: {
-				S3: {
-					bucket: cfnOutputs.awsUserFilesS3Bucket,
-					region: cfnOutputs.awsRegion,
-				},
-			},
-		};
+		let identityId;
 		try {
-			amplifyConfigureAppend(storageConfig);
+			const authSession = await fetchAuthSession();
+			identityId = authSession.identityId;
+		} catch (error) {
+			console.log("Error fetching identityId:", error);
+		}
+		try {
 			await putObjectS3({
-				key: jobId + "/upload/" + file.name,
-				keyType: S3KeyTypes.OBJECT,
+				path: `private/${identityId}/${jobId}/upload/${file.name}`,
 				file: file,
 			});
 		} catch (error) {
