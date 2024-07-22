@@ -12,7 +12,7 @@ This project is [configurable]({{< ref "docs/architecture" >}}) to suit your spe
 
 This form will collate your inputs and return the appropriate commands to enter for deployment. The output can be used with the [CloudShell]({{< ref "docs/shared/prerequisites/cloudshell" >}}) to quickly perform the installation. Please review the output to ensure you are happy with the values.
 
-Installation typically takes between 30-60 minutes. This result will deploy a CloudFormation stack for the pipeline. That CodePipeline workflow will deploy a CloudFormation stack for the app. You can monitor the progress of the pipeline from the CodePipeline service. 
+Installation typically takes between 30-60 minutes. This result will deploy a CloudFormation stack for the pipeline. That CodePipeline workflow will deploy a CloudFormation stack for the app. You can monitor the progress of the pipeline from the CodePipeline service.
 
 <br/>
 <div id="resultWrapper" style="display: none;">
@@ -25,6 +25,7 @@ Installation typically takes between 30-60 minutes. This result will deploy a Cl
 {{% steps %}}
 
 ### Requires All
+
 All fields in this section are required for all features you decide to enable.
 
 <h4>General Information</h4>
@@ -68,6 +69,7 @@ All fields in this section are required for all features you decide to enable.
 </fieldset>
 
 ### Requires At Least One
+
 At least one selection for user store is required. Select Cognito SAML, or Cognito Local, or both.
 
 <h4><input type="checkbox" name="cognitoSamlUsers" checked/>Cognito SAML Users {{< info >}}/document-translation/docs/translation/configuration/options#enable-cognito-saml-provider-users{{< /info >}}</h4>
@@ -132,6 +134,7 @@ Enable and configure the features you wish to deploy.
 </fieldset>
 
 ### Optional: Document Translation
+
 <h4><input type="checkbox" name="translation" checked/>Document Translation {{< info >}}/document-translation/docs/translation/configuration/options#translation--translation-pii{{< /info >}}</h4>
 
 <fieldset>
@@ -159,11 +162,20 @@ Enable and configure the features you wish to deploy.
 <label for="readableBedrockRegion">Readable Bedrock Region</label>
 {{< callout type="warning" >}}Amazon Bedrock is available in select regions. Simply Readable will send the input text to the selected region for processing with the Bedrock service.{{< /callout >}}
 <select id="readableBedrockRegion" name="readableBedrockRegion">
+	<option value="ap-northeast-1">ap-northeast-1 | Asia Pacific (Tokyo)</option>
+	<option value="ap-south-1">ap-south-1 | Asia Pacific (Mumbai)</option>
+	<option value="ap-southeast-2">ap-southeast-2 | Asia Pacific (Sydney)</option>
+	<option value="ap-southwest-1">ap-southwest-1 | Asia Pacific (Singapore)</option>
+	<option value="ca-central-1">ca-central-1 | Canada (Central)</option>
+	<option value="eu-central-1">eu-central-1 | Europe (Frankfurt)</option>
+	<option value="eu-central-1">eu-central-1 | Europe (Frankfurt)</option>
+	<option value="eu-west-1">eu-west-1 | Europe (Ireland)</option>
+	<option value="eu-west-2">eu-west-2 | Europe (London)</option>
+	<option value="eu-west-3">eu-west-3 | Europe (Paris)</option>
+	<option value="sa-east-1">sa-east-1 | South America (São Paulo)</option>
 	<option value="us-east-1">us-east-1 | US East (N. Virginia)</option>
 	<option value="us-west-2">us-west-2 | US West (Oregon)</option>
-	<option value="ap-southwest-1">ap-southwest-1 | Asia Pacific (Singapore)</option>
-	<option value="ap-northeast-1">ap-northeast-1 | Asia Pacific (Tokyo)</option>
-	<option value="eu-central-1">eu-central-1 | Europe (Frankfurt)</option>
+	<option value="us-gov-west-1">us-gov-west-1 | AWS GovCloud (US-West)</option>
 </select>
 <div class="isForCognitoSamlUsers">
 	{{< callout type="info" >}}Post install steps are required to define your Generative AI models for text simplification and image generation. <a href='{{< ref "docs/readable/post-install/models" >}}'>Simply Readable Models</a>{{< /callout >}}
@@ -172,7 +184,6 @@ Enable and configure the features you wish to deploy.
 </fieldset>
 
 {{% /steps %}}
-
 
 <button>Generate</button>
 
