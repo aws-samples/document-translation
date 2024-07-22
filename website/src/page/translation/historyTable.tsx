@@ -23,8 +23,7 @@ import { amplifyConfigureAppend } from "../../util/amplifyConfigure";
 import { formatJobNameId } from "../../util/formatJobNameId";
 import { formatTimestamp } from "../../util/formatTimestamp";
 import { getPresignedUrl } from "../../util/getPresignedUrl";
-
-import { S3KeyTypes } from "../../enums";
+import { describeS3Key } from "./util/describeS3Key";
 
 const cfnOutputs = require("../../cfnOutputs.json");
 
@@ -132,9 +131,11 @@ export default function HistoryTable() {
 			const keys = JSON.parse(stringKeys);
 
 			for (var i in keys) {
-				const presignedUrl = await getPresignedUrl({
+				const k = describeS3Key({
 					key: keys[i],
-					keyType: S3KeyTypes.SCOPE_USER_OBJECT,
+				});
+				const presignedUrl = await getPresignedUrl({
+					path: `${k.scope}/${k.identity}/${k.jobId}/${k.stage}/${k.translateId}/${k.filename}`,
 					bucketKey: "awsUserFilesS3Bucket",
 				});
 				window.open(presignedUrl, "_blank", "noopener,noreferrer");
