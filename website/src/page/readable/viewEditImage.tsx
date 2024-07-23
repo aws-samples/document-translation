@@ -137,6 +137,7 @@ export default function ReadableViewEditImage(props) {
 				</Box>
 				<Box variant="div">
 					<Select
+						data-testid="readable-new-row-image-model"
 						selectedOption={
 							props.item.modelId
 								? models[itemModelIndex]
@@ -152,6 +153,7 @@ export default function ReadableViewEditImage(props) {
 				</Box>
 				<Box variant="div" textAlign="center">
 					<Button
+						data-testid="readable-new-row-image-submit"
 						iconName="angle-right-double"
 						variant="link"
 						onClick={() => generate()}

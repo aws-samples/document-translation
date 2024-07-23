@@ -231,6 +231,7 @@ export default function ReadableNew() {
 			<>
 				<Box variant="div" textAlign="center">
 					<Button
+						data-testid="readable-new-addrow-text"
 						iconName="insert-row"
 						variant="link"
 						onClick={() => appendTextRow()}
@@ -246,6 +247,7 @@ export default function ReadableNew() {
 			<>
 				<Box variant="div">
 					<Button
+						data-testid="readable-new-addrow-image"
 						iconName="zoom-to-fit"
 						variant="link"
 						onClick={() => appendImageRow(textItem, index)}
@@ -322,6 +324,7 @@ export default function ReadableNew() {
 									<Container>
 										<SpaceBetween key={index} size="xl">
 											<Toggle
+												data-testid="readable-new-row-edit"
 												onChange={({ detail }) =>
 													setViewState(textItem.itemId, detail.checked)
 												}

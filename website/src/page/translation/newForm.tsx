@@ -181,7 +181,12 @@ export default function NewForm() {
 									>
 										{t("generic_cancel")}
 									</Button>
-									<Button variant="primary" onClick={save} disabled={isError()}>
+									<Button
+										variant="primary"
+										onClick={save}
+										disabled={isError()}
+										data-testid="translation-new-submit"
+									>
 										{t("generic_submit")}
 									</Button>
 								</SpaceBetween>

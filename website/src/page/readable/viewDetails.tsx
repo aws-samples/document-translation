@@ -50,6 +50,7 @@ export default function ReadableViewDetails(props) {
 
 	return (
 		<Table
+			data-testid="readable-new-details-table"
 			submitEdit={(e) => saveJobNameToDb(e)}
 			columnDefinitions={[
 				{
@@ -64,6 +65,7 @@ export default function ReadableViewDetails(props) {
 						editingCell: (item, { currentValue, setValue }) => {
 							return (
 								<Input
+									data-testid="readable-new-details-name-input"
 									autoFocus={true}
 									value={currentValue ?? item.name}
 									onChange={(e) => updateJobName(e, setValue)}

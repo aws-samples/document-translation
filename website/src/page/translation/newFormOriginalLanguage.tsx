@@ -53,6 +53,7 @@ export default function NewFormOriginalLanguage(props: {
 				<FormField stretch>
 					<SpaceBetween direction="vertical" size="xxl">
 						<Select
+							data-testid="translation-new-language-soruce"
 							selectedOption={{
 								value: props.languageSource,
 								label: lookupLanguageLabel(props.languageSource),

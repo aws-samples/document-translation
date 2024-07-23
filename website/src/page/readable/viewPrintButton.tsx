@@ -35,6 +35,7 @@ export default function ReadableViewPrintButton() {
 				]}
 			>
 				<Select
+					data-testid="readable-new-print-styles"
 					selectedOption={
 						printStyleSelected ? printStyleSelected : printStyleInitial
 					}
@@ -44,6 +45,7 @@ export default function ReadableViewPrintButton() {
 					statusType={printStyleOptions ? "finished" : "loading"}
 				/>
 				<Button
+					data-testid="readable-new-print-submit"
 					variant="primary"
 					onClick={(event) => {
 						event.preventDefault();

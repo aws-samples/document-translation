@@ -104,7 +104,12 @@ export default function ReadableNew() {
 				<SpaceBetween size="xxl">
 					{displayDetails()}
 					<SpaceBetween size="xl">
-						<Button iconName="file" variant="primary" onClick={handlePrint}>
+						<Button
+							iconName="file"
+							variant="primary"
+							onClick={handlePrint}
+							data-testid="readable-print-submit"
+						>
 							{t("generic_print")}
 						</Button>
 						<Container>

@@ -98,6 +98,7 @@ export default function QuickForm() {
 									textToCopy={translationTextOutput}
 								/>
 								<Button
+									data-testid="translation-quick-submit"
 									variant="primary"
 									onClick={submit}
 									loadingText={t("generic_loading")}
@@ -127,6 +128,7 @@ export default function QuickForm() {
 										<FormField stretch>
 											<SpaceBetween direction="vertical" size="xxl">
 												<Textarea
+													data-testid="translation-quick-input"
 													onChange={(e) =>
 														setTranslationTextInput(e.detail.value)
 													}
@@ -141,6 +143,7 @@ export default function QuickForm() {
 										<FormField stretch>
 											<SpaceBetween direction="vertical" size="xxl">
 												<Textarea
+													data-testid="translation-quick-output"
 													readOnly
 													rows={16}
 													value={translationTextOutput}
@@ -151,6 +154,7 @@ export default function QuickForm() {
 										</FormField>
 									</Grid>
 									<Select
+										data-testid="translation-quick-language"
 										selectedOption={{
 											value: selectedTarget?.value,
 											label: selectedTarget?.label,

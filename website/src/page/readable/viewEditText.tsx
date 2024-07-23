@@ -147,6 +147,7 @@ export default function ReadableViewEditText(props) {
 		return (
 			<>
 				<Textarea
+					data-testid="readable-new-row-text-input"
 					onChange={({ detail }) =>
 						onChangeText(props.ItemKeys.INPUT, detail.value)
 					}
@@ -157,6 +158,7 @@ export default function ReadableViewEditText(props) {
 				/>
 				<Box variant="div">
 					<Select
+						data-testid="readable-new-row-text-model"
 						selectedOption={
 							props.item.modelId
 								? models[itemModelIndex]
@@ -173,6 +175,7 @@ export default function ReadableViewEditText(props) {
 
 				<Box variant="div" textAlign="center">
 					<Button
+						data-testid="readable-new-row-text-submit"
 						iconName="angle-right-double"
 						variant="link"
 						onClick={() => generateText()}
@@ -191,6 +194,7 @@ export default function ReadableViewEditText(props) {
 		return (
 			<>
 				<Textarea
+					data-testid="readable-new-row-text-output"
 					onChange={({ detail }) => onChangeText("output", detail.value)}
 					value={props.item.output}
 					placeholder={t("readable_view_output_text_placeholder")}
@@ -199,6 +203,7 @@ export default function ReadableViewEditText(props) {
 				/>
 				<Box variant="div" textAlign="center">
 					<Button
+						data-testid="readable-new-row-text-upload"
 						iconName="upload"
 						variant="link"
 						onClick={({ detail }) => saveOutputTextManualEdit(detail.value)}

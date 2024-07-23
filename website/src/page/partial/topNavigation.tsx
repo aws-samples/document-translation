@@ -64,6 +64,7 @@ export default function Header(user: {
 
 	return (
 		<TopNavigation
+			data-testid="topnavigation"
 			identity={{
 				title: "Document Transformation",
 				// TODO BUSINESS NAME

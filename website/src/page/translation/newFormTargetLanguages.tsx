@@ -82,8 +82,18 @@ export default function NewFormTargetLanguages(props: {
 						variant="h2"
 						actions={
 							<SpaceBetween direction="horizontal" size="xxl">
-								<Button onClick={selectAllTargetLanguages}>Select All</Button>
-								<Button onClick={clearAllTargetLanguages}>Clear</Button>
+								<Button
+									onClick={selectAllTargetLanguages}
+									data-testid="translation-new-language-targets-selectall"
+								>
+									Select All
+								</Button>
+								<Button
+									onClick={clearAllTargetLanguages}
+									data-testid="translation-new-language-targets-clear"
+								>
+									Clear
+								</Button>
 							</SpaceBetween>
 						}
 					>
@@ -101,7 +111,10 @@ export default function NewFormTargetLanguages(props: {
 					}
 				>
 					<SpaceBetween direction="vertical" size="xxl">
-						<ul className="list-can-collapse list-no-bullet">
+						<ul
+							className="list-can-collapse list-no-bullet"
+							data-testid="translation-new-language-targets"
+						>
 							{languagesTarget.map((item: CheckboxItem, index: number) => (
 								<React.Fragment key={index}>
 									{index === 0 && (

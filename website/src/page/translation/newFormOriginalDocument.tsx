@@ -77,6 +77,7 @@ export default function NewFormOriginalDocument(props: {
 				<FormField stretch>
 					<SpaceBetween direction="vertical" size="xxl">
 						<FileUpload
+							data-testid="translation-new-upload"
 							onChange={({ detail }) => onChangeFile(detail.value[0])}
 							value={props.fileState ? [props.fileState] : []}
 							accept={JSON.stringify(supportedFileTypes)}

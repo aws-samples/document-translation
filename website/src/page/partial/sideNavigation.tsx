@@ -62,6 +62,7 @@ export default function Navigation() {
 
 	return (
 		<SideNavigation
+			data-testid="sidenavigation"
 			activeHref={window.location.pathname}
 			onFollow={async (event) => {
 				if (!event.detail.external) {
