@@ -126,6 +126,7 @@ export default function ReadableViewEditImage(props) {
 							{imageUrl && (
 								<>
 									<img
+										data-testid="readable-new-row-image-output"
 										className="borderRadius generatedImage"
 										src={imageUrl}
 										alt={`Generated`}
