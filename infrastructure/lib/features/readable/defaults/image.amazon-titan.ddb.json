@@ -21,7 +21,7 @@
 					"taskType": {
 						"S": "TEXT_IMAGE"
 					},
-					"textGenerationConfig": {
+					"imageGenerationConfig": {
 						"M": {
 							"cfgScale": {
 								"N": "8"
