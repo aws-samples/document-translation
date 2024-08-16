@@ -12,7 +12,6 @@ export interface SharedConfiguration {
 	readableBedrockRegion: string;
 	sourceGitBranch: string;
 	sourceGitRepo: string;
-	sourceGitService: string;
 	translation: boolean;
 	translationLifecycleDefault: number;
 	translationLifecyclePii: number;
@@ -64,7 +63,6 @@ export function getSharedConfiguration(): SharedConfiguration {
 		process.env.webUiCustomDomainCertificate || "";
 
 	// Source
-	const sourceGitService = process.env.sourceGitService?.toLowerCase() || "";
 	const sourceGitRepo = process.env.sourceGitRepo || "";
 	if (!sourceGitRepo) {
 		throw new Error("sourceGitRepo is required");
@@ -90,7 +88,6 @@ export function getSharedConfiguration(): SharedConfiguration {
 		readableBedrockRegion,
 		sourceGitBranch,
 		sourceGitRepo,
-		sourceGitService,
 		translation,
 		translationLifecycleDefault,
 		translationLifecyclePii,

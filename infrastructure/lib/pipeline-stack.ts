@@ -35,7 +35,6 @@ export class pipelineStack extends cdk.Stack {
 			webUi,
 			webUiCustomDomain,
 			webUiCustomDomainCertificate,
-			sourceGitService,
 			sourceGitRepo,
 			sourceGitBranch,
 			appRemovalPolicy,
@@ -93,23 +92,10 @@ export class pipelineStack extends cdk.Stack {
 		});
 
 		// SOURCE
-		let pipelineSource: pipelines.CodePipelineSource;
-		if (sourceGitService == "github") {
-			pipelineSource = pipelines.CodePipelineSource.gitHub(
-				sourceGitRepo,
-				sourceGitBranch,
-			);
-		} else {
-			const codeCommitRepo = codecommit.Repository.fromRepositoryName(
-				this,
-				"codeCommitRepo",
-				sourceGitRepo,
-			);
-			pipelineSource = pipelines.CodePipelineSource.codeCommit(
-				codeCommitRepo,
-				sourceGitBranch,
-			);
-		}
+		const pipelineSource = pipelines.CodePipelineSource.gitHub(
+			sourceGitRepo,
+			sourceGitBranch,
+		);
 
 		// PIPELINE
 		// PIPELINE | CODEPIPELINE
@@ -138,7 +124,6 @@ export class pipelineStack extends cdk.Stack {
 				buildEnvironment: {
 					environmentVariables: {
 						development: { value: development },
-						sourceGitService: { value: sourceGitService },
 						sourceGitRepo: { value: sourceGitRepo },
 						sourceGitBranch: { value: sourceGitBranch },
 						pipelineRemovalPolicy: { value: pipelineRemovalPolicy },
@@ -241,8 +226,8 @@ export class pipelineStack extends cdk.Stack {
 						"cd ${WEBDIR_SRC}",
 						"touch ${FEATURESFILE}",
 						'echo "{}" > ${FEATURESFILE}',
-						'jq -r ".translation = \"${translation}\"" ${FEATURESFILE} > ${FEATURESFILE}.tmp && mv ${FEATURESFILE}.tmp ${FEATURESFILE}',
-						'jq -r ".readable    = \"${readable}\""    ${FEATURESFILE} > ${FEATURESFILE}.tmp && mv ${FEATURESFILE}.tmp ${FEATURESFILE}',
+						'jq -r ".translation = "${translation}"" ${FEATURESFILE} > ${FEATURESFILE}.tmp && mv ${FEATURESFILE}.tmp ${FEATURESFILE}',
+						'jq -r ".readable    = "${readable}""    ${FEATURESFILE} > ${FEATURESFILE}.tmp && mv ${FEATURESFILE}.tmp ${FEATURESFILE}',
 						'echo "Features enabled: $(cat ${FEATURESFILE})"',
 						// BUILD REACT | BUILD
 						"cd ${WEBDIR}",
