@@ -63,8 +63,8 @@ All fields in this section are required for all features you decide to enable.
 	<input type="text" name="sourceGitRepo" placeholder="document-translation" value="document-translation" required>
 </div>
 <div>
-	<label for="sourceGitBranch">Branch Name</label>
-	<input type="text" name="sourceGitBranch" placeholder="main" value="main" required/>
+	<label for="instanceName">Branch Name</label>
+	<input type="text" name="instanceName" placeholder="main" value="main" required/>
 </div>
 </fieldset>
 

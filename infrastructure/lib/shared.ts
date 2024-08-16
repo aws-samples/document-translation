@@ -10,7 +10,7 @@ export interface SharedConfiguration {
 	pipelineRemovalPolicy: string;
 	readable: boolean;
 	readableBedrockRegion: string;
-	sourceGitBranch: string;
+	instanceName: string;
 	sourceGitRepo: string;
 	translation: boolean;
 	translationLifecycleDefault: number;
@@ -67,7 +67,7 @@ export function getSharedConfiguration(): SharedConfiguration {
 	if (!sourceGitRepo) {
 		throw new Error("sourceGitRepo is required");
 	}
-	const sourceGitBranch = process.env.sourceGitBranch || "main";
+	const instanceName = process.env.instanceName || "main";
 
 	// Removal
 	const appRemovalPolicy = process.env.appRemovalPolicy?.toLowerCase() || "";
@@ -86,7 +86,7 @@ export function getSharedConfiguration(): SharedConfiguration {
 		pipelineRemovalPolicy,
 		readable,
 		readableBedrockRegion,
-		sourceGitBranch,
+		instanceName,
 		sourceGitRepo,
 		translation,
 		translationLifecycleDefault,

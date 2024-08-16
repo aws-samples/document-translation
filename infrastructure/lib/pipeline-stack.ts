@@ -35,7 +35,7 @@ export class pipelineStack extends cdk.Stack {
 			webUiCustomDomain,
 			webUiCustomDomainCertificate,
 			sourceGitRepo,
-			sourceGitBranch,
+			instanceName,
 			appRemovalPolicy,
 			pipelineRemovalPolicy,
 		} = getSharedConfiguration();
@@ -93,7 +93,7 @@ export class pipelineStack extends cdk.Stack {
 		// SOURCE
 		const pipelineSource = pipelines.CodePipelineSource.gitHub(
 			sourceGitRepo,
-			sourceGitBranch,
+			instanceName,
 		);
 
 		// PIPELINE
@@ -124,7 +124,7 @@ export class pipelineStack extends cdk.Stack {
 					environmentVariables: {
 						development: { value: development },
 						sourceGitRepo: { value: sourceGitRepo },
-						sourceGitBranch: { value: sourceGitBranch },
+						instanceName: { value: instanceName },
 						pipelineRemovalPolicy: { value: pipelineRemovalPolicy },
 						appRemovalPolicy: { value: appRemovalPolicy },
 						webUi: { value: webUi },

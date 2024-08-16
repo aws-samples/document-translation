@@ -7,13 +7,11 @@ import { pipelineStack } from "../lib/pipeline-stack";
 
 // ENVIRONMENT VARIABLES
 // ENVIRONMENT VARIABLES | GITHUB REPO
-const sourceGitBranch: string =
-	process.env.sourceGitBranch !== undefined
-		? process.env.sourceGitBranch
-		: "main";
+const instanceName: string =
+	process.env.instanceName !== undefined ? process.env.instanceName : "main";
 
 const app = new cdk.App();
-const stackName = `DocTran-${sourceGitBranch}-pipeline`;
+const stackName = `DocTran-${instanceName}-pipeline`;
 new pipelineStack(app, `${stackName}`, {
 	stackName: `${stackName}`,
 	description: `(uksb-1tthgi813) (tag:pipeline)`,

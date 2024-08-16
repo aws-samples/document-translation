@@ -41,7 +41,7 @@ const parseAppConfig = (config: appConfig) => {
 		// Source
 		sourceRepoHook: config.github.repoHook,
 		sourceGitRepo: config.github.repoOwner + "/" + config.github.repoName,
-		// sourceGitBranch: config.github.repoBranch,
+		// instanceName: config.github.repoBranch,
 		// Translation
 		translation: config.translation.translation,
 		translationPii: config.translation.translationPii,

@@ -141,10 +141,7 @@ function handleForm(event) {
 				);
 				break;
 		}
-		appendStep(
-			"Set branch name",
-			`export sourceGitBranch="${data.sourceGitBranch}"`
-		);
+		appendStep("Set branch name", `export instanceName="${data.instanceName}"`);
 	}
 	if (data.cognitoLocalUsers === "on") {
 		appendSection("Cognito Local Users");
@@ -232,7 +229,10 @@ function handleForm(event) {
 		"Add CodeCommit as a remote",
 		`git remote add codecommit https://git-codecommit.\${AWS_REGION}.amazonaws.com/v1/repos/${data.sourceGitRepo}`
 	);
-	appendStep("Push files", `git push codecommit ${data.sourceGitTag}:${data.sourceGitBranch}`);
+	appendStep(
+		"Push files",
+		`git push codecommit ${data.sourceGitTag}:${data.instanceName}`
+	);
 
 	appendSection("Deploy the pipeline ");
 	appendStep(

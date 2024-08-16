@@ -19,7 +19,7 @@ export translationLifecycleDefault="7"
 export translationLifecyclePii="3"
 
 export sourceGitRepo="document-translation"
-export sourceGitBranch="dev"
+export instanceName="dev"
 
 export cognitoLocalUsers="true"
 export cognitoLocalUsersMfa="off"
@@ -37,7 +37,7 @@ export pipelineRemovalPolicy="destroy"
 ### Pipeline Commands
 
 ```sh
-echo "Deployment DocTran-${sourceGitBranch}"
+echo "Deployment DocTran-${instanceName}"
 # Synthesise CDK TS to CloudFormation
 cdk synth
 # Show a diff of changes
@@ -57,11 +57,11 @@ The app template is a child of the pipeline template. With CDK we can target the
 ### App Commands
 
 ```sh
-echo "Deployment DocTran-${sourceGitBranch}"
+echo "Deployment DocTran-${instanceName}"
 # Synthesise CDK TS to CloudFormation
-cdk synth "DocTran-${sourceGitBranch}-pipeline/DocTran-appStack/DocTran-${sourceGitBranch}-app" -a 'npx ts-node ./bin/doctran.ts'
+cdk synth "DocTran-${instanceName}-pipeline/DocTran-appStack/DocTran-${instanceName}-app" -a 'npx ts-node ./bin/doctran.ts'
 # Show a diff of changes
-cdk diff "DocTran-${sourceGitBranch}-pipeline/DocTran-appStack/DocTran-${sourceGitBranch}-app" -a 'npx ts-node ./bin/doctran.ts'
+cdk diff "DocTran-${instanceName}-pipeline/DocTran-appStack/DocTran-${instanceName}-app" -a 'npx ts-node ./bin/doctran.ts'
 # Deploy changes (performs synth & deploy)
-cdk deploy "DocTran-${sourceGitBranch}-pipeline/DocTran-appStack/DocTran-${sourceGitBranch}-app" -a 'npx ts-node ./bin/doctran.ts'
+cdk deploy "DocTran-${instanceName}-pipeline/DocTran-appStack/DocTran-${instanceName}-app" -a 'npx ts-node ./bin/doctran.ts'
 ```
