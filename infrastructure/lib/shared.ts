@@ -13,6 +13,7 @@ export interface SharedConfiguration {
 	instanceName: string;
 	sourceGitRepo: string;
 	sourceGitReleaseBranch: string;
+	sourceGitUseRepoHook: boolean;
 	translation: boolean;
 	translationLifecycleDefault: number;
 	translationLifecyclePii: number;
@@ -71,6 +72,8 @@ export function getSharedConfiguration(): SharedConfiguration {
 	if (!sourceGitReleaseBranch) {
 		throw new Error("sourceGitReleaseBranch is required");
 	}
+	const sourceGitUseRepoHook =
+		process.env.sourceGitUseRepoHook?.toLowerCase() === "true";
 
 	// Removal
 	const appRemovalPolicy = process.env.appRemovalPolicy?.toLowerCase() || "";
@@ -92,6 +95,7 @@ export function getSharedConfiguration(): SharedConfiguration {
 		instanceName,
 		sourceGitRepo,
 		sourceGitReleaseBranch,
+		sourceGitUseRepoHook,
 		translation,
 		translationLifecycleDefault,
 		translationLifecyclePii,

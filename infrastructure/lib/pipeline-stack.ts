@@ -12,6 +12,7 @@ import {
 } from "aws-cdk-lib";
 import { DocTranAppStage } from "./pipeline-app-stage";
 import { getSharedConfiguration } from "./shared";
+import { GitHubTrigger } from "aws-cdk-lib/aws-codepipeline-actions";
 
 export class pipelineStack extends cdk.Stack {
 	constructor(scope: Construct, id: string, props?: cdk.StackProps) {
@@ -36,6 +37,7 @@ export class pipelineStack extends cdk.Stack {
 			webUiCustomDomainCertificate,
 			sourceGitRepo,
 			sourceGitReleaseBranch,
+			sourceGitUseRepoHook,
 			instanceName,
 			appRemovalPolicy,
 			pipelineRemovalPolicy,
@@ -92,9 +94,15 @@ export class pipelineStack extends cdk.Stack {
 		});
 
 		// SOURCE
+		const pipelineTrigger: GitHubTrigger = sourceGitUseRepoHook
+			? GitHubTrigger.WEBHOOK
+			: GitHubTrigger.POLL;
 		const pipelineSource = pipelines.CodePipelineSource.gitHub(
 			sourceGitRepo,
 			sourceGitReleaseBranch,
+			{
+				trigger: pipelineTrigger,
+			},
 		);
 
 		// PIPELINE
