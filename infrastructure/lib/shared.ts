@@ -12,6 +12,7 @@ export interface SharedConfiguration {
 	readableBedrockRegion: string;
 	instanceName: string;
 	sourceGitRepo: string;
+	sourceGitReleaseBranch: string;
 	translation: boolean;
 	translationLifecycleDefault: number;
 	translationLifecyclePii: number;
@@ -63,11 +64,13 @@ export function getSharedConfiguration(): SharedConfiguration {
 		process.env.webUiCustomDomainCertificate || "";
 
 	// Source
-	const sourceGitRepo = process.env.sourceGitRepo || "";
-	if (!sourceGitRepo) {
-		throw new Error("sourceGitRepo is required");
-	}
+	const sourceGitRepo =
+		process.env.sourceGitRepo || "aws-samples/document-translation";
 	const instanceName = process.env.instanceName || "main";
+	const sourceGitReleaseBranch = process.env.sourceGitReleaseBranch || "";
+	if (!sourceGitReleaseBranch) {
+		throw new Error("sourceGitReleaseBranch is required");
+	}
 
 	// Removal
 	const appRemovalPolicy = process.env.appRemovalPolicy?.toLowerCase() || "";
@@ -88,6 +91,7 @@ export function getSharedConfiguration(): SharedConfiguration {
 		readableBedrockRegion,
 		instanceName,
 		sourceGitRepo,
+		sourceGitReleaseBranch,
 		translation,
 		translationLifecycleDefault,
 		translationLifecyclePii,
