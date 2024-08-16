@@ -9,7 +9,6 @@ import {
 	aws_codepipeline as codepipeline,
 	aws_s3 as s3,
 	aws_iam as iam,
-	aws_codecommit as codecommit,
 } from "aws-cdk-lib";
 import { DocTranAppStage } from "./pipeline-app-stage";
 import { getSharedConfiguration } from "./shared";

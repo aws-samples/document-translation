@@ -18,7 +18,6 @@ export translationPii="true"
 export translationLifecycleDefault="7"
 export translationLifecyclePii="3"
 
-export sourceGitService="code-commit"
 export sourceGitRepo="document-translation"
 export sourceGitBranch="dev"
 
