@@ -1,3 +1,4 @@
+import { getMiscOptions, MiscOptions } from "./shared.misc";
 import { getGithubOptions, githubOptions } from "./shared.github";
 import { getUserOptions, userOptions } from "./shared.users";
 import {
@@ -22,6 +23,8 @@ import { monitorCodepipeline } from "./monitor.codepipeline";
 const getOptions = async (): Promise<appConfig> => {
 	//
 	// Shared
+	// Shared | Misc
+	const misc: MiscOptions = await getMiscOptions();
 	// Shared | GitHub
 	const github: githubOptions = await getGithubOptions();
 	// Shared | Users
@@ -49,6 +52,7 @@ const getOptions = async (): Promise<appConfig> => {
 	const development: developmentOptions = await getDevelopmentOptions();
 
 	return {
+		misc,
 		github,
 		users,
 		users_cognito,

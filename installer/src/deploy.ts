@@ -1,5 +1,6 @@
 import { AwsCdkCli } from "@aws-cdk/cli-lib-alpha";
 
+import { MiscOptions } from "./shared.misc";
 import { githubOptions } from "./shared.github";
 import { userOptions } from "./shared.users";
 import { cognitoUserOptions } from "./shared.users.cognito";
@@ -15,6 +16,7 @@ export type awsConfig = {
 };
 
 export type appConfig = {
+	misc: MiscOptions;
 	github: githubOptions;
 	users: userOptions;
 	users_cognito: cognitoUserOptions;
@@ -42,6 +44,7 @@ const parseAppConfig = (config: appConfig) => {
 		sourceRepoHook: config.github.repoHook,
 		sourceGitRepo: config.github.repoOwner + "/" + config.github.repoName,
 		// instanceName: config.github.repoBranch,
+		sourceGitUseRepoHook: config.github.repoHook,
 		// Translation
 		translation: config.translation.translation,
 		translationPii: config.translation.translationPii,
