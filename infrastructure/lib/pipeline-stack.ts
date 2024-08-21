@@ -102,7 +102,7 @@ export class pipelineStack extends cdk.Stack {
 			sourceGitRepo,
 			sourceGitReleaseBranch,
 			{
-				actionName: `DocTran-${instanceName}-Source`,
+				actionName: "Source",
 				trigger: pipelineTrigger,
 			},
 		);
@@ -188,7 +188,7 @@ export class pipelineStack extends cdk.Stack {
 		});
 		// PIPELINE | STAGE
 		const deployStage = new DocTranAppStage(this, "DocTran-appStack", {
-			stageName: `DocTran-${instanceName}-Deploy`,
+			stageName: "Deploy-Infrastructure",
 			env: {
 				account: this.account,
 				region: this.region,
@@ -198,7 +198,7 @@ export class pipelineStack extends cdk.Stack {
 		const post: pipelines.ShellStep[] = [];
 		if (webUi) {
 			const shellStep_deployWebsiteToS3 = new pipelines.ShellStep(
-				"deployWebsiteToS3",
+				"Deploy-Website",
 				{
 					envFromCfnOutputs: {
 						appStackId: deployStage.appStackId,
