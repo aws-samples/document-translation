@@ -116,6 +116,7 @@ export class pipelineStack extends cdk.Stack {
 			restartExecutionOnUpdate: true,
 			crossAccountKeys: true,
 			enableKeyRotation: true,
+			pipelineType: codepipeline.PipelineType.V2,
 		});
 
 		// PIPELINE | CDKPIPELINE
