@@ -18,8 +18,9 @@ export translationPii="true"
 export translationLifecycleDefault="7"
 export translationLifecyclePii="3"
 
-export sourceGitRepo="document-translation"
-export instanceName="dev"
+export sourceGitRepo="aws-samples/document-translation"
+export sourceGitReleaseBranch="test/test"
+export instanceName="main"
 
 export cognitoLocalUsers="true"
 export cognitoLocalUsersMfa="off"
