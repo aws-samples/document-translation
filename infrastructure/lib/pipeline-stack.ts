@@ -140,6 +140,7 @@ export class pipelineStack extends cdk.Stack {
 						sourceGitReleaseBranch: {
 							value: sourceGitReleaseBranch,
 						},
+						sourceGitUseRepoHook: { value: sourceGitUseRepoHook },
 						instanceName: { value: instanceName },
 						pipelineRemovalPolicy: { value: pipelineRemovalPolicy },
 						pipelineApprovalPreCdkSynth: { value: pipelineApprovalPreCdkSynth },
