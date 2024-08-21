@@ -42,6 +42,8 @@ export class pipelineStack extends cdk.Stack {
 			instanceName,
 			appRemovalPolicy,
 			pipelineRemovalPolicy,
+			pipelineApprovalPreCdkSynth,
+			pipelineApprovalPreCdkSynthEmail,
 		} = getSharedConfiguration();
 
 		let removalPolicy: cdk.RemovalPolicy;
@@ -140,6 +142,10 @@ export class pipelineStack extends cdk.Stack {
 						},
 						instanceName: { value: instanceName },
 						pipelineRemovalPolicy: { value: pipelineRemovalPolicy },
+						pipelineApprovalPreCdkSynth: { value: pipelineApprovalPreCdkSynth },
+						pipelineApprovalPreCdkSynthEmail: {
+							value: pipelineApprovalPreCdkSynthEmail,
+						},
 						appRemovalPolicy: { value: appRemovalPolicy },
 						webUi: { value: webUi },
 						webUiCustomDomain: { value: webUiCustomDomain },
@@ -264,20 +270,23 @@ export class pipelineStack extends cdk.Stack {
 		// Force pipeline construct creation forward
 		cdkPipeline.buildPipeline();
 
-		// // Add approval pre-CDK
-		// pipeline.addStage({
-		// 	stageName: "ManualApproval_PreSynth",
-		// 	placement: {
-		// 		justAfter: cdkPipeline.pipeline.stages[0],
-		// 	},
-		// 	actions: [
-		// 		new codepipeline_actions.ManualApprovalAction({
-		// 			actionName: "ManualApproval_PreSynth",
-		// 			externalEntityLink: `https://github.com/${sourceGitRepo}/releases`,
-		// 			additionalInformation: `The source repository ${sourceGitRepo} tracked branch has been updated. Please review and approve the pipeline to implement the update if appropriate.`,
-		// 		}),
-		// 	],
-		// });
+		// Add approval pre-CDK
+		if (pipelineApprovalPreCdkSynth) {
+			pipeline.addStage({
+				stageName: "ManualApproval_PreSynth",
+				placement: {
+					justAfter: cdkPipeline.pipeline.stages[0],
+				},
+				actions: [
+					new codepipeline_actions.ManualApprovalAction({
+						actionName: "ManualApproval_PreSynth",
+						externalEntityLink: `https://github.com/${sourceGitRepo}/releases`,
+						additionalInformation: `The source repository ${sourceGitRepo} tracked branch has been updated. Please review and approve the pipeline to implement the update if appropriate. This approval may run twice per update.`,
+						notifyEmails: [pipelineApprovalPreCdkSynthEmail],
+					}),
+				],
+			});
+		}
 
 		// CDK NAGS
 		// CDK NAGS | PIPELINE

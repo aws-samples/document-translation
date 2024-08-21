@@ -8,6 +8,8 @@ export interface SharedConfiguration {
 	cognitoSamlUsers: boolean;
 	development: boolean;
 	pipelineRemovalPolicy: string;
+	pipelineApprovalPreCdkSynth: boolean;
+	pipelineApprovalPreCdkSynthEmail: string;
 	readable: boolean;
 	readableBedrockRegion: string;
 	instanceName: string;
@@ -80,6 +82,12 @@ export function getSharedConfiguration(): SharedConfiguration {
 	const pipelineRemovalPolicy =
 		process.env.pipelineRemovalPolicy?.toLowerCase() || "";
 
+	// Manual Approval
+	const pipelineApprovalPreCdkSynth =
+		process.env.pipelineApprovalPreCdkSynth?.toLowerCase() === "true";
+	const pipelineApprovalPreCdkSynthEmail =
+		process.env.pipelineApprovalPreCdkSynthEmail?.toLowerCase() || "";
+
 	return {
 		appRemovalPolicy,
 		cognitoLocalUsers,
@@ -89,6 +97,8 @@ export function getSharedConfiguration(): SharedConfiguration {
 		cognitoSamlMetadataUrl,
 		cognitoSamlUsers,
 		development,
+		pipelineApprovalPreCdkSynth,
+		pipelineApprovalPreCdkSynthEmail,
 		pipelineRemovalPolicy,
 		readable,
 		readableBedrockRegion,
