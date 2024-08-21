@@ -87,6 +87,15 @@ export function getSharedConfiguration(): SharedConfiguration {
 		process.env.pipelineApprovalPreCdkSynth?.toLowerCase() !== "false";
 	const pipelineApprovalPreCdkSynthEmail =
 		process.env.pipelineApprovalPreCdkSynthEmail?.toLowerCase() || "";
+	if (
+		(pipelineApprovalPreCdkSynth &&
+			pipelineApprovalPreCdkSynthEmail == undefined) ||
+		(pipelineApprovalPreCdkSynth && pipelineApprovalPreCdkSynthEmail == "")
+	) {
+		throw new Error(
+			"pipelineApprovalPreCdkSynthEmail is required when pipelineApprovalPreCdkSynth is true",
+		);
+	}
 
 	return {
 		appRemovalPolicy,
