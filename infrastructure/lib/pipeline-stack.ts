@@ -7,6 +7,7 @@ import { NagSuppressions } from "cdk-nag";
 import {
 	pipelines as pipelines,
 	aws_codepipeline as codepipeline,
+	aws_codepipeline_actions as codepipeline_actions,
 	aws_s3 as s3,
 	aws_iam as iam,
 } from "aws-cdk-lib";
@@ -101,6 +102,7 @@ export class pipelineStack extends cdk.Stack {
 			sourceGitRepo,
 			sourceGitReleaseBranch,
 			{
+				actionName: `DocTran-${instanceName}-Source`,
 				trigger: pipelineTrigger,
 			},
 		);
@@ -186,6 +188,7 @@ export class pipelineStack extends cdk.Stack {
 		});
 		// PIPELINE | STAGE
 		const deployStage = new DocTranAppStage(this, "DocTran-appStack", {
+			stageName: `DocTran-${instanceName}-Deploy`,
 			env: {
 				account: this.account,
 				region: this.region,
@@ -260,6 +263,21 @@ export class pipelineStack extends cdk.Stack {
 
 		// Force pipeline construct creation forward
 		cdkPipeline.buildPipeline();
+
+		// // Add approval pre-CDK
+		// pipeline.addStage({
+		// 	stageName: "ManualApproval_PreSynth",
+		// 	placement: {
+		// 		justAfter: cdkPipeline.pipeline.stages[0],
+		// 	},
+		// 	actions: [
+		// 		new codepipeline_actions.ManualApprovalAction({
+		// 			actionName: "ManualApproval_PreSynth",
+		// 			externalEntityLink: `https://github.com/${sourceGitRepo}/releases`,
+		// 			additionalInformation: `The source repository ${sourceGitRepo} tracked branch has been updated. Please review and approve the pipeline to implement the update if appropriate.`,
+		// 		}),
+		// 	],
+		// });
 
 		// CDK NAGS
 		// CDK NAGS | PIPELINE
