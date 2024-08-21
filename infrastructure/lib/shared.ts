@@ -84,7 +84,7 @@ export function getSharedConfiguration(): SharedConfiguration {
 
 	// Manual Approval
 	const pipelineApprovalPreCdkSynth =
-		process.env.pipelineApprovalPreCdkSynth?.toLowerCase() === "true";
+		process.env.pipelineApprovalPreCdkSynth?.toLowerCase() !== "false";
 	const pipelineApprovalPreCdkSynthEmail =
 		process.env.pipelineApprovalPreCdkSynthEmail?.toLowerCase() || "";
 
