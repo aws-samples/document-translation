@@ -33,6 +33,7 @@ export readableBedrockRegion="us-west-2"
 export development="true"
 export appRemovalPolicy="destroy"
 export pipelineRemovalPolicy="destroy"
+export pipelineApprovalPreCdkSynth="false"
 ```
 
 ### Pipeline Commands
