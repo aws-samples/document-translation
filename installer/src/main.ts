@@ -1,4 +1,4 @@
-import { getMiscOptions, MiscOptions } from "./shared.misc";
+import { getMiscOptions, MiscOptions } from "./common.misc";
 import { getGithubOptions, githubOptions } from "./pipeline.source";
 import { getUserOptions, userOptions } from "./shared.users";
 import {
