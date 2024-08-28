@@ -1,5 +1,5 @@
 import { getMiscOptions, MiscOptions } from "./shared.misc";
-import { getGithubOptions, githubOptions } from "./shared.github";
+import { getGithubOptions, githubOptions } from "./pipeline.source";
 import { getUserOptions, userOptions } from "./shared.users";
 import {
 	getCognitoUserOptions,

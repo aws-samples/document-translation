@@ -1,7 +1,7 @@
 import { AwsCdkCli } from "@aws-cdk/cli-lib-alpha";
 
 import { MiscOptions } from "./shared.misc";
-import { githubOptions } from "./shared.github";
+import { githubOptions } from "./pipeline.source";
 import { userOptions } from "./shared.users";
 import { cognitoUserOptions } from "./shared.users.cognito";
 import { samlUserOptions } from "./shared.users.saml";
