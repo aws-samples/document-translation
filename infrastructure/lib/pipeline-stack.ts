@@ -97,6 +97,9 @@ export class pipelineStack extends cdk.Stack {
 		});
 
 		// SOURCE
+		const oauthToken = cdk.SecretValue.secretsManager(
+			`doctran-${instanceName}-oauth-token`,
+		);
 		const pipelineTrigger: GitHubTrigger = sourceGitUseRepoHook
 			? GitHubTrigger.WEBHOOK
 			: GitHubTrigger.POLL;
@@ -106,6 +109,7 @@ export class pipelineStack extends cdk.Stack {
 			{
 				actionName: "Source",
 				trigger: pipelineTrigger,
+				authentication: oauthToken,
 			},
 		);
 
