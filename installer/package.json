@@ -13,6 +13,6 @@
 		"ts-node": "^10.9.2"
 	},
 	"scripts": {
-		"install": "ts-node ./src/main.ts"
+		"wizard": "ts-node ./src/main.ts"
 	}
 }

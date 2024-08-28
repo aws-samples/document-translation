@@ -20,4 +20,4 @@ echo "Installing dependencies for installer..."
 cd "${INSTALLERDIR}" || exit
 echo "Running installer..."
 npm install
-npm run start
+npm run wizard
