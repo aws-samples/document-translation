@@ -25,75 +25,103 @@ export interface SharedConfiguration {
 	webUiCustomDomainCertificate: string;
 }
 
+const parseParameterName = (name: string) => {
+	return `/doctran/<instanceName>/${name.replace(/_/g, "/")}`;
+};
+
 export function getSharedConfiguration(): SharedConfiguration {
 	// Development
-	const development = process.env.development?.toLowerCase() === "true";
+	const development =
+		process.env.common_development_enable?.toLowerCase() === "true";
 
 	// Cognito
 	const cognitoLocalUsers =
-		process.env.cognitoLocalUsers?.toLowerCase() === "true";
+		process.env.app_cognito_localUsers_enable?.toLowerCase() === "true";
 	const cognitoLocalUsersMfa =
-		process.env.cognitoLocalUsersMfa?.toLowerCase() || "off";
+		process.env.app_cognito_localUsers_mfa_enforcement?.toLowerCase() || "off";
 	const cognitoLocalUsersMfaOtp =
-		process.env.cognitoLocalUsersMfaOtp?.toLowerCase() === "true";
+		process.env.app_cognito_localUsers_mfa_otp?.toLowerCase() === "true";
 	const cognitoLocalUsersMfaSms =
-		process.env.cognitoLocalUsersMfaSms?.toLowerCase() === "true";
+		process.env.app_cognito_localUsers_mfa_sms?.toLowerCase() === "true";
 	const cognitoSamlUsers =
-		process.env.cognitoSamlUsers?.toLowerCase() === "true";
-	const cognitoSamlMetadataUrl = process.env.cognitoSamlMetadataUrl || "";
+		process.env.app_cognito_saml_enable?.toLowerCase() === "true";
+	const cognitoSamlMetadataUrl = process.env.app_cognito_saml_metadataUrl || "";
 
 	// Translation
-	const translation = process.env.translation?.toLowerCase() === "true";
-	const translationPii = process.env.translationPii?.toLowerCase() === "true";
+	const translation =
+		process.env.app_translation_enable?.toLowerCase() === "true";
+	const translationPii =
+		process.env.app_translation_pii_enable?.toLowerCase() === "true";
 	const translationLifecycleDefault = parseInt(
-		process.env.translationLifecycleDefault || "7",
+		process.env.app_translation_lifecycle || "7",
 	);
 	const translationLifecyclePii = parseInt(
-		process.env.translationLifecyclePii || "3",
+		process.env.app_translation_pii_lifecycle || "3",
 	);
 
 	// Readable
-	const readable = process.env.readable?.toLowerCase() === "true";
+	const readable = process.env.app_readable_enable?.toLowerCase() === "true";
 	const readableBedrockRegion =
-		process.env.readableBedrockRegion?.toLowerCase() || "";
+		process.env.app_readable_bedrockRegion?.toLowerCase() || "";
 	if (readable && !readableBedrockRegion) {
-		throw new Error("readableBedrockRegion is required when readable is true");
+		throw new Error(
+			`${parseParameterName(
+				"app_readable_bedrockRegion",
+			)} is required when ${parseParameterName("app_readable_enable")} is true`,
+		);
 	}
 
 	// Web UI
-	const webUi = process.env.webUi?.toLowerCase() === "true";
-	const webUiCustomDomain = process.env.webUiCustomDomain?.toLowerCase() || "";
-	const webUiCustomDomainCertificate =
-		process.env.webUiCustomDomainCertificate || "";
+	const webUi = process.env.app_webUi_enable?.toLowerCase() === "true";
+	const webUiCustomDomainEnable =
+		process.env.app_webUi_customDomain_enable?.toLowerCase() === "true";
+	let webUiCustomDomain = "";
+	let webUiCustomDomainCertificate = "";
+	if (webUiCustomDomainEnable) {
+		webUiCustomDomain =
+			process.env.app_webUi_customDomain_enable?.toLowerCase() || "";
+		webUiCustomDomainCertificate =
+			process.env.app_webUi_customDomain_certificateArn || "";
+	}
 
 	// Source
-	const sourceGitRepo =
-		process.env.sourceGitRepo || "aws-samples/document-translation";
-	const instanceName = process.env.instanceName || "main";
-	const sourceGitReleaseBranch = process.env.sourceGitReleaseBranch || "";
+	const sourceGitRepoOwner =
+		process.env.pipeline_source_repoOwner || "aws-samples";
+	const sourceGitRepoName =
+		process.env.pipeline_source_repoName || "document-translation";
+	const sourceGitRepo = `${sourceGitRepoOwner}/${sourceGitRepoName}`;
+	const instanceName = process.env.common_instance_name || "main";
+	const sourceGitReleaseBranch = process.env.pipeline_source_repoBranch || "";
 	if (!sourceGitReleaseBranch) {
-		throw new Error("sourceGitReleaseBranch is required");
+		throw new Error(
+			`${parseParameterName("pipeline_source_repoBranch")} is required`,
+		);
 	}
 	const sourceGitUseRepoHook =
-		process.env.sourceGitUseRepoHook?.toLowerCase() === "true";
+		process.env.pipeline_source_repoHook_enable?.toLowerCase() === "true";
 
 	// Removal
-	const appRemovalPolicy = process.env.appRemovalPolicy?.toLowerCase() || "";
+	const appRemovalPolicy = process.env.app_removalPolicy?.toLowerCase() || "";
 	const pipelineRemovalPolicy =
-		process.env.pipelineRemovalPolicy?.toLowerCase() || "";
+		process.env.pipeline_removalPolicy?.toLowerCase() || "";
 
 	// Manual Approval
 	const pipelineApprovalPreCdkSynth =
-		process.env.pipelineApprovalPreCdkSynth?.toLowerCase() !== "false";
+		process.env.pipeline_approvals_preCdkSynth_enable?.toLowerCase() !==
+		"false";
 	const pipelineApprovalPreCdkSynthEmail =
-		process.env.pipelineApprovalPreCdkSynthEmail?.toLowerCase() || "";
+		process.env.pipeline_approvals_preCdkSynth_email?.toLowerCase() || "";
 	if (
 		(pipelineApprovalPreCdkSynth &&
 			pipelineApprovalPreCdkSynthEmail == undefined) ||
 		(pipelineApprovalPreCdkSynth && pipelineApprovalPreCdkSynthEmail == "")
 	) {
 		throw new Error(
-			"pipelineApprovalPreCdkSynthEmail is required when pipelineApprovalPreCdkSynth is true",
+			`${parseParameterName(
+				"pipeline_approvals_preCdkSynth_email",
+			)} is required when ${parseParameterName(
+				"pipeline_approvals_preCdkSynth_enable",
+			)} is true`,
 		);
 	}
 

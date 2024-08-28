@@ -10,6 +10,7 @@ import {
 	aws_codepipeline_actions as codepipeline_actions,
 	aws_s3 as s3,
 	aws_iam as iam,
+	aws_codebuild as codebuild,
 } from "aws-cdk-lib";
 import { DocTranAppStage } from "./pipeline-app-stage";
 import { getSharedConfiguration } from "./shared";
@@ -20,27 +21,11 @@ export class pipelineStack extends cdk.Stack {
 		super(scope, id, props);
 
 		const {
-			development,
-			cognitoLocalUsers,
-			cognitoLocalUsersMfa,
-			cognitoLocalUsersMfaOtp,
-			cognitoLocalUsersMfaSms,
-			cognitoSamlUsers,
-			cognitoSamlMetadataUrl,
-			translation,
-			translationPii,
-			translationLifecycleDefault,
-			translationLifecyclePii,
-			readable,
-			readableBedrockRegion,
 			webUi,
-			webUiCustomDomain,
-			webUiCustomDomainCertificate,
 			sourceGitRepo,
 			sourceGitReleaseBranch,
 			sourceGitUseRepoHook,
 			instanceName,
-			appRemovalPolicy,
 			pipelineRemovalPolicy,
 			pipelineApprovalPreCdkSynth,
 			pipelineApprovalPreCdkSynthEmail,
@@ -124,6 +109,16 @@ export class pipelineStack extends cdk.Stack {
 		});
 
 		// PIPELINE | CDKPIPELINE
+		const dt_parameter = (path: string) => {
+			const name = path.replace(/\//g, "_");
+
+			return {
+				[name]: {
+					type: codebuild.BuildEnvironmentVariableType.PARAMETER_STORE,
+					value: `/doctran/${instanceName}/${path}`,
+				},
+			};
+		};
 		const dirPipeline = "infrastructure";
 		const cdkPipeline = new pipelines.CodePipeline(this, "cdkPipeline", {
 			codePipeline: pipeline,
@@ -131,6 +126,7 @@ export class pipelineStack extends cdk.Stack {
 				input: pipelineSource,
 				primaryOutputDirectory: `${dirPipeline}/cdk.out`,
 				commands: [
+					"env",
 					"npm install -g aws-cdk@^2.89.0",
 					`cd ${dirPipeline}`,
 					"npm ci",
@@ -139,37 +135,33 @@ export class pipelineStack extends cdk.Stack {
 			}),
 			codeBuildDefaults: {
 				buildEnvironment: {
+					// use dt_parameter function to create the objects within environmentVariables
 					environmentVariables: {
-						development: { value: development },
-						sourceGitRepo: { value: sourceGitRepo },
-						sourceGitReleaseBranch: {
-							value: sourceGitReleaseBranch,
-						},
-						sourceGitUseRepoHook: { value: sourceGitUseRepoHook },
-						instanceName: { value: instanceName },
-						pipelineRemovalPolicy: { value: pipelineRemovalPolicy },
-						pipelineApprovalPreCdkSynth: { value: pipelineApprovalPreCdkSynth },
-						pipelineApprovalPreCdkSynthEmail: {
-							value: pipelineApprovalPreCdkSynthEmail,
-						},
-						appRemovalPolicy: { value: appRemovalPolicy },
-						webUi: { value: webUi },
-						webUiCustomDomain: { value: webUiCustomDomain },
-						webUiCustomDomainCertificate: {
-							value: webUiCustomDomainCertificate,
-						},
-						cognitoLocalUsers: { value: cognitoLocalUsers },
-						cognitoLocalUsersMfa: { value: cognitoLocalUsersMfa },
-						cognitoLocalUsersMfaOtp: { value: cognitoLocalUsersMfaOtp },
-						cognitoLocalUsersMfaSms: { value: cognitoLocalUsersMfaSms },
-						cognitoSamlUsers: { value: cognitoSamlUsers },
-						cognitoSamlMetadataUrl: { value: cognitoSamlMetadataUrl },
-						readable: { value: readable },
-						readableBedrockRegion: { value: readableBedrockRegion },
-						translation: { value: translation },
-						translationPii: { value: translationPii },
-						translationLifecycleDefault: { value: translationLifecycleDefault },
-						translationLifecyclePii: { value: translationLifecyclePii },
+						...dt_parameter("app/cognito/localUsers/enable"),
+						...dt_parameter("app/cognito/localUsers/mfa/enforcement"),
+						...dt_parameter("app/cognito/localUsers/mfa/otp"),
+						...dt_parameter("app/cognito/localUsers/mfa/sms"),
+						...dt_parameter("app/cognito/saml/enable"),
+						...dt_parameter("app/cognito/saml/metadataUrl"),
+						...dt_parameter("app/readable/bedrockRegion"),
+						...dt_parameter("app/readable/enable"),
+						...dt_parameter("app/removalPolicy"),
+						...dt_parameter("app/translation/enable"),
+						...dt_parameter("app/translation/lifecycle"),
+						...dt_parameter("app/translation/pii/enable"),
+						...dt_parameter("app/translation/pii/lifecycle"),
+						...dt_parameter("app/webUi/customDomain/certificateArn"),
+						...dt_parameter("app/webUi/customDomain/enable"),
+						...dt_parameter("app/webUi/enable"),
+						...dt_parameter("common/development/enable"),
+						...dt_parameter("common/instance/name"),
+						...dt_parameter("pipeline/approvals/preCdkSynth/email"),
+						...dt_parameter("pipeline/approvals/preCdkSynth/enable"),
+						...dt_parameter("pipeline/removalPolicy"),
+						...dt_parameter("pipeline/source/repoBranch"),
+						...dt_parameter("pipeline/source/repoName"),
+						...dt_parameter("pipeline/source/repoOwner"),
+						...dt_parameter("pipeline/source/repoHook/enable"),
 					},
 				},
 				rolePolicy: [
@@ -252,8 +244,8 @@ export class pipelineStack extends cdk.Stack {
 						"cd ${WEBDIR_SRC}",
 						"touch ${FEATURESFILE}",
 						'echo "{}" > ${FEATURESFILE}',
-						'jq -r ".translation = "${translation}"" ${FEATURESFILE} > ${FEATURESFILE}.tmp && mv ${FEATURESFILE}.tmp ${FEATURESFILE}',
-						'jq -r ".readable    = "${readable}""    ${FEATURESFILE} > ${FEATURESFILE}.tmp && mv ${FEATURESFILE}.tmp ${FEATURESFILE}',
+						'jq -r ".translation = "${app_translation_enable}"" ${FEATURESFILE} > ${FEATURESFILE}.tmp && mv ${FEATURESFILE}.tmp ${FEATURESFILE}',
+						'jq -r ".readable    = "${app_readable_enable}""    ${FEATURESFILE} > ${FEATURESFILE}.tmp && mv ${FEATURESFILE}.tmp ${FEATURESFILE}',
 						'echo "Features enabled: $(cat ${FEATURESFILE})"',
 						// BUILD REACT | BUILD
 						"cd ${WEBDIR}",
