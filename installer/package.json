@@ -3,7 +3,6 @@
 	"main": "./src/main.ts",
 	"dependencies": {
 		"@aws-cdk/cli-lib-alpha": "^2.152.0-alpha.0",
-		"@aws-cdk/core": "^1.204.0",
 		"@aws-sdk/client-cloudformation": "^3.631.0",
 		"@aws-sdk/client-cloudwatch-logs": "^3.631.0",
 		"@aws-sdk/client-codepipeline": "^3.631.0",
