@@ -45,21 +45,38 @@ const getCodepipelineStatus = async (pipeline: string) => {
 	const command = new GetPipelineStateCommand({ name: pipeline });
 	const response = await client.send(command);
 
-	const inProgressStages = response.stageStates?.filter(
-		(stage) => stage.latestExecution?.status === "InProgress"
-	);
+	const checkForStatus = (status: string, payload: any) => {
+		return payload.stageStates?.filter(
+			(stage: any) => stage.latestExecution?.status === status
+		);
+	};
 
-	if (!inProgressStages || inProgressStages.length === 0) {
+	const stagesInProgress = checkForStatus("InProgress", response);
+	const stagesFailed = checkForStatus("Failed", response);
+
+	if (stagesInProgress.length > 0) {
+		return {
+			complete: false,
+			message: `Pipeline is in progress: Stage '${stagesInProgress[0].stageName}' is '${stagesInProgress[0].latestExecution?.status}'`,
+		};
+	}
+
+	if (stagesInProgress.length === 0 && stagesFailed.length > 0) {
+		throw new Error(
+			`Pipeline may have failed: Stage '${stagesFailed[0].stageName}' is '${stagesFailed[0].latestExecution?.status}'`
+		);
+	}
+
+	if (stagesInProgress.length === 0 && stagesFailed.length === 0) {
 		return {
 			complete: true,
 			message: "Pipeline is complete",
 		};
 	}
 
-	const firstInProgressStage = inProgressStages[0];
 	return {
 		complete: false,
-		message: `Pipeline is in progress: Stage '${firstInProgressStage.stageName}' is '${firstInProgressStage.latestExecution?.status}'`,
+		message: "Unable to determine pipeline status",
 	};
 };
 
