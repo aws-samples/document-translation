@@ -11,6 +11,7 @@ import {
 	aws_s3 as s3,
 	aws_iam as iam,
 	aws_codebuild as codebuild,
+	aws_sns as sns,
 } from "aws-cdk-lib";
 import { DocTranAppStage } from "./pipeline-app-stage";
 import { getSharedConfiguration } from "./shared";
@@ -270,6 +271,19 @@ export class pipelineStack extends cdk.Stack {
 
 		// Add approval pre-CDK
 		if (pipelineApprovalPreCdkSynth) {
+			const pipelineApprovalPreCdkSynthTopic = new sns.Topic(
+				this,
+				"pipelineApprovalPreCdkSynthTopic",
+				{
+					topicName: `doctran-${instanceName}-pipelineApprovalPreCdkSynthTopic`,
+					enforceSSL: true,
+				},
+			);
+			new sns.Subscription(this, "pipelineApprovalPreCdkSynthSubscription", {
+				topic: pipelineApprovalPreCdkSynthTopic,
+				endpoint: pipelineApprovalPreCdkSynthEmail,
+				protocol: sns.SubscriptionProtocol.EMAIL,
+			});
 			pipeline.addStage({
 				stageName: "ManualApproval_PreSynth",
 				placement: {
@@ -280,7 +294,7 @@ export class pipelineStack extends cdk.Stack {
 						actionName: "ManualApproval_PreSynth",
 						externalEntityLink: `https://github.com/${sourceGitRepo}/releases`,
 						additionalInformation: `The source repository ${sourceGitRepo} tracked branch has been updated. Please review and approve the pipeline to implement the update if appropriate. This approval may run twice per update.`,
-						notifyEmails: [pipelineApprovalPreCdkSynthEmail],
+						notificationTopic: pipelineApprovalPreCdkSynthTopic,
 					}),
 				],
 			});
