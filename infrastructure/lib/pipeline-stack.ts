@@ -12,6 +12,7 @@ import {
 	aws_iam as iam,
 	aws_codebuild as codebuild,
 	aws_sns as sns,
+	aws_kms as kms,
 } from "aws-cdk-lib";
 import { DocTranAppStage } from "./pipeline-app-stage";
 import { getSharedConfiguration } from "./shared";
@@ -271,12 +272,21 @@ export class pipelineStack extends cdk.Stack {
 
 		// Add approval pre-CDK
 		if (pipelineApprovalPreCdkSynth) {
+			const pipelineApprovalPreCdkSynthTopicKey = new kms.Key(
+				this,
+				"pipelineApprovalPreCdkSynthTopicKey",
+				{
+					enableKeyRotation: true,
+					removalPolicy,
+				},
+			);
 			const pipelineApprovalPreCdkSynthTopic = new sns.Topic(
 				this,
 				"pipelineApprovalPreCdkSynthTopic",
 				{
 					topicName: `doctran-${instanceName}-pipelineApprovalPreCdkSynthTopic`,
 					enforceSSL: true,
+					masterKey: pipelineApprovalPreCdkSynthTopicKey,
 				},
 			);
 			new sns.Subscription(this, "pipelineApprovalPreCdkSynthSubscription", {
