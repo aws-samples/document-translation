@@ -1,9 +1,5 @@
 import { confirm, select, Separator } from "@inquirer/prompts";
-
-export type readableOptions = {
-	readable: boolean;
-	readableBedrockRegion?: string;
-};
+import { AppReadableOptions } from "./options";
 
 const showInstruction = () => {
 	console.log(`
@@ -13,7 +9,7 @@ Post Install: https://aws-samples.github.io/document-translation/docs/readable/p
 	`);
 };
 
-export const getReadableOptions = async (): Promise<readableOptions> => {
+export const getAppReadableOptions = async (): Promise<AppReadableOptions> => {
 	showInstruction();
 	const theme = {
 		prefix: "Readable: ",
@@ -79,16 +75,16 @@ export const getReadableOptions = async (): Promise<readableOptions> => {
 		},
 	];
 
-	const answers: readableOptions = {
-		readable: await confirm({
+	const answers: AppReadableOptions = {
+		app_readable_enable: await confirm({
 			message: "Enable",
 			default: false,
 			theme,
 		}),
 	};
 
-	if (answers.readable) {
-		answers.readableBedrockRegion = await select({
+	if (answers.app_readable_enable) {
+		answers.app_readable_bedrockRegion = await select({
 			message: "Bedrock Region",
 			choices: regions,
 			loop: false,

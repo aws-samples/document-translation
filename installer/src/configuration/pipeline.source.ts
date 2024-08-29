@@ -1,15 +1,9 @@
 import { input, select } from "@inquirer/prompts";
+import { PipelineSourceOptions } from "./options";
 import {
 	SecretsManagerClient,
 	CreateSecretCommand,
 } from "@aws-sdk/client-secrets-manager";
-export type githubOptions = {
-	repoOwner: string;
-	repoName: string;
-	release: string;
-	token: string;
-	repoHook: boolean;
-};
 
 type secretsManagerError = {
 	$fault: string;
@@ -31,6 +25,7 @@ const createAwsSecret = async (name: string, secret: string) => {
 			new CreateSecretCommand({
 				Name: name,
 				SecretString: secret,
+				ForceOverwriteReplicaSecret: true,
 			})
 		);
 		return data;
@@ -127,9 +122,26 @@ const canTokenRepoHook = async (token: string): Promise<boolean> => {
 	return false;
 };
 
+const usePeriodicChecksInCodepipeline = (
+	owner: string,
+	name: string
+): boolean => {
+	if (owner === "aws-samples" && name === "document-translation") {
+		console.log("Pointed at upstream. Using periodic checks in codepipeline");
+		return true;
+	} else {
+		console.log("Pointed at fork. Using repo hooks to codepipeline");
+		return false;
+	}
+};
+
+const theme = {
+	prefix: "Pipeline - Source: ",
+};
+
 const showInstruction = () => {
 	console.log(`
-# GitHub Configuration
+# Pipeline - Source Configuration
 GitHub is used at the source code repository.
 Requirements: 1) GitHub Account. 2) GitHub Access Token.
 If using the upstream AWS-Samples respository then a classic token with "public_repo" and no expiration will work. 
@@ -137,48 +149,56 @@ Prerequisite: https://aws-samples.github.io/document-translation/docs/shared/con
 	`);
 };
 
-export const getGithubOptions = async (): Promise<githubOptions> => {
+export const getPipelineSourceOptions = async (
+	instanceName: string
+): Promise<PipelineSourceOptions> => {
 	showInstruction();
 
-	const theme = {
-		prefix: "GitHub: ",
-	};
-
-	let answers: githubOptions = {
-		repoOwner: await input({
+	let answers: PipelineSourceOptions = {
+		pipeline_source_repoOwner: await input({
 			message: "Repo Owner (github.com/<OWNER>/<NAME>)",
 			required: true,
 			default: "aws-samples",
 			theme,
 		}),
-		repoName: await input({
+		pipeline_source_repoName: await input({
 			message: "Repo Name (github.com/<OWNER>/<NAME>)",
 			required: true,
 			default: "document-translation",
 			theme,
 		}),
-		token: await input({
-			message: "Token",
-			required: true,
-			theme,
-		}),
-		release: "",
-		repoHook: false,
+		pipeline_source_repoBranch: "",
+		pipeline_source_repoHookEnable: false,
+		pipeline_source_repoPeriodicChecksEnable: true,
+		pipeline_source_repoTokenName: "",
 	};
 
-	answers.release = await select({
+	const repoToken: string = await input({
+		message: "Token",
+		required: true,
+		theme,
+	});
+
+	const timestamp = Math.floor(Date.now() / 1000);
+	answers.pipeline_source_repoTokenName = `doctran-${instanceName}-oauth-token-${timestamp}`;
+	createAwsSecret(answers.pipeline_source_repoTokenName, repoToken);
+
+	answers.pipeline_source_repoBranch = await select({
 		message: "Release",
 		choices: await getGitHubReleaseBranches(
-			answers.repoOwner,
-			answers.repoName,
-			answers.token
+			answers.pipeline_source_repoOwner,
+			answers.pipeline_source_repoName,
+			repoToken
 		),
 		theme,
 	});
 
-	answers.repoHook = await canTokenRepoHook(answers.token);
-
-	createAwsSecret("github-token", answers.token);
+	answers.pipeline_source_repoPeriodicChecksEnable =
+		usePeriodicChecksInCodepipeline(
+			answers.pipeline_source_repoOwner,
+			answers.pipeline_source_repoName
+		);
+	answers.pipeline_source_repoHookEnable = await canTokenRepoHook(repoToken);
 
 	return answers;
 };

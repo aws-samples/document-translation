@@ -1,11 +1,5 @@
 import { input, confirm } from "@inquirer/prompts";
-
-export type webOptions = {
-	webUi: boolean;
-	customDomain?: boolean;
-	customDomainName?: string;
-	customDomainArn?: string;
-};
+import { AppWebOptions } from "./options";
 
 const showInstruction = () => {
 	console.log(`
@@ -15,35 +9,35 @@ Post Install for custom domain name: https://aws-samples.github.io/document-tran
 	`);
 };
 
-export const getWebOptions = async (): Promise<webOptions> => {
+export const getAppWebOptions = async (): Promise<AppWebOptions> => {
 	showInstruction();
 	const theme = {
 		prefix: "Shared Web: ",
 	};
 
-	const answers: webOptions = {
-		webUi: await confirm({
+	const answers: AppWebOptions = {
+		app_webUi_enable: await confirm({
 			message: "Web UI",
 			default: true,
 			theme,
 		}),
 	};
 
-	if (answers.webUi) {
-		answers.customDomain = await confirm({
+	if (answers.app_webUi_enable) {
+		answers.app_webUi_customDomain_enable = await confirm({
 			message: "Custom Domain",
 			default: false,
 			theme,
 		});
 	}
 
-	if (answers.customDomain) {
-		answers.customDomainName = await input({
+	if (answers.app_webUi_customDomain_enable) {
+		answers.app_webUi_customDomain_name = await input({
 			message: "Custom Domain Name (doctran.example.com)",
 			required: true,
 			theme,
 		});
-		answers.customDomainArn = await input({
+		answers.app_webUi_customDomain_certificateArn = await input({
 			message: "Custom Domain Certificate Arn (arn:aws:acm:...)",
 			required: true,
 			validate: (value) => {

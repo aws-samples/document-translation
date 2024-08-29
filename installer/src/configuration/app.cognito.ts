@@ -1,9 +1,5 @@
 import { checkbox } from "@inquirer/prompts";
-
-export type userOptions = {
-	cognitoUsers: boolean;
-	samlUsers: boolean;
-};
+import { AppCognitoOptions } from "./options";
 
 const showInstruction = () => {
 	console.log(`
@@ -14,7 +10,7 @@ For test & development Local is recommended.
 	`);
 };
 
-export const getUserOptions = async (): Promise<userOptions> => {
+export const getAppCognitoOptions = async (): Promise<AppCognitoOptions> => {
 	showInstruction();
 	const theme = {
 		prefix: "Shared Users: ",
@@ -31,17 +27,17 @@ export const getUserOptions = async (): Promise<userOptions> => {
 		theme,
 	});
 
-	let answers: userOptions = {
-		cognitoUsers: false,
-		samlUsers: false,
+	let answers: AppCognitoOptions = {
+		app_cognito_localUsers_enable: false,
+		app_cognito_saml_enable: false,
 	};
 
 	if (selectedUserStores.includes("cognito")) {
-		answers.cognitoUsers = true;
+		answers.app_cognito_localUsers_enable = true;
 	}
 
 	if (selectedUserStores.includes("saml")) {
-		answers.samlUsers = true;
+		answers.app_cognito_saml_enable = true;
 	}
 
 	return answers;
