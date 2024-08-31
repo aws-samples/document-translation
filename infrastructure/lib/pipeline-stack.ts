@@ -294,6 +294,29 @@ export class pipelineStack extends cdk.Stack {
 				endpoint: pipelineApprovalPreCdkSynthEmail,
 				protocol: sns.SubscriptionProtocol.EMAIL,
 			});
+			const pipelineApprovalPreCdkSynthRole = new iam.Role(
+				this,
+				"pipelineApprovalPreCdkSynthRole",
+				{
+					assumedBy: cdkPipeline.pipeline.role,
+					inlinePolicies: {
+						pipelineApprovalPreCdkSynthPolicy: new iam.PolicyDocument({
+							statements: [
+								new iam.PolicyStatement({
+									effect: iam.Effect.ALLOW,
+									actions: ["sns:Publish"],
+									resources: [pipelineApprovalPreCdkSynthTopic.topicArn],
+								}),
+								new iam.PolicyStatement({
+									effect: iam.Effect.ALLOW,
+									actions: ["kms:GenerateDataKey", "kms:Decrypt"],
+									resources: [pipelineApprovalPreCdkSynthTopicKey.keyArn],
+								}),
+							],
+						}),
+					},
+				},
+			);
 			pipeline.addStage({
 				stageName: "ManualApproval_PreSynth",
 				placement: {
@@ -305,6 +328,7 @@ export class pipelineStack extends cdk.Stack {
 						externalEntityLink: `https://github.com/${sourceGitRepo}/releases`,
 						additionalInformation: `The source repository ${sourceGitRepo} tracked branch has been updated. Please review and approve the pipeline to implement the update if appropriate. This approval may run twice per update.`,
 						notificationTopic: pipelineApprovalPreCdkSynthTopic,
+						role: pipelineApprovalPreCdkSynthRole,
 					}),
 				],
 			});
