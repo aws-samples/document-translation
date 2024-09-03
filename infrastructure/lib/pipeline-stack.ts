@@ -1,11 +1,12 @@
 // Copyright Amazon.com, Inc. or its affiliates. All Rights Reserved.
 // SPDX-License-Identifier: MIT-0
 
+import * as fs from "fs";
 import * as cdk from "aws-cdk-lib";
 import { Construct } from "constructs";
 import { NagSuppressions } from "cdk-nag";
 import {
-	pipelines as pipelines,
+	pipelines as cdkpipelines,
 	aws_codepipeline as codepipeline,
 	aws_codepipeline_actions as codepipeline_actions,
 	aws_s3 as s3,
@@ -15,26 +16,21 @@ import {
 	aws_kms as kms,
 } from "aws-cdk-lib";
 import { DocTranAppStage } from "./pipeline-app-stage";
-import { getSharedConfiguration } from "./shared";
 import { GitHubTrigger } from "aws-cdk-lib/aws-codepipeline-actions";
+import { Config } from "./types";
 
 export class pipelineStack extends cdk.Stack {
 	constructor(scope: Construct, id: string, props?: cdk.StackProps) {
 		super(scope, id, props);
 
-		const {
-			webUi,
-			sourceGitRepo,
-			sourceGitReleaseBranch,
-			sourceGitUseRepoHook,
-			instanceName,
-			pipelineRemovalPolicy,
-			pipelineApprovalPreCdkSynth,
-			pipelineApprovalPreCdkSynthEmail,
-		} = getSharedConfiguration();
+		const config: Config = JSON.parse(
+			fs.readFileSync("./config.json", "utf-8"),
+		);
+
+		const sourceRepo = `${config.pipeline.source.repoOwner}/${config.pipeline.source.repoName}`;
 
 		let removalPolicy: cdk.RemovalPolicy;
-		switch (pipelineRemovalPolicy) {
+		switch (config.pipeline.removalPolicy) {
 			case "destroy":
 				removalPolicy = cdk.RemovalPolicy.DESTROY;
 				break;
@@ -85,14 +81,15 @@ export class pipelineStack extends cdk.Stack {
 
 		// SOURCE
 		const oauthToken = cdk.SecretValue.secretsManager(
-			`doctran-${instanceName}-oauth-token`,
+			`doctran-${config.common.instance.name}-oauth-token`,
 		);
-		const pipelineTrigger: GitHubTrigger = sourceGitUseRepoHook
+		const pipelineTrigger: GitHubTrigger = config.pipeline.source.repoHook
+			.enable
 			? GitHubTrigger.WEBHOOK
 			: GitHubTrigger.POLL;
-		const pipelineSource = pipelines.CodePipelineSource.gitHub(
-			sourceGitRepo,
-			sourceGitReleaseBranch,
+		const pipelineSource = cdkpipelines.CodePipelineSource.gitHub(
+			sourceRepo,
+			config.pipeline.source.repoBranch,
 			{
 				actionName: "Source",
 				trigger: pipelineTrigger,
@@ -111,20 +108,10 @@ export class pipelineStack extends cdk.Stack {
 		});
 
 		// PIPELINE | CDKPIPELINE
-		const dt_parameter = (path: string) => {
-			const name = path.replace(/\//g, "_");
-
-			return {
-				[name]: {
-					type: codebuild.BuildEnvironmentVariableType.PARAMETER_STORE,
-					value: `/doctran/${instanceName}/${path}`,
-				},
-			};
-		};
 		const dirPipeline = "infrastructure";
-		const cdkPipeline = new pipelines.CodePipeline(this, "cdkPipeline", {
+		const cdkPipeline = new cdkpipelines.CodePipeline(this, "cdkPipeline", {
 			codePipeline: pipeline,
-			synth: new pipelines.ShellStep("Synth", {
+			synth: new cdkpipelines.ShellStep("Synth", {
 				input: pipelineSource,
 				primaryOutputDirectory: `${dirPipeline}/cdk.out`,
 				commands: [
@@ -136,36 +123,6 @@ export class pipelineStack extends cdk.Stack {
 				],
 			}),
 			codeBuildDefaults: {
-				buildEnvironment: {
-					// use dt_parameter function to create the objects within environmentVariables
-					environmentVariables: {
-						...dt_parameter("app/cognito/localUsers/enable"),
-						...dt_parameter("app/cognito/localUsers/mfa/enforcement"),
-						...dt_parameter("app/cognito/localUsers/mfa/otp"),
-						...dt_parameter("app/cognito/localUsers/mfa/sms"),
-						...dt_parameter("app/cognito/saml/enable"),
-						...dt_parameter("app/cognito/saml/metadataUrl"),
-						...dt_parameter("app/readable/bedrockRegion"),
-						...dt_parameter("app/readable/enable"),
-						...dt_parameter("app/removalPolicy"),
-						...dt_parameter("app/translation/enable"),
-						...dt_parameter("app/translation/lifecycle"),
-						...dt_parameter("app/translation/pii/enable"),
-						...dt_parameter("app/translation/pii/lifecycle"),
-						...dt_parameter("app/webUi/customDomain/certificateArn"),
-						...dt_parameter("app/webUi/customDomain/enable"),
-						...dt_parameter("app/webUi/enable"),
-						...dt_parameter("common/development/enable"),
-						...dt_parameter("common/instance/name"),
-						...dt_parameter("pipeline/approvals/preCdkSynth/email"),
-						...dt_parameter("pipeline/approvals/preCdkSynth/enable"),
-						...dt_parameter("pipeline/removalPolicy"),
-						...dt_parameter("pipeline/source/repoBranch"),
-						...dt_parameter("pipeline/source/repoName"),
-						...dt_parameter("pipeline/source/repoOwner"),
-						...dt_parameter("pipeline/source/repoHook/enable"),
-					},
-				},
 				rolePolicy: [
 					new iam.PolicyStatement({
 						effect: iam.Effect.ALLOW,
@@ -192,6 +149,7 @@ export class pipelineStack extends cdk.Stack {
 				],
 			},
 		});
+
 		// PIPELINE | STAGE
 		const deployStage = new DocTranAppStage(this, "DocTran-appStack", {
 			stageName: "Deploy-Infrastructure",
@@ -201,9 +159,9 @@ export class pipelineStack extends cdk.Stack {
 			},
 		});
 
-		const post: pipelines.ShellStep[] = [];
-		if (webUi) {
-			const shellStep_deployWebsiteToS3 = new pipelines.ShellStep(
+		const post: cdkpipelines.ShellStep[] = [];
+		if (config.app.webUi.enable) {
+			const shellStep_deployWebsiteToS3 = new cdkpipelines.ShellStep(
 				"Deploy-Website",
 				{
 					envFromCfnOutputs: {
@@ -271,7 +229,7 @@ export class pipelineStack extends cdk.Stack {
 		cdkPipeline.buildPipeline();
 
 		// Add approval pre-CDK
-		if (pipelineApprovalPreCdkSynth) {
+		if (config.pipeline.approvals.preCdkSynth.enable) {
 			const pipelineApprovalPreCdkSynthTopicKey = new kms.Key(
 				this,
 				"pipelineApprovalPreCdkSynthTopicKey",
@@ -284,14 +242,14 @@ export class pipelineStack extends cdk.Stack {
 				this,
 				"pipelineApprovalPreCdkSynthTopic",
 				{
-					topicName: `doctran-${instanceName}-pipelineApprovalPreCdkSynthTopic`,
+					topicName: `doctran-${config.common.instance.name}-pipelineApprovalPreCdkSynthTopic`,
 					enforceSSL: true,
 					masterKey: pipelineApprovalPreCdkSynthTopicKey,
 				},
 			);
 			new sns.Subscription(this, "pipelineApprovalPreCdkSynthSubscription", {
 				topic: pipelineApprovalPreCdkSynthTopic,
-				endpoint: pipelineApprovalPreCdkSynthEmail,
+				endpoint: config.pipeline.approvals.preCdkSynth.email,
 				protocol: sns.SubscriptionProtocol.EMAIL,
 			});
 			const pipelineApprovalPreCdkSynthRole = new iam.Role(
@@ -325,8 +283,8 @@ export class pipelineStack extends cdk.Stack {
 				actions: [
 					new codepipeline_actions.ManualApprovalAction({
 						actionName: "ManualApproval_PreSynth",
-						externalEntityLink: `https://github.com/${sourceGitRepo}/releases`,
-						additionalInformation: `The source repository ${sourceGitRepo} tracked branch has been updated. Please review and approve the pipeline to implement the update if appropriate. This approval may run twice per update.`,
+						externalEntityLink: `https://github.com/${sourceRepo}/releases`,
+						additionalInformation: `The source repository ${sourceRepo} tracked branch has been updated. Please review and approve the pipeline to implement the update if appropriate. This approval may run twice per update.`,
 						notificationTopic: pipelineApprovalPreCdkSynthTopic,
 						role: pipelineApprovalPreCdkSynthRole,
 					}),
