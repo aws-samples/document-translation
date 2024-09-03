@@ -92,6 +92,12 @@ export const deploy = async (options: configOptions) => {
 	console.log("config", JSON.stringify(config, null, 4));
 
 	const infraPath = "../../infrastructure";
+	console.log(`Copying to ${infraPath} to kickstart`);
+	await fs.writeFile(
+		`${infraPath}/config.json`,
+		JSON.stringify(config, null, 4)
+	);
+
 	const cli = AwsCdkCli.fromCdkAppDirectory(infraPath);
 
 	// Boostrap the accunt
@@ -99,10 +105,5 @@ export const deploy = async (options: configOptions) => {
 	await cli.bootstrap();
 	// Deploy the stack
 	console.log("Deploying the pipeline stack");
-	// write config to ./ with fs
-	await fs.writeFile(
-		`${infraPath}/config.json`,
-		JSON.stringify(config, null, 4)
-	);
 	await cli.deploy();
 };
