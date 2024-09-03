@@ -314,14 +314,7 @@ export class pipelineStack extends cdk.Stack {
 					version: "0.2",
 					phases: {
 						install: {
-							commands: [
-								"whoami",
-								"pwd",
-								"ls -lah",
-								"env",
-								`cd ${dirGetOptions}`,
-								"npm ci",
-							],
+							commands: [`cd ${dirGetOptions}`, "npm ci"],
 						},
 						build: {
 							commands: ["npm run start"],
