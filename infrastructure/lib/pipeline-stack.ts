@@ -306,15 +306,42 @@ export class pipelineStack extends cdk.Stack {
 			: 0;
 
 		const dirGetOptions = "util/getOptions";
+		const preSynthProjectRole = new iam.Role(this, "preSynthProjectRole", {
+			assumedBy: new iam.ServicePrincipal("codebuild.amazonaws.com"),
+			inlinePolicies: {
+				ssmPolicy: new iam.PolicyDocument({
+					statements: [
+						// new iam.PolicyStatement({
+						// 	effect: iam.Effect.ALLOW,
+						// 	actions: ["codebuild:StartBuild"],
+						// 	resources: [preSynthProject.projectArn],
+						// }),
+						new iam.PolicyStatement({
+							effect: iam.Effect.ALLOW,
+							actions: ["ssm:GetParametersByPath"],
+							resources: [
+								`arn:aws:ssm:${this.region}:${this.account}:parameter/doctran/${config.common.instance.name}/`,
+							],
+						}),
+					],
+				}),
+			},
+		});
+
 		const preSynthProject = new codebuild.PipelineProject(
 			this,
 			"preSynthProject",
 			{
+				role: preSynthProjectRole,
 				buildSpec: codebuild.BuildSpec.fromObject({
 					version: "0.2",
 					phases: {
 						install: {
-							commands: [`cd ${dirGetOptions}`, "npm ci"],
+							commands: [
+								"echo $INSTANCE_NAME",
+								`cd ${dirGetOptions}`,
+								"npm ci",
+							],
 						},
 						build: {
 							commands: ["npm run start"],
@@ -323,7 +350,6 @@ export class pipelineStack extends cdk.Stack {
 				}),
 			},
 		);
-
 		const preBuildAction = new codepipeline_actions.CodeBuildAction({
 			actionName: "GetConfig",
 			project: preSynthProject,
@@ -341,11 +367,8 @@ export class pipelineStack extends cdk.Stack {
 			actions: [preBuildAction],
 		});
 
-		//
-		// TODO TESTING
-		//
 		NagSuppressions.addResourceSuppressions(
-			preSynthProject,
+			preSynthProjectRole,
 			[
 				{
 					id: "AwsSolutions-IAM5",
@@ -362,13 +385,17 @@ export class pipelineStack extends cdk.Stack {
 						"Action::s3:GetObject*",
 						"Action::s3:GetBucket*",
 						"Action::s3:List*",
-						"Action::s3:DeleteObject*",
-						"Action::s3:Abort*",
 						`Resource::<${cdk.Stack.of(this).getLogicalId(
 							artifactBucket.node.defaultChild as cdk.CfnElement,
 						)}.Arn>/*`,
 					],
 				},
+			],
+			true,
+		);
+		NagSuppressions.addResourceSuppressions(
+			preSynthProject,
+			[
 				{
 					id: "AwsSolutions-CB4",
 					reason:
