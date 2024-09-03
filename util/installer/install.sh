@@ -7,7 +7,7 @@ cd "document-translation" || exit
 
 # Set the working directory
 WORKDIR=$(pwd)
-INSTALLERDIR="${WORKDIR}/installer"
+INSTALLERDIR="${WORKDIR}/util/installer"
 INFRADIR="${WORKDIR}/infrastructure"
 
 # Install dependencies

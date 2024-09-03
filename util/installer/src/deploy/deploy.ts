@@ -58,7 +58,7 @@ export const deploy = async (config: config) => {
 	await saveConfigToParameterStore(config.configurationOptions);
 	setConfigToEnvironment(config.configurationOptions);
 
-	const cli = AwsCdkCli.fromCdkAppDirectory("../infrastructure");
+	const cli = AwsCdkCli.fromCdkAppDirectory("../../infrastructure");
 
 	// Boostrap the accunt
 	console.log("Bootstrapping CDK");
