@@ -125,7 +125,7 @@ export class pipelineStack extends cdk.Stack {
 				`cp ./config/util/getOptions/config.json ./${dirPipeline}/ && cat ./${dirPipeline}/config.json`,
 				`cd ./${dirPipeline}/`,
 				"npm ci",
-				"cdk synth",
+				"npm run cdk synth",
 			],
 		});
 		// PIPELINE | CDKPIPELINE
