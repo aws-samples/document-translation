@@ -123,6 +123,14 @@ export class pipelineStack extends cdk.Stack {
 				],
 			}),
 			codeBuildDefaults: {
+				buildEnvironment: {
+					environmentVariables: {
+						INSTANCE_NAME: {
+							type: codebuild.BuildEnvironmentVariableType.PARAMETER_STORE,
+							value: config.common.instance.name,
+						},
+					},
+				},
 				rolePolicy: [
 					new iam.PolicyStatement({
 						effect: iam.Effect.ALLOW,
