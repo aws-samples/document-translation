@@ -10,27 +10,27 @@ export interface AwsConfig {
 	region: string;
 }
 
-const flattenConfig = (config: ConfigurationOptions) => {
-	// flatten config to just key value pairs
-	return Object.entries(config).reduce(
-		(acc, [key, value]) => ({ ...acc, ...value }),
-		{}
-	);
+// foo.bar.pie = true becomes foo/bar/pie = true
+const flattenObject = (obj: any, parentKey = ""): any => {
+	let result: any = {};
+	for (const key in obj) {
+		const value = obj[key];
+		const newKey = parentKey ? `${parentKey}/${key}` : key;
+		if (typeof value === "object") {
+			result = { ...result, ...flattenObject(value, newKey) };
+		} else {
+			result[newKey] = value;
+		}
+	}
+	return result;
 };
 
-const saveConfigToParameterStore = async (config: ConfigurationOptions) => {
-	const flattenedConfig = flattenConfig(config);
-	// foo_bar_pie becomes "foo/bar/pie"
-	const parameterConfig = Object.fromEntries(
-		Object.entries(flattenedConfig).map(([key, value]) => [
-			key.replace(/_/g, "/"),
-			value,
-		])
-	);
+const saveConfigToParameterStore = async (config: Config) => {
+	const flattenedConfig = flattenObject(config);
 
 	const overwrite = true;
-	const prefix = `/doctran/${config.commonMiscOptions.common.instance.name}/`;
-	for (const [key, value] of Object.entries(parameterConfig)) {
+	const prefix = `/doctran/${config.common.instance.name}/`;
+	for (const [key, value] of Object.entries(flattenedConfig)) {
 		if (value) {
 			await putParameter(prefix, key, value.toString(), overwrite);
 			// calculate 1 second plus up to 1 second of jitter
@@ -87,8 +87,8 @@ type configOptions = {
 
 export const deploy = async (options: configOptions) => {
 	console.log("Saving configuration to Parameter Store");
-	await saveConfigToParameterStore(options.configurationOptions);
 	const config = mapConfig(options.configurationOptions);
+	await saveConfigToParameterStore(config);
 	console.log("config", JSON.stringify(config, null, 4));
 
 	const infraPath = "../../infrastructure";
