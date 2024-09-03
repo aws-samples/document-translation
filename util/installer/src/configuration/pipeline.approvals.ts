@@ -20,15 +20,21 @@ export const getPipelineApprovalOptions =
 		showInstruction();
 
 		const answers: PipelineApprovalOptions = {
-			pipeline_approvals_preCdkSynth_enable: await confirm({
-				message: "Enable",
-				default: true,
-				theme,
-			}),
+			pipeline: {
+				approvals: {
+					preCdkSynth: {
+						enable: await confirm({
+							message: "Enable",
+							default: true,
+							theme,
+						}),
+					},
+				},
+			},
 		};
 
-		if (answers.pipeline_approvals_preCdkSynth_enable) {
-			answers.pipeline_approvals_preCdkSynth_email = await input({
+		if (answers.pipeline.approvals.preCdkSynth.enable) {
+			answers.pipeline.approvals.preCdkSynth.email = await input({
 				message: "Email",
 				required: true,
 				theme,

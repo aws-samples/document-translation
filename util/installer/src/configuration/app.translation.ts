@@ -17,15 +17,24 @@ export const getAppTranslationOptions =
 		};
 
 		const answers: AppTranslationOptions = {
-			app_translation_enable: await confirm({
-				message: "Enable",
-				default: false,
-				theme,
-			}),
+			app: {
+				translation: {
+					enable: await confirm({
+						message: "Enable",
+						default: false,
+						theme,
+					}),
+					lifecycle: 7,
+					pii: {
+						enable: false,
+						lifecycle: 3,
+					},
+				},
+			},
 		};
 
-		if (answers.app_translation_enable) {
-			answers.app_translation_lifecycle = await number({
+		if (answers.app.translation.enable) {
+			answers.app.translation.lifecycle = await number({
 				message: "Default file retention in days",
 				default: 7,
 				min: 1,
@@ -35,20 +44,20 @@ export const getAppTranslationOptions =
 			});
 		}
 
-		if (answers.app_translation_enable) {
-			answers.app_translation_pii_enable = await confirm({
+		if (answers.app.translation.enable) {
+			answers.app.translation.pii.enable = await confirm({
 				message: "Enable Pii Detection",
 				default: false,
 				theme,
 			});
 		}
 
-		if (answers.app_translation_pii_enable) {
-			answers.app_translation_pii_lifecycle = await number({
+		if (answers.app.translation.pii.enable) {
+			answers.app.translation.pii.lifecycle = await number({
 				message: "Pii file retention in days",
 				default: 3,
 				min: 1,
-				max: answers.app_translation_lifecycle,
+				max: answers.app.translation.lifecycle,
 				required: true,
 				theme,
 			});

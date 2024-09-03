@@ -15,12 +15,16 @@ export const getCommonMiscOptions = async (): Promise<CommonMiscOptions> => {
 	showInstruction();
 
 	let answers: CommonMiscOptions = {
-		common_instance_name: await input({
-			message: "Instance Name (branch from before v3.x.x)",
-			required: true,
-			default: "main",
-			theme,
-		}),
+		common: {
+			instance: {
+				name: await input({
+					message: "Instance Name (branch from before v3.x.x)",
+					required: true,
+					default: "main",
+					theme,
+				}),
+			},
+		},
 	};
 
 	return answers;

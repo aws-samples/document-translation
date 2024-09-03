@@ -16,28 +16,37 @@ export const getAppWebOptions = async (): Promise<AppWebOptions> => {
 	};
 
 	const answers: AppWebOptions = {
-		app_webUi_enable: await confirm({
-			message: "Web UI",
-			default: true,
-			theme,
-		}),
+		app: {
+			webUi: {
+				enable: await confirm({
+					message: "Web UI",
+					default: true,
+					theme,
+				}),
+				customDomain: {
+					enable: false,
+					domain: "",
+					certificateArn: "",
+				},
+			},
+		},
 	};
 
-	if (answers.app_webUi_enable) {
-		answers.app_webUi_customDomain_enable = await confirm({
+	if (answers.app.webUi.enable) {
+		answers.app.webUi.customDomain.enable = await confirm({
 			message: "Custom Domain",
 			default: false,
 			theme,
 		});
 	}
 
-	if (answers.app_webUi_customDomain_enable) {
-		answers.app_webUi_customDomain_name = await input({
+	if (answers.app.webUi.customDomain.enable) {
+		answers.app.webUi.customDomain.domain = await input({
 			message: "Custom Domain Name (doctran.example.com)",
 			required: true,
 			theme,
 		});
-		answers.app_webUi_customDomain_certificateArn = await input({
+		answers.app.webUi.customDomain.certificateArn = await input({
 			message: "Custom Domain Certificate Arn (arn:aws:acm:...)",
 			required: true,
 			validate: (value) => {

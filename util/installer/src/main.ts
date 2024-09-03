@@ -26,17 +26,17 @@ const getConfigurationOptions = async (): Promise<ConfigurationOptions> => {
 
 	result.commonMiscOptions = await getCommonMiscOptions();
 	result.pipelineSourceOptions = await getPipelineSourceOptions(
-		result.commonMiscOptions.common_instance_name
+		result.commonMiscOptions.common.instance.name
 	);
 	result.pipelineApprovalOptions = await getPipelineApprovalOptions();
 
 	result.appCognitoOptions = await getAppCognitoOptions();
-	result.appCognitoLocalOptions = result.appCognitoOptions
-		.app_cognito_localUsers_enable
+	result.appCognitoLocalOptions = result.appCognitoOptions.app.cognito
+		.localUsers.enable
 		? await getAppCognitoLocalOptions()
 		: {};
-	result.appCognitoSamlOptions = result.appCognitoOptions
-		.app_cognito_saml_enable
+	result.appCognitoSamlOptions = result.appCognitoOptions.app.cognito.saml
+		.enable
 		? await getAppCognitoSamlOptions()
 		: {};
 
@@ -51,7 +51,7 @@ const getConfigurationOptions = async (): Promise<ConfigurationOptions> => {
 const prerequisites = async (configurationOptions: ConfigurationOptions) => {
 	prereqCdk();
 
-	if (configurationOptions.appTranslationOptions.app_translation_pii_enable) {
+	if (configurationOptions.appTranslationOptions.app.translation.pii.enable) {
 		await prereqTranslation();
 	}
 };

@@ -17,17 +17,24 @@ export const getAppCognitoSamlOptions =
 		};
 
 		const answers: AppCognitoSamlOptions = {
-			app_cognito_saml_metadataUrl: await input({
-				message: "Metadata URL (https://domain/...metadata.xml?appid=xxxx)",
-				required: true,
-				validate: (value) => {
-					if (value.startsWith("https://")) {
-						return true;
-					}
-					return "Invalid URL";
+			app: {
+				cognito: {
+					saml: {
+						metadataUrl: await input({
+							message:
+								"Metadata URL (https://domain/...metadata.xml?appid=xxxx)",
+							required: true,
+							validate: (value) => {
+								if (value.startsWith("https://")) {
+									return true;
+								}
+								return "Invalid URL";
+							},
+							theme,
+						}),
+					},
 				},
-				theme,
-			}),
+			},
 		};
 
 		return answers;

@@ -10,11 +10,11 @@ export type CommonConfig = {
 export type PipelineConfig = {
 	approvals: {
 		preCdkSynth: {
-			email: string;
+			email?: string;
 			enable: boolean;
 		};
 	};
-	removalPolicy: string;
+	removalPolicy?: string;
 	source: {
 		repoBranch: string;
 		repoHook: {
@@ -30,36 +30,36 @@ export type AppConfig = {
 		localUsers: {
 			enable: boolean;
 			mfa: {
-				enforcement: string;
-				otp: boolean;
-				sms: boolean;
+				enforcement?: string;
+				otp?: boolean;
+				sms?: boolean;
 			};
 		};
 		saml: {
 			enable: boolean;
-			metadataUrl: string;
+			metadataUrl?: string;
 		};
 	};
 	readable: {
-		bedrockRegion: string;
+		bedrockRegion?: string;
 		enable: boolean;
 	};
-	removalPolicy: string;
+	removalPolicy?: string;
 	translation: {
 		enable: boolean;
-		lifecycle: number;
+		lifecycle?: number;
 		pii: {
-			enable: boolean;
-			lifecycle: number;
+			enable?: boolean;
+			lifecycle?: number;
 		};
 	};
 	webUi: {
 		customDomain: {
-			certificateArn: string;
-			enable: boolean;
-			domain: string;
+			certificateArn?: string;
+			enable?: boolean;
+			domain?: string;
 		};
-		enable: boolean;
+		enable?: boolean;
 	};
 };
 

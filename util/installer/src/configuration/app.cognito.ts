@@ -28,16 +28,24 @@ export const getAppCognitoOptions = async (): Promise<AppCognitoOptions> => {
 	});
 
 	let answers: AppCognitoOptions = {
-		app_cognito_localUsers_enable: false,
-		app_cognito_saml_enable: false,
+		app: {
+			cognito: {
+				localUsers: {
+					enable: false,
+				},
+				saml: {
+					enable: false,
+				},
+			},
+		},
 	};
 
 	if (selectedUserStores.includes("cognito")) {
-		answers.app_cognito_localUsers_enable = true;
+		answers.app.cognito.localUsers.enable = true;
 	}
 
 	if (selectedUserStores.includes("saml")) {
-		answers.app_cognito_saml_enable = true;
+		answers.app.cognito.saml.enable = true;
 	}
 
 	return answers;

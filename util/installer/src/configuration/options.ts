@@ -11,61 +11,122 @@ export enum removalPolicy {
 }
 
 export interface CommonMiscOptions {
-	common_instance_name: string;
+	common: {
+		instance: {
+			name: string;
+		};
+	};
 }
 
 export interface CommonDevelopmentOptions {
-	common_development_enable: boolean;
-	app_removalPolicy?: string;
-	pipeline_removalPolicy?: string;
+	common: {
+		development: {
+			enable: boolean;
+		};
+	};
+	app: {
+		removalPolicy?: string;
+	};
+	pipeline: {
+		removalPolicy?: string;
+	};
 }
 
 export interface PipelineSourceOptions {
-	pipeline_source_repoBranch: string;
-	pipeline_source_repoHookEnable: boolean;
-	pipeline_source_repoName: string;
-	pipeline_source_repoOwner: string;
-	pipeline_source_repoPeriodicChecksEnable: boolean;
-	pipeline_source_repoTokenName: string;
+	pipeline: {
+		source: {
+			repoBranch: string;
+			repoHookEnable: boolean;
+			repoName: string;
+			repoOwner: string;
+			repoPeriodicChecksEnable: boolean;
+			repoTokenName: string;
+		};
+	};
 }
 
 export interface PipelineApprovalOptions {
-	pipeline_approvals_preCdkSynth_email?: string;
-	pipeline_approvals_preCdkSynth_enable: boolean;
+	pipeline: {
+		approvals: {
+			preCdkSynth: {
+				email?: string;
+				enable: boolean;
+			};
+		};
+	};
 }
 
 export interface AppCognitoOptions {
-	app_cognito_localUsers_enable: boolean;
-	app_cognito_saml_enable: boolean;
+	app: {
+		cognito: {
+			localUsers: {
+				enable: boolean;
+			};
+			saml: {
+				enable: boolean;
+				metadataUrl?: string;
+			};
+		};
+	};
 }
 
 export interface AppCognitoLocalOptions {
-	app_cognito_localUsers_mfa_enforcement?: cognitoMfaOption;
-	app_cognito_localUsers_mfa_otp?: boolean;
-	app_cognito_localUsers_mfa_sms?: boolean;
+	app: {
+		cognito: {
+			localUsers: {
+				mfa: {
+					enforcement?: cognitoMfaOption;
+					otp?: boolean;
+					sms?: boolean;
+				};
+			};
+		};
+	};
 }
 
 export interface AppCognitoSamlOptions {
-	app_cognito_saml_metadataUrl?: string;
+	app: {
+		cognito: {
+			saml: {
+				metadataUrl?: string;
+			};
+		};
+	};
 }
 
 export interface AppWebOptions {
-	app_webUi_enable: boolean;
-	app_webUi_customDomain_enable?: boolean;
-	app_webUi_customDomain_name?: string;
-	app_webUi_customDomain_certificateArn?: string;
+	app: {
+		webUi: {
+			enable: boolean;
+			customDomain: {
+				enable?: boolean;
+				domain?: string;
+				certificateArn?: string;
+			};
+		};
+	};
 }
 
 export interface AppTranslationOptions {
-	app_translation_enable: boolean;
-	app_translation_lifecycle?: number;
-	app_translation_pii_enable?: boolean;
-	app_translation_pii_lifecycle?: number;
+	app: {
+		translation: {
+			enable: boolean;
+			lifecycle?: number;
+			pii: {
+				enable?: boolean;
+				lifecycle?: number;
+			};
+		};
+	};
 }
 
 export interface AppReadableOptions {
-	app_readable_enable: boolean;
-	app_readable_bedrockRegion?: string;
+	app: {
+		readable: {
+			enable: boolean;
+			bedrockRegion?: string;
+		};
+	};
 }
 
 export interface ConfigurationOptions {

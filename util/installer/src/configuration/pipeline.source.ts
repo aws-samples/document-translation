@@ -224,44 +224,48 @@ export const getPipelineSourceOptions = async (
 	showInstruction();
 
 	let answers: PipelineSourceOptions = {
-		pipeline_source_repoOwner: await input({
-			message: "Repo Owner (github.com/<OWNER>/<NAME>)",
-			required: true,
-			default: "aws-samples",
-			theme,
-		}),
-		pipeline_source_repoName: await input({
-			message: "Repo Name (github.com/<OWNER>/<NAME>)",
-			required: true,
-			default: "document-translation",
-			theme,
-		}),
-		pipeline_source_repoBranch: "",
-		pipeline_source_repoHookEnable: false,
-		pipeline_source_repoPeriodicChecksEnable: true,
-		pipeline_source_repoTokenName: "",
+		pipeline: {
+			source: {
+				repoOwner: await input({
+					message: "Repo Owner (github.com/<OWNER>/<NAME>)",
+					required: true,
+					default: "aws-samples",
+					theme,
+				}),
+				repoName: await input({
+					message: "Repo Name (github.com/<OWNER>/<NAME>)",
+					required: true,
+					default: "document-translation",
+					theme,
+				}),
+				repoBranch: "",
+				repoHookEnable: false,
+				repoPeriodicChecksEnable: true,
+				repoTokenName: "",
+			},
+		},
 	};
 
 	const repoToken = await handleRepoToken(
 		`doctran-${instanceName}-oauth-token`
 	);
 
-	answers.pipeline_source_repoBranch = await select({
+	answers.pipeline.source.repoBranch = await select({
 		message: "Release",
 		choices: await getGitHubReleaseBranches(
-			answers.pipeline_source_repoOwner,
-			answers.pipeline_source_repoName,
+			answers.pipeline.source.repoOwner,
+			answers.pipeline.source.repoName,
 			repoToken
 		),
 		theme,
 	});
 
-	answers.pipeline_source_repoPeriodicChecksEnable =
+	answers.pipeline.source.repoPeriodicChecksEnable =
 		usePeriodicChecksInCodepipeline(
-			answers.pipeline_source_repoOwner,
-			answers.pipeline_source_repoName
+			answers.pipeline.source.repoOwner,
+			answers.pipeline.source.repoName
 		);
-	answers.pipeline_source_repoHookEnable = await canTokenRepoHook(repoToken);
+	answers.pipeline.source.repoHookEnable = await canTokenRepoHook(repoToken);
 
 	return answers;
 };

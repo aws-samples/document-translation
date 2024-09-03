@@ -16,36 +16,44 @@ export const getAppCognitoLocalOptions =
 		};
 
 		const answers: AppCognitoLocalOptions = {
-			app_cognito_localUsers_mfa_enforcement: await select({
-				message: "Multi Factor Authentication",
-				choices: [
-					{
-						value: cognitoMfaOption.OFF,
-						name: "Off",
-						description: "MFA is not enabled",
+			app: {
+				cognito: {
+					localUsers: {
+						mfa: {
+							enforcement: await select({
+								message: "Multi Factor Authentication",
+								choices: [
+									{
+										value: cognitoMfaOption.OFF,
+										name: "Off",
+										description: "MFA is not enabled",
+									},
+									{
+										value: cognitoMfaOption.OPTIONAL,
+										name: "Optional",
+										description: "MFA is optional",
+									},
+									{
+										value: cognitoMfaOption.REQUIRED,
+										name: "Required",
+										description: "MFA is required",
+									},
+								],
+								default: cognitoMfaOption.OFF,
+								loop: false,
+								pageSize: 20,
+								theme,
+							}),
+						},
 					},
-					{
-						value: cognitoMfaOption.OPTIONAL,
-						name: "Optional",
-						description: "MFA is optional",
-					},
-					{
-						value: cognitoMfaOption.REQUIRED,
-						name: "Required",
-						description: "MFA is required",
-					},
-				],
-				default: cognitoMfaOption.OFF,
-				loop: false,
-				pageSize: 20,
-				theme,
-			}),
+				},
+			},
 		};
 
 		let selectedMfaMethods: string[] = [];
 
 		if (
-			answers.app_cognito_localUsers_mfa_enforcement !== cognitoMfaOption.OFF
+			answers.app.cognito.localUsers.mfa.enforcement !== cognitoMfaOption.OFF
 		) {
 			selectedMfaMethods = await checkbox({
 				message: "Select MFA Methods",
@@ -59,8 +67,8 @@ export const getAppCognitoLocalOptions =
 			});
 		}
 
-		answers.app_cognito_localUsers_mfa_otp = selectedMfaMethods.includes("otp");
-		answers.app_cognito_localUsers_mfa_sms = selectedMfaMethods.includes("sms");
+		answers.app.cognito.localUsers.mfa.otp = selectedMfaMethods.includes("otp");
+		answers.app.cognito.localUsers.mfa.sms = selectedMfaMethods.includes("sms");
 
 		return answers;
 	};

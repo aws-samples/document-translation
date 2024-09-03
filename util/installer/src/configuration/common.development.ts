@@ -31,15 +31,25 @@ export const getCommonDevelopmentOptions =
 		];
 
 		const answers: CommonDevelopmentOptions = {
-			common_development_enable: await confirm({
-				message: "Enable (Do not enable for non-development)",
-				default: false,
-				theme,
-			}),
+			common: {
+				development: {
+					enable: await confirm({
+						message: "Enable (Do not enable for non-development)",
+						default: false,
+						theme,
+					}),
+				},
+			},
+			app: {
+				removalPolicy: removalPolicy.RETAIN,
+			},
+			pipeline: {
+				removalPolicy: removalPolicy.RETAIN,
+			},
 		};
 
-		if (answers.common_development_enable) {
-			answers.app_removalPolicy = await select({
+		if (answers.common.development.enable) {
+			answers.app.removalPolicy = await select({
 				message: "App Removal Policy",
 				choices: removalPolicyOptons,
 				loop: false,
@@ -47,7 +57,7 @@ export const getCommonDevelopmentOptions =
 				default: removalPolicy.RETAIN,
 				theme,
 			});
-			answers.pipeline_removalPolicy = await select({
+			answers.pipeline.removalPolicy = await select({
 				message: "Pipeline Removal Policy",
 				choices: removalPolicyOptons,
 				loop: false,

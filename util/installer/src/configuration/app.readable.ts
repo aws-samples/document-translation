@@ -76,15 +76,19 @@ export const getAppReadableOptions = async (): Promise<AppReadableOptions> => {
 	];
 
 	const answers: AppReadableOptions = {
-		app_readable_enable: await confirm({
-			message: "Enable",
-			default: false,
-			theme,
-		}),
+		app: {
+			readable: {
+				enable: await confirm({
+					message: "Enable",
+					default: false,
+					theme,
+				}),
+			},
+		},
 	};
 
-	if (answers.app_readable_enable) {
-		answers.app_readable_bedrockRegion = await select({
+	if (answers.app.readable.enable) {
+		answers.app.readable.bedrockRegion = await select({
 			message: "Bedrock Region",
 			choices: regions,
 			loop: false,
