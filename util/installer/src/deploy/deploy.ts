@@ -102,8 +102,13 @@ export const deploy = async (options: configOptions) => {
 
 	// Boostrap the accunt
 	console.log("Bootstrapping CDK");
-	await cli.bootstrap();
+	// await cli.bootstrap();
 	// Deploy the stack
 	console.log("Deploying the pipeline stack");
-	await cli.deploy();
+	const outputsFilePath = "cloudformation-outputs.json";
+	await cli.deploy({
+		outputsFile: outputsFilePath,
+	});
+
+	return outputsFilePath;
 };

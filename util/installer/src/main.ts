@@ -70,13 +70,17 @@ const main = async () => {
 	prerequisites(configurationOptions);
 
 	// Deploy
-	await deploy({
+	const outputsPath: string = await deploy({
 		configurationOptions,
 		awsConfig,
 	});
 
 	// Monitor codepipeline
-	await monitorCodepipeline();
+	await monitorCodepipeline(
+		configurationOptions.commonMiscOptions.common.instance.name,
+		`../../infrastructure/${outputsPath}`,
+		awsConfig.region
+	);
 };
 
 main();

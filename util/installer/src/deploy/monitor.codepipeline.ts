@@ -1,7 +1,5 @@
 import {
 	CloudFormationClient,
-	ListStacksCommand,
-	ListStackResourcesCommand,
 	DescribeStacksCommand,
 } from "@aws-sdk/client-cloudformation";
 
@@ -10,37 +8,7 @@ import {
 	GetPipelineStateCommand,
 } from "@aws-sdk/client-codepipeline";
 
-const client = new CloudFormationClient();
-const findStack = async (suffix: string) => {
-	const command = new ListStacksCommand({});
-	const response = await client.send(command);
-	const foundStack = response.StackSummaries?.find((stack) => {
-		return (
-			stack.StackName?.startsWith("DocTran") &&
-			stack.StackName?.endsWith(suffix)
-		);
-	});
-	if (!foundStack) {
-		throw new Error("No stack found");
-	}
-	return foundStack.StackName;
-};
-
-const findPipeline = async (stack: string) => {
-	const command = new ListStackResourcesCommand({
-		StackName: stack,
-	});
-	const response = await client.send(command);
-	const foundResource = response.StackResourceSummaries?.find((resource) => {
-		return resource.ResourceType === "AWS::CodePipeline::Pipeline";
-	});
-	if (!foundResource?.PhysicalResourceId) {
-		throw new Error("No pipeline found");
-	}
-	return foundResource.PhysicalResourceId;
-};
-
-const getCodepipelineStatus = async (pipeline: string) => {
+const getCodepipelineStatus = async (pipeline: string, region: string) => {
 	const client = new CodePipelineClient();
 	const command = new GetPipelineStateCommand({ name: pipeline });
 	const response = await client.send(command);
@@ -55,6 +23,17 @@ const getCodepipelineStatus = async (pipeline: string) => {
 	const stagesFailed = checkForStatus("Failed", response);
 
 	if (stagesInProgress.length > 0) {
+		if (stagesInProgress[0].stageName === "ManualApproval_PreSynth") {
+			console.log(`
+A manual approval is awaiting your approval to carry on with the installation pipeline.
+https://${region}.console.aws.amazon.com/codesuite/codepipeline/pipelines/${pipeline}/view?region=${region}
+			`);
+			return {
+				complete: false,
+				message: `Pipeline is in progress: Stage '${stagesInProgress[0].stageName}' is '${stagesInProgress[0].latestExecution?.status}'`,
+			};
+		}
+
 		return {
 			complete: false,
 			message: `Pipeline is in progress: Stage '${stagesInProgress[0].stageName}' is '${stagesInProgress[0].latestExecution?.status}'`,
@@ -89,11 +68,18 @@ const getCfnOutput = async (stack: string) => {
 	console.log(outputs);
 };
 
-export const monitorCodepipeline = async () => {
-	const stackName = await findStack("pipeline");
-	if (!stackName) throw new Error("Stack required");
-	const pipeline = await findPipeline(stackName);
-	if (!pipeline) throw new Error("Pipeline required");
+export const monitorCodepipeline = async (
+	instanceName: string,
+	outputsPath: string,
+	region: string
+) => {
+	// load json file
+	const fs = require("fs");
+	const outputs = JSON.parse(await fs.readFileSync(outputsPath, "utf8"));
+	const pipeline = outputs[`DocTran-${instanceName}-pipeline`].PipelineName;
+
+	if (!pipeline) throw new Error("PipelineName required");
+	console.log("pipeline", pipeline);
 
 	console.log(
 		"\nThe pipeline is now deploying the app. This can take up to 30 minutes. The status will be checked every 1 minute.\n"
@@ -105,14 +91,12 @@ export const monitorCodepipeline = async () => {
 			" - Checking pipeline status...",
 			pipeline
 		);
-		const status = await getCodepipelineStatus(pipeline);
+		const status = await getCodepipelineStatus(pipeline, region);
 		statusComplete = status.complete;
 		console.log(status.message);
 		if (statusComplete) break;
 		await new Promise((resolve) => setTimeout(resolve, 1000 * 60));
 	}
 
-	const appStack = await findStack("app");
-	if (!appStack) throw new Error("Stack required");
-	await getCfnOutput(appStack);
+	await getCfnOutput(`DocTran-${instanceName}-app`);
 };

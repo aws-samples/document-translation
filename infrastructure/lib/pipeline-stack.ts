@@ -520,6 +520,10 @@ export class pipelineStack extends cdk.Stack {
 			true,
 		);
 
+		new cdk.CfnOutput(this, "PipelineName", {
+			value: pipeline.pipelineName,
+		});
+
 		// END
 	}
 }
