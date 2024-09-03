@@ -24,7 +24,9 @@ const isMacieEnabled = async () => {
 		}
 		return false;
 	} catch (err) {
-		console.log(err);
+		// Do nothing
+		// Expected to fail when Macie is not enabled
+		return false;
 	}
 };
 
