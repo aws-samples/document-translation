@@ -205,8 +205,8 @@ export class pipelineStack extends cdk.Stack {
 						// BUILD REACT | FEATURES
 						"cd ${WEBDIR_SRC}",
 						'touch ${FEATURESFILE} && echo "{}" > ${FEATURESFILE}',
-						'jq -r ".translation = "${app_translation_enable}"" ${FEATURESFILE} > ${FEATURESFILE}.tmp && mv ${FEATURESFILE}.tmp ${FEATURESFILE}',
-						'jq -r ".readable    = "${app_readable_enable}""    ${FEATURESFILE} > ${FEATURESFILE}.tmp && mv ${FEATURESFILE}.tmp ${FEATURESFILE}',
+						`jq -r ".translation = ${config.app.translation.enable}" \${FEATURESFILE} > \${FEATURESFILE}.tmp && mv \${FEATURESFILE}.tmp \${FEATURESFILE}`,
+						`jq -r ".readable    = ${config.app.readable.enable}"    \${FEATURESFILE} > \${FEATURESFILE}.tmp && mv \${FEATURESFILE}.tmp \${FEATURESFILE}`,
 						'echo "Features enabled: $(cat ${FEATURESFILE})"',
 						// BUILD REACT | BUILD
 						"cd ${WEBDIR}",
