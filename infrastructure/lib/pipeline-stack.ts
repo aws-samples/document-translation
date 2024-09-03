@@ -292,6 +292,91 @@ export class pipelineStack extends cdk.Stack {
 			});
 		}
 
+		// GetOptions
+		const getEnvironmentOrder = config.pipeline.approvals.preCdkSynth.enable
+			? 1
+			: 0;
+
+		const dirGetOptions = "util/getOptions";
+		const preSynthProject = new codebuild.PipelineProject(
+			this,
+			"preSynthProject",
+			{
+				buildSpec: codebuild.BuildSpec.fromObject({
+					version: "0.2",
+					phases: {
+						install: {
+							commands: [
+								"whoami",
+								"pwd",
+								"ls -lah",
+								"env",
+								`cd ${dirGetOptions}`,
+								"npm ci",
+							],
+						},
+						build: {
+							commands: ["npm run start"],
+						},
+					},
+				}),
+			},
+		);
+
+		const preBuildAction = new codepipeline_actions.CodeBuildAction({
+			actionName: "GetConfig",
+			project: preSynthProject,
+			input: new codepipeline.Artifact(
+				"aws_samples_document_translation_Source", // TODO dynamically get this value
+			),
+			// outputs: [new codepipeline.Artifact("PreBuildOutput")],
+		});
+
+		pipeline.addStage({
+			stageName: "PreSynth",
+			placement: {
+				justAfter: cdkPipeline.pipeline.stages[getEnvironmentOrder],
+			},
+			actions: [preBuildAction],
+		});
+
+		//
+		// TODO TESTING
+		//
+		NagSuppressions.addResourceSuppressions(
+			preSynthProject,
+			[
+				{
+					id: "AwsSolutions-IAM5",
+					reason: "Permissions scoped to dedicated resources",
+					appliesTo: [
+						"Resource::arn:<AWS::Partition>:logs:<AWS::Region>:<AWS::AccountId>:log-group:/aws/codebuild/<preSynthProjectA2B2E575>:*",
+						"Resource::arn:<AWS::Partition>:codebuild:<AWS::Region>:<AWS::AccountId>:report-group/<preSynthProjectA2B2E575>-*",
+					],
+				},
+				{
+					id: "AwsSolutions-IAM5",
+					reason: "Permissions scoped to dedicated resources",
+					appliesTo: [
+						"Action::s3:GetObject*",
+						"Action::s3:GetBucket*",
+						"Action::s3:List*",
+						"Action::s3:DeleteObject*",
+						"Action::s3:Abort*",
+						`Resource::<${cdk.Stack.of(this).getLogicalId(
+							artifactBucket.node.defaultChild as cdk.CfnElement,
+						)}.Arn>/*`,
+					],
+				},
+				{
+					id: "AwsSolutions-CB4",
+					reason:
+						"Encryption is enabled by default by CodeBuild https://docs.aws.amazon.com/cdk/api/v2/docs/aws-cdk-lib.aws_codebuild.PipelineProject.html#encryptionkey",
+				},
+			],
+			true,
+		);
+
 		// CDK NAGS
 		// CDK NAGS | PIPELINE
 		NagSuppressions.addResourceSuppressions(
