@@ -64,52 +64,7 @@ const main = async () => {
 	console.log("AwsConfig:", awsConfig);
 
 	// Get Options
-	// const configurationOptions = await getConfigurationOptions();
-	// console.log("AppConfig:", configurationOptions);
-
-	// TEST
-	const configurationOptions: ConfigurationOptions = {
-		commonMiscOptions: { common_instance_name: "main" },
-		pipelineSourceOptions: {
-			pipeline_source_repoOwner: "aws-samples",
-			pipeline_source_repoName: "document-translation",
-			pipeline_source_repoBranch: "release/test",
-			pipeline_source_repoHookEnable: false,
-			pipeline_source_repoPeriodicChecksEnable: true,
-			pipeline_source_repoTokenName: "doctran-main-oauth-token-1724924907",
-		},
-		pipelineApprovalOptions: { pipeline_approvals_preCdkSynth_enable: false },
-		appCognitoOptions: {
-			app_cognito_localUsers_enable: true,
-			app_cognito_saml_enable: false,
-		},
-		appCognitoLocalOptions: {
-			app_cognito_localUsers_mfa_enforcement: cognitoMfaOption.OFF,
-			app_cognito_localUsers_mfa_otp: false,
-			app_cognito_localUsers_mfa_sms: false,
-		},
-		appCognitoSamlOptions: {},
-		appWebOptions: {
-			app_webUi_enable: true,
-			app_webUi_customDomain_enable: false,
-		},
-		appTranslationOptions: {
-			app_translation_enable: true,
-			app_translation_lifecycle: 7,
-			app_translation_pii_enable: true,
-			app_translation_pii_lifecycle: 7,
-		},
-		appReadableOptions: {
-			app_readable_enable: true,
-			app_readable_bedrockRegion: "eu-west-2",
-		},
-		commonDevelopmentOptions: {
-			common_development_enable: true,
-			app_removalPolicy: "DELETE",
-			pipeline_removalPolicy: "DELETE",
-		},
-	};
-	// TEST
+	const configurationOptions = await getConfigurationOptions();
 
 	// Prerequisites
 	prerequisites(configurationOptions);
