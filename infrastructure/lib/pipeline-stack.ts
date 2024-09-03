@@ -123,14 +123,6 @@ export class pipelineStack extends cdk.Stack {
 				],
 			}),
 			codeBuildDefaults: {
-				buildEnvironment: {
-					environmentVariables: {
-						INSTANCE_NAME: {
-							type: codebuild.BuildEnvironmentVariableType.PARAMETER_STORE,
-							value: config.common.instance.name,
-						},
-					},
-				},
 				rolePolicy: [
 					new iam.PolicyStatement({
 						effect: iam.Effect.ALLOW,
@@ -333,6 +325,17 @@ export class pipelineStack extends cdk.Stack {
 			"preSynthProject",
 			{
 				role: preSynthProjectRole,
+				environment: {
+					buildImage: codebuild.LinuxBuildImage.STANDARD_7_0,
+					environmentVariables: {
+						// This stage builds the config file from parameter store.
+						// The INSTANCE_NAME variable is required to pull the correct parameter scope.
+						INSTANCE_NAME: {
+							type: codebuild.BuildEnvironmentVariableType.PLAINTEXT,
+							value: config.common.instance.name,
+						},
+					},
+				},
 				buildSpec: codebuild.BuildSpec.fromObject({
 					version: "0.2",
 					phases: {
