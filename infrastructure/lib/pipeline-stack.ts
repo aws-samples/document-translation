@@ -250,7 +250,7 @@ export class pipelineStack extends cdk.Stack {
 			);
 			new sns.Subscription(this, "pipelineApprovalPreCdkSynthSubscription", {
 				topic: pipelineApprovalPreCdkSynthTopic,
-				endpoint: config.pipeline.approvals.preCdkSynth.email,
+				endpoint: config.pipeline.approvals.preCdkSynth.email!,
 				protocol: sns.SubscriptionProtocol.EMAIL,
 			});
 			const pipelineApprovalPreCdkSynthRole = new iam.Role(

@@ -171,7 +171,7 @@ export class DocTranStack extends cdk.Stack {
 				api: base_api.api,
 				apiSchema: base_api.apiSchema,
 				removalPolicy: removalPolicy, // ASM-CFN1
-				translationPii: config.app.translation.pii.enable,
+				translationPii: config.app.translation.pii.enable!,
 			});
 			// OUTPUTS
 			this.awsUserFilesS3Bucket = new cdk.CfnOutput(
@@ -188,7 +188,7 @@ export class DocTranStack extends cdk.Stack {
 			const base_readable = new dt_readable(this, "base_readable", {
 				api: base_api.api,
 				apiSchema: base_api.apiSchema,
-				bedrockRegion: config.app.readable.bedrockRegion,
+				bedrockRegion: config.app.readable.bedrockRegion!,
 				identityPool: base_api.identityPool,
 				removalPolicy: removalPolicy, // ASM-CFN1
 				serverAccessLoggingBucket,
@@ -210,9 +210,9 @@ export class DocTranStack extends cdk.Stack {
 				serverAccessLoggingBucket,
 				userPoolClient: base_api.userPoolClient,
 				removalPolicy: removalPolicy, // ASM-CFN1
-				webUiCustomDomain: config.app.webUi.customDomain.domain,
+				webUiCustomDomain: config.app.webUi.customDomain.domain!,
 				webUiCustomDomainCertificate:
-					config.app.webUi.customDomain.certificateArn,
+					config.app.webUi.customDomain.certificateArn!,
 				signOutSuffix: signOutSuffix,
 				development: config.common.development.enable,
 			});
