@@ -1,7 +1,6 @@
 // Copyright Amazon.com, Inc. or its affiliates. All Rights Reserved.
 // SPDX-License-Identifier: MIT-0
 
-import * as fs from "fs";
 import * as cdk from "aws-cdk-lib";
 import { Construct } from "constructs";
 import { NagSuppressions } from "cdk-nag";
@@ -14,7 +13,8 @@ import { dt_web } from "./features/web";
 import { dt_sharedPreferences } from "./features/preferences";
 import { dt_translate } from "./features/translation/translation";
 import { dt_readable } from "./features/readable/readable";
-import { Config, defaultConfig } from "./types";
+import { Config } from "./types";
+import { loadConfig } from "../util/loadConfig";
 
 // STATIC VARS
 const s3PrefixPrivate = "private";
@@ -49,10 +49,7 @@ export class DocTranStack extends cdk.Stack {
 	constructor(scope: Construct, id: string, props?: cdk.StackProps) {
 		super(scope, id, props);
 
-		const config: Config = {
-			...defaultConfig,
-			...JSON.parse(fs.readFileSync("./config.json", "utf-8")),
-		};
+		const config: Config = loadConfig();
 
 		let removalPolicy: cdk.RemovalPolicy;
 		switch (config.app.removalPolicy) {

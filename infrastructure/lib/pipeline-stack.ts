@@ -1,7 +1,6 @@
 // Copyright Amazon.com, Inc. or its affiliates. All Rights Reserved.
 // SPDX-License-Identifier: MIT-0
 
-import * as fs from "fs";
 import * as cdk from "aws-cdk-lib";
 import { Construct } from "constructs";
 import { NagSuppressions } from "cdk-nag";
@@ -17,16 +16,14 @@ import {
 } from "aws-cdk-lib";
 import { DocTranAppStage } from "./pipeline-app-stage";
 import { GitHubTrigger } from "aws-cdk-lib/aws-codepipeline-actions";
-import { Config, defaultConfig } from "./types";
+import { Config } from "./types";
+import { loadConfig } from "../util/loadConfig";
 
 export class pipelineStack extends cdk.Stack {
 	constructor(scope: Construct, id: string, props?: cdk.StackProps) {
 		super(scope, id, props);
 
-		const config: Config = {
-			...defaultConfig,
-			...JSON.parse(fs.readFileSync("./config.json", "utf-8")),
-		};
+		const config: Config = loadConfig();
 
 		const sourceRepo = `${config.pipeline.source.repoOwner}/${config.pipeline.source.repoName}`;
 
