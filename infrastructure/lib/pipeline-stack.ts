@@ -97,7 +97,7 @@ export class pipelineStack extends cdk.Stack {
 			},
 		);
 		const sourceOutput = new codepipeline.Artifact(
-			"aws_samples_document_translation_Source", // TODO dynamically get this value
+			"aws_samples_document_translation_Source", // TODO dynamically get this value ? cdkpipelines.ArtifactMap
 		);
 
 		// PIPELINE
@@ -110,21 +110,28 @@ export class pipelineStack extends cdk.Stack {
 			pipelineType: codepipeline.PipelineType.V2,
 		});
 
-		// PIPELINE | CDKPIPELINE
+		const getConfigOutput = new codepipeline.Artifact("GetConfigOutput");
+
 		const dirPipeline = "infrastructure";
+
+		const synth = new cdkpipelines.ShellStep("Synth", {
+			input: pipelineSource,
+			additionalInputs: {
+				"./config":
+					cdkpipelines.CodePipelineFileSet.fromArtifact(getConfigOutput),
+			},
+			primaryOutputDirectory: `${dirPipeline}/cdk.out`,
+			commands: [
+				`cp ./config/util/getOptions/config.json ./${dirPipeline}/ && cat ./${dirPipeline}/config.json`,
+				`cd ./${dirPipeline}/`,
+				"npm ci",
+				"cdk synth",
+			],
+		});
+		// PIPELINE | CDKPIPELINE
 		const cdkPipeline = new cdkpipelines.CodePipeline(this, "cdkPipeline", {
 			codePipeline: pipeline,
-			synth: new cdkpipelines.ShellStep("Synth", {
-				input: pipelineSource,
-				primaryOutputDirectory: `${dirPipeline}/cdk.out`,
-				commands: [
-					"env",
-					"npm install -g aws-cdk@^2.89.0",
-					`cd ${dirPipeline}`,
-					"npm ci",
-					"cdk synth",
-				],
-			}),
+			synth: synth,
 			codeBuildDefaults: {
 				rolePolicy: [
 					new iam.PolicyStatement({
@@ -339,10 +346,13 @@ export class pipelineStack extends cdk.Stack {
 							commands: ["npm run start"],
 						},
 					},
+					artifacts: {
+						files: [`./${dirGetOptions}/config.json`],
+					},
 				}),
 			},
 		);
-		const getConfigOutput = new codepipeline.Artifact("GetConfigOutput");
+
 		const preBuildAction = new codepipeline_actions.CodeBuildAction({
 			actionName: "GetConfig",
 			project: preSynthProject,
@@ -376,6 +386,8 @@ export class pipelineStack extends cdk.Stack {
 						"Action::s3:GetObject*",
 						"Action::s3:GetBucket*",
 						"Action::s3:List*",
+						"Action::s3:DeleteObject*",
+						"Action::s3:Abort*",
 						`Resource::<${cdk.Stack.of(this).getLogicalId(
 							artifactBucket.node.defaultChild as cdk.CfnElement,
 						)}.Arn>/*`,
