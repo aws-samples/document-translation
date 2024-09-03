@@ -54,3 +54,4 @@ coverage/
 # Config
 util/**/config.json
 infrastructure/**/config.json
+infrastructure/**/cloudformation-outputs.json
