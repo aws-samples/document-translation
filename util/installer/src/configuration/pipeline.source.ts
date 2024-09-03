@@ -1,8 +1,10 @@
-import { input, select } from "@inquirer/prompts";
+import { confirm, input, select } from "@inquirer/prompts";
 import { PipelineSourceOptions } from "./options";
 import {
 	SecretsManagerClient,
 	CreateSecretCommand,
+	GetSecretValueCommand,
+	PutSecretValueCommand,
 } from "@aws-sdk/client-secrets-manager";
 
 type secretsManagerError = {
@@ -16,6 +18,47 @@ type secretsManagerError = {
 		totalRetryDelay: number;
 	};
 	__type: string;
+};
+
+const getAwsSecretValue = async (name: string) => {
+	const client = new SecretsManagerClient();
+	try {
+		const data = await client.send(
+			new GetSecretValueCommand({ SecretId: name })
+		);
+		return data.SecretString;
+	} catch (err) {
+		const error: secretsManagerError = err as secretsManagerError;
+		if (error.__type === "ResourceNotFoundException") {
+			console.log(`Secret not found in AWS SecretsManager: ${name}. `);
+		} else {
+			throw new Error(
+				`Error getting secret in AWS SecretsManager: ${name}: ${err}`
+			);
+		}
+	}
+};
+
+const updateAwsSecret = async (name: string, secret: string) => {
+	const client = new SecretsManagerClient();
+	try {
+		const data = await client.send(
+			new PutSecretValueCommand({
+				SecretId: name,
+				SecretString: secret,
+			})
+		);
+		return data;
+	} catch (err) {
+		const error: secretsManagerError = err as secretsManagerError;
+		if (error.__type === "ResourceNotFoundException") {
+			throw new Error(`Secret not found in AWS SecretsManager: ${name}. `);
+		} else {
+			throw new Error(
+				`Error updating secret in AWS SecretsManager: ${name}: ${err}`
+			);
+		}
+	}
 };
 
 const createAwsSecret = async (name: string, secret: string) => {
@@ -32,16 +75,42 @@ const createAwsSecret = async (name: string, secret: string) => {
 	} catch (err) {
 		const error: secretsManagerError = err as secretsManagerError;
 		if (error.__type === "ResourceExistsException") {
-			throw new Error(
-				// `Secret already exists in AWS SecretsManager: ${name}.\nIf this token is old and no longer required it can be deleted (this is irreversable).\nDelete command: 'aws secretsmanager delete-secret --secret-id ${name}'.\nYou can view the contents of the secret to check its value.\nReveal command: 'aws secretsmanager get-secret-value --secret-id ${name}'. `
-				`Secret already exists in AWS SecretsManager: ${name}. `
-			);
+			throw new Error(`Secret already exists in AWS SecretsManager: ${name}. `);
 		} else {
 			throw new Error(
 				`Error creating secret in AWS SecretsManager: ${name}: ${err}`
 			);
 		}
 	}
+};
+
+const handleRepoToken = async (name: string) => {
+	const secretValue = await getAwsSecretValue(name);
+
+	if (secretValue) {
+		const useExistingSecret = await confirm({
+			message: `Secret ${name} already exists. Do you want to use it?`,
+			default: true,
+			theme,
+		});
+
+		if (useExistingSecret) {
+			return secretValue;
+		} else {
+			const repoToken = await input({
+				message: "Enter the repository token:",
+				theme,
+			});
+			await updateAwsSecret(name, repoToken);
+			return repoToken;
+		}
+	}
+	const repoToken = await input({
+		message: "Enter the repository token:",
+		theme,
+	});
+	await createAwsSecret(name, repoToken);
+	return repoToken;
 };
 
 type githubBranchInfo = {
@@ -173,15 +242,9 @@ export const getPipelineSourceOptions = async (
 		pipeline_source_repoTokenName: "",
 	};
 
-	const repoToken: string = await input({
-		message: "Token",
-		required: true,
-		theme,
-	});
-
-	const timestamp = Math.floor(Date.now() / 1000);
-	answers.pipeline_source_repoTokenName = `doctran-${instanceName}-oauth-token-${timestamp}`;
-	createAwsSecret(answers.pipeline_source_repoTokenName, repoToken);
+	const repoToken = await handleRepoToken(
+		`doctran-${instanceName}-oauth-token`
+	);
 
 	answers.pipeline_source_repoBranch = await select({
 		message: "Release",
