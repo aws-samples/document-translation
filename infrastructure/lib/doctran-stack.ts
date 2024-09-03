@@ -14,7 +14,7 @@ import { dt_web } from "./features/web";
 import { dt_sharedPreferences } from "./features/preferences";
 import { dt_translate } from "./features/translation/translation";
 import { dt_readable } from "./features/readable/readable";
-import { Config } from "./types";
+import { Config, defaultConfig } from "./types";
 
 // STATIC VARS
 const s3PrefixPrivate = "private";
@@ -49,9 +49,10 @@ export class DocTranStack extends cdk.Stack {
 	constructor(scope: Construct, id: string, props?: cdk.StackProps) {
 		super(scope, id, props);
 
-		const config: Config = JSON.parse(
-			fs.readFileSync("./config.json", "utf-8"),
-		);
+		const config: Config = {
+			...defaultConfig,
+			...JSON.parse(fs.readFileSync("./config.json", "utf-8")),
+		};
 
 		let removalPolicy: cdk.RemovalPolicy;
 		switch (config.app.removalPolicy) {

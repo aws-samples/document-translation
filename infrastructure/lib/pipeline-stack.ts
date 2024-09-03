@@ -17,15 +17,16 @@ import {
 } from "aws-cdk-lib";
 import { DocTranAppStage } from "./pipeline-app-stage";
 import { GitHubTrigger } from "aws-cdk-lib/aws-codepipeline-actions";
-import { Config } from "./types";
+import { Config, defaultConfig } from "./types";
 
 export class pipelineStack extends cdk.Stack {
 	constructor(scope: Construct, id: string, props?: cdk.StackProps) {
 		super(scope, id, props);
 
-		const config: Config = JSON.parse(
-			fs.readFileSync("./config.json", "utf-8"),
-		);
+		const config: Config = {
+			...defaultConfig,
+			...JSON.parse(fs.readFileSync("./config.json", "utf-8")),
+		};
 
 		const sourceRepo = `${config.pipeline.source.repoOwner}/${config.pipeline.source.repoName}`;
 
