@@ -84,6 +84,10 @@ export const monitorCodepipeline = async (
 	console.log(
 		"\nThe pipeline is now deploying the app. This can take up to 30 minutes. The status will be checked every 1 minute.\n"
 	);
+
+	// Give the pipeline 2 minutes to get started
+	await new Promise((resolve) => setTimeout(resolve, 1000 * 60 * 2));
+
 	let statusComplete = false;
 	while (!statusComplete) {
 		console.log(
