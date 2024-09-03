@@ -96,6 +96,9 @@ export class pipelineStack extends cdk.Stack {
 				authentication: oauthToken,
 			},
 		);
+		const sourceOutput = new codepipeline.Artifact(
+			"aws_samples_document_translation_Source", // TODO dynamically get this value
+		);
 
 		// PIPELINE
 		// PIPELINE | CODEPIPELINE
@@ -173,28 +176,20 @@ export class pipelineStack extends cdk.Stack {
 					installCommands: ["npm install -u @aws-amplify/cli@~12.0"],
 					commands: [
 						// ENVs
-						'echo "appStackId: ${appStackId}"',
-						'echo "appStackName: ${appStackName}"',
-						'echo "appWebsiteS3Bucket: ${appWebsiteS3Bucket}"',
-						"export WEBDIR=${CODEBUILD_SRC_DIR}/website",
-						"export WEBDIR_SRC=${WEBDIR}/src",
-						"export WEBDIR_BUILD=${WEBDIR}/build",
-						"export WEBDIR_GRAPHQL=${WEBDIR_SRC}/graphql",
-						'echo "WEBDIR: ${WEBDIR}"',
-						'echo "WEBDIR_SRC: ${WEBDIR_SRC}"',
-						'echo "WEBDIR_BUILD: ${WEBDIR_BUILD}"',
-						'echo "WEBDIR_GRAPHQL: ${WEBDIR_GRAPHQL}"',
-						"export CFNOUTPUTSFILE=${WEBDIR_SRC}/cfnOutputs.json",
-						"export GRAPHQLSCHEMAFILE=${WEBDIR_GRAPHQL}/schema.graphql",
-						"export FEATURESFILE=${WEBDIR_SRC}/features.json",
-						'echo "CFNOUTPUTSFILE: ${CFNOUTPUTSFILE}"',
-						'echo "GRAPHQLSCHEMAFILE: ${GRAPHQLSCHEMAFILE}"',
-						'echo "FEATURESFILE: ${FEATURESFILE}"',
+						'echo "${appStackId}"',
+						'echo "${appStackName}"',
+						'echo "${appWebsiteS3Bucket}"',
+						'export WEBDIR=${CODEBUILD_SRC_DIR}/website && echo "${WEBDIR}"',
+						'export WEBDIR_SRC=${WEBDIR}/src && echo "${WEBDIR_SRC}"',
+						'export WEBDIR_BUILD=${WEBDIR}/build && echo "${WEBDIR_BUILD}"',
+						'export WEBDIR_GRAPHQL=${WEBDIR_SRC}/graphql && echo "${WEBDIR_GRAPHQL}"',
+						'export CFNOUTPUTSFILE=${WEBDIR_SRC}/cfnOutputs.json && echo "${CFNOUTPUTSFILE}"',
+						'export GRAPHQLSCHEMAFILE=${WEBDIR_GRAPHQL}/schema.graphql && echo "${GRAPHQLSCHEMAFILE}"',
+						'export FEATURESFILE=${WEBDIR_SRC}/features.json && echo "${FEATURESFILE}"',
 						// Get Cloudformation Outputs
 						"aws cloudformation describe-stacks --stack-name ${appStackName} --query 'Stacks[0].Outputs' | jq .[] | jq -n 'reduce inputs as $i (null; . + ($i|{ (.OutputKey) : (.OutputValue) }))' > ${CFNOUTPUTSFILE}",
 						// Get AppSync Schema
-						"export awsAppsyncId=$(jq -r .awsAppsyncId ${CFNOUTPUTSFILE})",
-						'echo "awsAppsyncId: ${awsAppsyncId}"',
+						'export awsAppsyncId=$(jq -r .awsAppsyncId ${CFNOUTPUTSFILE}) && echo "${awsAppsyncId}"',
 						"mkdir -p ${WEBDIR_GRAPHQL}",
 						"aws appsync get-introspection-schema --api-id=${awsAppsyncId} --format SDL ${GRAPHQLSCHEMAFILE}",
 						"cd ${WEBDIR_GRAPHQL}",
@@ -202,8 +197,7 @@ export class pipelineStack extends cdk.Stack {
 						// BUILD REACT
 						// BUILD REACT | FEATURES
 						"cd ${WEBDIR_SRC}",
-						"touch ${FEATURESFILE}",
-						'echo "{}" > ${FEATURESFILE}',
+						'touch ${FEATURESFILE} && echo "{}" > ${FEATURESFILE}',
 						'jq -r ".translation = "${app_translation_enable}"" ${FEATURESFILE} > ${FEATURESFILE}.tmp && mv ${FEATURESFILE}.tmp ${FEATURESFILE}',
 						'jq -r ".readable    = "${app_readable_enable}""    ${FEATURESFILE} > ${FEATURESFILE}.tmp && mv ${FEATURESFILE}.tmp ${FEATURESFILE}',
 						'echo "Features enabled: $(cat ${FEATURESFILE})"',
@@ -303,11 +297,6 @@ export class pipelineStack extends cdk.Stack {
 			inlinePolicies: {
 				ssmPolicy: new iam.PolicyDocument({
 					statements: [
-						// new iam.PolicyStatement({
-						// 	effect: iam.Effect.ALLOW,
-						// 	actions: ["codebuild:StartBuild"],
-						// 	resources: [preSynthProject.projectArn],
-						// }),
 						new iam.PolicyStatement({
 							effect: iam.Effect.ALLOW,
 							actions: ["ssm:GetParametersByPath"],
@@ -353,13 +342,12 @@ export class pipelineStack extends cdk.Stack {
 				}),
 			},
 		);
+		const getConfigOutput = new codepipeline.Artifact("GetConfigOutput");
 		const preBuildAction = new codepipeline_actions.CodeBuildAction({
 			actionName: "GetConfig",
 			project: preSynthProject,
-			input: new codepipeline.Artifact(
-				"aws_samples_document_translation_Source", // TODO dynamically get this value
-			),
-			// outputs: [new codepipeline.Artifact("PreBuildOutput")],
+			input: sourceOutput,
+			outputs: [getConfigOutput],
 		});
 
 		pipeline.addStage({
