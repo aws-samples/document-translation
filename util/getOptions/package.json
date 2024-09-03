@@ -1,0 +1,15 @@
+{
+	"name": "getoptions",
+	"main": "./src/index.ts",
+	"dependencies": {
+		"@aws-sdk/client-ssm": "^3.637.0",
+		"fs": "^0.0.1-security",
+		"ts-node": "^10.9.2"
+	},
+	"devDependencies": {
+		"@types/node": "^22.5.2"
+	},
+	"scripts": {
+		"start": "ts-node ./src/index.ts"
+	}
+}

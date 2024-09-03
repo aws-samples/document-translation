@@ -50,3 +50,7 @@ coverage/
 # DOCS
 # DOCS | HUGO
 .hugo_build.lock
+
+# Config
+util/**/config.json
+infrastructure/**/config.json
