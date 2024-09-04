@@ -85,21 +85,20 @@ export const monitorCodepipeline = async (
 		"\nThe pipeline is now deploying the app. This can take up to 30 minutes. The status will be checked every 1 minute.\n"
 	);
 
-	// Give the pipeline 2 minutes to get started
-	await new Promise((resolve) => setTimeout(resolve, 1000 * 60 * 2));
-
-	let statusComplete = false;
-	while (!statusComplete) {
+	let statusCompleteCount = 0;
+	while (statusCompleteCount < 2) {
+		await new Promise((resolve) => setTimeout(resolve, 1000 * 60));
 		console.log(
 			new Date(Date.now()).toLocaleString(),
 			" - Checking pipeline status...",
 			pipeline
 		);
 		const status = await getCodepipelineStatus(pipeline, region);
-		statusComplete = status.complete;
-		console.log(status.message);
-		if (statusComplete) break;
-		await new Promise((resolve) => setTimeout(resolve, 1000 * 60));
+		if (status.complete) {
+			console.log(status.message);
+			++statusCompleteCount;
+			break;
+		}
 	}
 
 	await getCfnOutput(`DocTran-${instanceName}-app`);
