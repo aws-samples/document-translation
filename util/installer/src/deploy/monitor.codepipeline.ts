@@ -94,8 +94,8 @@ export const monitorCodepipeline = async (
 			pipeline
 		);
 		const status = await getCodepipelineStatus(pipeline, region);
+		console.log(status.message);
 		if (status.complete) {
-			console.log(status.message);
 			++statusCompleteCount;
 			break;
 		}
