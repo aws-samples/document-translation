@@ -3,6 +3,9 @@ import {
 	DescribeStacksCommand,
 } from "@aws-sdk/client-cloudformation";
 
+import { getAwsConfig, AwsConfig } from "../awsconfig";
+import fs from "fs/promises";
+
 import {
 	CodePipelineClient,
 	GetPipelineStateCommand,
@@ -103,3 +106,15 @@ export const monitorCodepipeline = async (
 
 	await getCfnOutput(`DocTran-${instanceName}-app`);
 };
+
+const main = async () => {
+	const awsConfig: AwsConfig = await getAwsConfig();
+	const config = JSON.parse(await fs.readFile("config.json", "utf8"));
+	await monitorCodepipeline(
+		config.common.instance.name,
+		`../../infrastructure/cloudformation-outputs.json`,
+		awsConfig.region
+	);
+	console.log("Completed");
+};
+if (require.main === module) main();

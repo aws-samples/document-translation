@@ -14,6 +14,13 @@
 		"ts-node": "^10.9.2"
 	},
 	"scripts": {
-		"wizard": "ts-node ./src/main.ts"
+		"wizard": "ts-node ./src/main.ts",
+		"awsconfig": "ts-node src/awsconfig.ts",
+		"options": "ts-node src/options.ts",
+		"prereq": "ts-node src/prerequisites.ts",
+		"parameters": "ts-node src/parameters.ts",
+		"parameters_deploy": "ts-node src/parameters.ts && ts-node src/deploy/deploy.ts",
+		"deploy": "ts-node src/deploy/deploy.ts",
+		"monitor": "ts-node src/deploy/monitor.codepipeline.ts"
 	}
 }

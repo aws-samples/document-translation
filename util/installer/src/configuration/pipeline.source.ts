@@ -148,9 +148,9 @@ const getGithubBranches = async (
 	if (Array.isArray(jsonData)) {
 		const data: githubBranchInfo[] = jsonData;
 		return data.map((branch: any) => branch.name);
-	} else {
-		throw new Error("Unexpected response format");
 	}
+	console.log(jsonData);
+	throw new Error("Unexpected response format");
 };
 
 type branchChoices = {

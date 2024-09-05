@@ -30,7 +30,7 @@ export const putParameter = async (
 	try {
 		const response: PutParameterCommandOutput = await client.send(command);
 		console.log(
-			`Saving parameter '${name}' returned: '${response.$metadata.httpStatusCode}'`
+			`Saving '${name}' = '${value}' returned: '${response.$metadata.httpStatusCode}'`
 		);
 	} catch (error) {
 		console.log(error);
