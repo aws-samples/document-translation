@@ -19,12 +19,12 @@ export class DocTranAppStage extends cdk.Stage {
 
 		// ENVIRONMENT VARIABLES
 		// ENVIRONMENT VARIABLES | GITHUB REPO
-		const sourceGitBranch: string =
-			process.env.sourceGitBranch !== undefined
-				? process.env.sourceGitBranch
+		const instanceName: string =
+			process.env.instanceName !== undefined
+				? process.env.instanceName
 				: "main";
 
-		const stackName = `DocTran-${sourceGitBranch}-app`;
+		const stackName = `DocTran-${instanceName}-app`;
 		const docTranStackInstance = new DocTranStack(this, `${stackName}`, {
 			stackName: `${stackName}`,
 			description: `(uksb-1tthgi813) (tag:app)`,

@@ -37,9 +37,9 @@ export class dt_api extends Construct {
 
 		// ENVIRONMENT VARIABLES
 		// ENVIRONMENT VARIABLES | GITHUB REPO
-		const sourceGitBranch: string =
-			process.env.sourceGitBranch !== undefined
-				? process.env.sourceGitBranch
+		const instanceName: string =
+			process.env.instanceName !== undefined
+				? process.env.instanceName
 				: "main";
 
 		// COGNITO
@@ -144,7 +144,7 @@ export class dt_api extends Construct {
 			cognitoDomain: {
 				domainPrefix: `document-translation-auth-${
 					cdk.Stack.of(this).account
-				}-${sourceGitBranch}`,
+				}-${instanceName}`,
 			},
 		});
 

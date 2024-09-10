@@ -8,16 +8,17 @@ Copyright Amazon.com, Inc. or its affiliates. All Rights Reserved.
 SPDX-License-Identifier: MIT-0
 -->
 
-## Enable Simply Readable
+{{< callout type="info" >}}
+Configuration values are stored in AWS Parameter Store. The installer script automatically creates these based on your selections.
+{{< /callout >}}
 
-```sh
-export readable="true"
-export readableBedrockRegion="<your-chosen-region-code>" # E.g. "eu-central-1" for Franfurt
-```
+## All Readable Options
 
-## All Options
+Parameter values are prefix scoped to specific deployments with `/doctran/<instanceName>/`.
+<br/>E.g. `/doctran/main/readable/enable` = "true"
 
-| Option                        | Example value   | Default | Required?                    | Description                                  |
-| ----------------------------- | --------------- | ------- | ---------------------------- | -------------------------------------------- |
-| `readable`                    | `true`, `false` | `false` | Not required                 | Enable simply readable                       |
-| `readableBedrockRegion`       | `eu-central-1`  | None    | Required if readable is true | Specify the region to use for Amazon Bedrock |
+| Option Parameter Suffix  | Example value   | Default | Required?               | Description                                  |
+| ------------------------ | --------------- | ------- | ----------------------- | -------------------------------------------- |
+| **Readable**             |                 |         |                         |                                              |
+| `readable/enable`        | `true`, `false` | `false` | No                      | Enable simply readable features              |
+| `readable/bedrockRegion` | `eu-central-1`  | NA      | **If** readable enabled | Specify the region to use for Amazon Bedrock |

@@ -1,0 +1,26 @@
+{
+	"name": "installer",
+	"main": "./src/main.ts",
+	"dependencies": {
+		"@aws-cdk/cli-lib-alpha": "^2.152.0-alpha.0",
+		"@aws-sdk/client-cloudformation": "^3.631.0",
+		"@aws-sdk/client-cloudwatch-logs": "^3.631.0",
+		"@aws-sdk/client-codepipeline": "^3.631.0",
+		"@aws-sdk/client-macie2": "^3.631.0",
+		"@aws-sdk/client-secrets-manager": "^3.631.0",
+		"@aws-sdk/client-ssm": "^3.637.0",
+		"commander": "^12.1.0",
+		"inquirer": "^10.1.8",
+		"ts-node": "^10.9.2"
+	},
+	"scripts": {
+		"wizard": "ts-node ./src/main.ts",
+		"awsconfig": "ts-node src/awsconfig.ts",
+		"options": "ts-node src/options.ts",
+		"prereq": "ts-node src/prerequisites.ts",
+		"parameters": "ts-node src/parameters.ts",
+		"parameters_deploy": "ts-node src/parameters.ts && ts-node src/deploy/deploy.ts",
+		"deploy": "ts-node src/deploy/deploy.ts",
+		"monitor": "ts-node src/deploy/monitor.codepipeline.ts"
+	}
+}

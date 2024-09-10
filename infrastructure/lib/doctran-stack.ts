@@ -13,7 +13,8 @@ import { dt_web } from "./features/web";
 import { dt_sharedPreferences } from "./features/preferences";
 import { dt_translate } from "./features/translation/translation";
 import { dt_readable } from "./features/readable/readable";
-import { getSharedConfiguration } from "./shared";
+import { Config } from "./types";
+import { loadConfig } from "../util/loadConfig";
 
 // STATIC VARS
 const s3PrefixPrivate = "private";
@@ -48,26 +49,10 @@ export class DocTranStack extends cdk.Stack {
 	constructor(scope: Construct, id: string, props?: cdk.StackProps) {
 		super(scope, id, props);
 
-		const {
-			development,
-			cognitoLocalUsers,
-			cognitoLocalUsersMfa,
-			cognitoLocalUsersMfaOtp,
-			cognitoLocalUsersMfaSms,
-			cognitoSamlUsers,
-			cognitoSamlMetadataUrl,
-			translation,
-			translationPii,
-			readable,
-			readableBedrockRegion,
-			webUi,
-			webUiCustomDomain,
-			webUiCustomDomainCertificate,
-			appRemovalPolicy,
-		} = getSharedConfiguration();
+		const config: Config = loadConfig();
 
 		let removalPolicy: cdk.RemovalPolicy;
-		switch (appRemovalPolicy) {
+		switch (config.app.removalPolicy) {
 			case "destroy":
 				removalPolicy = cdk.RemovalPolicy.DESTROY;
 				break;
@@ -107,12 +92,12 @@ export class DocTranStack extends cdk.Stack {
 		// API (Required feature)
 		//
 		const base_api = new dt_api(this, "base_api", {
-			cognitoLocalUsers,
-			cognitoLocalUsersMfa,
-			cognitoLocalUsersMfaOtp,
-			cognitoLocalUsersMfaSms,
-			cognitoSamlUsers,
-			cognitoSamlMetadataUrl,
+			cognitoLocalUsers: config.app.cognito.localUsers.enable,
+			cognitoLocalUsersMfa: config.app.cognito.localUsers.mfa.enforcement,
+			cognitoLocalUsersMfaOtp: config.app.cognito.localUsers.mfa.otp,
+			cognitoLocalUsersMfaSms: config.app.cognito.localUsers.mfa.sms,
+			cognitoSamlUsers: config.app.cognito.saml.enable,
+			cognitoSamlMetadataUrl: config.app.cognito.saml.metadataUrl,
 			removalPolicy: removalPolicy, // ASM-CFN1
 		});
 
@@ -161,7 +146,7 @@ export class DocTranStack extends cdk.Stack {
 		//
 		// TRANSLATE (Optional feature)
 		//
-		if (translation) {
+		if (config.app.translation.enable) {
 			const translationLifecycleDefault: number =
 				process.env.translationLifecycleDefault &&
 				parseInt(process.env.translationLifecycleDefault) >= 1 &&
@@ -184,7 +169,7 @@ export class DocTranStack extends cdk.Stack {
 				api: base_api.api,
 				apiSchema: base_api.apiSchema,
 				removalPolicy: removalPolicy, // ASM-CFN1
-				translationPii,
+				translationPii: config.app.translation.pii.enable!,
 			});
 			// OUTPUTS
 			this.awsUserFilesS3Bucket = new cdk.CfnOutput(
@@ -197,11 +182,11 @@ export class DocTranStack extends cdk.Stack {
 		//
 		// READABLE (Optional feature)
 		//
-		if (readable) {
+		if (config.app.readable.enable) {
 			const base_readable = new dt_readable(this, "base_readable", {
 				api: base_api.api,
 				apiSchema: base_api.apiSchema,
-				bedrockRegion: readableBedrockRegion,
+				bedrockRegion: config.app.readable.bedrockRegion!,
 				identityPool: base_api.identityPool,
 				removalPolicy: removalPolicy, // ASM-CFN1
 				serverAccessLoggingBucket,
@@ -217,16 +202,17 @@ export class DocTranStack extends cdk.Stack {
 		//
 		// WEBSITE (Optional feature)
 		//
-		if (webUi) {
+		if (config.app.webUi.enable) {
 			const signOutSuffix: string = "signout";
 			const base_web = new dt_web(this, "base_web", {
 				serverAccessLoggingBucket,
 				userPoolClient: base_api.userPoolClient,
 				removalPolicy: removalPolicy, // ASM-CFN1
-				webUiCustomDomain: webUiCustomDomain,
-				webUiCustomDomainCertificate: webUiCustomDomainCertificate,
+				webUiCustomDomain: config.app.webUi.customDomain.domain!,
+				webUiCustomDomainCertificate:
+					config.app.webUi.customDomain.certificateArn!,
 				signOutSuffix: signOutSuffix,
-				development: development,
+				development: config.common.development.enable,
 			});
 			new dt_sharedPreferences(this, "base_sharedPreferences", {
 				api: base_api.api,
@@ -242,19 +228,24 @@ export class DocTranStack extends cdk.Stack {
 				"appWebsiteDistribution",
 				{ value: base_web.websiteDistribution.distributionId },
 			);
-			if (webUiCustomDomain && webUiCustomDomainCertificate) {
+			if (
+				config.app.webUi.customDomain.domain &&
+				config.app.webUi.customDomain.certificateArn
+			) {
 				this.awsCognitoOauthRedirectSignIn = new cdk.CfnOutput(
 					this,
 					"awsCognitoOauthRedirectSignIn",
-					{ value: `https://${webUiCustomDomain}/` },
+					{ value: `https://${config.app.webUi.customDomain.domain}/` },
 				);
 				this.awsCognitoOauthRedirectSignOut = new cdk.CfnOutput(
 					this,
 					"awsCognitoOauthRedirectSignOut",
-					{ value: `https://${webUiCustomDomain}/${signOutSuffix}` },
+					{
+						value: `https://${config.app.webUi.customDomain.domain}/${signOutSuffix}`,
+					},
 				);
 				this.appHostedUrl = new cdk.CfnOutput(this, "appHostedUrl", {
-					value: `https://${webUiCustomDomain}/`,
+					value: `https://${config.app.webUi.customDomain.domain}/`,
 				});
 				this.appHostedUrlCloudFront = new cdk.CfnOutput(
 					this,

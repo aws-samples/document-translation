@@ -13,32 +13,36 @@ Both the CI/CD pipeline and app are defined here. They can be udpated independen
 - Environment variables of configuration options for the deployment being worked on.
 
 ```shell
-export translation="true"
-export translationPii="true"
-export translationLifecycleDefault="7"
-export translationLifecyclePii="3"
-
-export sourceGitService="code-commit"
-export sourceGitRepo="document-translation"
-export sourceGitBranch="dev"
-
-export cognitoLocalUsers="true"
-export cognitoLocalUsersMfa="off"
-
-export webUi="true"
-
-export readable="true"
-export readableBedrockRegion="us-west-2"
-
-export development="true"
-export appRemovalPolicy="destroy"
-export pipelineRemovalPolicy="destroy"
+export common_instance_name="main"
+export pipeline_source_repoOwner="aws-samples"
+export pipeline_source_repoName="document-translation"
+export pipeline_source_repoBranch="release/test"
+export pipeline_source_repoHookEnable="false"
+export pipeline_source_repoPeriodicChecksEnable="true"
+export pipeline_source_repoTokenName="doctran-main-oauth-token-1724924907"
+export pipeline_approvals_preCdkSynth_enable="false"
+export app_cognito_localUsers_enable="true"
+export app_cognito_saml_enable="false"
+export app_cognito_localUsers_mfa_enforcement="OFF"
+export app_cognito_localUsers_mfa_otp="false"
+export app_cognito_localUsers_mfa_sms="false"
+export app_webUi_enable="true"
+export app_webUi_customDomain_enable="false"
+export app_translation_enable="true"
+export app_translation_lifecycle="7"
+export app_translation_pii_enable="true"
+export app_translation_pii_lifecycle="7"
+export app_readable_enable="true"
+export app_readable_bedrockRegion="eu-west-2"
+export common_development_enable="true"
+export app_removalPolicy="DELETE"
+export pipeline_removalPolicy="DELETE"
 ```
 
 ### Pipeline Commands
 
 ```sh
-echo "Deployment DocTran-${sourceGitBranch}"
+echo "Deployment DocTran-${instanceName}"
 # Synthesise CDK TS to CloudFormation
 cdk synth
 # Show a diff of changes
@@ -58,11 +62,11 @@ The app template is a child of the pipeline template. With CDK we can target the
 ### App Commands
 
 ```sh
-echo "Deployment DocTran-${sourceGitBranch}"
+echo "Deployment DocTran-${instanceName}"
 # Synthesise CDK TS to CloudFormation
-cdk synth "DocTran-${sourceGitBranch}-pipeline/DocTran-appStack/DocTran-${sourceGitBranch}-app" -a 'npx ts-node ./bin/doctran.ts'
+cdk synth "DocTran-${instanceName}-pipeline/DocTran-appStack/DocTran-${instanceName}-app" -a 'npx ts-node ./bin/doctran.ts'
 # Show a diff of changes
-cdk diff "DocTran-${sourceGitBranch}-pipeline/DocTran-appStack/DocTran-${sourceGitBranch}-app" -a 'npx ts-node ./bin/doctran.ts'
+cdk diff "DocTran-${instanceName}-pipeline/DocTran-appStack/DocTran-${instanceName}-app" -a 'npx ts-node ./bin/doctran.ts'
 # Deploy changes (performs synth & deploy)
-cdk deploy "DocTran-${sourceGitBranch}-pipeline/DocTran-appStack/DocTran-${sourceGitBranch}-app" -a 'npx ts-node ./bin/doctran.ts'
+cdk deploy "DocTran-${instanceName}-pipeline/DocTran-appStack/DocTran-${instanceName}-app" -a 'npx ts-node ./bin/doctran.ts'
 ```

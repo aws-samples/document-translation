@@ -9,6 +9,5 @@ SPDX-License-Identifier: MIT-0
 -->
 
 {{< cards >}}
-  {{< card link="options" title="Options" >}}
-  {{< card link="source-service" title="Source Service" >}}
+{{< card link="options" title="Options" >}}
 {{< /cards >}}

@@ -5,11 +5,7 @@ import { Construct } from "constructs";
 import { NagSuppressions } from "cdk-nag";
 import * as cdk from "aws-cdk-lib";
 
-import {
-	aws_lambda as lambda,
-	aws_stepfunctions as sfn,
-	aws_logs as logs,
-} from "aws-cdk-lib";
+import { aws_stepfunctions as sfn, aws_logs as logs } from "aws-cdk-lib";
 
 export interface props {
 	nameSuffix: string;
@@ -18,7 +14,6 @@ export interface props {
 }
 
 export class dt_stepfunction extends Construct {
-	public readonly lambdaFunction: lambda.Function;
 	public readonly StateMachine: sfn.StateMachine;
 
 	constructor(scope: Construct, id: string, props: props) {
