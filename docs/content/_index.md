@@ -36,7 +36,7 @@ layout: hextra-home
     title="Simply Readable"
     subtitle="Create Easy Read documents quickly. Generate simplified text and images powered by Amazon Bedrock."
     class="hx-aspect-auto md:hx-aspect-[1.1/1] max-lg:hx-min-h-[340px]"
-    image="images/hextra-markdown.webp"
+    image=""
     imageClass="hx-top-[40%] hx-left-[36px] hx-w-[180%] sm:hx-w-[110%] dark:hx-opacity-80"
     style="background: radial-gradient(ellipse at 50% 80%,rgba(142,53,74,0.15),hsla(0,0%,100%,0));"
   >}}
