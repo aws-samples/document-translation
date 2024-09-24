@@ -1,7 +1,7 @@
 {
 	description = "Docs Development";
 	
-	inputs.nixpkgs.url = "github:NixOS/nixpkgs/nixos-23.11-small";
+	inputs.nixpkgs.url = "github:NixOS/nixpkgs/nixos-24.05-small";
 
 	outputs = {
 		self,
