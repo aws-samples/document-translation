@@ -1,0 +1,42 @@
+name: Release Automation
+
+on:
+  push:
+    tags:
+      - 'v*.*.*'
+
+jobs:
+  create-release-branches:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v2
+        with:
+          fetch-depth: 0
+
+      - name: Set up Git
+        run: |
+          git config user.name github-actions
+          git config user.email github-actions@github.com
+
+      - name: Create release branches
+        run: |
+          # Get the pushed tag
+          TAG=${GITHUB_REF#refs/tags/}
+          
+          # Extract major, minor, and patch versions
+          IFS='.' read -r MAJOR MINOR PATCH &lt;&lt;&lt; "${TAG#v}"
+          
+          # Create release branch for the exact version
+          git checkout -b "release/${TAG}"
+          git push origin "release/${TAG}"
+          
+          # Update release branch for minor version
+          git checkout -b "release/v${MAJOR}.${MINOR}" || git checkout "release/v${MAJOR}.${MINOR}"
+          git merge --ff-only "${TAG}"
+          git push origin "release/v${MAJOR}.${MINOR}"
+          
+          # Update release branch for major version
+          git checkout -b "release/v${MAJOR}" || git checkout "release/v${MAJOR}"
+          git merge --ff-only "${TAG}"
+          git push origin "release/v${MAJOR}"
