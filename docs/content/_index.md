@@ -9,39 +9,39 @@ layout: hextra-home
   Improving Inclusion &&nbsp;<br class="sm:hx-block hx-hidden" />Access to Information
 {{< /hextra/hero-headline >}}
 </div>
-&nbsp;
 
 <div class="hx-mb-12">
 {{< hextra/hero-subtitle >}}
   Translate documents from one language to another&nbsp;<br class="sm:hx-block hx-hidden" />& transform documents into Easy Read formats
 {{< /hextra/hero-subtitle >}}
 </div>
-&nbsp;
 
 <div class="hx-mb-6">
 {{< hextra/hero-button text="Get Started Now" link="docs/installation/" >}}
 </div>
-&nbsp;
+
+<div class="hx-mt-6"></div>
 
 {{< hextra/feature-grid >}}
   {{< hextra/feature-card
     title="Document Translation"
     subtitle="Simple and easy document translation. Translate documents in up to 75 languages and dialects powered by Amazon Translate."
     class="hx-aspect-auto md:hx-aspect-[1.1/1] max-md:hx-min-h-[340px]"
-    image=""
-    imageClass="hx-top-[40%] hx-left-[24px] hx-w-[180%] sm:hx-w-[110%] dark:hx-opacity-80"
+    image="/img/feature_translation.png"
+    imageClass="hx-top-[0%] hx-left-[36px] hx-w-[180%] sm:hx-w-[110%] dark:hx-opacity-80"
     style="background: radial-gradient(ellipse at 50% 80%,rgba(194,97,254,0.15),hsla(0,0%,100%,0));"
   >}}
   {{< hextra/feature-card
     title="Simply Readable"
     subtitle="Create Easy Read documents quickly. Generate simplified text and images powered by Amazon Bedrock."
     class="hx-aspect-auto md:hx-aspect-[1.1/1] max-lg:hx-min-h-[340px]"
-    image=""
-    imageClass="hx-top-[40%] hx-left-[36px] hx-w-[180%] sm:hx-w-[110%] dark:hx-opacity-80"
+    image="/img/feature_readable.png"
+    imageClass="hx-top-[0%] hx-left-[36px] hx-w-[180%] sm:hx-w-[110%] dark:hx-opacity-80"
     style="background: radial-gradient(ellipse at 50% 80%,rgba(142,53,74,0.15),hsla(0,0%,100%,0));"
   >}}
 {{< /hextra/feature-grid >}}
-&nbsp;
+
+<div class="hx-mt-6"></div>
 
 {{< hextra/feature-grid >}}
   {{< hextra/feature-card
