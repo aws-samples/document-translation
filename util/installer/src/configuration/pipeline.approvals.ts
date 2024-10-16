@@ -11,7 +11,7 @@ const showInstruction = () => {
 GitHub is used at the source code repository.
 Requirements: 1) GitHub Account. 2) GitHub Access Token.
 If using the upstream AWS-Samples respository then a classic token with "public_repo" and no expiration will work. 
-Prerequisite: https://aws-samples.github.io/document-translation/docs/shared/configuration/source-service/github/
+Prerequisite: https://aws-samples.github.io/document-translation/docs/shared/prerequisites/github-token/
 	`);
 };
 
