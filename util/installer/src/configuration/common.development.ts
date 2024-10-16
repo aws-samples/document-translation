@@ -1,9 +1,10 @@
 import { confirm, select } from "@inquirer/prompts";
 import { CommonDevelopmentOptions, removalPolicy } from "./options";
+import { BOLD, RESET } from "../util/textStyles"
 
 const showInstruction = () => {
 	console.log(`
-# Development Configuration
+${BOLD}# Development Configuration${RESET}
 Do not enable for non-development.
 	`);
 };

@@ -1,9 +1,10 @@
 import { input } from "@inquirer/prompts";
 import { AppCognitoSamlOptions } from "./options";
+import { BOLD, RESET } from "../util/textStyles"
 
 const showInstruction = () => {
 	console.log(`
-# Cognito SAML Configuration
+${BOLD}# Cognito SAML Configuration${RESET}
 Prerequisites: https://aws-samples.github.io/document-translation/docs/shared/prerequisites/saml-provider/
 Post Install: https://aws-samples.github.io/document-translation/docs/shared/post-install/saml-provider/
 	`);

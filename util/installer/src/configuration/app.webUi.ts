@@ -1,9 +1,10 @@
 import { input, confirm } from "@inquirer/prompts";
 import { AppWebOptions } from "./options";
+import { BOLD, RESET } from "../util/textStyles"
 
 const showInstruction = () => {
 	console.log(`
-# Web UI Configuration
+${BOLD}# Web UI Configuration${RESET}
 Prerequisites for custom domain name: https://aws-samples.github.io/document-translation/docs/shared/prerequisites/domain/
 Post Install for custom domain name: https://aws-samples.github.io/document-translation/docs/shared/post-install/domain/
 	`);

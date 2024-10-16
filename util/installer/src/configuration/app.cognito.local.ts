@@ -1,9 +1,10 @@
 import { select, checkbox } from "@inquirer/prompts";
 import { AppCognitoLocalOptions, cognitoMfaOption } from "./options";
+import { BOLD, RESET } from "../util/textStyles"
 
 const showInstruction = () => {
 	console.log(`
-# Cognito Local Configuration
+${BOLD}# Cognito Local Configuration${RESET}
 Post Install: https://aws-samples.github.io/document-translation/docs/shared/post-install/cognito-first-user/
 	`);
 };

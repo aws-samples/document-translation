@@ -1,5 +1,6 @@
 import { input, confirm } from "@inquirer/prompts";
 import { PipelineApprovalOptions } from "./options";
+import { BOLD, RESET } from "../util/textStyles"
 
 const theme = {
 	prefix: "Pipeline - Source: ",
@@ -7,7 +8,7 @@ const theme = {
 
 const showInstruction = () => {
 	console.log(`
-# Pipeline - Approvals
+${BOLD}# Pipeline - Approvals${RESET}
 GitHub is used at the source code repository.
 Requirements: 1) GitHub Account. 2) GitHub Access Token.
 If using the upstream AWS-Samples respository then a classic token with "public_repo" and no expiration will work. 

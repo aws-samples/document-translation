@@ -1,10 +1,11 @@
 import { confirm, number } from "@inquirer/prompts";
 
 import { AppTranslationOptions } from "./options";
+import { BOLD, RESET } from "../util/textStyles"
 
 const showInstruction = () => {
 	console.log(`
-# Translation Configuration
+${BOLD}# Translation Configuration${RESET}
 Prerequisites: https://aws-samples.github.io/document-translation/docs/translation/prerequisites/
 	`);
 };

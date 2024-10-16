@@ -6,6 +6,7 @@ import {
 	GetSecretValueCommand,
 	PutSecretValueCommand,
 } from "@aws-sdk/client-secrets-manager";
+import { BOLD, RESET } from "../util/textStyles"
 
 type secretsManagerError = {
 	$fault: string;
@@ -179,9 +180,6 @@ const getGitHubReleaseBranches = async (
             name = branch;
         }
 
-		const BOLD = '\x1b[1m';
-		const RESET = '\x1b[0m';
-
         if (group !== currentGroup) {
             choices.push(new Separator(`${BOLD} # ${group || "other"} ${RESET}`));
             currentGroup = group;
@@ -229,7 +227,7 @@ const theme = {
 
 const showInstruction = () => {
 	console.log(`
-# Pipeline - Source Configuration
+${BOLD}# Pipeline - Source Configuration${RESET}
 GitHub is used at the source code repository.
 Requirements: 1) GitHub Account. 2) GitHub Access Token.
 If using the upstream AWS-Samples respository then a classic token with "public_repo" and no expiration will work. 

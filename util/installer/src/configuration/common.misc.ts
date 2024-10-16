@@ -1,5 +1,6 @@
 import { input } from "@inquirer/prompts";
 import { CommonMiscOptions } from "./options";
+import { BOLD, RESET } from "../util/textStyles"
 
 const theme = {
 	prefix: "Common - Misc: ",
@@ -7,7 +8,7 @@ const theme = {
 
 const showInstruction = () => {
 	console.log(`
-# Common - Misc Configuration
+${BOLD}# Common - Misc Configuration${RESET}
 	`);
 };
 

@@ -1,9 +1,10 @@
 import { confirm, select, Separator } from "@inquirer/prompts";
 import { AppReadableOptions } from "./options";
+import { BOLD, RESET } from "../util/textStyles"
 
 const showInstruction = () => {
 	console.log(`
-# Readable Configuration
+${BOLD}# Readable Configuration${RESET}
 Prerequisites: https://aws-samples.github.io/document-translation/docs/readable/prerequisites/
 Post Install: https://aws-samples.github.io/document-translation/docs/readable/post-install/
 	`);

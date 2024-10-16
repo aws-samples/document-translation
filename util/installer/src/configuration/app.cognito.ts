@@ -1,9 +1,10 @@
 import { checkbox } from "@inquirer/prompts";
 import { AppCognitoOptions } from "./options";
+import { BOLD, RESET } from "../util/textStyles"
 
 const showInstruction = () => {
 	console.log(`
-# User Store Configuration
+${BOLD}# User Store Configuration${RESET}
 At least 1 user store option must be selected.
 For production SAML integration is recommended.
 For test & development Local is recommended. 
