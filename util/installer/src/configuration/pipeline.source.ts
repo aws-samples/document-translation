@@ -1,4 +1,4 @@
-import { confirm, input, select } from "@inquirer/prompts";
+import { confirm, input, select, Separator  } from "@inquirer/prompts";
 import { PipelineSourceOptions } from "./options";
 import {
 	SecretsManagerClient,
@@ -154,27 +154,46 @@ const getGithubBranches = async (
 };
 
 type branchChoices = {
-	name: string;
-	value: string;
-};
+    name: string;
+    value: string;
+} | Separator;
 
 const getGitHubReleaseBranches = async (
-	repoOwner: string,
-	repoName: string,
-	token: string
+    repoOwner: string,
+    repoName: string,
+    token: string
 ): Promise<branchChoices[]> => {
-	const branches = await getGithubBranches(repoOwner, repoName, token);
-	const releaseBranches = branches.filter((branch: string) =>
-		branch.startsWith("release/")
-	);
+    const releaseBranches = await getGithubBranches(repoOwner, repoName, token);
+    releaseBranches.sort().reverse();
 
-	releaseBranches.sort().reverse();
-	const choices: branchChoices[] = releaseBranches.map((branch: string) => ({
-		name: branch,
-		value: branch,
-	}));
+    const choices: branchChoices[] = [];
+    let currentGroup = "";
 
-	return choices;
+    releaseBranches.forEach((branch: string) => {
+        const slashIndex = branch.indexOf('/');
+        let group = "";
+        let name = branch;
+
+        if (slashIndex !== -1) {
+            group = branch.substring(0, slashIndex);
+            name = branch;
+        }
+
+		const BOLD = '\x1b[1m';
+		const RESET = '\x1b[0m';
+
+        if (group !== currentGroup) {
+            choices.push(new Separator(`${BOLD} # ${group || "other"} ${RESET}`));
+            currentGroup = group;
+        }
+
+        choices.push({
+            name: name,
+            value: branch,
+        });
+    });
+
+    return choices;
 };
 
 const canTokenRepoHook = async (token: string): Promise<boolean> => {
@@ -252,6 +271,7 @@ export const getPipelineSourceOptions = async (
 
 	answers.pipeline.source.repoBranch = await select({
 		message: "Release",
+		pageSize: 30,
 		choices: await getGitHubReleaseBranches(
 			answers.pipeline.source.repoOwner,
 			answers.pipeline.source.repoName,
