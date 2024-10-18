@@ -23,9 +23,13 @@ jobs:
         run: |
           # Get the pushed tag
           TAG=${GITHUB_REF#refs/tags/}
+          echo ${TAG}
           
           # Extract major, minor, and patch versions
           IFS='.' read -r MAJOR MINOR PATCH &lt;&lt;&lt; "${TAG#v}"
+          echo ${MAJOR}
+          echo ${MINOR}
+          echo ${PATCH}
           
           # Create release branch for the exact version
           git checkout -b "release/${TAG}"
