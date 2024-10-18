@@ -85,17 +85,19 @@ export class pipelineStack extends cdk.Stack {
 			.enable
 			? GitHubTrigger.WEBHOOK
 			: GitHubTrigger.POLL;
+		const actionName = "Source";
 		const pipelineSource = cdkpipelines.CodePipelineSource.gitHub(
 			sourceRepo,
 			config.pipeline.source.repoBranch,
 			{
-				actionName: "Source",
+				actionName: actionName,
 				trigger: pipelineTrigger,
 				authentication: oauthToken,
 			},
 		);
+
 		const sourceOutput = new codepipeline.Artifact(
-			"aws_samples_document_translation_Source", // TODO dynamically get this value ? cdkpipelines.ArtifactMap
+			sourceRepo.replace(/[^a-zA-Z0-9]/g, "_") + "_" + actionName,
 		);
 
 		// PIPELINE
