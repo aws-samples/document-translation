@@ -26,7 +26,7 @@ jobs:
           echo ${TAG}
           
           # Extract major, minor, and patch versions
-          IFS='.' read -r MAJOR MINOR PATCH &lt;&lt;&lt; "${TAG#v}"
+          IFS='.' read -r MAJOR MINOR PATCH <<< "${TAG#v}"
           echo ${MAJOR}
           echo ${MINOR}
           echo ${PATCH}
