@@ -14,8 +14,17 @@
 				nodejs_22
 				# Optional
 				bat
+				jq
 			];
-			shellHook = ''bat --style=plain --paging=never ./README.md''; 
+			shellHook = ''
+			echo ""
+			echo "package.json scripts"
+			echo ""
+			cat package.json | jq .scripts
+			echo ""
+			bat --style=plain --paging=never ./README.md
+			echo ""
+			''; 
 		};
 	};
 }
