@@ -29,7 +29,7 @@ export const saveConfigToParameterStore = async (config: Config) => {
 	const overwrite = true;
 	const prefix = `/doctran/${config.common.instance.name}/`;
 	for (const [key, value] of Object.entries(flattenedConfig)) {
-		if (value) {
+		if (value !== undefined && value !== null && value.toString().length > 0) {
 			await putParameter(prefix, key, value.toString(), overwrite);
 			// calculate 1 second plus up to 1 second of jitter
 			const oneSecond = 1000;
