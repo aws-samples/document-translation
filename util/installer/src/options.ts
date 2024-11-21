@@ -35,11 +35,11 @@ const mapConfig = (options: ConfigurationOptions): Config => {
 			cognito: {
 				localUsers: {
 					enable: options.appCognitoOptions.app.cognito.localUsers.enable,
-					mfa: options.appCognitoLocalOptions.app.cognito.localUsers.mfa,
+					mfa: options.appCognitoOptions.app.cognito.localUsers.enable ? options.appCognitoLocalOptions.app.cognito.localUsers.mfa : {},
 				},
 				saml: {
 					enable: options.appCognitoOptions.app.cognito.saml.enable,
-					metadataUrl: options.appCognitoOptions.app.cognito.saml.metadataUrl,
+					metadataUrl: options.appCognitoOptions.app.cognito.saml.enable ? options.appCognitoSamlOptions.app.cognito.saml.metadataUrl : undefined,
 				},
 			},
 			webUi: options.appWebOptions.app.webUi,
