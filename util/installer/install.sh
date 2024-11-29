@@ -10,6 +10,9 @@ WORKDIR=$(pwd)
 INSTALLERDIR="${WORKDIR}/util/installer"
 INFRADIR="${WORKDIR}/infrastructure"
 
+# See https://github.com/aws-samples/document-translation/issues/93
+export UV_USE_IO_URING=0
+
 # Install dependencies
 echo "Installing dependencies for CDK infrastructure..."
 cd "${INFRADIR}" || exit
