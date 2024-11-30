@@ -30,9 +30,17 @@ export class DocTranAppStage extends cdk.Stage {
 			description: `(uksb-1tthgi813) (tag:app)`,
 		});
 
-		cdk.Aspects.of(docTranStackInstance).add(
-			new AwsSolutionsChecks({ verbose: true }),
-		);
+		// Skip NAG for faster development testing
+		const skipNag: boolean = 
+		process.env.skipNag !== undefined 
+			? process.env.skipNag.toLowerCase() === 'true'
+			: false;
+
+		if (!skipNag) {
+			cdk.Aspects.of(docTranStackInstance).add(new AwsSolutionsChecks({ verbose: true }));
+		} else {
+			console.warn("\nSkipping cdk-nag as skipNag environment is true\n");
+		}
 
 		// OUTPUTS
 		this.appStackId = docTranStackInstance.appStackId;
