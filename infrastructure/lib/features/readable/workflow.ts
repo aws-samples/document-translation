@@ -22,8 +22,8 @@ import { dt_lambda } from "../../components/lambda";
 import { dt_readableWorkflowGenerate as dt_readableWorkflowGenerate } from "./generate";
 
 const appsyncQuery_updateJobItem = `mutation ReadableUpdateJobItem(
-		$id: String!
-		$itemId: String!
+		$id: ID!
+		$itemId: ID!
 		$order: Int
 		$modelId: String
 		$input: String

@@ -66,20 +66,26 @@ export const handler = async (event: event) => {
 	let responseBody;
 	try {
 		const response = await fetch(request);
+		if (!response.ok) {
+			throw new Error(`HTTP error! status: ${response.status} ${response.statusText}`);
+		}
 		responseBody = await response.json();
 		if (responseBody.errors) {
-			responseBody.errors.every(function (error) {
-				console.error(error);
-			});
-			throw new Error(JSON.stringify(responseBody.errors));
+			const errorMessages = responseBody.errors.map(error => 
+				`Error: ${error.message || JSON.stringify(error)}`
+			).join('\n');
+			console.error('GraphQL Errors:', errorMessages);
+			throw new Error(`GraphQL request failed with errors:\n${errorMessages}`);
 		}
+		return {
+			statusCode: 200,
+			body: JSON.stringify(responseBody),
+		};
 	} catch (error) {
-		console.error(error);
-		throw new Error(JSON.stringify(error));
+		console.error('Request failed:', error instanceof Error ? error.message : 'Unknown error');
+		throw new Error(error instanceof Error ? 
+			`Request failed: ${error.message}` : 
+			'Request failed with unknown error'
+		);
 	}
-
-	return {
-		statusCode: 200,
-		body: JSON.stringify(responseBody),
-	};
 };

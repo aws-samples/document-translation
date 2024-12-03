@@ -14,6 +14,7 @@ import { dt_readableJob } from "./jobMetadata";
 import { dt_readableModel } from "./model";
 import { dt_readableItem } from "./jobItem";
 import { dt_readableWorkflow } from "./workflow";
+import { dt_readableWorkflowParseDoc } from "./parseDoc";
 import { dt_readablePrintStyles } from "./printStyles";
 
 export interface props {
@@ -79,6 +80,15 @@ export class dt_readable extends Construct {
 			removalPolicy: props.removalPolicy,
 			updateJobItemMutation_name: readableItem.updateJobItemMutation_name,
 			contentBucket: this.contentBucket,
+		});''
+
+		// WORKFLOW
+		new dt_readableWorkflowParseDoc(this, "readableWorkflowParseDoc", {
+			removalPolicy: props.removalPolicy,
+			contentBucket: this.contentBucket,
+			api: props.api,
+			createJobItemMutation_name: readableItem.createJobItemMutation_name,
+			updateJobItemMutation_name: readableItem.updateJobItemMutation_name,
 		});
 
 		NagSuppressions.addResourceSuppressionsByPath(
