@@ -85,8 +85,10 @@ export class dt_readable extends Construct {
 		// WORKFLOW
 		new dt_readableWorkflowParseDoc(this, "readableWorkflowParseDoc", {
 			api: props.api,
+			apiSchema: props.apiSchema,
 			contentBucket: this.contentBucket,
 			createJobItemMutation_name: readableItem.createJobItemMutation_name,
+			apiDsJobTable: readableJob.apiDsJobTable,
 			jobTable: readableJob.jobTable,
 			removalPolicy: props.removalPolicy,
 			updateJobItemMutation_name: readableItem.updateJobItemMutation_name,

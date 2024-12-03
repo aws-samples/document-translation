@@ -16,6 +16,15 @@ import {
 	aws_pipes as pipes,
 } from "aws-cdk-lib";
 
+import {
+	CodeFirstSchema,
+	GraphqlType,
+	ObjectType as OutputType,
+	InputType,
+	ResolvableField,
+	Directive,
+} from "awscdk-appsync-utils";
+
 import * as dt_enums from "./enum";
 import { dt_stepfunction } from "../../components/stepfunction";
 import { dt_lambda } from "../../components/lambda";
@@ -94,6 +103,8 @@ readableUpdateJobItem(
 
 export interface props {
 	api: appsync.GraphqlApi;
+	apiSchema: CodeFirstSchema;
+	apiDsJobTable: appsync.DynamoDbDataSource;
 	contentBucket: s3.Bucket;
 	createJobItemMutation_name: string;
 	jobTable: dynamodb.Table;
@@ -518,6 +529,109 @@ export class dt_readableWorkflowParseDoc extends Construct {
 				targetParameters,
 			});
 		}
+
+
+		// API
+		// API | MUTATION createJobImport
+		// INPUT
+		const createJobImport_input = new InputType(
+			`${dt_enums.Feature.PREFIX}_createJobImport_input`,
+			{
+				definition: {
+					identity: GraphqlType.string(),
+					id: GraphqlType.id({ isRequired: true }),
+					modelId: GraphqlType.string(),
+					status: GraphqlType.string(),
+					key: GraphqlType.string(),
+				},
+				directives: [
+					Directive.custom("@aws_cognito_user_pools"),
+					Directive.iam(),
+				],
+			},
+		);
+		props.apiSchema.addType(createJobImport_input);
+		// OUTPUT
+		const createJobImport_output = new OutputType(
+			`${dt_enums.Feature.PREFIX}_createJobImport_output`,
+			{
+				definition: {
+					id: GraphqlType.id({ isRequired: true }),
+					modelId: GraphqlType.string(),
+					status: GraphqlType.string(),
+				},
+				directives: [
+					Directive.custom("@aws_cognito_user_pools"),
+				],
+			},
+		);
+		props.apiSchema.addType(createJobImport_output);
+
+		// MUTATION
+		const createJobImportMutation = new ResolvableField({
+			returnType: createJobImport_output.attribute(),
+			dataSource: props.apiDsJobTable,
+			args: createJobImport_input.definition,
+			requestMappingTemplate: appsync.MappingTemplate.fromString(`
+				#set( $timestamp = $util.time.nowEpochSeconds() )
+				#if($ctx.identity.sub) #set( $isUserCognito = true ) #end
+
+				{
+					"version" : "2017-02-28",
+					"operation" : "UpdateItem",
+					"key" : {
+						"id": $util.dynamodb.toDynamoDBJson( $ctx.args.id ),
+						"itemId":  $util.dynamodb.toDynamoDBJson( "${dt_enums.ItemStatus.DOCIMPORT}" ),
+					},
+					"update": {
+						"expression": "SET #if($removeNewLine)
+							#end                           #owner    = :owner         #if($removeNewLine)
+							#end #if($ctx.args.status)   , #status   = :status   #end #if($removeNewLine)
+							#end #if($ctx.args.input)    , #input    = :input    #end #if($removeNewLine)
+							#end #if($ctx.args.type)     , #type     = :type     #end #if($removeNewLine)
+							#end #if($ctx.args.modelId)  , #modelId  = :modelId  #end #if($removeNewLine)
+							#end #if($ctx.args.order)    , #order    = :order    #end #if($removeNewLine)
+							#end #if($ctx.args.output)   , #output   = :output   #end #if($removeNewLine)
+							#end #if($ctx.args.parent)   , #parent   = :parent   #end #if($removeNewLine)
+							#end #if($ctx.args.identity) , #identity = :identity #end #if($removeNewLine)
+							#end ",
+						"expressionNames": {
+														"#owner":    "owner"
+							#if($ctx.args.status)     , "#status":   "status"   #end
+							#if($ctx.args.input)      , "#input":    "input"    #end
+							#if($ctx.args.type)       , "#type":     "type"     #end
+							#if($ctx.args.modelId)    , "#modelId":  "modelId"  #end
+							#if($ctx.args.order)      , "#order":    "order"    #end
+							#if($ctx.args.output)     , "#output":   "output"   #end
+							#if($ctx.args.parent)     , "#parent":   "parent"   #end
+							#if($ctx.args.identity)   , "#identity": "identity" #end
+						},
+						"expressionValues": {
+							#if($isUserCognito)       ":owner":    $util.dynamodb.toDynamoDBJson($ctx.identity.sub)  #end
+							#if(! $isUserCognito)     ":owner":    $util.dynamodb.toDynamoDBJson($ctx.args.owner)    #end
+							#if($ctx.args.status)   , ":status":   $util.dynamodb.toDynamoDBJson($ctx.args.status)   #end
+							#if($ctx.args.input)    , ":input":    $util.dynamodb.toDynamoDBJson($ctx.args.input)    #end
+							#if($ctx.args.type)     , ":type":     $util.dynamodb.toDynamoDBJson($ctx.args.type)     #end
+							#if($ctx.args.modelId)  , ":modelId":  $util.dynamodb.toDynamoDBJson($ctx.args.modelId)  #end
+							#if($ctx.args.order)    , ":order":    $util.dynamodb.toDynamoDBJson($ctx.args.order)    #end
+							#if($ctx.args.output)   , ":output":   $util.dynamodb.toDynamoDBJson($ctx.args.output)   #end
+							#if($ctx.args.parent)   , ":parent":   $util.dynamodb.toDynamoDBJson($ctx.args.parent)   #end
+							#if($ctx.args.identity) , ":identity": $util.dynamodb.toDynamoDBJson($ctx.args.identity) #end
+						}
+					}
+				}
+			`),
+			responseMappingTemplate: appsync.MappingTemplate.dynamoDbResultItem(),
+			directives: [
+				Directive.custom("@aws_cognito_user_pools"),
+				Directive.iam(),
+			],
+		});
+		const createJobImportMutation_name = `${dt_enums.Feature.PREFIX}CreateJobImport`;
+		props.apiSchema.addMutation(
+			createJobImportMutation_name,
+			createJobImportMutation,
+		);
 
 		// END
 	}
