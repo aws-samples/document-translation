@@ -425,6 +425,12 @@ export class dt_readableWorkflowParseDoc extends Construct {
 						`Resource::<${cdk.Stack.of(this).getLogicalId(
 							splitMdLambda.lambdaFunction.node.defaultChild as cdk.CfnElement,
 						)}.Arn>:*`,
+						`Resource::<${cdk.Stack.of(this).getLogicalId(
+							unmarshallDdbLambda.lambdaFunction.node.defaultChild as cdk.CfnElement,
+						)}.Arn>:*`,
+						`Resource::<${cdk.Stack.of(this).getLogicalId(
+							updateDbLambda.lambdaFunction.node.defaultChild as cdk.CfnElement,
+						)}.Arn>:*`,
 					],
 				},
 			],
