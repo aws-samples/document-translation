@@ -12,9 +12,11 @@ import {
 	aws_stepfunctions_tasks as tasks,
 	aws_lambda as lambda,
 	aws_appsync as appsync,
+	aws_dynamodb as dynamodb,
+	aws_pipes as pipes,
 } from "aws-cdk-lib";
 
-// import * as dt_enums from "./enum";
+import * as dt_enums from "./enum";
 import { dt_stepfunction } from "../../components/stepfunction";
 import { dt_lambda } from "../../components/lambda";
 
@@ -91,10 +93,11 @@ readableUpdateJobItem(
 }`;
 
 export interface props {
-	contentBucket: s3.Bucket;
-	removalPolicy: cdk.RemovalPolicy;
 	api: appsync.GraphqlApi;
+	contentBucket: s3.Bucket;
 	createJobItemMutation_name: string;
+	jobTable: dynamodb.Table;
+	removalPolicy: cdk.RemovalPolicy;
 	updateJobItemMutation_name: string;
 }
 
@@ -104,25 +107,49 @@ export class dt_readableWorkflowParseDoc extends Construct {
 	constructor(scope: Construct, id: string, props: props) {
 		super(scope, id);
 
+		// STATE MACHINE | TASKS | unNestJobDetails
+		const unNestJobDetails = new sfn.Pass(this, "unNestJobDetails", {
+			parameters: {
+				dynamodb: sfn.JsonPath.objectAt("$.[0].dynamodb"),
+			},
+		});
+		// STATE MACHINE | TASKS | unmarshallDdb
+		const unmarshallDdbLambda = new dt_lambda(this, "unmarshallDdbLambda", {
+			path: "lambda/unmarshallDdb",
+			description: "Unmarshall DDB",
+			bundlingNodeModules: ["@aws-sdk/util-dynamodb"],
+		});
+
+		const unmarshallDdbStream = new tasks.LambdaInvoke(
+			this,
+			"unmarshallDdbStream",
+			{
+				lambdaFunction: unmarshallDdbLambda.lambdaFunction,
+				inputPath: "$.dynamodb.NewImage",
+				resultSelector: {
+					"jobDetails.$": "$.Payload",
+				},
+			},
+		);
+
 		// LAMBDA
 		// LAMBDA | DOC TO HTML
 		// LAMBDA | DOC TO HTML | ROLE
-		const permitBucket = new iam.Policy(
-			this,
-			"permitBucket",
-			{
-				policyName: "Permit-read-write-to-bucket-for-doc-parsing",
-				statements: [
-					new iam.PolicyStatement({
-						// ASM-IAM
-						actions: ["s3:getObject", "s3:putObject"],
-						resources: [
-							`${props.contentBucket.bucketArn}/*`, 
-						],
-					}),
-				],
-			},
-		);
+		const permitBucket = new iam.Policy(this, "permitBucket", {
+			policyName: "Permit-read-write-to-bucket-for-doc-parsing",
+			statements: [
+				new iam.PolicyStatement({
+					// ASM-IAM
+					actions: ["s3:ListBucket"],
+					resources: [`${props.contentBucket.bucketArn}`],
+				}),
+				new iam.PolicyStatement({
+					// ASM-IAM
+					actions: ["s3:getObject", "s3:putObject"],
+					resources: [`${props.contentBucket.bucketArn}/*`],
+				}),
+			],
+		});
 		NagSuppressions.addResourceSuppressions(
 			permitBucket,
 			[
@@ -144,11 +171,11 @@ export class dt_readableWorkflowParseDoc extends Construct {
 			path: "lambda/docToHtml",
 			description: "Parse Doc to HTML",
 			environment: {
-				BUCKET_NAME: props.contentBucket.bucketName
+				BUCKET_NAME: props.contentBucket.bucketName,
 			},
 			timeout: cdk.Duration.minutes(1),
 		});
-		docToHtmlLambda.lambdaRole.attachInlinePolicy(permitBucket)
+		docToHtmlLambda.lambdaRole.attachInlinePolicy(permitBucket);
 
 		// STATE MACHINE | TASKS | DOC TO HTML
 		const docToHtml = new tasks.LambdaInvoke(this, "docToHtml", {
@@ -169,9 +196,9 @@ export class dt_readableWorkflowParseDoc extends Construct {
 			path: "lambda/htmlToMd",
 			description: "Parse HTML to MD",
 			environment: {
-				BUCKET_NAME: props.contentBucket.bucketName
+				BUCKET_NAME: props.contentBucket.bucketName,
 			},
-			timeout: cdk.Duration.minutes(1),	
+			timeout: cdk.Duration.minutes(1),
 		});
 
 		// STATE MACHINE | TASKS | htmlToMd
@@ -186,7 +213,7 @@ export class dt_readableWorkflowParseDoc extends Construct {
 			}),
 		});
 
-		// 
+		//
 		// LAMBDA
 		// LAMBDA | Split MD
 		// LAMBDA | Split MD | FUNCTION
@@ -194,9 +221,9 @@ export class dt_readableWorkflowParseDoc extends Construct {
 			path: "lambda/utilSplit",
 			description: "Split MD",
 			environment: {
-				BUCKET_NAME: props.contentBucket.bucketName
+				BUCKET_NAME: props.contentBucket.bucketName,
 			},
-			timeout: cdk.Duration.minutes(1),	
+			timeout: cdk.Duration.minutes(1),
 		});
 
 		// STATE MACHINE | TASKS | splitMd
@@ -257,24 +284,19 @@ export class dt_readableWorkflowParseDoc extends Construct {
 		});
 		updateDbLambda.lambdaRole?.attachInlinePolicy(iamPolicyGraphqlQuery);
 
-		const updateDb = new tasks.LambdaInvoke(
-			this,
-			"updateDb",
-			{
-				lambdaFunction: updateDbLambda.lambdaFunction,
-				resultPath: sfn.JsonPath.DISCARD,
-				payload: sfn.TaskInput.fromObject({
-					id: sfn.JsonPath.objectAt("$.jobDetails.id"),
-					order: sfn.JsonPath.objectAt("$.index"),
-					modelId: sfn.JsonPath.objectAt("$.jobDetails.modelId"),
-					input: sfn.JsonPath.objectAt("$.value"),
-					identity: sfn.JsonPath.objectAt("$.jobDetails.identity"),
-					owner: sfn.JsonPath.objectAt("$.jobDetails.owner"),
-					type: "text",
-				}),
-			},
-		);
-
+		const updateDb = new tasks.LambdaInvoke(this, "updateDb", {
+			lambdaFunction: updateDbLambda.lambdaFunction,
+			resultPath: sfn.JsonPath.DISCARD,
+			payload: sfn.TaskInput.fromObject({
+				id: sfn.JsonPath.objectAt("$.jobDetails.id"),
+				order: sfn.JsonPath.objectAt("$.index"),
+				modelId: sfn.JsonPath.objectAt("$.jobDetails.modelId"),
+				input: sfn.JsonPath.objectAt("$.value"),
+				identity: sfn.JsonPath.objectAt("$.jobDetails.identity"),
+				owner: sfn.JsonPath.objectAt("$.jobDetails.owner"),
+				type: "text",
+			}),
+		});
 
 		// STATE MACHINE | TASKS | createJobItem
 		const iamPolicyGraphqlQueryParseDoc = new iam.Policy(
@@ -297,20 +319,25 @@ export class dt_readableWorkflowParseDoc extends Construct {
 				],
 			},
 		);
-		const updateDbLambdaParseDoc = new dt_lambda(this, "updateDbLambdaParseDoc", {
-			path: "lambda/appsyncMutationRequest",
-			description: "Update DB API",
-			runtime: lambda.Runtime.NODEJS_18_X,
-			environment: {
-				API_ENDPOINT: props.api.graphqlUrl,
-				API_QUERY: appsyncQuery_updateJobItem,
-				API_REGION: cdk.Stack.of(this).region,
+		const updateDbLambdaParseDoc = new dt_lambda(
+			this,
+			"updateDbLambdaParseDoc",
+			{
+				path: "lambda/appsyncMutationRequest",
+				description: "Update DB API",
+				runtime: lambda.Runtime.NODEJS_18_X,
+				environment: {
+					API_ENDPOINT: props.api.graphqlUrl,
+					API_QUERY: appsyncQuery_updateJobItem,
+					API_REGION: cdk.Stack.of(this).region,
+				},
+				bundlingNodeModules: ["@aws-crypto/sha256-js"],
 			},
-			bundlingNodeModules: ["@aws-crypto/sha256-js"],
-		});
-		updateDbLambdaParseDoc.lambdaRole?.attachInlinePolicy(iamPolicyGraphqlQueryParseDoc);
+		);
+		updateDbLambdaParseDoc.lambdaRole?.attachInlinePolicy(
+			iamPolicyGraphqlQueryParseDoc,
+		);
 
-		const documentImportKey = "documentImport"
 		const updateDbParseDocProcessing = new tasks.LambdaInvoke(
 			this,
 			"updateDbParseDocProcessing",
@@ -319,7 +346,7 @@ export class dt_readableWorkflowParseDoc extends Construct {
 				resultPath: sfn.JsonPath.DISCARD,
 				payload: sfn.TaskInput.fromObject({
 					id: sfn.JsonPath.objectAt("$.jobDetails.id"),
-					itemId: documentImportKey,
+					itemId: dt_enums.JobTable.SK_DOCIMPORT,
 					status: "processing",
 				}),
 			},
@@ -333,7 +360,7 @@ export class dt_readableWorkflowParseDoc extends Construct {
 				resultPath: sfn.JsonPath.DISCARD,
 				payload: sfn.TaskInput.fromObject({
 					id: sfn.JsonPath.objectAt("$.jobDetails.id"),
-					itemId: documentImportKey,
+					itemId: dt_enums.JobTable.SK_DOCIMPORT,
 					status: "completed",
 				}),
 			},
@@ -348,18 +375,25 @@ export class dt_readableWorkflowParseDoc extends Construct {
 			{
 				nameSuffix: "ReadableParseDoc",
 				removalPolicy: props.removalPolicy,
-				definition: 
-					// updateDbParseDocProcessing
-					// .next(
-						docToHtml
-					// )
+				comment: `
+					[{"NewImage": {
+						"id":       { "S": "aaaa-bbbb-cccc-dddd-eeee-ffff" },
+						"identity": { "S": "noIdentity" },
+						"itemId":   { "S": "documentImport" },
+						"key":      { "S": "private/test-region-1:0123456789/testId/test.docx" },
+						"modelId":  { "S": "modelId" },
+						"owner":    { "S": "noOwner" },
+						"status":   { "S": "docimport" }
+					}}]
+				`,
+				definition: unNestJobDetails
+					.next(unmarshallDdbStream)
+					// .next(updateDbParseDocProcessing)
+					.next(docToHtml)
 					.next(htmlToMd)
 					.next(splitMd)
-					.next(
-						iterateMd
-						.itemProcessor(updateDb)
-					)
-					// .next(updateDbParseDocCompleted)
+					.next(iterateMd.itemProcessor(updateDb)),
+				// .next(updateDbParseDocCompleted)
 			},
 		).StateMachine;
 		NagSuppressions.addResourceSuppressions(
@@ -370,7 +404,8 @@ export class dt_readableWorkflowParseDoc extends Construct {
 					reason: "Permissions scoped to dedicated resources.",
 					appliesTo: [
 						`Resource::<${cdk.Stack.of(this).getLogicalId(
-							docToHtmlLambda.lambdaFunction.node.defaultChild as cdk.CfnElement,
+							docToHtmlLambda.lambdaFunction.node
+								.defaultChild as cdk.CfnElement,
 						)}.Arn>:*`,
 						`Resource::<${cdk.Stack.of(this).getLogicalId(
 							htmlToMdLambda.lambdaFunction.node.defaultChild as cdk.CfnElement,
@@ -383,6 +418,106 @@ export class dt_readableWorkflowParseDoc extends Construct {
 			],
 			true,
 		);
+
+		// PIPE | DDB JOB TO STEPFUNCTION
+		if (props.jobTable.tableStreamArn) {
+			// tableStreamArn may be undefined
+			// PIPE | DDB JOB TO STEPFUNCTION | PERMISSIONS
+			const pipeJobToSfnRole = new iam.Role(this, "pipeJobToSfnRole", {
+				// ASM-L6 // ASM-L8
+				assumedBy: new iam.ServicePrincipal("pipes.amazonaws.com"),
+				description: "Pipe Role (Pass DynamoDB job to StepFunction)",
+			});
+			pipeJobToSfnRole.attachInlinePolicy(
+				new iam.Policy(this, "permitStartExecutionOfParseDoc", {
+					policyName: "Start-Sfn-ReadablenParseDoc",
+					statements: [
+						new iam.PolicyStatement({
+							// ASM-IAM
+							actions: ["states:StartExecution"],
+							resources: [this.sfnMain.stateMachineArn],
+						}),
+					],
+				}),
+			);
+			pipeJobToSfnRole.attachInlinePolicy(
+				new iam.Policy(this, "permitReadDynamoDBStream", {
+					policyName: "Read-DynamoDB-Stream",
+					statements: [
+						new iam.PolicyStatement({
+							// ASM-IAM
+							actions: [
+								"dynamodb:DescribeStream",
+								"dynamodb:GetRecords",
+								"dynamodb:GetShardIterator",
+							],
+							resources: [props.jobTable.tableStreamArn],
+						}),
+					],
+				}),
+			);
+
+			// PIPE | DDB JOB TO STEPFUNCTION | PIPE
+			// PIPE | DDB JOB TO STEPFUNCTION | PIPE | SOURCE
+			const pipeSourceDynamoDBStreamParametersProperty: pipes.CfnPipe.PipeSourceDynamoDBStreamParametersProperty =
+				{
+					startingPosition: "TRIM_HORIZON",
+					batchSize: 1,
+				};
+			const filterPattern = {
+				eventName: ["INSERT", "MODIFY"],
+				dynamodb: {
+					NewImage: {
+						itemId: {
+							S: [
+								{
+									"equals-ignore-case": dt_enums.JobTable.SK_DOCIMPORT,
+								},
+							],
+						},
+						status: {
+							S: [
+								{
+									"equals-ignore-case": dt_enums.ItemStatus.DOCIMPORT,
+								},
+							],
+						},
+					},
+				},
+			};
+			const pipeSourceDynamoDBStreamFiltersProperty: pipes.CfnPipe.FilterCriteriaProperty =
+				{
+					filters: [
+						{
+							pattern: JSON.stringify(filterPattern),
+						},
+					],
+				};
+			const sourceParameters = {
+				dynamoDbStreamParameters: pipeSourceDynamoDBStreamParametersProperty,
+				filterCriteria: pipeSourceDynamoDBStreamFiltersProperty,
+			};
+
+			// PIPE | DDB JOB TO STEPFUNCTION | PIPE | TARGET
+			const pipeTargetStateMachineParametersProperty: pipes.CfnPipe.PipeTargetStateMachineParametersProperty =
+				{
+					invocationType: "FIRE_AND_FORGET",
+				};
+			const targetParameters = {
+				stepFunctionStateMachineParameters:
+					pipeTargetStateMachineParametersProperty,
+			};
+
+			// PIPE | DDB JOB TO STEPFUNCTION | PIPE | DEF
+			new pipes.CfnPipe(this, "pipeJobToSfn", {
+				roleArn: pipeJobToSfnRole.roleArn,
+				source: props.jobTable.tableStreamArn,
+				target: this.sfnMain.stateMachineArn,
+				description: "DocTran Readable Job to StepFunction PraseDoc",
+				sourceParameters,
+				targetParameters,
+			});
+		}
 
 		// END
 	}
