@@ -143,7 +143,7 @@ export class dt_readableItem extends Construct {
 			{
 				definition: {
 					order: GraphqlType.int(),
-					itemId: GraphqlType.string({ isRequired: true }),
+					itemId: GraphqlType.id({ isRequired: true }),
 					type: GraphqlType.string(),
 					identity: GraphqlType.string(),
 					...jobItemCommon_input,

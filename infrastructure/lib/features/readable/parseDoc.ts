@@ -306,6 +306,7 @@ export class dt_readableWorkflowParseDoc extends Construct {
 				identity: sfn.JsonPath.objectAt("$.jobDetails.identity"),
 				owner: sfn.JsonPath.objectAt("$.jobDetails.owner"),
 				type: "text",
+				status: dt_enums.ItemStatus.GENERATE
 			}),
 		});
 
@@ -581,13 +582,13 @@ export class dt_readableWorkflowParseDoc extends Construct {
 					"operation" : "UpdateItem",
 					"key" : {
 						"id": $util.dynamodb.toDynamoDBJson( $ctx.args.id ),
-						"itemId":  $util.dynamodb.toDynamoDBJson( "${dt_enums.ItemStatus.DOCIMPORT}" ),
+						"itemId":  $util.dynamodb.toDynamoDBJson( "${dt_enums.JobTable.SK_DOCIMPORT}" ),
 					},
 					"update": {
 						"expression": "SET #if($removeNewLine)
 							#end                           #owner    = :owner         #if($removeNewLine)
 							#end #if($ctx.args.status)   , #status   = :status   #end #if($removeNewLine)
-							#end #if($ctx.args.input)    , #input    = :input    #end #if($removeNewLine)
+							#end #if($ctx.args.key)      , #key      = :key      #end #if($removeNewLine)
 							#end #if($ctx.args.type)     , #type     = :type     #end #if($removeNewLine)
 							#end #if($ctx.args.modelId)  , #modelId  = :modelId  #end #if($removeNewLine)
 							#end #if($ctx.args.order)    , #order    = :order    #end #if($removeNewLine)
@@ -598,7 +599,7 @@ export class dt_readableWorkflowParseDoc extends Construct {
 						"expressionNames": {
 														"#owner":    "owner"
 							#if($ctx.args.status)     , "#status":   "status"   #end
-							#if($ctx.args.input)      , "#input":    "input"    #end
+							#if($ctx.args.key)        , "#key":    "key"    #end
 							#if($ctx.args.type)       , "#type":     "type"     #end
 							#if($ctx.args.modelId)    , "#modelId":  "modelId"  #end
 							#if($ctx.args.order)      , "#order":    "order"    #end
@@ -610,7 +611,7 @@ export class dt_readableWorkflowParseDoc extends Construct {
 							#if($isUserCognito)       ":owner":    $util.dynamodb.toDynamoDBJson($ctx.identity.sub)  #end
 							#if(! $isUserCognito)     ":owner":    $util.dynamodb.toDynamoDBJson($ctx.args.owner)    #end
 							#if($ctx.args.status)   , ":status":   $util.dynamodb.toDynamoDBJson($ctx.args.status)   #end
-							#if($ctx.args.input)    , ":input":    $util.dynamodb.toDynamoDBJson($ctx.args.input)    #end
+							#if($ctx.args.key)      , ":key":    $util.dynamodb.toDynamoDBJson($ctx.args.key)    #end
 							#if($ctx.args.type)     , ":type":     $util.dynamodb.toDynamoDBJson($ctx.args.type)     #end
 							#if($ctx.args.modelId)  , ":modelId":  $util.dynamodb.toDynamoDBJson($ctx.args.modelId)  #end
 							#if($ctx.args.order)    , ":order":    $util.dynamodb.toDynamoDBJson($ctx.args.order)    #end
