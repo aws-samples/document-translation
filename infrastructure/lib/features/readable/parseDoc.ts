@@ -185,6 +185,7 @@ export class dt_readableWorkflowParseDoc extends Construct {
 				BUCKET_NAME: props.contentBucket.bucketName,
 			},
 			timeout: cdk.Duration.minutes(1),
+			bundlingNodeModules: ["mammoth"],
 		});
 		docToHtmlLambda.lambdaRole.attachInlinePolicy(permitBucket);
 
@@ -210,6 +211,7 @@ export class dt_readableWorkflowParseDoc extends Construct {
 				BUCKET_NAME: props.contentBucket.bucketName,
 			},
 			timeout: cdk.Duration.minutes(1),
+			bundlingNodeModules: ["turndown"],
 		});
 
 		// STATE MACHINE | TASKS | htmlToMd
