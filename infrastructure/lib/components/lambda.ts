@@ -12,7 +12,7 @@ import {
 } from "aws-cdk-lib";
 
 export interface props {
-	role: iam.Role;
+	role?: iam.Role;
 	path: string;
 	description: string;
 	environment?: { [key: string]: string } | undefined;
@@ -24,6 +24,7 @@ export interface props {
 
 export class dt_lambda extends Construct {
 	public readonly lambdaFunction: lambda.Function;
+	public readonly lambdaRole: iam.Role;
 
 	constructor(scope: Construct, id: string, props: props) {
 		super(scope, id);
@@ -36,10 +37,25 @@ export class dt_lambda extends Construct {
 				? props.architecture
 				: lambda.Architecture.ARM_64;
 
+		// Create a role if not provided
+		if(props.role) {
+			this.lambdaRole = props.role;
+		} else {
+			this.lambdaRole = new iam.Role(
+				this,
+				"LambdaRole",
+				{
+					// ASM-L6 // ASM-L8
+					assumedBy: new iam.ServicePrincipal("lambda.amazonaws.com"),
+					description: `Lambda Role (${props.description})`,
+				},
+			);
+		}
+
 		// FUNCTION
 		this.lambdaFunction = new nodejs.NodejsFunction(this, "MyFunction", {
 			// UNIQUE
-			role: props.role, // ASM-L7
+			role: this.lambdaRole, // ASM-L7
 			entry: `${props.path}/index.ts`,
 			description: props.description,
 			environment: props.environment,
@@ -105,7 +121,7 @@ export class dt_lambda extends Construct {
 
 		// PERMISSIONS | XRAY
 		NagSuppressions.addResourceSuppressions(
-			props.role,
+			this.lambdaRole,
 			[
 				{
 					id: "AwsSolutions-IAM5",

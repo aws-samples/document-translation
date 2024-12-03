@@ -21,6 +21,7 @@ import { fetchAuthSession } from "@aws-amplify/auth";
 
 import { UseReadableModels } from "./hooks/useReadableModels";
 import { UseReadableSubscription } from "./hooks/useReadableSubscription";
+import ReadableViewUpload from "./viewUpload";
 
 import { ItemKeys, ItemStatus, ItemValues } from "./enums";
 import ReadableViewDetails from "./viewDetails";
@@ -318,7 +319,9 @@ export default function ReadableNew() {
 					{displayDetails()}
 					<SpaceBetween size="xl">
 						<ReadableViewPrintButton />
-						{textState &&
+						{(!textState || textState.length === 0) ? (
+							<ReadableViewUpload jobId={metadataState.id} />
+						) : (
 							textState.map((textItem, index) => (
 								<SpaceBetween key={textItem.itemId} size="xl">
 									<Container>
@@ -342,7 +345,7 @@ export default function ReadableNew() {
 										<span className="jobId">{textItem.itemId}</span>
 									</Container>
 								</SpaceBetween>
-							))}
+							)))}
 					</SpaceBetween>
 					{displayAddTextRow()}
 				</SpaceBetween>

@@ -12,7 +12,7 @@ import { generateClient } from "@aws-amplify/api";
 import { fetchAuthSession } from "@aws-amplify/auth";
 
 import { getBrowserLanguage } from "./util/getBrowserLanguage";
-import { putObjectS3 } from "./util/putObjectS3";
+import { putObjectS3 } from "../../util/putObjectS3";
 
 import NewFormOriginalDocument from "./newFormOriginalDocument";
 import NewFormOriginalLanguage from "./newFormOriginalLanguage";
@@ -85,6 +85,7 @@ export default function NewForm() {
 		}
 		try {
 			await putObjectS3({
+				bucketKey: "awsUserFilesS3Bucket",
 				path: `private/${identityId}/${jobId}/upload/${file.name}`,
 				file: file,
 			});

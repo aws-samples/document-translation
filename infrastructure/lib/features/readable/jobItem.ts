@@ -28,23 +28,49 @@ export interface props {
 
 export class dt_readableItem extends Construct {
 	public readonly updateJobItemMutation_name: string;
+	public readonly createJobItemMutation_name: string;
 
 	constructor(scope: Construct, id: string, props: props) {
 		super(scope, id);
 
 		// API
+
+		// create & update common
+		const jobItemCommon_input = {
+			id: GraphqlType.id({ isRequired: true }),
+			parent: GraphqlType.string(),
+			input: GraphqlType.string(),
+			modelId: GraphqlType.string(),
+			output: GraphqlType.string(),
+			owner: GraphqlType.string(),
+			status: GraphqlType.string(),
+		}
+		const jobItemCommon_output = {
+			id: GraphqlType.id({ isRequired: true }),
+			itemId: GraphqlType.id({ isRequired: true }),
+			parent: GraphqlType.string(),
+			input: GraphqlType.string(),
+			modelId: GraphqlType.string(),
+			owner: GraphqlType.string(),
+			output: GraphqlType.string(),
+			status: GraphqlType.string(),
+		}
+
 		// API | MUTATION createJobItem
 		// INPUT
 		const createJobItem_input = new InputType(
 			`${dt_enums.Feature.PREFIX}_createJobItem_input`,
 			{
 				definition: {
-					id: GraphqlType.id({ isRequired: true }),
 					order: GraphqlType.int({ isRequired: true }),
 					identity: GraphqlType.string({ isRequired: true }),
 					type: GraphqlType.string({ isRequired: true }),
-					parent: GraphqlType.string(),
+					...jobItemCommon_input,
 				},
+				directives: [
+					Directive.custom("@aws_cognito_user_pools"),
+					Directive.iam(),
+				],
 			},
 		);
 		props.apiSchema.addType(createJobItem_input);
@@ -53,14 +79,15 @@ export class dt_readableItem extends Construct {
 			`${dt_enums.Feature.PREFIX}_createJobItem_output`,
 			{
 				definition: {
-					id: GraphqlType.id({ isRequired: true }),
-					itemId: GraphqlType.id({ isRequired: true }),
 					order: GraphqlType.int({ isRequired: true }),
 					identity: GraphqlType.string({ isRequired: true }),
 					type: GraphqlType.string({ isRequired: true }),
-					parent: GraphqlType.string(),
+					...jobItemCommon_output,
 				},
-				directives: [Directive.custom("@aws_cognito_user_pools")],
+				directives: [
+					Directive.custom("@aws_cognito_user_pools"),
+					Directive.iam(),
+				],
 			},
 		);
 		props.apiSchema.addType(createJobItem_output);
@@ -72,6 +99,8 @@ export class dt_readableItem extends Construct {
 			args: createJobItem_input.definition,
 			requestMappingTemplate: appsync.MappingTemplate.fromString(`
 				#set( $timestamp = $util.time.nowEpochSeconds() )
+				#if($ctx.identity.sub) #set( $isUserCognito = true ) #end
+
 				{
 					"version" : "2017-02-28",
 					"operation" : "PutItem",
@@ -83,20 +112,27 @@ export class dt_readableItem extends Construct {
 						"expression": "attribute_not_exists(itemId)"
 					},
 					"attributeValues" :{
-						"${dt_enums.JobTable.GSI_OWNER_PK}": $util.dynamodb.toDynamoDBJson( $ctx.identity.sub ),
+						#if($isUserCognito)   "${dt_enums.JobTable.GSI_OWNER_PK}": $util.dynamodb.toDynamoDBJson( $ctx.identity.sub ), #end
+						#if(! $isUserCognito) "${dt_enums.JobTable.GSI_OWNER_PK}": $util.dynamodb.toDynamoDBJson( $ctx.args.owner ),   #end
 						"order": $util.dynamodb.toDynamoDBJson( $ctx.args.order) ,
 						"identity": $util.dynamodb.toDynamoDBJson( $ctx.args.identity) ,
-						#if($ctx.args.parent) "parent": $util.dynamodb.toDynamoDBJson( $ctx.args.parent ), #end
+						#if($ctx.args.parent)  "parent":  $util.dynamodb.toDynamoDBJson( $ctx.args.parent  ), #end
+						#if($ctx.args.status)  "status":  $util.dynamodb.toDynamoDBJson( $ctx.args.status  ), #end
+						#if($ctx.args.input)   "input":   $util.dynamodb.toDynamoDBJson( $ctx.args.input   ), #end
+						#if($ctx.args.modelId) "modelId": $util.dynamodb.toDynamoDBJson( $ctx.args.modelId ), #end
 						"type": $util.dynamodb.toDynamoDBJson( $ctx.args.type )
 					}
 				}
 			`),
 			responseMappingTemplate: appsync.MappingTemplate.dynamoDbResultItem(),
-			directives: [Directive.custom("@aws_cognito_user_pools")],
+			directives: [
+				Directive.custom("@aws_cognito_user_pools"),
+				Directive.iam(),
+			],
 		});
-
+		this.createJobItemMutation_name = `${dt_enums.Feature.PREFIX}CreateJobItem`;
 		props.apiSchema.addMutation(
-			`${dt_enums.Feature.PREFIX}CreateJobItem`,
+			this.createJobItemMutation_name,
 			createJobItemMutation,
 		);
 
@@ -106,16 +142,11 @@ export class dt_readableItem extends Construct {
 			`${dt_enums.Feature.PREFIX}_updateJobItem_input`,
 			{
 				definition: {
-					id: GraphqlType.string({ isRequired: true }),
-					itemId: GraphqlType.string({ isRequired: true }),
-					type: GraphqlType.string(),
-					input: GraphqlType.string(),
-					modelId: GraphqlType.string(),
 					order: GraphqlType.int(),
+					itemId: GraphqlType.id({ isRequired: true }),
+					type: GraphqlType.string(),
 					identity: GraphqlType.string(),
-					output: GraphqlType.string(),
-					status: GraphqlType.string(),
-					parent: GraphqlType.string(),
+					...jobItemCommon_input,
 				},
 				directives: [
 					Directive.custom("@aws_cognito_user_pools"),
@@ -130,17 +161,10 @@ export class dt_readableItem extends Construct {
 			`${dt_enums.Feature.PREFIX}_updateJobItem_output`,
 			{
 				definition: {
-					id: GraphqlType.string({ isRequired: true }),
-					itemId: GraphqlType.string({ isRequired: true }),
 					type: GraphqlType.string(),
-					input: GraphqlType.string(),
-					modelId: GraphqlType.string(),
 					order: GraphqlType.int(),
-					owner: GraphqlType.string(),
 					identity: GraphqlType.string(),
-					output: GraphqlType.string(),
-					status: GraphqlType.string(),
-					parent: GraphqlType.string(),
+					...jobItemCommon_output,
 				},
 				directives: [
 					Directive.custom("@aws_cognito_user_pools"),

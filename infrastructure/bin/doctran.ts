@@ -21,5 +21,16 @@ new pipelineStack(app, `${stackName}`, {
 	},
 });
 
-cdk.Aspects.of(app).add(new AwsSolutionsChecks({ verbose: true }));
+// Skip NAG for faster development testing
+const skipNag: boolean = 
+	process.env.skipNag !== undefined 
+		? process.env.skipNag.toLowerCase() === 'true'
+		: false;
+
+if (!skipNag) {
+	cdk.Aspects.of(app).add(new AwsSolutionsChecks({ verbose: true }));
+} else {
+	console.warn("\nSkipping cdk-nag as skipNag environment is true\n");
+}
+
 app.synth();

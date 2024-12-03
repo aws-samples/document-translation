@@ -9,6 +9,7 @@ import { aws_stepfunctions as sfn, aws_logs as logs } from "aws-cdk-lib";
 
 export interface props {
 	nameSuffix: string;
+	comment?: string;
 	removalPolicy: cdk.RemovalPolicy;
 	definition: sfn.IChainable;
 }
@@ -23,6 +24,7 @@ export class dt_stepfunction extends Construct {
 			this,
 			`${cdk.Stack.of(this).stackName}_${props.nameSuffix}`,
 			{
+				comment: props.comment ? props.comment.trim() : props.nameSuffix,
 				stateMachineName: `${cdk.Stack.of(this).stackName}_${props.nameSuffix}`,
 				logs: {
 					destination: new logs.LogGroup(this, `${props.nameSuffix}`, {
