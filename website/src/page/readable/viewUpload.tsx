@@ -28,12 +28,14 @@ export default function ReadableViewUpload({ jobId }: ReadableViewUploadProps) {
 
 	const handleSubmit = async () => {
 		if (!file) return;
-
+		
 		// Only accept .docx files
 		if (!file.name.endsWith(".docx")) {
 			setErrorText(t("readable_upload_error_format"));
 			return;
 		}
+
+		setIsLoading(true);
 
 		let identityId;
 		try {
@@ -50,7 +52,6 @@ export default function ReadableViewUpload({ jobId }: ReadableViewUploadProps) {
 				path: key,
 				file: file,
 			});
-			setIsLoading(true);
 		} catch (error) {
 			console.error("Error uploading file:", error);
 			setErrorText(t("readable_upload_error_generic"));
