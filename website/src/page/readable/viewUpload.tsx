@@ -4,7 +4,9 @@ import "@cloudscape-design/global-styles/index.css";
 
 import { useState } from "react";
 import { useTranslation } from "react-i18next";
-import { FileUpload, Container, SpaceBetween, Box, Button } from "@cloudscape-design/components";
+import { FileUpload, Container, SpaceBetween, Box, Button, Select } from "@cloudscape-design/components";
+import { UseReadableModels } from "./hooks/useReadableModels";
+import { ItemValues } from "./enums";
 import { putObjectS3 } from "../../util/putObjectS3";
 import { fetchAuthSession } from "@aws-amplify/auth";
 
@@ -25,10 +27,12 @@ export default function ReadableViewUpload({ jobId }: ReadableViewUploadProps) {
 	const [file, setFile] = useState<File | undefined>();
 	const [errorText, setErrorText] = useState("");
 	const [isLoading, setIsLoading] = useState(false);
+	const { modelState, modelDefault, loading: modelsLoading } = UseReadableModels();
+	const [selectedModel, setSelectedModel] = useState<any>(null);
 
 	const handleSubmit = async () => {
 		if (!file) return;
-		
+
 		// Only accept .docx files
 		if (!file.name.endsWith(".docx")) {
 			setErrorText(t("readable_upload_error_format"));
@@ -68,7 +72,7 @@ export default function ReadableViewUpload({ jobId }: ReadableViewUploadProps) {
 						id: jobId,
 						identity: identityId,
 						key: key,
-						modelId: "Default-Example-Text-01",
+						modelId: selectedModel?.value || modelDefault.text.id,
 						status: "docimport",
 					},
 				});
@@ -85,6 +89,14 @@ export default function ReadableViewUpload({ jobId }: ReadableViewUploadProps) {
 		<Container>
 			<SpaceBetween size="m">
 				<Box variant="p">{t("readable_upload_description")}</Box>
+				<Select
+					selectedOption={selectedModel || modelState.text[modelDefault.text?.index || 0]}
+					onChange={({ detail }) => setSelectedModel(detail.selectedOption)}
+					options={modelState.text}
+					loadingText="Loading models..."
+					placeholder="Choose a model"
+					loading={modelsLoading}
+				/>
 				<FileUpload
 					onChange={({ detail }) => {
 						setFile(detail.value[0]);
@@ -110,7 +122,7 @@ export default function ReadableViewUpload({ jobId }: ReadableViewUploadProps) {
 				/>
 				<Button 
 					variant="primary"
-					disabled={file ? false : true}
+					disabled={!file || modelsLoading}
 					loading={isLoading}
 					onClick={handleSubmit}
 				>
