@@ -320,7 +320,10 @@ export default function ReadableNew() {
 					<SpaceBetween size="xl">
 						<ReadableViewPrintButton />
 						{(!textState || textState.length === 0) ? (
-							<ReadableViewUpload jobId={metadataState.id} />
+							<ReadableViewUpload
+								metadataState={metadataState} 
+								setMetadataState={setMetadataState}
+							/>
 						) : (
 							textState.map((textItem, index) => (
 								<SpaceBetween key={textItem.itemId} size="xl">
