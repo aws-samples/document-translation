@@ -4,7 +4,7 @@ import "@cloudscape-design/global-styles/index.css";
 
 import { useEffect, useState } from "react";
 
-import { Box, Grid } from "@cloudscape-design/components";
+import { Box, Grid, Spinner } from "@cloudscape-design/components";
 
 import { getPresignedUrl } from "../../util/getPresignedUrl";
 import { describeS3Key } from "./util/describeS3Key";
@@ -41,7 +41,13 @@ export default function ReadableViewPreview(props) {
 				)}
 				{!imageUrl && <div></div>}
 				<Box data-whitespace="preserve" variant="div">
-					{props?.text?.output}
+					{(() => {
+						if (props?.text?.status === "generate" || props?.text?.status === "processing") {
+							return <Spinner />;
+						} else {
+							return props?.text?.output;
+						}
+					})()}
 				</Box>
 			</Grid>
 		</>
