@@ -1,4 +1,8 @@
 {
+	"readable_upload_description": "Upload a file to extract the text",
+	"generic_error_file_format": "The file format is not correct.",
+	"generic_error_file_upload": "An error occurred whilst trying to upload the file.",
+	"generic_loading": "Loading",
 	"generic_cancel": "Cancel",
 	"generic_create_new": "Create New",
 	"generic_created": "Created",
