@@ -58,7 +58,7 @@ export default function ReadableViewUpload(props: ReadableViewUploadProps) {
 
 		// Only accept .docx files
 		if (!file.name.endsWith(".docx")) {
-			setErrorText(t("readable_upload_error_format"));
+			setErrorText(t("generic_error_file_format"));
 			return;
 		}
 
@@ -81,7 +81,7 @@ export default function ReadableViewUpload(props: ReadableViewUploadProps) {
 			});
 		} catch (error) {
 			console.error("Error uploading file:", error);
-			setErrorText(t("readable_upload_error_generic"));
+			setErrorText(t("generic_error_file_upload"));
 		}
 
 		// Update job name if not set
@@ -139,8 +139,8 @@ export default function ReadableViewUpload(props: ReadableViewUploadProps) {
 					}
 					onChange={({ detail }) => setSelectedModel(detail.selectedOption)}
 					options={modelState.text}
-					loadingText="Loading models..."
-					placeholder="Choose a model"
+					loadingText={t("generic_loading")}
+					placeholder={t("generic_loading")}
 					loading={modelsLoading}
 				/>
 				<FileUpload

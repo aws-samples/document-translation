@@ -86,13 +86,13 @@ export default function NewFormTargetLanguages(props: {
 									onClick={selectAllTargetLanguages}
 									data-testid="translation-new-language-targets-selectall"
 								>
-									Select All
+									t("generic_select_all")
 								</Button>
 								<Button
 									onClick={clearAllTargetLanguages}
 									data-testid="translation-new-language-targets-clear"
 								>
-									Clear
+									t("generic_clear")
 								</Button>
 							</SpaceBetween>
 						}

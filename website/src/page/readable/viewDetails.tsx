@@ -88,7 +88,7 @@ export default function ReadableViewDetails(props) {
 			]}
 			items={[props.metadataState]}
 			loading={props.metadataState === undefined}
-			loadingText="Loading jobs"
+			loadingText={t("generic_loading")}
 			header={<Header>{t("generic_details")}</Header>}
 		/>
 	);
