@@ -50,7 +50,8 @@
 		"build": "react-scripts build",
 		"test": "react-scripts test",
 		"eject": "react-scripts eject",
-		"fmt": "prettier --write ."
+		"fmt": "prettier --write .",
+		"update-translations": "node scripts/translation/updateTranslations.js"
 	},
 	"browserslist": {
 		"production": [
