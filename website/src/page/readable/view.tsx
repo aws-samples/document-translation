@@ -134,6 +134,82 @@ export default function ReadableNew() {
 		});
 	}
 
+	async function handleMoveUp(index) {
+		if (index > 0) {
+			const newState = [...textState];
+			[newState[index - 1], newState[index]] = [newState[index], newState[index - 1]];
+			
+			// Prepare batch updates for both items
+			const batchMutations = `
+				mutation BatchUpdateItems {
+					item1: readableUpdateJobItem(
+						id: "${metadataState.id}",
+						itemId: "${newState[index - 1].itemId}",
+						order: ${index - 1},
+						status: "${ItemStatus.COMPLETED}"
+					) {
+						itemId
+					}
+					item2: readableUpdateJobItem(
+						id: "${metadataState.id}",
+						itemId: "${newState[index].itemId}",
+						order: ${index},
+						status: "${ItemStatus.COMPLETED}"
+					) {
+						itemId
+					}
+				}
+			`;
+
+			try {
+				await client.graphql({
+					query: batchMutations
+				});
+				setTextState(newState);
+			} catch (error) {
+				console.error("Error updating items:", error);
+			}
+		}
+	}
+
+	async function handleMoveDown(index) {
+		if (index < textState.length - 1) {
+			const newState = [...textState];
+			[newState[index], newState[index + 1]] = [newState[index + 1], newState[index]];
+			
+			// Prepare batch updates for both items
+			const batchMutations = `
+				mutation BatchUpdateItems {
+					item1: readableUpdateJobItem(
+						id: "${metadataState.id}",
+						itemId: "${newState[index].itemId}",
+						order: ${index},
+						status: "${ItemStatus.COMPLETED}"
+					) {
+						itemId
+					}
+					item2: readableUpdateJobItem(
+						id: "${metadataState.id}",
+						itemId: "${newState[index + 1].itemId}",
+						order: ${index + 1},
+						status: "${ItemStatus.COMPLETED}"
+					) {
+						itemId
+					}
+				}
+			`;
+
+			try {
+				await client.graphql({
+					query: batchMutations
+				});
+				setTextState(newState);
+			} catch (error) {
+				console.error("Error updating items:", error);
+			}
+		}
+	}
+
 	async function appendTextRow() {
 		try {
 			const newItemIndexOrder = textState.length;
@@ -184,7 +260,7 @@ export default function ReadableNew() {
 		);
 	}
 	// DISPLAY | TEXT ITEM
-	function displayTextItem(item, index) {
+	function displayTextItem(item, index, totalItems) {
 		return (
 			<ReadableViewEditText
 				item={item}
@@ -197,6 +273,9 @@ export default function ReadableNew() {
 				metadataState={metadataState}
 				setTextState={setTextState}
 				modelState={modelState}
+				totalItems={totalItems}
+				onMoveUp={handleMoveUp}
+				// onMoveDown={handleMoveDown}
 				// items={items}
 				// setItems={setItems}
 				// models={models}
@@ -260,16 +339,16 @@ export default function ReadableNew() {
 		);
 	}
 
-	function displayItemView(textItem, index) {
+	function displayItemView(textItem, index, totalItems) {
 		if (itemViewState[textItem.itemId] && itemViewState[textItem.itemId].edit) {
-			return displayItemEditView(textItem, index);
+			return displayItemEditView(textItem, index, totalItems);
 		}
 		return displayItemPreviewView(textItem, index);
 	}
-	function displayItemEditView(textItem, index) {
+	function displayItemEditView(textItem, index, totalItems) {
 		return (
 			<>
-				{displayTextItem(textItem, index)}
+				{displayTextItem(textItem, index, totalItems)}
 				<hr />
 				{imageState && (
 					<Grid>
@@ -328,7 +407,9 @@ export default function ReadableNew() {
 							textState.map((textItem, index) => (
 								<SpaceBetween key={textItem.itemId} size="xl">
 									<Container>
-										<SpaceBetween key={index} size="xl">
+										<SpaceBetween key={index} direction="vertical" size="xl">
+										<SpaceBetween direction="horizontal" size="xs">
+
 											<Toggle
 												data-testid="readable-new-row-edit"
 												onChange={({ detail }) =>
@@ -343,7 +424,24 @@ export default function ReadableNew() {
 											>
 												{t("generic_edit")}
 											</Toggle>
-											{displayItemView(textItem, index)}
+												<Button
+													data-testid="readable-new-row-text-moveup"
+													iconName="angle-up"
+													variant="icon"
+													onClick={() => handleMoveUp(index)}
+													disabled={textItem.order === 0}
+												>
+												</Button>
+												<Button
+													data-testid="readable-new-row-text-movedown"
+													iconName="angle-down"
+													variant="icon"
+													onClick={() => handleMoveDown(index)}
+													disabled={textItem.order === textState.length - 1}
+												>
+												</Button>
+											</SpaceBetween>
+											{displayItemView(textItem, index, textState.length)}
 										</SpaceBetween>
 										<span className="jobId">{textItem.itemId}</span>
 									</Container>
