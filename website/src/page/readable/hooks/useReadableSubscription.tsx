@@ -180,6 +180,7 @@ export const UseReadableSubscription = (
 				ItemKeys.UPDATEDAT,
 				ItemKeys.STATUS,
 				ItemKeys.OUTPUT,
+				ItemKeys.INPUT,
 			];
 			const possibleUpdateKeysForMetadata = ["name"];
 			if (item.type === ItemValues.TEXT) {
