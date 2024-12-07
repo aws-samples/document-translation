@@ -288,12 +288,6 @@ export default function ReadableNew() {
 				setTextState={setTextState}
 				modelState={modelState}
 				totalItems={totalItems}
-				onMoveUp={handleMoveUp}
-				// onMoveDown={handleMoveDown}
-				// items={items}
-				// setItems={setItems}
-				// models={models}
-				// setModels={setIModels}
 			/>
 		);
 	}
@@ -306,16 +300,12 @@ export default function ReadableNew() {
 				LoadingStatus={LoadingStatus}
 				modelDefault={modelDefault}
 				modelState={modelState}
-				// LoadingStatus={LoadingStatus}
 				metadataState={metadataState}
 				ItemStatus={ItemStatus}
 				parentItem={parentItem}
 				ItemValues={ItemValues}
 				ItemKeys={ItemKeys}
 				setImageState={setImageState}
-				// parentIndex={index}
-				// appendImageRow={appendImageRow}
-				// images={item.images}
 			/>
 		);
 	}
@@ -444,7 +434,6 @@ export default function ReadableNew() {
 				actions={
 					<ButtonGroup
 						onItemClick={({ detail }) => handleButtonGroup(detail, textItem.itemId, index)}
-						ariaLabel="Chat actions"
 						items={[
 							{
 								type: "group",

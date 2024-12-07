@@ -27,49 +27,12 @@ if (features.readable) {
 
 export default function ReadableViewEditText(props) {
 	const { t } = useTranslation();
-	// const [formState, setFormState] = useState(initialFormState);
 
 	// UTIL
 	function isStatusLoading(status) {
 		// TODO Move to utils
 		return props.LoadingStatus.includes(status);
 	}
-
-	// // function setItemsStateStatus(index, newStatus) {
-	// // 	props.setItems((currentState) => {
-	// // 		const newState = [...currentState];
-	// // 		newState[index].status = newStatus;
-	// // 		return newState;
-	// // 	});
-	// // }
-
-	// // function updateFormStateWithClearedSavedEdit(index, category, type) {
-	// // 	updateFormStateWithEditStatus(index, category, type, false);
-	// // }
-
-	// function isTextInputUnsaved(index) {
-	// 	return !(
-	// 		formState?.[index]?.["input"]?.unsaved ||
-	// 		formState?.[index]?.["modelId"]?.unsaved
-	// 	);
-	// }
-
-	// function isTextOutputUnsaved(index) {
-	// 	return !formState?.[index]?.["output"]?.unsaved;
-	// }
-
-	// // TEXT AREAS
-	// // TEXT AREAS | INPUT
-	// function updateFormStateWithTextEditStatus(index, type, status) {
-	// 	setFormState((currentState) => {
-	// 		const newState = [...currentState];
-	// 		newState[index] = newState[index] ?? {};
-	// 		newState[index][type] = newState[index][type] ?? {};
-	// 		newState[index][type].unsaved = status;
-	// 		return newState;
-	// 	});
-	// }
-
 	function setItemsStateWithNewValue(type, value) {
 		props.setTextState((currentState) => {
 			const newState = [...currentState];
@@ -79,7 +42,6 @@ export default function ReadableViewEditText(props) {
 	}
 
 	function onChangeText(type, value) {
-		// updateFormStateWithTextEditStatus(index, type, true);
 		setItemsStateWithNewValue(type, value);
 	}
 
@@ -121,7 +83,6 @@ export default function ReadableViewEditText(props) {
 
 	// // TEXT AREAS | OUTPUT
 	function saveOutputTextManualEdit() {
-		// setItemsStateStatus(index, statusValueCompleted);
 		const payload = {
 			id: props.metadataState.id,
 			itemId: props.item.itemId,
@@ -129,7 +90,6 @@ export default function ReadableViewEditText(props) {
 			status: props.ItemStatus.UPDATED,
 		};
 		pushItemUpdateWithNewData(payload);
-		// updateFormStateWithClearedSavedEdit(index, "text", "output");
 	}
 
 	// MODEL SELECTION
@@ -180,8 +140,6 @@ export default function ReadableViewEditText(props) {
 						variant="link"
 						onClick={() => generateText()}
 						loading={isStatusLoading(props.item.status)}
-
-						// disabled={isTextInputUnsaved(index)}
 					>
 						{t("generic_generate")}
 					</Button>
@@ -208,7 +166,6 @@ export default function ReadableViewEditText(props) {
 						variant="link"
 						onClick={({ detail }) => saveOutputTextManualEdit(detail.value)}
 						loading={isStatusLoading(props.item.status)}
-						// disabled={isTextOutputUnsaved(index)}
 					>
 						{t("generic_save")}
 					</Button>
