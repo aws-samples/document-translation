@@ -425,7 +425,7 @@ export default function ReadableNew() {
 		}
 	}
 
-	function showRowHeader(textItem, index) {
+	function showRowFooter(textItem, index) {
 		return (
 			<Header
 				actions={
@@ -514,7 +514,7 @@ export default function ReadableNew() {
 							textState.map((textItem, index) => (
 								<SpaceBetween key={textItem.itemId} size="xl">
 									<Container
-										header={showRowHeader(textItem, index)}
+										footer={showRowFooter(textItem, index)}
 									>
 										{displayItemView(textItem, index, textState.length)}
 									</Container>
