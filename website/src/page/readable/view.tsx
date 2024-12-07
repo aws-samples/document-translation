@@ -70,6 +70,19 @@ export default function ReadableNew() {
 		);
 	}
 
+	// When an item with no, or empty, input exists default to edit view
+	// this results in less clicks for the user particularly when adding a new row
+	React.useEffect(() => {
+		textState.map((textItem) => {
+			if (!textItem.input || textItem.input === "") {
+				setItemViewState((prevState) => ({
+					...prevState,
+					[textItem.itemId]: { edit: true },
+				}));
+			}
+		});
+	}, [textState]);
+
 	async function createNewTextItem(order) {
 		const authSession = await fetchAuthSession();
 		try {
