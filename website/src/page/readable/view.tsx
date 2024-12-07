@@ -2,7 +2,7 @@
 // SPDX-License-Identifier: MIT-0
 import "@cloudscape-design/global-styles/index.css";
 
-import { useState } from "react";
+import React, { useState } from "react";
 import { useTranslation } from "react-i18next";
 
 import {
@@ -14,6 +14,7 @@ import {
 	Header,
 	SpaceBetween,
 	Toggle,
+	ButtonGroup,
 } from "@cloudscape-design/components";
 
 import { generateClient } from "@aws-amplify/api";
@@ -390,6 +391,112 @@ export default function ReadableNew() {
 			},
 		});
 	}
+	
+	function copyStringToClipboard(str: string) {
+		navigator.clipboard.writeText(str);
+	}
+
+	interface ItemClickDetails {
+		checked?: boolean,
+		id: string,
+		pressed?: boolean,
+	}
+
+	function handleButtonGroup(detail: ItemClickDetails, itemId: string, index: number) {
+		switch (detail.id) {
+			case 'mode':
+				setViewState(itemId, detail.pressed);
+				return;
+			case 'move-down':
+				handleMoveDown(index);
+				return;
+			case 'move-up':
+				handleMoveUp(index);
+				return;
+			case 'copy-itemId':
+				copyStringToClipboard(itemId)
+				return;
+			case 'copy-output':
+				copyStringToClipboard(textState[index].output)
+				return;
+			default:
+				console.error("Unknown button group action", detail.id);
+				return;
+		}
+	}
+
+	function showRowHeader(textItem, index) {
+		return (
+			<Header
+				actions={
+					<ButtonGroup
+						onItemClick={({ detail }) => handleButtonGroup(detail, textItem.itemId, index)}
+						ariaLabel="Chat actions"
+						items={[
+							{
+								type: "group",
+								text: "Controls",
+								items: [
+									{
+										type: "icon-toggle-button",
+										id: "mode",
+										iconName: "edit",
+										text: itemViewState[textItem.itemId]?.edit ? t("generic_view") : t("generic_edit"),
+										popoverFeedback: t("generic_viewing"),
+										pressedIconName: "transcript",
+										pressed: itemViewState[textItem.itemId]?.edit || false,
+										pressedPopoverFeedback: t("generic_editing"),
+									},
+									{
+										type: "icon-button",
+										id: "copy-output",
+										iconName: "copy",
+										text: t("generic_copy"),
+									}
+								]
+							},
+							{
+								type: "menu-dropdown",
+								id: "more-actions",
+								text: "More actions",
+								items: [
+									{
+										text: "Move row",
+										items: [
+											{
+												disabled: textItem.order === 0,
+												iconName: "angle-up",
+												id: `move-up`,
+												text: "Move up",
+											},
+											{
+												id: `move-down`,
+												disabled: textItem.order === textState.length - 1,
+												iconName: "angle-down",
+												text: "Move down",
+											},
+										]
+									},
+									{
+										text: "More Other",
+										items: [
+											{
+												id: "copy-itemId",
+												iconName: "script",
+												text: "Copy ID"
+											},
+										]
+									}
+								]
+							}
+						]}
+						variant="icon"
+					/>
+				}
+			>
+			</Header>
+		);
+	};
 
 	return (
 		<>
@@ -406,44 +513,10 @@ export default function ReadableNew() {
 						) : (
 							textState.map((textItem, index) => (
 								<SpaceBetween key={textItem.itemId} size="xl">
-									<Container>
-										<SpaceBetween key={index} direction="vertical" size="xl">
-										<SpaceBetween direction="horizontal" size="xs">
-
-											<Toggle
-												data-testid="readable-new-row-edit"
-												onChange={({ detail }) =>
-													setViewState(textItem.itemId, detail.checked)
-												}
-												checked={
-													itemViewState[textItem.itemId] &&
-													itemViewState[textItem.itemId].edit
-														? itemViewState[textItem.itemId].edit
-														: false
-												}
-											>
-												{t("generic_edit")}
-											</Toggle>
-												<Button
-													data-testid="readable-new-row-text-moveup"
-													iconName="angle-up"
-													variant="icon"
-													onClick={() => handleMoveUp(index)}
-													disabled={textItem.order === 0}
-												>
-												</Button>
-												<Button
-													data-testid="readable-new-row-text-movedown"
-													iconName="angle-down"
-													variant="icon"
-													onClick={() => handleMoveDown(index)}
-													disabled={textItem.order === textState.length - 1}
-												>
-												</Button>
-											</SpaceBetween>
-											{displayItemView(textItem, index, textState.length)}
-										</SpaceBetween>
-										<span className="jobId">{textItem.itemId}</span>
+									<Container
+										header={showRowHeader(textItem, index)}
+									>
+										{displayItemView(textItem, index, textState.length)}
 									</Container>
 								</SpaceBetween>
 							)))}
