@@ -448,7 +448,7 @@ export default function ReadableNew() {
 						items={[
 							{
 								type: "group",
-								text: "Controls",
+								text: t("generic_controls"),
 								items: [
 									{
 										type: "icon-toggle-button",
@@ -471,32 +471,32 @@ export default function ReadableNew() {
 							{
 								type: "menu-dropdown",
 								id: "more-actions",
-								text: "More actions",
+								text: t("generic_more_actions"),
 								items: [
 									{
-										text: "Move row",
+										text: t("generic_move_row"),
 										items: [
 											{
 												disabled: textItem.order === 0,
 												iconName: "angle-up",
 												id: `move-up`,
-												text: "Move up",
+												text: t("generic_move_up"),
 											},
 											{
 												id: `move-down`,
 												disabled: textItem.order === textState.length - 1,
 												iconName: "angle-down",
-												text: "Move down",
+												text: t("generic_move_down"),
 											},
 										]
 									},
 									{
-										text: "More Other",
+										text: t("generic_other"),
 										items: [
 											{
 												id: "copy-itemId",
 												iconName: "script",
-												text: "Copy ID"
+												text: t("generic_copy_id"),
 											},
 										]
 									}
