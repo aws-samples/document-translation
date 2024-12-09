@@ -73,15 +73,17 @@ export default function ReadableNew() {
 	// When an item with no, or empty, input exists default to edit view
 	// this results in less clicks for the user particularly when adding a new row
 	React.useEffect(() => {
-		textState.map((textItem) => {
-			if (!textItem.input || textItem.input === "") {
+		textState.forEach((textItem) => {
+			const hasNoInput = !textItem.input || textItem.input === "";
+			const isNotLoading = !LoadingStatus.includes(textItem.status) && textItem.status;
+			if (hasNoInput && isNotLoading) {
 				setItemViewState((prevState) => ({
 					...prevState,
 					[textItem.itemId]: { edit: true },
 				}));
 			}
 		});
-	}, [textState]);
+	}, [textState, LoadingStatus]);
 
 	async function createNewTextItem(order) {
 		const authSession = await fetchAuthSession();
