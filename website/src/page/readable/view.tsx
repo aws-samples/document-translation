@@ -74,9 +74,9 @@ export default function ReadableNew() {
 	// this results in less clicks for the user particularly when adding a new row
 	React.useEffect(() => {
 		textState.forEach((textItem) => {
-			const hasNoInput = !textItem.input || textItem.input === "";
+			const hasNoInputOrOutput = ! hasContent(textItem);
 			const isNotLoading = !LoadingStatus.includes(textItem.status) && textItem.status;
-			if (hasNoInput && isNotLoading) {
+			if (hasNoInputOrOutput && isNotLoading) {
 				setItemViewState((prevState) => ({
 					...prevState,
 					[textItem.itemId]: { edit: true },
@@ -84,6 +84,12 @@ export default function ReadableNew() {
 			}
 		});
 	}, [textState, LoadingStatus]);
+
+	const hasContent = (textItem): boolean => {
+		const hasInput = textItem.input || ! textItem.input === "";
+		const hasOutput = textItem.output || ! textItem.output === "";
+		return hasInput || hasOutput;
+	}
 
 	async function createNewTextItem(order) {
 		const authSession = await fetchAuthSession();
@@ -446,6 +452,7 @@ export default function ReadableNew() {
 										id: "mode",
 										iconName: "edit",
 										text: itemViewState[textItem.itemId]?.edit ? t("generic_view") : t("generic_edit"),
+										disabled: ! hasContent(textItem),
 										popoverFeedback: t("generic_viewing"),
 										pressedIconName: "transcript",
 										pressed: itemViewState[textItem.itemId]?.edit || false,
