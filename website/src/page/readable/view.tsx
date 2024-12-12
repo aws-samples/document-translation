@@ -457,7 +457,6 @@ export default function ReadableNew() {
 										id: "mode",
 										iconName: "edit",
 										text: itemViewState[textItem.itemId]?.edit ? t("generic_view") : t("generic_edit"),
-										disabled: ! hasContent(textItem),
 										popoverFeedback: t("generic_viewing"),
 										pressedIconName: "transcript",
 										pressed: itemViewState[textItem.itemId]?.edit || false,
