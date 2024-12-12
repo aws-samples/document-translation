@@ -15,6 +15,7 @@ import {
 	Table,
 	TextContent,
 	Toggle,
+	TextFilter,
 } from "@cloudscape-design/components";
 
 import { useTranslationJobs } from "./hooks/useTranslationJobs";
@@ -51,6 +52,7 @@ export default function HistoryTable() {
 	const { t } = useTranslation();
 	const navigate = useNavigate();
 	const [hideExpired, setHideExpired] = useState(true);
+	const [ filteringText, setFilteringText ] = useState("");
 
 	const toggleExpired = () => setHideExpired(!hideExpired);
 
@@ -176,9 +178,12 @@ export default function HistoryTable() {
 				},
 			]}
 			stickyColumns={{ first: 0, last: 1 }}
-			items={jobs.filter(
-				(job) => !hideExpired || job.jobStatus.toUpperCase() !== "EXPIRED"
-			)}
+			items={jobs.filter(item => {
+				if (filteringText) {
+					return (item.jobName?.toLowerCase() ?? '').includes(filteringText.toLowerCase());
+				}
+				return !hideExpired || item.jobStatus.toUpperCase() !== "EXPIRED";
+			})}
 			loadingText={t("generic_loading")}
 			loading={loading}
 			trackBy="id"
@@ -212,6 +217,12 @@ export default function HistoryTable() {
 			}
 			stickyHeader
 			stripedRows
+			filter={
+				<TextFilter
+					filteringText={filteringText}
+					onChange={({ detail }) => setFilteringText(detail.filteringText)}
+					countText={`${jobs.filter(item => (item.jobName?.toLowerCase() ?? '').includes(filteringText.toLowerCase())).length} matches`}				/>
+			}
 		/>
 	);
 }

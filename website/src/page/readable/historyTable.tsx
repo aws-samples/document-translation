@@ -2,6 +2,7 @@
 // SPDX-License-Identifier: MIT-0
 import "@cloudscape-design/global-styles/index.css";
 
+import { useState } from "react";
 import { useTranslation } from "react-i18next";
 import { useNavigate } from "react-router-dom";
 
@@ -12,6 +13,7 @@ import {
 	Link,
 	SpaceBetween,
 	Table,
+	TextFilter,
 } from "@cloudscape-design/components";
 
 import { useReadableJobs } from "./hooks/useReadableJobs";
@@ -24,6 +26,7 @@ export default function HistoryTable() {
 	const { jobs, loading } = useReadableJobs();
 	const { t } = useTranslation();
 	const navigate = useNavigate();
+	const [ filteringText, setFilteringText ] = useState("");
 
 	async function createAndNavigate() {
 		const jobId = await CreateJob();
@@ -62,7 +65,9 @@ export default function HistoryTable() {
 					cell: (item) => formatTimestamp(item.updatedAt),
 				},
 			]}
-			items={jobs}
+			items={jobs.filter(item => 
+				(item.name?.toLowerCase() ?? '').includes(filteringText.toLowerCase())
+			)}
 			loadingText={t("generic_loading")}
 			loading={loading}
 			trackBy="id"
@@ -81,6 +86,12 @@ export default function HistoryTable() {
 			}
 			stickyHeader
 			stripedRows
+			filter={
+				<TextFilter
+					filteringText={filteringText}
+					onChange={({ detail }) => setFilteringText(detail.filteringText)}
+					countText={`${jobs.filter(item => (item.name?.toLowerCase() ?? '').includes(filteringText.toLowerCase())).length} matches`}				/>
+			}
 		/>
 	);
 }
