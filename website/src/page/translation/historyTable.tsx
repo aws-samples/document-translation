@@ -196,15 +196,19 @@ export default function HistoryTable() {
 				</Box>
 			}
 			header={
-				<Header counter={`(${jobs.length})`}>{t("generic_history")}</Header>
-			}
-			preferences={
-				<Toggle
-					onChange={({ detail }) => toggleExpired(detail.checked)}
-					checked={hideExpired ? false : true}
+				<Header
+				counter={`(${jobs.length})`}
+				actions={
+					<Toggle
+						onChange={({ detail }) => toggleExpired(detail.checked)}
+						checked={hideExpired ? false : true}
+					>
+						{t("generic_status_expired")}
+					</Toggle>
+				}
 				>
-					{t("generic_status_expired")}
-				</Toggle>
+					{t("generic_history")}
+				</Header>
 			}
 		/>
 	);
