@@ -79,6 +79,8 @@ export default function HistoryTable() {
 			header={
 				<Header counter={`(${jobs.length})`}>{t("generic_history")}</Header>
 			}
+			stickyHeader
+			stripedRows
 		/>
 	);
 }

@@ -210,6 +210,8 @@ export default function HistoryTable() {
 					{t("generic_history")}
 				</Header>
 			}
+			stickyHeader
+			stripedRows
 		/>
 	);
 }
