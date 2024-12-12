@@ -363,13 +363,19 @@ export default function ReadableNew() {
 				{displayTextItem(textItem, index, totalItems)}
 				<hr />
 				{imageState && (
-					<Grid>
-						{imageState[textItem.itemId] &&
-							imageState[textItem.itemId].map((imageItem, index) => (
-								<Box key={imageItem.itemId} variant="div">
-									{displayImageItem(imageItem, index, textItem)}
-								</Box>
-							))}
+					<Grid
+						gridDefinition={[
+							// If imageState[textItem.itemId] exists, create spans for all images plus add button
+							// If it doesn't exist, create just one span for the add button
+							...Array(imageState[textItem.itemId]?.length || 0).fill({ colspan: 4 }),
+							{ colspan: 4 } // Add button span
+						]}
+					>
+						{imageState[textItem.itemId]?.map((imageItem, index) => (
+							<Box key={imageItem.itemId} variant="div">
+								{displayImageItem(imageItem, index, textItem)}
+							</Box>
+						))}
 						<Box margin="xxl" variant="div">
 							{displayAddImageRow(textItem, index)}
 						</Box>
