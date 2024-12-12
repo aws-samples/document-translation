@@ -101,8 +101,6 @@ export default function ReadableViewEditText(props) {
 	function displayInput() {
 		const type = props.ItemValues.TEXT;
 		const models = props.modelState[type];
-		const defaultModelIndex = props.modelDefault[type].index;
-		const itemModelIndex = returnIndexOfModelId(models, props.item.modelId);
 
 		return (
 			<>
@@ -121,8 +119,8 @@ export default function ReadableViewEditText(props) {
 						data-testid="readable-new-row-text-model"
 						selectedOption={
 							props.item.modelId
-								? models[itemModelIndex]
-								: models[defaultModelIndex]
+								? models[returnIndexOfModelId(models, props.item.modelId)]
+								: models[props.modelDefault[type].index]
 						}
 						onChange={({ detail }) =>
 							onChangeModel(detail.selectedOption.value)
