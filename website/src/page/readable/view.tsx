@@ -13,7 +13,6 @@ import {
 	Grid,
 	Header,
 	SpaceBetween,
-	Toggle,
 	ButtonGroup,
 } from "@cloudscape-design/components";
 
