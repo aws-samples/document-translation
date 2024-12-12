@@ -83,7 +83,7 @@ export default function ReadableNew() {
 				}));
 			}
 		});
-	}, [textState, LoadingStatus]);
+	}, [textState]);
 
 	const hasContent = (textItem): boolean => {
 		const hasInput = textItem.input || ! textItem.input === "";
