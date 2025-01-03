@@ -8,8 +8,7 @@ SPDX-License-Identifier: MIT-0
 - [Documentation](https://aws-samples.github.io/document-translation/)
 	- [Architecture](https://aws-samples.github.io/document-translation/docs/architecture/)
 	- [Installation](https://aws-samples.github.io/document-translation/docs/installation/)
-	- [Quick Start](https://aws-samples.github.io/document-translation/docs/quick-start.html)
-	- [FAQ](https://aws-samples.github.io/document-translation/docs/faq.html)
+	- [FAQ](https://aws-samples.github.io/document-translation/docs/faq/)
 
 ## Security
 
