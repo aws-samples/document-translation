@@ -37,7 +37,7 @@
 		"awscdk-appsync-utils": "^0.0.271",
 		"cdk-nag": "2.27.210",
 		"constructs": "^10.3.0",
-		"esbuild": "^0.19.5",
+		"esbuild": "^0.25.0",
 		"lambda-tester": "^4.0.1",
 		"source-map-support": "^0.5.21"
 	}
