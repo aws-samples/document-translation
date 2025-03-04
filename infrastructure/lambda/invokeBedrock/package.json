@@ -1,7 +1,0 @@
-{
-	"type": "module",
-	"dependencies": {
-		"@aws-sdk/client-bedrock-runtime": "^3.654.0",
-		"@aws-sdk/util-dynamodb": "^3.437.0"
-	}
-}
