@@ -16,7 +16,7 @@ import { dt_stepfunction } from "../../../components/stepfunction";
 import { dt_lambda } from "../../../components/lambda";
 
 export interface props {
-	invokeBedrockLambda: lambda.Function;
+	converseBedrockLambda: lambda.Function;
 	removalPolicy: cdk.RemovalPolicy;
 }
 
@@ -97,10 +97,10 @@ export class dt_readableWorkflow extends Construct {
 			},
 		});
 
-		// STATE MACHINE | TASKS | invokeBedrock
-		const invokeBedrock = new tasks.LambdaInvoke(this, "invokeBedrock", {
-			lambdaFunction: props.invokeBedrockLambda,
-			resultPath: "$.invokeBedrock",
+		// STATE MACHINE | TASKS | converseBedrock
+		const converseBedrock = new tasks.LambdaInvoke(this, "converseBedrock", {
+			lambdaFunction: props.converseBedrockLambda,
+			resultPath: "$.converseBedrock",
 			resultSelector: {
 				"Payload.$": "$.Payload",
 			},
@@ -120,7 +120,7 @@ export class dt_readableWorkflow extends Construct {
 			},
 			payload: sfn.TaskInput.fromObject({
 				string: sfn.JsonPath.stringAt(
-					"$.invokeBedrock.Payload.Body.completion",
+					"$.converseBedrock.Payload.Body.completion",
 				),
 				pattern: regexStringLeadingToColon,
 			}),
@@ -154,7 +154,7 @@ export class dt_readableWorkflow extends Construct {
 				removalPolicy: props.removalPolicy,
 				definition: createPrompt
 					.next(createBody)
-					.next(invokeBedrock)
+					.next(converseBedrock)
 					.next(utilRegexReplace)
 					.next(utilTrim)
 					.next(filterOutput),
@@ -168,7 +168,7 @@ export class dt_readableWorkflow extends Construct {
 					reason: "Permissions scoped to dedicated resources.",
 					appliesTo: [
 						`Resource::<${cdk.Stack.of(this).getLogicalId(
-							props.invokeBedrockLambda.node.defaultChild as cdk.CfnElement,
+							props.converseBedrockLambda.node.defaultChild as cdk.CfnElement,
 						)}.Arn>:*`,
 					],
 				},

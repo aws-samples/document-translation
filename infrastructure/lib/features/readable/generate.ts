@@ -34,11 +34,11 @@ export class dt_readableWorkflowGenerate extends Construct {
 		super(scope, id);
 
 		// LAMBDA
-		// LAMBDA | INVOKE BEDROCK
-		// LAMBDA | INVOKE BEDROCK | ROLE
-		const invokeBedrockLambdaRole = new iam.Role(
+		// LAMBDA | CONVERSE BEDROCK
+		// LAMBDA | CONVERSE BEDROCK | ROLE
+		const converseBedrockLambdaRole = new iam.Role(
 			this,
-			"invokeBedrockLambdaRole",
+			"converseBedrockLambdaRole",
 			{
 				// ASM-L6 // ASM-L8
 				assumedBy: new iam.ServicePrincipal("lambda.amazonaws.com"),
@@ -46,8 +46,8 @@ export class dt_readableWorkflowGenerate extends Construct {
 			},
 		);
 
-		// LAMBDA | INVOKE BEDROCK | POLICY
-		const permitInvokeBedrockModel = new iam.Policy(
+		// LAMBDA | CONVERSE BEDROCK | POLICY
+		const permitConverseBedrockModel = new iam.Policy(
 			this,
 			"permitSfnSendSuccess",
 			{
@@ -66,9 +66,9 @@ export class dt_readableWorkflowGenerate extends Construct {
 				],
 			},
 		);
-		invokeBedrockLambdaRole.attachInlinePolicy(permitInvokeBedrockModel);
+		converseBedrockLambdaRole.attachInlinePolicy(permitConverseBedrockModel);
 		NagSuppressions.addResourceSuppressions(
-			permitInvokeBedrockModel,
+			permitConverseBedrockModel,
 			[
 				{
 					id: "AwsSolutions-IAM5",
@@ -88,10 +88,10 @@ export class dt_readableWorkflowGenerate extends Construct {
 			true,
 		);
 
-		// LAMBDA | INVOKE BEDROCK | FUNCTION
-		const invokeBedrockLambda = new dt_lambda(this, "invokeBedrockLambda", {
-			role: invokeBedrockLambdaRole,
-			path: "lambda/invokeBedrock",
+		// LAMBDA | CONVERSE BEDROCK | FUNCTION
+		const converseBedrockLambda = new dt_lambda(this, "converseBedrockLambda", {
+			role: converseBedrockLambdaRole,
+			path: "lambda/converseBedrock",
 			description: "Invoke Bedrock API",
 			environment: {
 				BEDROCK_REGION: props.bedrockRegion,
@@ -134,7 +134,7 @@ export class dt_readableWorkflowGenerate extends Construct {
 			this,
 			"workflow_amazon_text",
 			{
-				invokeBedrockLambda: invokeBedrockLambda.lambdaFunction,
+				converseBedrockLambda: converseBedrockLambda.lambdaFunction,
 				removalPolicy: props.removalPolicy,
 			},
 		);
@@ -154,7 +154,7 @@ export class dt_readableWorkflowGenerate extends Construct {
 			this,
 			"workflow_anthropic",
 			{
-				invokeBedrockLambda: invokeBedrockLambda.lambdaFunction,
+				converseBedrockLambda: converseBedrockLambda.lambdaFunction,
 				removalPolicy: props.removalPolicy,
 			},
 		);
@@ -163,7 +163,7 @@ export class dt_readableWorkflowGenerate extends Construct {
 			this,
 			"workflow_anthropic3",
 			{
-				invokeBedrockLambda: invokeBedrockLambda.lambdaFunction,
+				converseBedrockLambda: converseBedrockLambda.lambdaFunction,
 				removalPolicy: props.removalPolicy,
 			},
 		);
