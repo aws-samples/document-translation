@@ -66,7 +66,7 @@ export default function Header(user: {
 		<TopNavigation
 			data-testid="topnavigation"
 			identity={{
-				title: "Document Transformation",
+				title: "MOPAC | DS - 📄 SimplyReadable",
 				// TODO BUSINESS NAME
 				logo: getLogo(),
 				href: "/",
