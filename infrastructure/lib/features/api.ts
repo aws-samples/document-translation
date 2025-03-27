@@ -15,6 +15,7 @@ import * as identitypool from "@aws-cdk/aws-cognito-identitypool-alpha";
 import { CodeFirstSchema } from "awscdk-appsync-utils";
 
 export interface props {
+	instanceName: string;
 	cognitoLocalUsers?: boolean;
 	cognitoLocalUsersMfa?: string;
 	cognitoLocalUsersMfaOtp?: boolean;
@@ -34,13 +35,6 @@ export class dt_api extends Construct {
 
 	constructor(scope: Construct, id: string, props: props) {
 		super(scope, id);
-
-		// ENVIRONMENT VARIABLES
-		// ENVIRONMENT VARIABLES | GITHUB REPO
-		const instanceName: string =
-			process.env.instanceName !== undefined
-				? process.env.instanceName
-				: "main";
 
 		// COGNITO
 		// COGNITO | USERPOOL
@@ -144,7 +138,7 @@ export class dt_api extends Construct {
 			cognitoDomain: {
 				domainPrefix: `document-translation-auth-${
 					cdk.Stack.of(this).account
-				}-${instanceName}`,
+				}-${props.instanceName}`,
 			},
 		});
 

@@ -4,14 +4,13 @@
 import * as cdk from "aws-cdk-lib";
 import { AwsSolutionsChecks } from "cdk-nag";
 import { pipelineStack } from "../lib/pipeline-stack";
+import { Config } from "./types";
+import { loadConfig } from "../util/loadConfig";
 
-// ENVIRONMENT VARIABLES
-// ENVIRONMENT VARIABLES | GITHUB REPO
-const instanceName: string =
-	process.env.instanceName !== undefined ? process.env.instanceName : "main";
+const config: Config = loadConfig();
 
 const app = new cdk.App();
-const stackName = `DocTran-${instanceName}-pipeline`;
+const stackName = `DocTran-${config.common.instance.name}-pipeline`;
 new pipelineStack(app, `${stackName}`, {
 	stackName: `${stackName}`,
 	description: `(uksb-1tthgi813) (tag:pipeline)`,

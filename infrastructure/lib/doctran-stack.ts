@@ -92,6 +92,7 @@ export class DocTranStack extends cdk.Stack {
 		// API (Required feature)
 		//
 		const base_api = new dt_api(this, "base_api", {
+			instanceName: config.common.instance.name,
 			cognitoLocalUsers: config.app.cognito.localUsers.enable,
 			cognitoLocalUsersMfa: config.app.cognito.localUsers.mfa.enforcement,
 			cognitoLocalUsersMfaOtp: config.app.cognito.localUsers.mfa.otp,
