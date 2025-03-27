@@ -4,7 +4,7 @@
 import * as cdk from "aws-cdk-lib";
 import { AwsSolutionsChecks } from "cdk-nag";
 import { pipelineStack } from "../lib/pipeline-stack";
-import { Config } from "./types";
+import { Config } from "../lib/types";
 import { loadConfig } from "../util/loadConfig";
 
 const config: Config = loadConfig();
