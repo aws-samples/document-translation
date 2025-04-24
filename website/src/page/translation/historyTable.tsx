@@ -14,8 +14,8 @@ import {
 	Spinner,
 	Table,
 	TextContent,
-	Toggle,
 	TextFilter,
+	Toggle,
 } from "@cloudscape-design/components";
 
 import { useTranslationJobs } from "./hooks/useTranslationJobs";
@@ -52,7 +52,7 @@ export default function HistoryTable() {
 	const { t } = useTranslation();
 	const navigate = useNavigate();
 	const [hideExpired, setHideExpired] = useState(true);
-	const [ filteringText, setFilteringText ] = useState("");
+	const [filteringText, setFilteringText] = useState("");
 
 	const toggleExpired = () => setHideExpired(!hideExpired);
 
@@ -123,6 +123,11 @@ export default function HistoryTable() {
 						{t("generic_download")}
 					</Button>
 				)}
+				{item.jobStatus.toUpperCase() === "DIRECT_COMPLETED" && (
+					<TextContent data-status="isDirectCompleted">
+						{t("generic_status_direct_completed")}
+					</TextContent>
+				)}
 			</>
 		);
 	};
@@ -178,9 +183,11 @@ export default function HistoryTable() {
 				},
 			]}
 			stickyColumns={{ first: 0, last: 1 }}
-			items={jobs.filter(item => {
+			items={jobs.filter((item) => {
 				if (filteringText) {
-					return (item.jobName?.toLowerCase() ?? '').includes(filteringText.toLowerCase());
+					return (item.jobName?.toLowerCase() ?? "").includes(
+						filteringText.toLowerCase()
+					);
 				}
 				return !hideExpired || item.jobStatus.toUpperCase() !== "EXPIRED";
 			})}
@@ -202,15 +209,15 @@ export default function HistoryTable() {
 			}
 			header={
 				<Header
-				counter={`(${jobs.length})`}
-				actions={
-					<Toggle
-						onChange={({ detail }) => toggleExpired(detail.checked)}
-						checked={hideExpired ? false : true}
-					>
-						{t("generic_status_expired")}
-					</Toggle>
-				}
+					counter={`(${jobs.length})`}
+					actions={
+						<Toggle
+							onChange={({ detail }) => toggleExpired(detail.checked)}
+							checked={hideExpired ? false : true}
+						>
+							{t("generic_status_expired")}
+						</Toggle>
+					}
 				>
 					{t("generic_history")}
 				</Header>
@@ -221,7 +228,8 @@ export default function HistoryTable() {
 				<TextFilter
 					filteringText={filteringText}
 					onChange={({ detail }) => setFilteringText(detail.filteringText)}
-					countText={`${jobs.filter(item => (item.jobName?.toLowerCase() ?? '').includes(filteringText.toLowerCase())).length} matches`}				/>
+					countText={`${jobs.filter((item) => (item.jobName?.toLowerCase() ?? "").includes(filteringText.toLowerCase())).length} matches`}
+				/>
 			}
 		/>
 	);

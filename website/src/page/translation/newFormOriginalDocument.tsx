@@ -26,6 +26,9 @@ const supportedFileSizeMegaBytes = 20;
 const supportedFileSizeKiloBytes = supportedFileSizeMegaBytes * 1000;
 const supportedFileSizeBytes = supportedFileSizeKiloBytes * 1000;
 
+// Size limit for direct translation using TranslateDocumentCommand (100KB)
+export const directTranslationSizeLimit = 100000;
+
 export default function NewFormOriginalDocument(props: {
 	fileState: File | undefined;
 	updateFileState: Function;
