@@ -5,7 +5,12 @@ import "@cloudscape-design/global-styles/index.css";
 import React from "react";
 import { useTranslation } from "react-i18next";
 
-import { Header, Input, Table, ButtonGroup } from "@cloudscape-design/components";
+import {
+	ButtonGroup,
+	Header,
+	Input,
+	Table,
+} from "@cloudscape-design/components";
 
 import { generateClient } from "@aws-amplify/api";
 
@@ -53,15 +58,19 @@ export default function ReadableViewDetails(props) {
 	}
 
 	interface ItemClickDetails {
-		checked?: boolean,
-		id: string,
-		pressed?: boolean,
+		checked?: boolean;
+		id: string;
+		pressed?: boolean;
 	}
 
-	function handleButtonGroup(detail: ItemClickDetails, itemId: string, index: number) {
+	function handleButtonGroup(
+		detail: ItemClickDetails,
+		itemId: string,
+		index: number
+	) {
 		switch (detail.id) {
-			case 'copy-itemId':
-				copyStringToClipboard(itemId)
+			case "copy-itemId":
+				copyStringToClipboard(itemId);
 				return;
 			default:
 				console.error("Unknown button group action", detail.id);
@@ -113,34 +122,36 @@ export default function ReadableViewDetails(props) {
 			header={
 				// <Header>{t("generic_details")}</Header>
 				<Header
-				actions={
-					<ButtonGroup
-						onItemClick={({ detail }) => handleButtonGroup(detail, textItem.itemId, index)}
-						items={[
-							{
-								type: "menu-dropdown",
-								id: "more-actions",
-								text: t("generic_more_actions"),
-								items: [
-									{
-										text: t("generic_other"),
-										items: [
-											{
-												id: "copy-itemId",
-												iconName: "script",
-												text: t("generic_copy_id"),
-											},
-										]
-									}
-								]
+					actions={
+						<ButtonGroup
+							onItemClick={({ detail }) =>
+								handleButtonGroup(detail, textItem.itemId, index)
 							}
-						]}
-						variant="icon"
-					/>
-				}
-			>
-				{t("generic_details")}
-			</Header>
+							items={[
+								{
+									type: "menu-dropdown",
+									id: "more-actions",
+									text: t("generic_more_actions"),
+									items: [
+										{
+											text: t("generic_other"),
+											items: [
+												{
+													id: "copy-itemId",
+													iconName: "script",
+													text: t("generic_copy_id"),
+												},
+											],
+										},
+									],
+								},
+							]}
+							variant="icon"
+						/>
+					}
+				>
+					{t("generic_details")}
+				</Header>
 			}
 		/>
 	);

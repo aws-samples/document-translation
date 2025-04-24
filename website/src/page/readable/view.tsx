@@ -8,12 +8,12 @@ import { useTranslation } from "react-i18next";
 import {
 	Box,
 	Button,
+	ButtonGroup,
 	Container,
 	ContentLayout,
 	Grid,
 	Header,
 	SpaceBetween,
-	ButtonGroup,
 } from "@cloudscape-design/components";
 
 import { generateClient } from "@aws-amplify/api";
@@ -21,7 +21,6 @@ import { fetchAuthSession } from "@aws-amplify/auth";
 
 import { UseReadableModels } from "./hooks/useReadableModels";
 import { UseReadableSubscription } from "./hooks/useReadableSubscription";
-import ReadableViewUpload from "./viewUpload";
 
 import { ItemKeys, ItemStatus, ItemValues } from "./enums";
 import ReadableViewDetails from "./viewDetails";
@@ -29,6 +28,7 @@ import ReadableViewEditImage from "./viewEditImage";
 import ReadableViewEditText from "./viewEditText";
 import ReadableViewPreview from "./viewPreview";
 import ReadableViewPrintButton from "./viewPrintButton";
+import ReadableViewUpload from "./viewUpload";
 
 const client = generateClient({ authMode: "userPool" });
 
@@ -73,8 +73,9 @@ export default function ReadableNew() {
 	// this results in less clicks for the user particularly when adding a new row
 	React.useEffect(() => {
 		textState.forEach((textItem) => {
-			const hasNoInputOrOutput = ! hasContent(textItem);
-			const isNotLoading = !LoadingStatus.includes(textItem.status) && textItem.status;
+			const hasNoInputOrOutput = !hasContent(textItem);
+			const isNotLoading =
+				!LoadingStatus.includes(textItem.status) && textItem.status;
 			if (hasNoInputOrOutput && isNotLoading) {
 				setItemViewState((prevState) => ({
 					...prevState,
@@ -85,10 +86,10 @@ export default function ReadableNew() {
 	}, [textState]);
 
 	const hasContent = (textItem): boolean => {
-		const hasInput = textItem.input || ! textItem.input === "";
-		const hasOutput = textItem.output || ! textItem.output === "";
+		const hasInput = textItem.input || !textItem.input === "";
+		const hasOutput = textItem.output || !textItem.output === "";
 		return hasInput || hasOutput;
-	}
+	};
 
 	async function createNewTextItem(order) {
 		const authSession = await fetchAuthSession();
@@ -158,8 +159,11 @@ export default function ReadableNew() {
 	async function handleMoveUp(index) {
 		if (index > 0) {
 			const newState = [...textState];
-			[newState[index - 1], newState[index]] = [newState[index], newState[index - 1]];
-			
+			[newState[index - 1], newState[index]] = [
+				newState[index],
+				newState[index - 1],
+			];
+
 			// Prepare batch updates for both items
 			const batchMutations = `
 				mutation BatchUpdateItems {
@@ -184,7 +188,7 @@ export default function ReadableNew() {
 
 			try {
 				await client.graphql({
-					query: batchMutations
+					query: batchMutations,
 				});
 				setTextState(newState);
 			} catch (error) {
@@ -196,8 +200,11 @@ export default function ReadableNew() {
 	async function handleMoveDown(index) {
 		if (index < textState.length - 1) {
 			const newState = [...textState];
-			[newState[index], newState[index + 1]] = [newState[index + 1], newState[index]];
-			
+			[newState[index], newState[index + 1]] = [
+				newState[index + 1],
+				newState[index],
+			];
+
 			// Prepare batch updates for both items
 			const batchMutations = `
 				mutation BatchUpdateItems {
@@ -222,7 +229,7 @@ export default function ReadableNew() {
 
 			try {
 				await client.graphql({
-					query: batchMutations
+					query: batchMutations,
 				});
 				setTextState(newState);
 			} catch (error) {
@@ -366,8 +373,10 @@ export default function ReadableNew() {
 						gridDefinition={[
 							// If imageState[textItem.itemId] exists, create spans for all images plus add button
 							// If it doesn't exist, create just one span for the add button
-							...Array(imageState[textItem.itemId]?.length || 0).fill({ colspan: 4 }),
-							{ colspan: 4 } // Add button span
+							...Array(imageState[textItem.itemId]?.length || 0).fill({
+								colspan: 4,
+							}),
+							{ colspan: 4 }, // Add button span
 						]}
 					>
 						{imageState[textItem.itemId]?.map((imageItem, index) => (
@@ -407,33 +416,37 @@ export default function ReadableNew() {
 			},
 		});
 	}
-	
+
 	function copyStringToClipboard(str: string) {
 		navigator.clipboard.writeText(str);
 	}
 
 	interface ItemClickDetails {
-		checked?: boolean,
-		id: string,
-		pressed?: boolean,
+		checked?: boolean;
+		id: string;
+		pressed?: boolean;
 	}
 
-	function handleButtonGroup(detail: ItemClickDetails, itemId: string, index: number) {
+	function handleButtonGroup(
+		detail: ItemClickDetails,
+		itemId: string,
+		index: number
+	) {
 		switch (detail.id) {
-			case 'mode':
+			case "mode":
 				setViewState(itemId, detail.pressed);
 				return;
-			case 'move-down':
+			case "move-down":
 				handleMoveDown(index);
 				return;
-			case 'move-up':
+			case "move-up":
 				handleMoveUp(index);
 				return;
-			case 'copy-itemId':
-				copyStringToClipboard(itemId)
+			case "copy-itemId":
+				copyStringToClipboard(itemId);
 				return;
-			case 'copy-output':
-				copyStringToClipboard(textState[index].output)
+			case "copy-output":
+				copyStringToClipboard(textState[index].output);
 				return;
 			default:
 				console.error("Unknown button group action", detail.id);
@@ -446,7 +459,9 @@ export default function ReadableNew() {
 			<Header
 				actions={
 					<ButtonGroup
-						onItemClick={({ detail }) => handleButtonGroup(detail, textItem.itemId, index)}
+						onItemClick={({ detail }) =>
+							handleButtonGroup(detail, textItem.itemId, index)
+						}
 						items={[
 							{
 								type: "group",
@@ -456,7 +471,9 @@ export default function ReadableNew() {
 										type: "icon-toggle-button",
 										id: "mode",
 										iconName: "edit",
-										text: itemViewState[textItem.itemId]?.edit ? t("generic_view") : t("generic_edit"),
+										text: itemViewState[textItem.itemId]?.edit
+											? t("generic_view")
+											: t("generic_edit"),
 										popoverFeedback: t("generic_viewing"),
 										pressedIconName: "transcript",
 										pressed: itemViewState[textItem.itemId]?.edit || false,
@@ -467,8 +484,8 @@ export default function ReadableNew() {
 										id: "copy-output",
 										iconName: "copy",
 										text: t("generic_copy"),
-									}
-								]
+									},
+								],
 							},
 							{
 								type: "menu-dropdown",
@@ -490,7 +507,7 @@ export default function ReadableNew() {
 												iconName: "angle-down",
 												text: t("generic_move_down"),
 											},
-										]
+										],
 									},
 									{
 										text: t("generic_other"),
@@ -500,18 +517,17 @@ export default function ReadableNew() {
 												iconName: "script",
 												text: t("generic_copy_id"),
 											},
-										]
-									}
-								]
-							}
+										],
+									},
+								],
+							},
 						]}
 						variant="icon"
 					/>
 				}
-			>
-			</Header>
+			></Header>
 		);
-	};
+	}
 
 	return (
 		<>
@@ -520,21 +536,20 @@ export default function ReadableNew() {
 					{displayDetails()}
 					<SpaceBetween size="xl">
 						<ReadableViewPrintButton />
-						{(!textState || textState.length === 0) ? (
+						{!textState || textState.length === 0 ? (
 							<ReadableViewUpload
-								metadataState={metadataState} 
+								metadataState={metadataState}
 								setMetadataState={setMetadataState}
 							/>
 						) : (
 							textState.map((textItem, index) => (
 								<SpaceBetween key={textItem.itemId} size="xl">
-									<Container
-										footer={showRowFooter(textItem, index)}
-									>
+									<Container footer={showRowFooter(textItem, index)}>
 										{displayItemView(textItem, index, textState.length)}
 									</Container>
 								</SpaceBetween>
-							)))}
+							))
+						)}
 					</SpaceBetween>
 					{displayAddTextRow()}
 				</SpaceBetween>

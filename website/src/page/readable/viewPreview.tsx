@@ -42,7 +42,10 @@ export default function ReadableViewPreview(props) {
 				{!imageUrl && <div></div>}
 				<Box data-whitespace="preserve" variant="div">
 					{(() => {
-						if (props?.text?.status === "generate" || props?.text?.status === "processing") {
+						if (
+							props?.text?.status === "generate" ||
+							props?.text?.status === "processing"
+						) {
 							return <Spinner />;
 						} else {
 							return props?.text?.output;

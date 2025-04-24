@@ -24,7 +24,8 @@ let readableGetJob: string;
 
 try {
 	if (features.readable) {
-		subscription_readableUpdateJobItem = require("../../../graphql/subscriptions").readableUpdateJobItem;
+		subscription_readableUpdateJobItem =
+			require("../../../graphql/subscriptions").readableUpdateJobItem;
 		readableGetJob = require("../../../graphql/queries").readableGetJob;
 	}
 } catch (error) {

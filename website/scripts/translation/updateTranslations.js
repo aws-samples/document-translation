@@ -35,13 +35,14 @@ const {
  */
 const client = new TranslateClient({
 	maxAttempts: 5,
-	retryMode: 'adaptive'
+	retryMode: "adaptive",
 });
 
 // Add jitter delay between API calls to handle rate limiting
-const delay = (ms = 100) => new Promise(resolve => 
-	setTimeout(resolve, ms + Math.floor(Math.random() * 100))
-);
+const delay = (ms = 100) =>
+	new Promise((resolve) =>
+		setTimeout(resolve, ms + Math.floor(Math.random() * 100))
+	);
 
 /**
  * Source language code and comprehensive list of target languages
@@ -132,7 +133,12 @@ const allLanguages = [
  * @returns {string} Full file path
  */
 async function createFilePath(languageCode) {
-	const filePath = path.join(__dirname, "../../public/locales", languageCode, "translation.json");
+	const filePath = path.join(
+		__dirname,
+		"../../public/locales",
+		languageCode,
+		"translation.json"
+	);
 	const dir = path.dirname(filePath);
 	await fs.mkdir(dir, { recursive: true });
 	console.log(`Processing: ${filePath}`);
@@ -157,7 +163,7 @@ async function translateString(sourceLanguageCode, targetLanguageCode, text) {
 			TargetLanguageCode: targetLanguageCode,
 			Settings: {
 				Formality: "FORMAL",
-				Profanity: "MASK"
+				Profanity: "MASK",
 			},
 		};
 		const command = new TranslateTextCommand(input);
@@ -187,9 +193,9 @@ async function loopAllStrings(
 	async function translateObject(obj) {
 		const result = {};
 		for (const [key, value] of Object.entries(obj)) {
-			if (typeof value === 'object' && value !== null) {
+			if (typeof value === "object" && value !== null) {
 				result[key] = await translateObject(value);
-			} else if (typeof value === 'string') {
+			} else if (typeof value === "string") {
 				result[key] = await translateString(
 					sourceLanguageCode,
 					targetLanguageCode,
@@ -206,7 +212,7 @@ async function loopAllStrings(
 	const filename = await createFilePath(targetLanguageCode);
 	const content = JSON.stringify(translatedStrings, null, "\t");
 
-	await fs.writeFile(filename, content, 'utf8');
+	await fs.writeFile(filename, content, "utf8");
 	console.log(`Successfully translated to ${targetLanguageCode}`);
 }
 
@@ -227,9 +233,11 @@ async function loopAllTargets(
 	for (let i = 0; i < targetLanguages.length; i += batchSize) {
 		const batch = targetLanguages.slice(i, i + batchSize);
 		await Promise.all(
-			batch.map(target => 
-				loopAllStrings(sourceLanguageCode, target, sourceStrings)
-					.catch(error => console.error(`Failed to translate ${target}: ${error.message}`))
+			batch.map((target) =>
+				loopAllStrings(sourceLanguageCode, target, sourceStrings).catch(
+					(error) =>
+						console.error(`Failed to translate ${target}: ${error.message}`)
+				)
 			)
 		);
 		await delay(1000); // Add 1s delay between batches
@@ -244,9 +252,9 @@ async function main() {
 			(item) => item !== sourceLanguageCode
 		);
 		await loopAllTargets(sourceLanguageCode, sourceStrings, targetLanguages);
-		console.log('Translation completed successfully');
+		console.log("Translation completed successfully");
 	} catch (error) {
-		console.error('Translation failed:', error.message);
+		console.error("Translation failed:", error.message);
 		process.exit(1);
 	}
 }

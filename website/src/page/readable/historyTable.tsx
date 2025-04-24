@@ -26,7 +26,7 @@ export default function HistoryTable() {
 	const { jobs, loading } = useReadableJobs();
 	const { t } = useTranslation();
 	const navigate = useNavigate();
-	const [ filteringText, setFilteringText ] = useState("");
+	const [filteringText, setFilteringText] = useState("");
 
 	async function createAndNavigate() {
 		const jobId = await CreateJob();
@@ -65,8 +65,8 @@ export default function HistoryTable() {
 					cell: (item) => formatTimestamp(item.updatedAt),
 				},
 			]}
-			items={jobs.filter(item => 
-				(item.name?.toLowerCase() ?? '').includes(filteringText.toLowerCase())
+			items={jobs.filter((item) =>
+				(item.name?.toLowerCase() ?? "").includes(filteringText.toLowerCase())
 			)}
 			loadingText={t("generic_loading")}
 			loading={loading}
@@ -90,7 +90,8 @@ export default function HistoryTable() {
 				<TextFilter
 					filteringText={filteringText}
 					onChange={({ detail }) => setFilteringText(detail.filteringText)}
-					countText={`${jobs.filter(item => (item.name?.toLowerCase() ?? '').includes(filteringText.toLowerCase())).length} matches`}				/>
+					countText={`${jobs.filter((item) => (item.name?.toLowerCase() ?? "").includes(filteringText.toLowerCase())).length} matches`}
+				/>
 			}
 		/>
 	);
