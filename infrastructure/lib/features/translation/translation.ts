@@ -185,6 +185,7 @@ export class dt_translate extends Construct {
 						// ASM-IAM // ASM-COG7
 						actions: [
 							"translate:TranslateDocument",
+							"Resource::*",
 						],
 					}),
 				],
@@ -192,6 +193,20 @@ export class dt_translate extends Construct {
 		);
 		props.identityPool.authenticatedRole.attachInlinePolicy(
 			policyAuthenticatedPermitQuickDocumentTranslation,
+		);
+		NagSuppressions.addResourceSuppressions(
+			policyAuthenticatedPermitQuickDocumentTranslation,
+			[
+				{
+					id: "AwsSolutions-IAM5",
+					reason: "Action does not apply to a resource. Restricted by action.",
+					appliesTo: [
+						"Action::translate:TranslateDocument",
+						"Resource::*",
+					],
+				},
+			],
+			true,
 		);
 
 		// INFRA | DYNAMODB
