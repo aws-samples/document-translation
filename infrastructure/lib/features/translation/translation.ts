@@ -185,6 +185,7 @@ export class dt_translate extends Construct {
 						// ASM-IAM // ASM-COG7
 						actions: [
 							"translate:TranslateDocument",
+							"translate:ListTerminologies"
 						],
 						resources: ["*"],
 					}),
@@ -202,6 +203,7 @@ export class dt_translate extends Construct {
 					reason: "Action does not apply to a resource. Restricted by action.",
 					appliesTo: [
 						"Action::translate:TranslateDocument",
+						"Action::translate:ListTerminologies",
 						"Resource::*",
 					],
 				},

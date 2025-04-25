@@ -9,6 +9,7 @@ interface TranslationProgress {
 	[key: string]: {
 		status: "pending" | "translating" | "completed" | "error";
 		error?: string;
+		usedTerminology?: boolean;
 	};
 }
 
@@ -54,8 +55,8 @@ export function useDirectTranslation() {
 						[targetLang]: { status: "translating" },
 					}));
 
-					// Call the translation service
-					const translatedContent = await translateDocument({
+					// Call the translation service with terminology lookup
+					const result = await translateDocument({
 						sourceLanguage,
 						targetLanguage: targetLang,
 						document: file,
@@ -68,12 +69,15 @@ export function useDirectTranslation() {
 					const downloadFileName = `${baseName}_${targetLang}.${extension}`;
 
 					// Download the translated file
-					downloadFile(translatedContent, downloadFileName, file.type);
+					downloadFile(result.translatedContent, downloadFileName, file.type);
 
-					// Update progress
+					// Update progress with terminology usage info
 					setProgress((prev) => ({
 						...prev,
-						[targetLang]: { status: "completed" },
+						[targetLang]: { 
+							status: "completed",
+							usedTerminology: result.usedTerminology
+						},
 					}));
 					setCompletedCount((prev) => prev + 1);
 				} catch (error) {

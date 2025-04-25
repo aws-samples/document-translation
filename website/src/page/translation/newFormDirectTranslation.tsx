@@ -8,6 +8,7 @@ import { FcDownload } from "react-icons/fc";
 import { useNavigate } from "react-router-dom";
 
 import {
+	Badge,
 	Box,
 	Button,
 	Container,
@@ -21,6 +22,7 @@ interface TranslationProgress {
 	[key: string]: {
 		status: "pending" | "translating" | "completed" | "error";
 		error?: string;
+		usedTerminology?: boolean;
 	};
 }
 
@@ -33,7 +35,7 @@ export default function NewFormDirectTranslation(props: {
 	const { t } = useTranslation();
 	const navigate = useNavigate();
 
-	const getStatusIndicator = (status: string) => {
+	const getStatusIndicator = (status: string, usedTerminology?: boolean) => {
 		switch (status) {
 			case "pending":
 				return (
@@ -49,9 +51,14 @@ export default function NewFormDirectTranslation(props: {
 				);
 			case "completed":
 				return (
-					<StatusIndicator type="success">
-						{t("translation_direct_status_completed")}
-					</StatusIndicator>
+					<SpaceBetween direction="horizontal" size="xs">
+						<StatusIndicator type="success">
+							{t("translation_direct_status_completed")}
+						</StatusIndicator>
+						{usedTerminology && (
+							<Badge color="blue">{t("translation_direct_custom_terminology")}</Badge>
+						)}
+					</SpaceBetween>
 				);
 			case "error":
 				return (
@@ -97,7 +104,7 @@ export default function NewFormDirectTranslation(props: {
 						}}
 					>
 						<div>{lang}</div>
-						<div>{getStatusIndicator(info.status)}</div>
+						<div>{getStatusIndicator(info.status, info.usedTerminology)}</div>
 						{info.error && (
 							<div style={{ color: "red", fontSize: "0.9em" }}>
 								{info.error}
