@@ -24,7 +24,7 @@ export class DocTranAppStage extends cdk.Stage {
 		const stackName = `DocTran-${config.common.instance.name}-app`;
 		const docTranStackInstance = new DocTranStack(this, `${stackName}`, {
 			stackName: `${stackName}`,
-			description: `(uksb-1tthgi813) (tag:app)`,
+			description: `(uksb-1tthgi813) (tag:app)${config.app.translation.enable ? ' (tag:translation)' : ''}${config.app.readable.enable ? ' (tag:readable)' : ''}${config.app.webUi.enable ? ' (tag:webui)' : ''}`,
 		});
 
 		// Skip NAG for faster development testing
