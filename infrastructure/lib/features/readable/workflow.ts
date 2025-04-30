@@ -149,7 +149,6 @@ export class dt_readableWorkflow extends Construct {
 			role: updateDbLambdaRole,
 			path: "lambda/appsyncMutationRequest",
 			description: "Update DB API",
-			runtime: lambda.Runtime.NODEJS_18_X,
 			environment: {
 				API_ENDPOINT: props.api.graphqlUrl,
 				API_QUERY: appsyncQuery_updateJobItem,

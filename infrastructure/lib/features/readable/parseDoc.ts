@@ -287,7 +287,6 @@ export class dt_readableWorkflowParseDoc extends Construct {
 		const updateDbLambda = new dt_lambda(this, "updateDbLambda", {
 			path: "lambda/appsyncMutationRequest",
 			description: "Update DB API",
-			runtime: lambda.Runtime.NODEJS_18_X,
 			environment: {
 				API_ENDPOINT: props.api.graphqlUrl,
 				API_QUERY: appsyncQuery_createJobItem,
@@ -339,7 +338,6 @@ export class dt_readableWorkflowParseDoc extends Construct {
 			{
 				path: "lambda/appsyncMutationRequest",
 				description: "Update DB API",
-				runtime: lambda.Runtime.NODEJS_18_X,
 				environment: {
 					API_ENDPOINT: props.api.graphqlUrl,
 					API_QUERY: appsyncQuery_updateJobItem,

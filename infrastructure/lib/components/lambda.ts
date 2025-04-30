@@ -30,7 +30,7 @@ export class dt_lambda extends Construct {
 		super(scope, id);
 
 		const runtime: lambda.Runtime =
-			props.runtime !== undefined ? props.runtime : lambda.Runtime.NODEJS_18_X; // ASM-L1
+			props.runtime !== undefined ? props.runtime : lambda.Runtime.NODEJS_22_X; // ASM-L1
 
 		const architecture: lambda.Architecture =
 			props.architecture !== undefined
