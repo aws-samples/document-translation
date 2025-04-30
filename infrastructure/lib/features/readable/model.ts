@@ -188,6 +188,20 @@ export class dt_readableModel extends Construct {
 			],
 			true,
 		);
+		NagSuppressions.addResourceSuppressionsByPath(
+			cdk.Stack.of(this),
+			`/${
+				cdk.Stack.of(this).node.findChild("AWS679f53fac002430cb0da5b7982bd2287")
+					.node.path
+			}/Resource`,
+			[
+				{
+					id: "AwsSolutions-L1",
+					reason: "Custom Resource Lambda defined by CDK project. Unable to specify runtime.",
+				},
+			],
+			true,
+		);
 
 		// END
 	}

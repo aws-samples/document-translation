@@ -118,14 +118,11 @@ export class dt_readablePrintStyles extends Construct {
 			`/${
 				cdk.Stack.of(this).node.findChild("AWS679f53fac002430cb0da5b7982bd2287")
 					.node.path
-			}/ServiceRole/Resource`,
+			}/Resource`,
 			[
 				{
-					id: "AwsSolutions-IAM4",
-					appliesTo: [
-						"Policy::arn:<AWS::Partition>:iam::aws:policy/service-role/AWSLambdaBasicExecutionRole",
-					],
-					reason: "Custom Resource Lambda defined by CDK project",
+					id: "AwsSolutions-L1",
+					reason: "Custom Resource Lambda defined by CDK project. Unable to specify runtime.",
 				},
 			],
 			true,
