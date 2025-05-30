@@ -53,7 +53,7 @@ export class dt_readableWorkflow extends Construct {
 			this,
 			"permitSfnSendSuccess",
 			{
-				policyName: "Send-Sfn-task-success-to-Sfn-Service",
+				policyName: `Invoke-${Strings.modelVendor}-${Strings.modelNamePrefix}-models`,
 				statements: [
 					new iam.PolicyStatement({
 						// ASM-IAM
