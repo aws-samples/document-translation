@@ -20,6 +20,7 @@ import { dt_readableWorkflow as dt_readableWorkflow_amazon_titanText } from "./v
 import { dt_readableWorkflow as dt_readableWorkflow_anthropic_claudeText } from "./vendor/text.anthropic.claude-v2";
 import { dt_readableWorkflow as dt_readableWorkflow_anthropic_claude3Text } from "./vendor/text.anthropic.claude-3-*-*-v1";
 import { dt_readableWorkflow as dt_readableWorkflow_stabilityai_stableDiffusion } from "./vendor/image.stability.stable-diffusion-xl-v1";
+import { dt_readableWorkflow as dt_readableWorkflow_stabilityai_stableDiffusion_3 } from "./vendor/image.stability.sd3-*";
 
 export interface props {
 	bedrockRegion: string;
@@ -178,6 +179,17 @@ export class dt_readableWorkflowGenerate extends Construct {
 					removalPolicy: props.removalPolicy,
 				},
 			);
+		// MODEL WORKFLOWS | IMAGE | STABILITYAI v3
+		const workflow_stabilityai_3 =
+			new dt_readableWorkflow_stabilityai_stableDiffusion_3(
+				this,
+				"workflow_stabilityai_3",
+				{
+					bedrockRegion: props.bedrockRegion,
+					contentBucket: props.contentBucket,
+					removalPolicy: props.removalPolicy,
+				},
+			);
 
 		//
 		// STATE MACHINE
@@ -209,44 +221,35 @@ export class dt_readableWorkflowGenerate extends Construct {
 						workflow_stabilityai.modelChoiceCondition,
 						workflow_stabilityai.invokeModel,
 					)
+					.when(
+						workflow_stabilityai_3.modelChoiceCondition,
+						workflow_stabilityai_3.invokeModel,
+					)
 					.otherwise(failUnrecognisedModel),
 			},
 		).StateMachine;
 
+		const workflows = [
+			workflow_amazon_text,
+			workflow_amazon_image, 
+			workflow_anthropic,
+			workflow_anthropic3,
+			workflow_stabilityai,
+			workflow_stabilityai_3
+		];
 		NagSuppressions.addResourceSuppressions(
 			this.sfnMain,
 			[
 				{
 					id: "AwsSolutions-IAM5",
-					reason:
-						"Permission scoped to project specific resources. Execution ID unknown at deploy time.",
-					appliesTo: [
+					reason: "Permission scoped to project specific resources. Execution ID unknown at deploy time.",
+					appliesTo: workflows.map(workflow => 
 						`Resource::arn:<AWS::Partition>:states:<AWS::Region>:<AWS::AccountId>:execution:{"Fn::Select":[6,{"Fn::Split":[":",{"Ref":"${cdk.Stack.of(
 							this,
 						).getLogicalId(
-							workflow_amazon_text.sfnMain.node.defaultChild as cdk.CfnElement,
-						)}"}]}]}*`,
-						`Resource::arn:<AWS::Partition>:states:<AWS::Region>:<AWS::AccountId>:execution:{"Fn::Select":[6,{"Fn::Split":[":",{"Ref":"${cdk.Stack.of(
-							this,
-						).getLogicalId(
-							workflow_amazon_image.sfnMain.node.defaultChild as cdk.CfnElement,
-						)}"}]}]}*`,
-						`Resource::arn:<AWS::Partition>:states:<AWS::Region>:<AWS::AccountId>:execution:{"Fn::Select":[6,{"Fn::Split":[":",{"Ref":"${cdk.Stack.of(
-							this,
-						).getLogicalId(
-							workflow_anthropic.sfnMain.node.defaultChild as cdk.CfnElement,
-						)}"}]}]}*`,
-						`Resource::arn:<AWS::Partition>:states:<AWS::Region>:<AWS::AccountId>:execution:{"Fn::Select":[6,{"Fn::Split":[":",{"Ref":"${cdk.Stack.of(
-							this,
-						).getLogicalId(
-							workflow_anthropic3.sfnMain.node.defaultChild as cdk.CfnElement,
-						)}"}]}]}*`,
-						`Resource::arn:<AWS::Partition>:states:<AWS::Region>:<AWS::AccountId>:execution:{"Fn::Select":[6,{"Fn::Split":[":",{"Ref":"${cdk.Stack.of(
-							this,
-						).getLogicalId(
-							workflow_stabilityai.sfnMain.node.defaultChild as cdk.CfnElement,
-						)}"}]}]}*`,
-					],
+							workflow.sfnMain.node.defaultChild as cdk.CfnElement,
+						)}"}]}]}*`
+					)
 				},
 			],
 			true,

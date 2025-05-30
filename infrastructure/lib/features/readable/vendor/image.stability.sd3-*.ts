@@ -24,10 +24,10 @@ export interface props {
 
 enum Strings {
 	modelVendor = "stability",
-	modelNamePrefix = "stable-diffusion-",
+	modelNamePrefix = "sd3-",
 }
 
-const id = "v1";
+const id = "v3";
 
 export class dt_readableWorkflow extends Construct {
 	public readonly invokeModel: tasks.StepFunctionsStartExecution;
@@ -132,12 +132,7 @@ export class dt_readableWorkflow extends Construct {
 			resultPath: "$.prompt",
 			parameters: {
 				Payload: {
-					text_prompts: [
-						{
-							text: sfn.JsonPath.stringAt("$.jobDetails.prePrompt"),
-							weight: 1,
-						},
-					],
+					prompt: sfn.JsonPath.stringAt("$.jobDetails.prePrompt"),
 				},
 			},
 		});
@@ -162,7 +157,7 @@ export class dt_readableWorkflow extends Construct {
 			payload: sfn.TaskInput.fromObject({
 				ModelId: sfn.JsonPath.objectAt("$.jobDetails.modelId"),
 				Body: sfn.JsonPath.stringAt("$.body.Payload"),
-				PathToResult: "artifacts.0.base64",
+				PathToResult: "images.0",
 				ResultS3Bucket: props.contentBucket.bucketName,
 				ResultS3Key: sfn.JsonPath.format(
 					`${Bucket.PREFIX_PRIVATE}/{}/{}/{}_{}.png`,
@@ -221,7 +216,7 @@ export class dt_readableWorkflow extends Construct {
 		// PARENT | TASK
 		this.invokeModel = new tasks.StepFunctionsStartExecution(
 			this,
-			`invokeModel_${Strings.modelVendor}`,
+			`invokeModel_${Strings.modelVendor}_${id}`,
 			{
 				stateMachine: this.sfnMain,
 				resultSelector: {
