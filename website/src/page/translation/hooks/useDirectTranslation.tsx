@@ -74,9 +74,9 @@ export function useDirectTranslation() {
 					// Update progress with terminology usage info
 					setProgress((prev) => ({
 						...prev,
-						[targetLang]: { 
+						[targetLang]: {
 							status: "completed",
-							usedTerminology: result.usedTerminology
+							usedTerminology: result.usedTerminology,
 						},
 					}));
 					setCompletedCount((prev) => prev + 1);

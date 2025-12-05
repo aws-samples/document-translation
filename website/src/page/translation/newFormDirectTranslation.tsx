@@ -56,7 +56,9 @@ export default function NewFormDirectTranslation(props: {
 							{t("translation_direct_status_completed")}
 						</StatusIndicator>
 						{usedTerminology && (
-							<Badge color="blue">{t("translation_direct_custom_terminology")}</Badge>
+							<Badge color="blue">
+								{t("translation_direct_custom_terminology")}
+							</Badge>
 						)}
 					</SpaceBetween>
 				);
