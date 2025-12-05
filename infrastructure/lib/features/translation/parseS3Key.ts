@@ -156,7 +156,7 @@ export class dt_parseS3Key extends Construct {
 			{
 				resultPath: "$.result.language",
 				parameters: {
-					value: sfn.JsonPath.stringAt("$.segmentFileName[0]"),
+					value: sfn.JsonPath.stringAt("$.segmentFileName.value[0]"),
 				},
 			},
 		);

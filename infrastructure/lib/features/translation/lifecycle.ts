@@ -52,7 +52,7 @@ export class dt_translationLifecycle extends Construct {
 			table: props.jobTable,
 			key: {
 				id: tasks.DynamoAttributeValue.fromString(
-					sfn.JsonPath.stringAt("$.parseS3Key.jobId.value"),
+					sfn.JsonPath.stringAt("$.parseS3Key.Output.result.jobId.value"),
 				),
 			},
 			updateExpression:
