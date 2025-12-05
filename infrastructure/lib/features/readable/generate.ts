@@ -16,7 +16,6 @@ import { dt_stepfunction } from "../../components/stepfunction";
 import { dt_lambda } from "../../components/lambda";
 
 import { dt_readableWorkflow as dt_readableWorkflow_amazon_titanImage } from "./vendor/image.amazon.titan-image-generator-v1";
-import { dt_readableWorkflow as dt_readableWorkflow_amazon_titanText } from "./vendor/text.amazon.titan-text-*-v1";
 import { dt_readableWorkflow as dt_readableWorkflow_anthropic_claudeText } from "./vendor/text.anthropic.claude-v2";
 import { dt_readableWorkflow as dt_readableWorkflow_anthropic_claude3Text } from "./vendor/text.anthropic.claude-3-*-*-v1";
 import { dt_readableWorkflow as dt_readableWorkflow_stabilityai_stableDiffusion } from "./vendor/image.stability.stable-diffusion-xl-v1";
@@ -130,15 +129,6 @@ export class dt_readableWorkflowGenerate extends Construct {
 			),
 		});
 
-		// MODEL WORKFLOWS | TEXT | AMAZON
-		const workflow_amazon_text = new dt_readableWorkflow_amazon_titanText(
-			this,
-			"workflow_amazon_text",
-			{
-				invokeBedrockLambda: invokeBedrockLambda.lambdaFunction,
-				removalPolicy: props.removalPolicy,
-			},
-		);
 		// MODEL WORKFLOWS | IMAGE | AMAZON
 		const workflow_amazon_image = new dt_readableWorkflow_amazon_titanImage(
 			this,
@@ -202,10 +192,6 @@ export class dt_readableWorkflowGenerate extends Construct {
 				removalPolicy: props.removalPolicy,
 				definition: modelChoice
 					.when(
-						workflow_amazon_text.modelChoiceCondition,
-						workflow_amazon_text.invokeModel,
-					)
-					.when(
 						workflow_amazon_image.modelChoiceCondition,
 						workflow_amazon_image.invokeModel,
 					)
@@ -230,7 +216,6 @@ export class dt_readableWorkflowGenerate extends Construct {
 		).StateMachine;
 
 		const workflows = [
-			workflow_amazon_text,
 			workflow_amazon_image, 
 			workflow_anthropic,
 			workflow_anthropic3,
