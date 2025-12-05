@@ -80,7 +80,8 @@ export class dt_readable extends Construct {
 			removalPolicy: props.removalPolicy,
 			updateJobItemMutation_name: readableItem.updateJobItemMutation_name,
 			contentBucket: this.contentBucket,
-		});''
+		});
+		("");
 
 		// WORKFLOW
 		new dt_readableWorkflowParseDoc(this, "readableWorkflowParseDoc", {

@@ -21,9 +21,9 @@ new pipelineStack(app, `${stackName}`, {
 });
 
 // Skip NAG for faster development testing
-const skipNag: boolean = 
-	process.env.skipNag !== undefined 
-		? process.env.skipNag.toLowerCase() === 'true'
+const skipNag: boolean =
+	process.env.skipNag !== undefined
+		? process.env.skipNag.toLowerCase() === "true"
 		: false;
 
 if (!skipNag) {

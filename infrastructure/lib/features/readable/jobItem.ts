@@ -44,7 +44,7 @@ export class dt_readableItem extends Construct {
 			output: GraphqlType.string(),
 			owner: GraphqlType.string(),
 			status: GraphqlType.string(),
-		}
+		};
 		const jobItemCommon_output = {
 			id: GraphqlType.id({ isRequired: true }),
 			itemId: GraphqlType.id({ isRequired: true }),
@@ -54,7 +54,7 @@ export class dt_readableItem extends Construct {
 			owner: GraphqlType.string(),
 			output: GraphqlType.string(),
 			status: GraphqlType.string(),
-		}
+		};
 
 		// API | MUTATION createJobItem
 		// INPUT

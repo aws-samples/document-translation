@@ -18,8 +18,8 @@ export enum JobTable {
 	GSI_OWNER_ATTR_CREATEDAT = "createdAt",
 }
 
-// Filter on a unique status key so that the itemId does not need to be excluded from 
-// the primary workflow. An exclusion list does not need to be maintained. New unique 
+// Filter on a unique status key so that the itemId does not need to be excluded from
+// the primary workflow. An exclusion list does not need to be maintained. New unique
 // status keys can be added without conflicts.
 export enum ItemStatus {
 	PROCESSING = "processing",

@@ -292,17 +292,15 @@ export class pipelineStack extends cdk.Stack {
 				],
 			});
 
-
 			NagSuppressions.addResourceSuppressionsByPath(
 				cdk.Stack.of(this),
 				`${pipelineApprovalPreCdkSynthRole.node.path}/DefaultPolicy/Resource`,
 				[
 					{
 						id: "AwsSolutions-IAM5",
-						appliesTo: [
-							"Action::kms:GenerateDataKey*",
-						],
-						reason: "Permissions scoped to specific resource. Unable to override default policy on role.",
+						appliesTo: ["Action::kms:GenerateDataKey*"],
+						reason:
+							"Permissions scoped to specific resource. Unable to override default policy on role.",
 					},
 				],
 				true,

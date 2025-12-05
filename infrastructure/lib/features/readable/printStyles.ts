@@ -122,7 +122,8 @@ export class dt_readablePrintStyles extends Construct {
 			[
 				{
 					id: "AwsSolutions-L1",
-					reason: "Custom Resource Lambda defined by CDK project. Unable to specify runtime.",
+					reason:
+						"Custom Resource Lambda defined by CDK project. Unable to specify runtime.",
 				},
 			],
 			true,

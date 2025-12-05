@@ -24,17 +24,23 @@ export class DocTranAppStage extends cdk.Stage {
 		const stackName = `DocTran-${config.common.instance.name}-app`;
 		const docTranStackInstance = new DocTranStack(this, `${stackName}`, {
 			stackName: `${stackName}`,
-			description: `(uksb-1tthgi813) (tag:app)${config.app.translation.enable ? ' (tag:translation)' : ''}${config.app.readable.enable ? ' (tag:readable)' : ''}${config.app.webUi.enable ? ' (tag:webui)' : ''}`,
+			description: `(uksb-1tthgi813) (tag:app)${
+				config.app.translation.enable ? " (tag:translation)" : ""
+			}${config.app.readable.enable ? " (tag:readable)" : ""}${
+				config.app.webUi.enable ? " (tag:webui)" : ""
+			}`,
 		});
 
 		// Skip NAG for faster development testing
-		const skipNag: boolean = 
-		process.env.skipNag !== undefined 
-			? process.env.skipNag.toLowerCase() === 'true'
-			: false;
+		const skipNag: boolean =
+			process.env.skipNag !== undefined
+				? process.env.skipNag.toLowerCase() === "true"
+				: false;
 
 		if (!skipNag) {
-			cdk.Aspects.of(docTranStackInstance).add(new AwsSolutionsChecks({ verbose: true }));
+			cdk.Aspects.of(docTranStackInstance).add(
+				new AwsSolutionsChecks({ verbose: true }),
+			);
 		} else {
 			console.warn("\nSkipping cdk-nag as skipNag environment is true\n");
 		}

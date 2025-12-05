@@ -3,9 +3,7 @@ interface Event {
 	splitter: string;
 }
 
-export const handler = async (
-	event: Event
-): Promise<string[]> => {
+export const handler = async (event: Event): Promise<string[]> => {
 	const { string, splitter } = event;
 	const split = string.split(splitter);
 	return split;

@@ -38,18 +38,14 @@ export class dt_lambda extends Construct {
 				: lambda.Architecture.ARM_64;
 
 		// Create a role if not provided
-		if(props.role) {
+		if (props.role) {
 			this.lambdaRole = props.role;
 		} else {
-			this.lambdaRole = new iam.Role(
-				this,
-				"LambdaRole",
-				{
-					// ASM-L6 // ASM-L8
-					assumedBy: new iam.ServicePrincipal("lambda.amazonaws.com"),
-					description: `Lambda Role (${props.description})`,
-				},
-			);
+			this.lambdaRole = new iam.Role(this, "LambdaRole", {
+				// ASM-L6 // ASM-L8
+				assumedBy: new iam.ServicePrincipal("lambda.amazonaws.com"),
+				description: `Lambda Role (${props.description})`,
+			});
 		}
 
 		// FUNCTION

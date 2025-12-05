@@ -307,7 +307,7 @@ export class dt_readableWorkflowParseDoc extends Construct {
 				identity: sfn.JsonPath.objectAt("$.jobDetails.identity"),
 				owner: sfn.JsonPath.objectAt("$.jobDetails.owner"),
 				type: "text",
-				status: dt_enums.ItemStatus.GENERATE
+				status: dt_enums.ItemStatus.GENERATE,
 			}),
 		});
 
@@ -426,7 +426,8 @@ export class dt_readableWorkflowParseDoc extends Construct {
 							splitMdLambda.lambdaFunction.node.defaultChild as cdk.CfnElement,
 						)}.Arn>:*`,
 						`Resource::<${cdk.Stack.of(this).getLogicalId(
-							unmarshallDdbLambda.lambdaFunction.node.defaultChild as cdk.CfnElement,
+							unmarshallDdbLambda.lambdaFunction.node
+								.defaultChild as cdk.CfnElement,
 						)}.Arn>:*`,
 						`Resource::<${cdk.Stack.of(this).getLogicalId(
 							updateDbLambda.lambdaFunction.node.defaultChild as cdk.CfnElement,
@@ -537,7 +538,6 @@ export class dt_readableWorkflowParseDoc extends Construct {
 			});
 		}
 
-
 		// API
 		// API | MUTATION createJobImport
 		// INPUT
@@ -567,9 +567,7 @@ export class dt_readableWorkflowParseDoc extends Construct {
 					modelId: GraphqlType.string(),
 					status: GraphqlType.string(),
 				},
-				directives: [
-					Directive.custom("@aws_cognito_user_pools"),
-				],
+				directives: [Directive.custom("@aws_cognito_user_pools")],
 			},
 		);
 		props.apiSchema.addType(createJobImport_output);

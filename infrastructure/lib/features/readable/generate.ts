@@ -181,14 +181,16 @@ export class dt_readableWorkflowGenerate extends Construct {
 			[
 				{
 					id: "AwsSolutions-IAM5",
-					reason: "Permission scoped to project specific resources. Execution ID unknown at deploy time.",
-					appliesTo: workflows.map(workflow => 
-						`Resource::arn:<AWS::Partition>:states:<AWS::Region>:<AWS::AccountId>:execution:{"Fn::Select":[6,{"Fn::Split":[":",{"Ref":"${cdk.Stack.of(
-							this,
-						).getLogicalId(
-							workflow.sfnMain.node.defaultChild as cdk.CfnElement,
-						)}"}]}]}*`
-					)
+					reason:
+						"Permission scoped to project specific resources. Execution ID unknown at deploy time.",
+					appliesTo: workflows.map(
+						(workflow) =>
+							`Resource::arn:<AWS::Partition>:states:<AWS::Region>:<AWS::AccountId>:execution:{"Fn::Select":[6,{"Fn::Split":[":",{"Ref":"${cdk.Stack.of(
+								this,
+							).getLogicalId(
+								workflow.sfnMain.node.defaultChild as cdk.CfnElement,
+							)}"}]}]}*`,
+					),
 				},
 			],
 			true,

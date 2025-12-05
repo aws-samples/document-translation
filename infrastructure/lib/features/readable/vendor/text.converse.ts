@@ -74,17 +74,21 @@ export class dt_readableWorkflow extends Construct {
 			parameters: {
 				payload: {
 					ModelId: sfn.JsonPath.stringAt("$.jobDetails.modelId"),
-					Messages: [{
-						Content: [{
-							Text: sfn.JsonPath.format(
-								"{}\n\n{}",
-								sfn.JsonPath.stringAt("$.jobDetails.prePrompt"),
-								sfn.JsonPath.stringAt("$.jobDetails.input"),
-							),
-						}],
-						Role: "user",
-					}],
-				}
+					Messages: [
+						{
+							Content: [
+								{
+									Text: sfn.JsonPath.format(
+										"{}\n\n{}",
+										sfn.JsonPath.stringAt("$.jobDetails.prePrompt"),
+										sfn.JsonPath.stringAt("$.jobDetails.input"),
+									),
+								},
+							],
+							Role: "user",
+						},
+					],
+				},
 			},
 		});
 
@@ -197,7 +201,9 @@ export class dt_readableWorkflow extends Construct {
 					reason: "Model for prompt is unknown at deploy time",
 					appliesTo: [
 						"Resource::*",
-						`Resource::arn:aws:bedrock:${cdk.Stack.of(this).region}::foundation-model/*`,
+						`Resource::arn:aws:bedrock:${
+							cdk.Stack.of(this).region
+						}::foundation-model/*`,
 						"Resource::arn:aws:bedrock:*::foundation-model/*",
 					],
 				},

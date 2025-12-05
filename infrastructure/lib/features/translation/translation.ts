@@ -185,7 +185,7 @@ export class dt_translate extends Construct {
 						// ASM-IAM // ASM-COG7
 						actions: [
 							"translate:TranslateDocument",
-							"translate:ListTerminologies"
+							"translate:ListTerminologies",
 						],
 						resources: ["*"],
 					}),
