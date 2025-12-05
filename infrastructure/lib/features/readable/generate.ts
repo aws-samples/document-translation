@@ -15,7 +15,6 @@ import * as dt_enums from "./enum";
 import { dt_stepfunction } from "../../components/stepfunction";
 import { dt_lambda } from "../../components/lambda";
 
-import { dt_readableWorkflow as dt_readableWorkflow_anthropic_claudeText } from "./vendor/text.anthropic.claude-v2";
 import { dt_readableWorkflow as dt_readableWorkflow_anthropic_claude3Text } from "./vendor/text.anthropic.claude-3-*-*-v1";
 import { dt_readableWorkflow as dt_readableWorkflow_stabilityai_stableDiffusion } from "./vendor/image.stability.stable-diffusion-xl-v1";
 import { dt_readableWorkflow as dt_readableWorkflow_stabilityai_stableDiffusion_3 } from "./vendor/image.stability.sd3-*";
@@ -129,15 +128,6 @@ export class dt_readableWorkflowGenerate extends Construct {
 		});
 
 		// MODEL WORKFLOWS | TEXT | ANTHRHOPIC
-		// MODEL WORKFLOWS | TEXT | ANTHRHOPIC | CLAUDE v2
-		const workflow_anthropic = new dt_readableWorkflow_anthropic_claudeText(
-			this,
-			"workflow_anthropic",
-			{
-				invokeBedrockLambda: invokeBedrockLambda.lambdaFunction,
-				removalPolicy: props.removalPolicy,
-			},
-		);
 		// MODEL WORKFLOWS | TEXT | ANTHRHOPIC | CLAUDE 3 SONNET HAIKU
 		const workflow_anthropic3 = new dt_readableWorkflow_anthropic_claude3Text(
 			this,
@@ -181,10 +171,6 @@ export class dt_readableWorkflowGenerate extends Construct {
 				removalPolicy: props.removalPolicy,
 				definition: modelChoice
 					.when(
-						workflow_anthropic.modelChoiceCondition,
-						workflow_anthropic.invokeModel,
-					)
-					.when(
 						workflow_anthropic3.modelChoiceCondition,
 						workflow_anthropic3.invokeModel,
 					)
@@ -201,7 +187,6 @@ export class dt_readableWorkflowGenerate extends Construct {
 		).StateMachine;
 
 		const workflows = [
-			workflow_anthropic,
 			workflow_anthropic3,
 			workflow_stabilityai,
 			workflow_stabilityai_3
