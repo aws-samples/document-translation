@@ -201,9 +201,7 @@ export class dt_readableWorkflow extends Construct {
 					reason: "Model for prompt is unknown at deploy time",
 					appliesTo: [
 						"Resource::*",
-						`Resource::arn:aws:bedrock:${
-							cdk.Stack.of(this).region
-						}::foundation-model/*`,
+						"Resource::arn:aws:bedrock:<AWS::Region>::foundation-model/*",
 						"Resource::arn:aws:bedrock:*::foundation-model/*",
 					],
 				},
