@@ -133,6 +133,23 @@ export class dt_readableModel extends Construct {
 		// 	installLatestAwsSdk: true,
 		// });
 
+		// EXAMPLE ENTRY | TEXT CONVERSE
+		new cr.AwsCustomResource(this, "exampleEntryTextConverse_claude3", {
+			onCreate: {
+				service: "DynamoDB",
+				action: "putItem",
+				parameters: {
+					TableName: this.modelTable.tableName,
+					Item: require("./defaults/text.anthropic-claude-converse.ddb.json"),
+				},
+				physicalResourceId: cr.PhysicalResourceId.of("exampleEntryTextConverse"),
+			},
+			policy: cr.AwsCustomResourcePolicy.fromSdkCalls({
+				resources: [this.modelTable.tableArn],
+			}),
+			installLatestAwsSdk: true,
+		});
+
 		// EXAMPLE ENTRY | IMAGE
 		new cr.AwsCustomResource(this, "exampleEntryImage", {
 			onCreate: {

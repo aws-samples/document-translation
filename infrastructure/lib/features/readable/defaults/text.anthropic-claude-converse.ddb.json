@@ -1,0 +1,41 @@
+{
+	"id": {
+		"S": "Default-Example-Text-Claude-3-haiku"
+	},
+	"name": {
+		"S": "Example Simplifier (Claude 3 Haiku)"
+	},
+	"type": {
+		"S": "text"
+	},
+	"default": {
+		"BOOL": false
+	},
+	"text": {
+		"M": {
+			"modelId": {
+				"S": "anthropic.claude-3-haiku-20240307-v1:0"
+			},
+			"parameters": {
+				"M": {
+					"InferenceConfig": {
+						"M": {
+							"MaxTokens": {
+								"N": "512"
+							},
+							"Temperature": {
+								"N": "0.7"
+							},
+							"TopP": {
+								"N": "0.9"
+							}
+						}
+					}
+				}
+			},
+			"prePrompt": {
+				"S": "Simplify the following text so it can be easily understood by those with a low reading age. Use short sentences, explain any abbreviations or words that can have two meanings, and separate the sentences into new lines."
+			}
+		}
+	}
+}
