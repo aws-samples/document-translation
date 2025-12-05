@@ -11,13 +11,13 @@ import {
 	aws_s3 as s3,
 } from "aws-cdk-lib";
 
-import * as dt_enums from "./enum";
 import { dt_stepfunction } from "../../components/stepfunction";
 import { dt_lambda } from "../../components/lambda";
 
 import { dt_readableWorkflow as dt_readableWorkflow_anthropic_claude3Text } from "./vendor/text.anthropic.claude-3-*-*-v1";
 import { dt_readableWorkflow as dt_readableWorkflow_stabilityai_stableDiffusion } from "./vendor/image.stability.stable-diffusion-xl-v1";
 import { dt_readableWorkflow as dt_readableWorkflow_stabilityai_stableDiffusion_3 } from "./vendor/image.stability.sd3-*";
+import { dt_readableWorkflow as dt_readableWorkflow_converseText } from "./vendor/text.converse";
 
 export interface props {
 	bedrockRegion: string;
@@ -102,30 +102,6 @@ export class dt_readableWorkflowGenerate extends Construct {
 		// MODEL WORKFLOWS
 		// MODEL WORKFLOWS | CHOICE
 		const modelChoice = new sfn.Choice(this, "modelChoice");
-		// MODEL CHOICE | UNRECOGNISED
-		// const updateDbUnrecognisedModel = new tasks.LambdaInvoke(
-		// 	this,
-		// 	"updateDbUnrecognisedModel",
-		// 	{
-		// 		lambdaFunction: updateDbLambda.lambdaFunction,
-		// 		resultSelector: {
-		// 			"Payload.$": "$.Payload",
-		// 		},
-		// 		resultPath: "$.updateDbUnrecognisedModel",
-		// 		payload: sfn.TaskInput.fromObject({
-		// 			id: sfn.JsonPath.objectAt("$.jobDetails.id"),
-		// 			itemId: sfn.JsonPath.objectAt("$.jobDetails.itemId"),
-		// 			status: dt_enums.ItemStatus.FAILED_UNRECOGNISEDMODEL,
-		// 		}),
-		// 	},
-		// );
-		const failUnrecognisedModel = new sfn.Fail(this, "failUnrecognisedModel", {
-			error: dt_enums.ItemStatus.FAILED_UNRECOGNISEDMODEL,
-			causePath: sfn.JsonPath.format(
-				"Workflow does not recognise modelId of '{}'",
-				sfn.JsonPath.stringAt("$.jobDetails.modelId"),
-			),
-		});
 
 		// MODEL WORKFLOWS | TEXT | ANTHRHOPIC
 		// MODEL WORKFLOWS | TEXT | ANTHRHOPIC | CLAUDE 3 SONNET HAIKU
@@ -159,6 +135,14 @@ export class dt_readableWorkflowGenerate extends Construct {
 					removalPolicy: props.removalPolicy,
 				},
 			);
+		// MODEL WORKFLOWS | TEXT | CONVERSE API
+		const workflow_converseText = new dt_readableWorkflow_converseText(
+			this,
+			"workflow_converseText",
+			{
+				removalPolicy: props.removalPolicy,
+			},
+		);
 
 		//
 		// STATE MACHINE
@@ -182,14 +166,15 @@ export class dt_readableWorkflowGenerate extends Construct {
 						workflow_stabilityai_3.modelChoiceCondition,
 						workflow_stabilityai_3.invokeModel,
 					)
-					.otherwise(failUnrecognisedModel),
+					.otherwise(workflow_converseText.invokeModel),
 			},
 		).StateMachine;
 
 		const workflows = [
 			workflow_anthropic3,
 			workflow_stabilityai,
-			workflow_stabilityai_3
+			workflow_stabilityai_3,
+			workflow_converseText,
 		];
 		NagSuppressions.addResourceSuppressions(
 			this.sfnMain,
