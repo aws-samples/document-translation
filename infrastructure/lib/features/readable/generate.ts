@@ -15,7 +15,6 @@ import * as dt_enums from "./enum";
 import { dt_stepfunction } from "../../components/stepfunction";
 import { dt_lambda } from "../../components/lambda";
 
-import { dt_readableWorkflow as dt_readableWorkflow_amazon_titanImage } from "./vendor/image.amazon.titan-image-generator-v1";
 import { dt_readableWorkflow as dt_readableWorkflow_anthropic_claudeText } from "./vendor/text.anthropic.claude-v2";
 import { dt_readableWorkflow as dt_readableWorkflow_anthropic_claude3Text } from "./vendor/text.anthropic.claude-3-*-*-v1";
 import { dt_readableWorkflow as dt_readableWorkflow_stabilityai_stableDiffusion } from "./vendor/image.stability.stable-diffusion-xl-v1";
@@ -129,16 +128,6 @@ export class dt_readableWorkflowGenerate extends Construct {
 			),
 		});
 
-		// MODEL WORKFLOWS | IMAGE | AMAZON
-		const workflow_amazon_image = new dt_readableWorkflow_amazon_titanImage(
-			this,
-			"workflow_amazon_image",
-			{
-				bedrockRegion: props.bedrockRegion,
-				contentBucket: props.contentBucket,
-				removalPolicy: props.removalPolicy,
-			},
-		);
 		// MODEL WORKFLOWS | TEXT | ANTHRHOPIC
 		// MODEL WORKFLOWS | TEXT | ANTHRHOPIC | CLAUDE v2
 		const workflow_anthropic = new dt_readableWorkflow_anthropic_claudeText(
@@ -192,10 +181,6 @@ export class dt_readableWorkflowGenerate extends Construct {
 				removalPolicy: props.removalPolicy,
 				definition: modelChoice
 					.when(
-						workflow_amazon_image.modelChoiceCondition,
-						workflow_amazon_image.invokeModel,
-					)
-					.when(
 						workflow_anthropic.modelChoiceCondition,
 						workflow_anthropic.invokeModel,
 					)
@@ -216,7 +201,6 @@ export class dt_readableWorkflowGenerate extends Construct {
 		).StateMachine;
 
 		const workflows = [
-			workflow_amazon_image, 
 			workflow_anthropic,
 			workflow_anthropic3,
 			workflow_stabilityai,
