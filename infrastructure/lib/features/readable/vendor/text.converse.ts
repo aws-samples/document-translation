@@ -26,45 +26,6 @@ export class dt_readableWorkflow extends Construct {
 	constructor(scope: Construct, id: string, props: props) {
 		super(scope, id);
 
-		// LAMBDA
-		// LAMBDA | UTIL REGEX REPLACE
-		// LAMBDA | UTIL REGEX REPLACE | ROLE
-		const utilRegexReplaceLambdaRole = new iam.Role(
-			this,
-			"utilRegexReplaceRole",
-			{
-				// ASM-L6 // ASM-L8
-				assumedBy: new iam.ServicePrincipal("lambda.amazonaws.com"),
-				description: "Lambda Role (Util regex replace on a string)",
-			},
-		);
-
-		// LAMBDA | UTIL REGEX REPLACE | FUNCTION
-		const utilRegexReplaceLambda = new dt_lambda(
-			this,
-			"utilRegexReplaceLambda",
-			{
-				role: utilRegexReplaceLambdaRole,
-				path: "lambda/utilRegexReplace",
-				description: "Util regex replace on a string",
-			},
-		);
-
-		// LAMBDA | UTIL TRIM
-		// LAMBDA | UTIL TRIM | ROLE
-		const utilTrimLambdaRole = new iam.Role(this, "utilTrimRole", {
-			// ASM-L6 // ASM-L8
-			assumedBy: new iam.ServicePrincipal("lambda.amazonaws.com"),
-			description: "Lambda Role (Util trim on a string)",
-		});
-
-		// LAMBDA | UTIL TRIM | FUNCTION
-		const utilTrimLambda = new dt_lambda(this, "utilTrimLambda", {
-			role: utilTrimLambdaRole,
-			path: "lambda/utilTrim",
-			description: "Util trim on a string",
-		});
-
 		//
 		// STATE MACHINE
 		// STATE MACHINE | TASKS
@@ -124,39 +85,13 @@ export class dt_readableWorkflow extends Construct {
 			],
 		});
 
-		// STATE MACHINE | TASKS | utilRegexReplace
-		const regexStringLeadingToColon = "^[\\w\\s]+:";
-		const utilRegexReplace = new tasks.LambdaInvoke(this, "utilRegexReplace", {
-			lambdaFunction: utilRegexReplaceLambda.lambdaFunction,
-			resultPath: "$.utilRegexReplace",
-			resultSelector: {
-				"Payload.$": "$.Payload",
-			},
-			payload: sfn.TaskInput.fromObject({
-				string: sfn.JsonPath.stringAt(
-					"$.converseBedrock.Output.Message.Content[0].Text",
-				),
-				pattern: regexStringLeadingToColon,
-			}),
-		});
-
-		// STATE MACHINE | TASKS | utilTrim
-		const utilTrim = new tasks.LambdaInvoke(this, "utilTrim", {
-			lambdaFunction: utilTrimLambda.lambdaFunction,
-			resultPath: "$.utilTrim",
-			resultSelector: {
-				"Payload.$": "$.Payload",
-			},
-			payload: sfn.TaskInput.fromObject({
-				string: sfn.JsonPath.stringAt("$.utilRegexReplace.Payload"),
-			}),
-		});
 
 		// STATE MACHINE | TASKS | filterOutput
 		const filterOutput = new sfn.Pass(this, "filterOutput", {
-			parameters: {
-				payload: sfn.JsonPath.stringAt("$.utilTrim.Payload"),
-			},
+			queryLanguage: sfn.QueryLanguage.JSONATA,
+			outputs: {
+				payload: "{% $states.input.converseBedrock.Output.Message.Content[0].Text %}",
+			}
 		});
 
 		// STATE MACHINE | DEF
@@ -169,33 +104,12 @@ export class dt_readableWorkflow extends Construct {
 				definition: createInput
 					.next(mergeParameters)
 					.next(converseBedrock)
-					.next(utilRegexReplace)
-					.next(utilTrim)
 					.next(filterOutput),
 			},
 		).StateMachine;
 		NagSuppressions.addResourceSuppressions(
 			this.sfnMain,
 			[
-				{
-					id: "AwsSolutions-IAM5",
-					reason: "Permissions scoped to dedicated resources.",
-					appliesTo: [
-						`Resource::<${cdk.Stack.of(this).getLogicalId(
-							utilRegexReplaceLambda.lambdaFunction.node
-								.defaultChild as cdk.CfnElement,
-						)}.Arn>:*`,
-					],
-				},
-				{
-					id: "AwsSolutions-IAM5",
-					reason: "Permissions scoped to dedicated resources.",
-					appliesTo: [
-						`Resource::<${cdk.Stack.of(this).getLogicalId(
-							utilTrimLambda.lambdaFunction.node.defaultChild as cdk.CfnElement,
-						)}.Arn>:*`,
-					],
-				},
 				{
 					id: "AwsSolutions-IAM5",
 					reason: "Model for prompt is unknown at deploy time",
