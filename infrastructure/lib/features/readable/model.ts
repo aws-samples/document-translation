@@ -118,15 +118,15 @@ export class dt_readableModel extends Construct {
 		// });
 
 		// EXAMPLE ENTRY | TEXT CONVERSE
-		new cr.AwsCustomResource(this, "exampleEntryTextConverse_claude3", {
+		new cr.AwsCustomResource(this, "exampleEntryText_claude3_haiku", {
 			onCreate: {
 				service: "DynamoDB",
 				action: "putItem",
 				parameters: {
 					TableName: this.modelTable.tableName,
-					Item: require("./defaults/text.anthropic-claude-converse.ddb.json"),
+					Item: require("./defaults/text.anthropic-claude-3-haiku.ddb.json"),
 				},
-				physicalResourceId: cr.PhysicalResourceId.of("exampleEntryTextConverse"),
+				physicalResourceId: cr.PhysicalResourceId.of("exampleEntryText_claude3_haiku"),
 			},
 			policy: cr.AwsCustomResourcePolicy.fromSdkCalls({
 				resources: [this.modelTable.tableArn],
