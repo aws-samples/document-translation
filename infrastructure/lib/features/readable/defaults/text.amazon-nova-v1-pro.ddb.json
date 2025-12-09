@@ -1,9 +1,9 @@
 {
 	"id": {
-		"S": "Default-Example-Text-Claude-3-haiku"
+		"S": "Default-Example-Text-Amazon-Nova-v1-Pro"
 	},
 	"name": {
-		"S": "Example Simplifier (Claude 3 Haiku)"
+		"S": "Example Simplifier (Amazon-Nova-v1-Pro)"
 	},
 	"type": {
 		"S": "text"
@@ -14,23 +14,10 @@
 	"text": {
 		"M": {
 			"modelId": {
-				"S": "anthropic.claude-3-haiku-20240307-v1:0"
+				"S": "amazon.nova-pro-v1:0"
 			},
 			"parameters": {
 				"M": {
-					"InferenceConfig": {
-						"M": {
-							"MaxTokens": {
-								"N": "512"
-							},
-							"Temperature": {
-								"N": "0.7"
-							},
-							"TopP": {
-								"N": "0.9"
-							}
-						}
-					}
 				}
 			},
 			"prePrompt": {

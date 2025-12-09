@@ -97,20 +97,41 @@ export class dt_readableModel extends Construct {
 
 		// EXAMPLE ENTRY
 		// EXAMPLE ENTRY | TEXT
-		new cr.AwsCustomResource(this, "exampleEntryText_claude3_haiku", {
-			onCreate: {
-				service: "DynamoDB",
-				action: "putItem",
-				parameters: {
-					TableName: this.modelTable.tableName,
-					Item: require("./defaults/text.anthropic-claude-3-haiku.ddb.json"),
-				},
-				physicalResourceId: cr.PhysicalResourceId.of("exampleEntryText_claude3_haiku"),
+		const textModels = [
+			{
+				id: "exampleEntryText_claude_4-5_haiku",
+				file: "./defaults/text.anthropic-claude-4-5-haiku.ddb.json"
 			},
-			policy: cr.AwsCustomResourcePolicy.fromSdkCalls({
-				resources: [this.modelTable.tableArn],
-			}),
-			installLatestAwsSdk: true,
+			{
+				id: "exampleEntryText_mistral_7b_instruct",
+				file: "./defaults/text.mistral-mistral-7b-instruct.ddb.json"
+			},
+			{
+				id: "exampleEntryText_amazon_nova_v1_pro",
+				file: "./defaults/text.amazon-nova-v1-pro.ddb.json"
+			},
+			{
+				id: "exampleEntryText_amazon_nova_v2_lite",
+				file: "./defaults/text.amazon-nova-v2-lite.ddb.json"
+			}
+		];
+
+		textModels.forEach(model => {
+			new cr.AwsCustomResource(this, model.id, {
+				onCreate: {
+					service: "DynamoDB",
+					action: "putItem",
+					parameters: {
+						TableName: this.modelTable.tableName,
+						Item: require(model.file),
+					},
+					physicalResourceId: cr.PhysicalResourceId.of(model.id),
+				},
+				policy: cr.AwsCustomResourcePolicy.fromSdkCalls({
+					resources: [this.modelTable.tableArn],
+				}),
+				installLatestAwsSdk: true,
+			});
 		});
 
 		// EXAMPLE ENTRY | IMAGE

@@ -1,0 +1,28 @@
+{
+	"id": {
+		"S": "Default-Example-Text-Amazon-Nova-v2-Lite-GLOBAL"
+	},
+	"name": {
+		"S": "Example Simplifier (Amazon-Nova-v2-Pro-GLOBAL)"
+	},
+	"type": {
+		"S": "text"
+	},
+	"default": {
+		"BOOL": false
+	},
+	"text": {
+		"M": {
+			"modelId": {
+				"S": "eu.amazon.nova-2-lite-v1:0"
+			},
+			"parameters": {
+				"M": {
+				}
+			},
+			"prePrompt": {
+				"S": "Simplify the following text so it can be easily understood by those with a low reading age. Use short sentences, explain any abbreviations or words that can have two meanings, and separate the sentences into new lines."
+			}
+		}
+	}
+}

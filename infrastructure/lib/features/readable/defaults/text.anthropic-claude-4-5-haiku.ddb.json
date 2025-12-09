@@ -1,0 +1,28 @@
+{
+	"id": {
+		"S": "Default-Example-Text-Anthropic-Claude-4-5-EU"
+	},
+	"name": {
+		"S": "Example Simplifier (Anthropic-Claude-4-5-EU)"
+	},
+	"type": {
+		"S": "text"
+	},
+	"default": {
+		"BOOL": false
+	},
+	"text": {
+		"M": {
+			"modelId": {
+				"S": "eu.anthropic.claude-haiku-4-5-20251001-v1:0"
+			},
+			"parameters": {
+				"M": {
+				}
+			},
+			"prePrompt": {
+				"S": "Simplify the following text so it can be easily understood by those with a low reading age. Use short sentences, explain any abbreviations or words that can have two meanings, and separate the sentences into new lines."
+			}
+		}
+	}
+}
