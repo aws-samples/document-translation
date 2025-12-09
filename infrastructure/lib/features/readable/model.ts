@@ -97,27 +97,6 @@ export class dt_readableModel extends Construct {
 
 		// EXAMPLE ENTRY
 		// EXAMPLE ENTRY | TEXT
-		// https://github.com/aws/aws-cdk/issues/30067
-		// // EXAMPLE ENTRY | TEXT
-		// const exampleEntryText_amazonTitan = new cr.AwsCustomResource(this, 'exampleEntryText_amazonTitan', {
-		// 	onCreate: {
-		// 		service: 'DynamoDB',
-		// 		action: 'putItem',
-		// 		parameters: {
-		// 			TableName: this.modelTable.tableName,
-		// 			Item: require('./defaults/text.amazon-titan.ddb.json'),
-		// 		},
-		// 		physicalResourceId: cr.PhysicalResourceId.of('exampleEntryText_amazonTitan'),
-		// 	},
-		// 	policy: cr.AwsCustomResourcePolicy.fromSdkCalls({
-		// 		resources: [
-		// 			this.modelTable.tableArn
-		// 		],
-		// 	}),
-		// 	installLatestAwsSdk: true,
-		// });
-
-		// EXAMPLE ENTRY | TEXT CONVERSE
 		new cr.AwsCustomResource(this, "exampleEntryText_claude3_haiku", {
 			onCreate: {
 				service: "DynamoDB",
@@ -150,26 +129,6 @@ export class dt_readableModel extends Construct {
 			}),
 			installLatestAwsSdk: true,
 		});
-
-		// https://github.com/aws/aws-cdk/issues/30067
-		// // EXAMPLE ENTRY | TEXT
-		// const exampleEntryImage_amazonTitan = new cr.AwsCustomResource(this, 'exampleEntryImage_amazonTitan', {
-		// 	onCreate: {
-		// 		service: 'DynamoDB',
-		// 		action: 'putItem',
-		// 		parameters: {
-		// 			TableName: this.modelTable.tableName,
-		// 			Item: require('./defaults/image.amazon-titan.ddb.json'),
-		// 		},
-		// 		physicalResourceId: cr.PhysicalResourceId.of('exampleEntryImage_amazonTitan'),
-		// 	},
-		// 	policy: cr.AwsCustomResourcePolicy.fromSdkCalls({
-		// 		resources: [
-		// 			this.modelTable.tableArn
-		// 		],
-		// 	}),
-		// 	installLatestAwsSdk: true,
-		// });
 
 		// EXAMPLE ENTRY | CUSTOM RESOURCE CDK LAMBDA
 		NagSuppressions.addResourceSuppressionsByPath(
