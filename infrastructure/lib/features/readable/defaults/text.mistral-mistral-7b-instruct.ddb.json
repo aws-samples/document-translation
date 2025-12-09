@@ -17,8 +17,7 @@
 				"S": "mistral.mistral-7b-instruct-v0:2"
 			},
 			"parameters": {
-				"M": {
-				}
+				"M": {}
 			},
 			"prePrompt": {
 				"S": "Simplify the following text so it can be easily understood by those with a low reading age. Use short sentences, explain any abbreviations or words that can have two meanings, and separate the sentences into new lines."

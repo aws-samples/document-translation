@@ -79,19 +79,21 @@ export class dt_readableWorkflow extends Construct {
 					actions: ["bedrock:InvokeModel"],
 					resources: [
 						`arn:aws:bedrock:*::foundation-model/*`,
-						`arn:aws:bedrock:*:${cdk.Stack.of(this).account}:inference-profile/*`,
+						`arn:aws:bedrock:*:${
+							cdk.Stack.of(this).account
+						}:inference-profile/*`,
 					],
 				}),
 			],
 		});
 
-
 		// STATE MACHINE | TASKS | filterOutput
 		const filterOutput = new sfn.Pass(this, "filterOutput", {
 			queryLanguage: sfn.QueryLanguage.JSONATA,
 			outputs: {
-				payload: "{% $states.input.converseBedrock.Output.Message.Content[0].Text %}",
-			}
+				payload:
+					"{% $states.input.converseBedrock.Output.Message.Content[0].Text %}",
+			},
 		});
 
 		// STATE MACHINE | DEF
