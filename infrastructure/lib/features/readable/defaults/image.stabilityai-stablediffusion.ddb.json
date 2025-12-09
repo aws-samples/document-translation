@@ -3,7 +3,7 @@
 		"S": "Default-Example-Image-01"
 	},
 	"name": {
-		"S": "Example Without People (Claude v2 & Stability Diffusion)"
+		"S": "Example Without People (Claude 3 Haiku & Stability Diffusion)"
 	},
 	"type": {
 		"S": "image"
@@ -40,28 +40,22 @@
 	"text": {
 		"M": {
 			"modelId": {
-				"S": "anthropic.claude-v2"
+				"S": "anthropic.claude-3-haiku-20240307-v1:0"
 			},
 			"parameters": {
 				"M": {
-					"max_tokens_to_sample": {
-						"N": "300"
-					},
-					"stop_sequences": {
-						"L": [
-							{
-								"S": "Human:"
+					"InferenceConfig": {
+						"M": {
+							"MaxTokens": {
+								"N": "512"
+							},
+							"Temperature": {
+								"N": "0.7"
+							},
+							"TopP": {
+								"N": "0.9"
 							}
-						]
-					},
-					"temperature": {
-						"N": "1"
-					},
-					"top_k": {
-						"N": "250"
-					},
-					"top_p": {
-						"N": "0.999"
+						}
 					}
 				}
 			},
