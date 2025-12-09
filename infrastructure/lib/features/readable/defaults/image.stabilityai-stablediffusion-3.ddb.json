@@ -1,0 +1,47 @@
+{
+	"id": {
+		"S": "Default-Example-Image-Stability-Diffusion-v3"
+	},
+	"default": {
+		"BOOL": true
+	},
+	"image": {
+		"M": {
+			"modelId": {
+				"S": "stability.sd3-5-large-v1:0"
+			},
+			"parameters": {
+				"M": {
+					"mode": {
+						"S": "text-to-image"
+					},
+					"aspect_ratio": {
+						"S": "1:1"
+					},
+					"output_format": {
+						"S": "jpeg"
+					}
+				}
+			}
+		}
+	},
+	"name": {
+		"S": "Example Without People (Claude v4-5 Haiku & Stability Diffusion v3)"
+	},
+	"text": {
+		"M": {
+			"modelId": {
+				"S": "eu.anthropic.claude-haiku-4-5-20251001-v1:0"
+			},
+			"parameters": {
+				"M": {}
+			},
+			"prePrompt": {
+				"S": "You're a prompt engineer, trying to design a prompt for Stable Diffusion, so it can generate a photographic image to illustrate the following text, showing no people in the image:"
+			}
+		}
+	},
+	"type": {
+		"S": "image"
+	}
+}
