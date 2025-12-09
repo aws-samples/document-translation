@@ -78,8 +78,8 @@ export class dt_readableWorkflow extends Construct {
 				new iam.PolicyStatement({
 					actions: ["bedrock:InvokeModel"],
 					resources: [
-						`arn:aws:bedrock:${cdk.Stack.of(this).region}::foundation-model/*`,
 						`arn:aws:bedrock:*::foundation-model/*`,
+						`arn:aws:bedrock:*:${cdk.Stack.of(this).account}:inference-profile/*`,
 					],
 				}),
 			],
@@ -114,9 +114,8 @@ export class dt_readableWorkflow extends Construct {
 					id: "AwsSolutions-IAM5",
 					reason: "Model for prompt is unknown at deploy time",
 					appliesTo: [
-						"Resource::*",
-						"Resource::arn:aws:bedrock:<AWS::Region>::foundation-model/*",
-						"Resource::arn:aws:bedrock:*::foundation-model/*",
+						`Resource::arn:aws:bedrock:*::foundation-model/*`,
+						`Resource::arn:aws:bedrock:*:<AWS::AccountId>:inference-profile/*`,
 					],
 				},
 			],
