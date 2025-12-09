@@ -97,22 +97,6 @@ export class dt_readableModel extends Construct {
 
 		// EXAMPLE ENTRY
 		// EXAMPLE ENTRY | TEXT
-		new cr.AwsCustomResource(this, "exampleEntryText", {
-			onCreate: {
-				service: "DynamoDB",
-				action: "putItem",
-				parameters: {
-					TableName: this.modelTable.tableName,
-					Item: require("./defaults/text.anthropic-claude.ddb.json"),
-				},
-				physicalResourceId: cr.PhysicalResourceId.of("exampleEntryText"),
-			},
-			policy: cr.AwsCustomResourcePolicy.fromSdkCalls({
-				resources: [this.modelTable.tableArn],
-			}),
-			installLatestAwsSdk: true,
-		});
-
 		// https://github.com/aws/aws-cdk/issues/30067
 		// // EXAMPLE ENTRY | TEXT
 		// const exampleEntryText_amazonTitan = new cr.AwsCustomResource(this, 'exampleEntryText_amazonTitan', {
