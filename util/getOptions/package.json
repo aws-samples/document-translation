@@ -2,7 +2,7 @@
 	"name": "getoptions",
 	"main": "./src/index.ts",
 	"dependencies": {
-		"@aws-sdk/client-ssm": "^3.637.0",
+		"@aws-sdk/client-ssm": "^3.1003.0",
 		"fs": "^0.0.1-security",
 		"ts-node": "^10.9.2"
 	},
