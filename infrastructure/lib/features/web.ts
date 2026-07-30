@@ -94,6 +94,8 @@ export class dt_web extends Construct {
 					logBucket: props.serverAccessLoggingBucket, // ASM-S1
 					logFilePrefix: "logs/websiteDistribution/", // ASM-S1
 					logIncludesCookies: true,
+					// CloudFront does not enforce this setting when using its default certificate and instead uses TLSv1.
+					// https://docs.aws.amazon.com/cloudfront/latest/APIReference/API_ViewerCertificate.html
 					minimumProtocolVersion:
 						cloudfront.SecurityPolicyProtocol.TLS_V1_2_2021, // ASM-CRF5
 					errorResponses: [returnUnknownPagesToIndex],
@@ -114,7 +116,8 @@ export class dt_web extends Construct {
 				},
 				{
 					id: "AwsSolutions-CFR4",
-					reason: "Custom certificate is not in scope for this prototype",
+					reason:
+						"The CloudFront default certificate fixes the minimum protocol at TLSv1 and ignores the configured minimumProtocolVersion. Use a custom domain with an ACM certificate to enforce TLS 1.2 or later. See https://docs.aws.amazon.com/cloudfront/latest/APIReference/API_ViewerCertificate.html",
 				},
 			],
 			true,
