@@ -17,7 +17,7 @@ This step is **conditional**.
 
 A custom domain allows you to specify an appropriate URL for this project. The default URL is provided by AWS Cloudfront with a structure of `abcdefg1234567.cloudfront.net`. A custom domain allows you to specify a prettier URL such as `document-translation.example.com`.
 
-An SSL certificate is required for the custom domain. This must be added to your AWS Account in the `us-west-1` region. 
+An SSL certificate is required for the custom domain. This must be added to your AWS Account in the `us-east-1` region.
 
 - [AWS Certificate Manager (ACM)](https://us-east-1.console.aws.amazon.com/acm/home?region=us-east-1#/certificates/request)
 

@@ -41,6 +41,16 @@ export const getAppWebOptions = async (): Promise<AppWebOptions> => {
 		});
 	}
 
+	if (
+		answers.app.webUi.enable &&
+		!answers.app.webUi.customDomain.enable
+	) {
+		console.warn(`
+${BOLD}Warning: CloudFront default certificate TLS policy${RESET}
+The default CloudFront certificate permits negotiating down to TLS 1.0. To enforce TLS 1.2 or later, use a custom domain with an ACM certificate. See the DT docs on how to configure this.
+		`);
+	}
+
 	if (answers.app.webUi.customDomain.enable) {
 		answers.app.webUi.customDomain.domain = await input({
 			message: "Custom Domain Name (doctran.example.com)",
