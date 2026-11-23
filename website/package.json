@@ -10,7 +10,7 @@
 		"@cloudscape-design/components": "^3.0.713",
 		"@cloudscape-design/global-styles": "^1.0.27",
 		"aws-amplify": "^6.16.3",
-		"i18next": "^23.11.3",
+		"i18next": "^27.2.6",
 		"i18next-browser-languagedetector": "^7.2.1",
 		"i18next-xhr-backend": "^3.2.2",
 		"react": "^18.3.1",
